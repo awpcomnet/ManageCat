@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.manage.catalog.dao.CatalogDao">
+
+	<resultMap id="catalogResultMap" type="com.cat.manage.catalog.domain.Catalog">
+		<id property="id" column="id" />
+		<result property="parentId" column="parent_id" />
+		<result property="abbr" column="abbr" />
+		<result property="name" column="name" />
+		<result property="url" column="url" />
+		<result property="urlType" column="url_type" /> 
+		<result property="description" column="description" />
+		<result property="order" column="order_num" />
+		<result property="state" column="state" />
+		<result property="icon" column="icon" />
+	</resultMap>
+
+	<!-- 根据栏目ID查询栏目信息 -->
+	<select id="queryCatalog" parameterType="int" resultMap="catalogResultMap">  
+        <![CDATA[  
+            select * from t_work_catalog where id = #{id}
+        ]]>
+	</select>
+	
+	<!-- 增加新的栏目 -->
+	<insert id="addCatalog" parameterType="com.cat.manage.catalog.domain.Catalog">
+	   <![CDATA[
+	       insert into t_work_catalog (parent_id, name, abbr, url, url_type,  description, order_num, state, icon)
+	       values (#{parentId}, #{name}, #{abbr}, #{url}, #{urlType}, #{description}, #{order}, #{state}, #{icon})
+	   ]]>
+	</insert>
+	
+	<!-- 更新栏目 -->
+	<update id="updateCatalog" parameterType="com.cat.manage.catalog.domain.Catalog">
+	   <![CDATA[
+	       update t_work_catalog set name = #{name}, abbr = #{abbr}, url = #{url}, url_type = #{urlType}, description = #{description}, order_num = #{order}, state = #{state}, icon = #{icon} where id = #{id}
+	   ]]>
+	</update>
+	
+	<!-- 删除栏目 -->
+	<delete id="delCatalogById" parameterType="int">
+	   <![CDATA[
+	       delete from t_work_catalog where id = #{id}
+	   ]]>
+	</delete>
+	
+	<!-- 删除多个栏目 -->
+	<delete id="delCatalogs" parameterType="java.lang.Integer">
+		delete from t_work_catalog where id in
+		<foreach collection="array" item="id" open="(" separator="," close=")">#{id}</foreach>
+	</delete>
+	
+	<!-- 删除多个栏目（根据 parentId） -->
+	<delete id="delCatalogsByParentId" parameterType="java.lang.Integer">
+		delete from t_work_catalog where parent_id in
+		<foreach collection="array" item="parentId" open="(" separator="," close=")">#{parentId}</foreach>
+	</delete>
+	
+	<!-- 查询某栏目下所有子栏目的列表 -->
+	<select id="querySubCatalogs" parameterType="int" resultMap="catalogResultMap">
+	   <![CDATA[
+	       select * from t_work_catalog where parent_id = #{id} order by order_num asc
+	   ]]>
+	</select>
+	
+	<select id="querySubCatalogsForFuzzy" parameterType="com.cat.manage.catalog.domain.Catalog" resultMap="catalogResultMap">
+		select id, parent_id, name, abbr, url, url_type, description, order_num, icon, state from t_work_catalog where parent_id = #{parentId}
+		<if test="id != null and id != ''">
+   			and id = #{id}
+   		</if>
+   		<if test="name != null and name != ''">
+   			and name like '%${name}%'
+   		</if>
+   		<if test="abbr != null and abbr != ''">
+   			and abbr like '%${abbr}%'
+   		</if>
+   		<if test="urlType != null and urlType != ''">
+   			and url_type = #{urlType}
+   		</if>
+   		order by order_num asc
+	</select>
+</mapper>

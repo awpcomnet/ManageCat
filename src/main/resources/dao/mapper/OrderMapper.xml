@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.manage.order.dao.OrderDao">
+	<resultMap type="com.cat.manage.order.domain.Order" id="orderResultMap">
+		<id property="orderId" column="order_id"/>
+		<result property="foreignState" column="foreign_state"/>
+		<result property="transfer" column="transfer"/>
+		<result property="affirmState" column="affirm_state"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		
+	</resultMap>
+	
+	<!-- 添加订单 -->
+	<insert id="addOrder" parameterType="com.cat.manage.order.domain.Order">
+		insert t_order (foreign_state, transfer, affirm_state, create_date, update_date)
+		values(#{foreignState},#{transfer},#{affirmState}, now(), now())
+	</insert>
+	
+	<!-- 查询单个订单 -->
+	<select id="queryOrderById" parameterType="java.lang.Integer">
+		select order_id, foreign_state, transfer, affirm_state, date_format(create_date, '%Y年%m月%d日 %T') as create_date, date_format(update_date, '%Y年%m月%d日 %T') as update_date from t_order where order_id = #{orderId}
+	</select>
+	
+	<!-- 查询所有订单 -->
+	<select id="queryOrderAll" resultMap="orderResultMap">
+		select order_id, foreign_state, transfer, affirm_state, date_format(create_date, '%Y年%m月%d日 %T') as create_date, date_format(update_date, '%Y年%m月%d日 %T') as update_date from t_order 
+		<if test="startTime != null and startTime != ''">
+			and DATE_FORMAT(create_date, '%Y%m%d') &gt;= #{startTime, jdbcType=VARCHAR}
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and DATE_FORMAT(create_date, '%Y%m%d') &lt;= #{endTime, jdbcType=VARCHAR}
+		</if>
+		order by create_date desc
+		
+	</select>
+	
+	<!-- 修改单个日历 -->
+	<update id="updateOrder" parameterType="com.cat.manage.order.domain.Order">
+		update t_order set update_date=now()
+		<if test="foreignState != null and foreignState != ''">
+			, foreign_state = #{foreignState}
+		</if>
+		<if test="transfer != null and transfer != ''">
+			, transfer= #{transfer}
+		</if>
+		<if test="affirmState != null and affirmState != ''">
+			, affirm_state = #{affirmState}
+		</if>
+		 where order_id = #{orderId}
+	</update>
+	
+</mapper>

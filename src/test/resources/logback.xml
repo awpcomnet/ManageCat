@@ -1,0 +1,41 @@
+<configuration>
+
+	<!-- 控制台日志 -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>[%-5level] [%23d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread{10}] [%c{30}:%L] -- %msg %n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<!-- 单个日志文件 -->
+	<appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
+		<file>E:/workspace/ManageWeb/logs/MIS.log</file>
+		<encoder>
+			<pattern>[%-5level] [%23d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread{10}] [%c{30}:%L] -- %msg %n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+		<append>true</append>
+		<prudent>false</prudent>
+	</appender>
+
+	<!-- 按日期滚动日志文件 -->
+	<appender name="rollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>E:/workspace/bams-web/logs/BAMS.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>E:/workspace/bams-web/logs/logs/BAMS-%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%-5level] [%23d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread{10}] [%c{30}:%L] -- %msg %n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+		<append>false</append>
+		<prudent>false</prudent>
+	</appender>
+
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+</configuration>
