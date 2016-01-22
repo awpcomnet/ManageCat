@@ -8,8 +8,10 @@ public class Order implements Serializable{
 	private String foreignState;//国外订单状态
 	private String transfer;//转运状态
 	private String affirmState;//确认收货状态
-	private String createDate; //创建时间
-	private String updateDate; //更新时间
+	private Date createDate; //创建时间
+	private Date updateDate; //更新时间
+	private String createDateFormat;//格式化后的时间
+	private String updateDateFormat;//格式化后的更新时间
 	
 	public Integer getOrderId() {
 		return orderId;
@@ -50,25 +52,43 @@ public class Order implements Serializable{
 		this.affirmState = affirmState;
 	}
 
-	
-
-	public String getCreateDate() {
+	public Date getCreateDate() {
 		return createDate;
 	}
 
 
-	public void setCreateDate(String createDate) {
+	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
 
 
-	public String getUpdateDate() {
+	public Date getUpdateDate() {
 		return updateDate;
 	}
 
 
-	public void setUpdateDate(String updateDate) {
+	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+
+
+	public String getCreateDateFormat() {
+		return createDateFormat;
+	}
+
+
+	public void setCreateDateFormat(String createDateFormat) {
+		this.createDateFormat = createDateFormat;
+	}
+
+
+	public String getUpdateDateFormat() {
+		return updateDateFormat;
+	}
+
+
+	public void setUpdateDateFormat(String updateDateFormat) {
+		this.updateDateFormat = updateDateFormat;
 	}
 
 

@@ -15,8 +15,11 @@ public class SubOrder implements Serializable{
 	private Double costPrice; //成本价(单个)
 	private Double sellingPrice; //售价(单个)
 	private String curState;//当前状态(0:国外下单成功 1:国外已砍单 2:已到转运公司 3:转运中 4:已到海关 5:已入库 6:售出 99:损坏)
-	private String createDate; //创建时间
-	private String updateDate; //更新时间
+	private Date createDate; //创建时间
+	private Date updateDate; //更新时间
+	private String createDateFormat;//格式化后的创建时间
+	private String updateDateFormat;//格式化后的更新时间
+	
 	public Integer getSuborderId() {
 		return suborderId;
 	}
@@ -83,19 +86,29 @@ public class SubOrder implements Serializable{
 	public void setSeriesId(Integer seriesId) {
 		this.seriesId = seriesId;
 	}
-	
-	
-	public String getCreateDate() {
+	public Date getCreateDate() {
 		return createDate;
 	}
-	public void setCreateDate(String createDate) {
+	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-	public String getUpdateDate() {
+	public Date getUpdateDate() {
 		return updateDate;
 	}
-	public void setUpdateDate(String updateDate) {
+	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+	public String getCreateDateFormat() {
+		return createDateFormat;
+	}
+	public void setCreateDateFormat(String createDateFormat) {
+		this.createDateFormat = createDateFormat;
+	}
+	public String getUpdateDateFormat() {
+		return updateDateFormat;
+	}
+	public void setUpdateDateFormat(String updateDateFormat) {
+		this.updateDateFormat = updateDateFormat;
 	}
 	@Override
 	public String toString() {
