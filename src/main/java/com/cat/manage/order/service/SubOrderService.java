@@ -1,15 +1,15 @@
 package com.cat.manage.order.service;
 
-import java.util.Date;
 import java.util.List;
 
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cat.manage.common.exception.BusinessException;
 import com.cat.manage.order.dao.SubOrderDao;
 import com.cat.manage.order.domain.SubOrder;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 @Service
 public class SubOrderService {
@@ -38,6 +38,17 @@ public class SubOrderService {
 	 */
 	public List<SubOrder> querySubOrderAll(String startTime, String endTime){
 		return subOrderDao.querySubOrderAll(startTime, endTime);
+	}
+	
+	/**
+	 * 查询所有子订单
+	 * @return
+	 */
+	public PageInfo<SubOrder> querySubOrderAllForName(SubOrder subOrder, String startTime, String endTime, Integer pageNum, Integer pageSize){
+		PageHelper.startPage(pageNum, pageSize);
+		List<SubOrder> list = subOrderDao.querySubOrderAllForName(subOrder, startTime, endTime);
+		PageInfo<SubOrder> page = new PageInfo<SubOrder>(list);
+		return page;
 	}
 	
 	/**

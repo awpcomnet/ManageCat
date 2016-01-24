@@ -121,7 +121,7 @@ Ext.define("MIS.view.catalog.CatalogModify", {
 				cataordernum = component.up("catalogmodify").down("numberfield[name=orderNum]").getValue(),
 				cataicon = component.up("catalogmodify").down("textfield[name=icon]").getValue(),
 				cataurltype = component.up("catalogmodify").down("textfield[name=urlType]").getValue(),
-				catastate = component.up("catalogmodify").down("checkbox[name=state]").getValue();
+				catastate = component.up("catalogmodify").down("checkbox[name=state]").getValue()+0;
 				cataid = component.up("#catalogmodifywindow").extraData.id;
 				
 			//console.log("name="+cataname+" abbr="+cataabbr+" url="+cataurl+" description="+description+" orderNum="+cataordernum+" icon="+cataicon+" urlType="+cataurltype+" state="+catastate+" id="+cataid);

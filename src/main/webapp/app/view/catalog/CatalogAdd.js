@@ -123,7 +123,7 @@ Ext.define("MIS.view.catalog.CatalogAdd", {
                 urlType = catalogAdd.down("textfield[name=urlType]").getValue(),
                 description = catalogAdd.down("textfield[name=description]").getValue(),
                 orderNum = catalogAdd.down("numberfield[name=orderNum]").getValue(),
-                state = catalogAdd.down("checkbox[name=state]").getValue(),
+                state = catalogAdd.down("checkbox[name=state]").getValue()+0,
                 icon = catalogAdd.down("textfield[name=icon]").getValue();
             
             var params = {

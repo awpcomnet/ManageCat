@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.manage.base.dao.BrandDao">
+	<resultMap type="com.cat.manage.base.domain.Brand" id="brandResultMap">
+		<id property="brandId" column="brand_id"/>
+		<result property="brandName" column="brand_name"/>
+		<result property="brandEname" column="brand_ename"/>
+		<result property="ofOrigin" column="of_origin"/>
+		<result property="isUse" column="is_use"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="createBy" column="create_by"/>
+		<result property="updateBy" column="update_by"/>
+		<result property="createDateFormat" column="createDateFormat"/>
+		<result property="updateDateFormat" column="updateDateFormat"/>
+	</resultMap>
+	
+	<!-- 添加品牌信息 -->
+	<insert id="addBrand" parameterType="com.cat.manage.base.domain.Brand">
+		insert into t_brand ( brand_name, brand_ename, of_origin, is_use, create_date, create_by, update_date, update_by)
+ 		values(#{brandName}, #{brandEname}, #{ofOrigin}, #{isUse}, now(), 'system', now(), 'system')
+	</insert>
+	
+	<!-- 修改品牌信息 -->
+	<update id="updateBrand" parameterType="com.cat.manage.base.domain.Brand">
+		update t_brand set update_date=now() , update_by = 'system'
+		<if test="brandName != null and brandName != ''">
+			, brand_name = #{brandName}
+		</if>
+		<if test="brandEname != null and brandEname != ''">
+			, brand_ename = #{brandEname}
+		</if>
+		<if test="ofOrigin != null and ofOrigin != ''">
+			, of_origin = #{ofOrigin}
+		</if>
+		<if test="isUse != null and isUse != ''">
+			, is_use = #{isUse}
+		</if>
+		where brand_id = #{brandId}
+	</update>
+	
+	<!-- 删除品牌信息 -->
+	<delete id="deleteBrand" parameterType="java.lang.Integer">
+		delete from t_brand where brand_id = #{brandId}
+	</delete>
+	
+	<!-- 查询品牌信息 -->
+	<select id="queryBrands" parameterType="com.cat.manage.base.domain.Brand" resultMap="brandResultMap">
+		select brand_id, brand_name, brand_ename, of_origin, is_use, create_date, create_by, update_date, update_by, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat 
+		from t_brand where 1=1
+		<if test="ofOrigin != null and ofOrigin != ''">
+			and of_origin = #{ofOrigin}
+		</if>
+		<if test="isUse != null and isUse != ''">
+			and is_use = #{isUse}
+		</if>
+		order by create_date desc
+	</select>
+</mapper>

@@ -27,11 +27,22 @@ public interface OrderDao {
 	 * 查询所有订单
 	 * @return
 	 */
-	public List<Order> queryOrderAll(@Param("startTime") String startTime, @Param("endTime") String endTime);
+	public List<Order> queryOrderAll(Order order, String startTime, String endTime);
 	
 	/**
 	 * 修改订单
 	 * @param order
 	 */
 	public void updateOrder(Order order);
+	
+	/**
+	 * 删除主订单
+	 * @param orderId
+	 */
+	public void deleteOrder(Integer orderId);
+	
+	/**
+	 * 更新主订单状态
+	 */
+	public void updateOrderForstatus(Integer orderId, String foreignState, String transfer, String affirmState);
 }
