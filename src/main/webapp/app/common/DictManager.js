@@ -5,7 +5,7 @@
 Ext.define("MIS.common.DictManager", {
     singleton:true,
 
-    dicts: ["foreignState", "transfer", "affirmState"],
+    dicts: ["foreignState", "transfer", "affirmState", "unitDict"],
 
     /**
      * 缓存字典Store, 防止反复创建字典实例
@@ -19,7 +19,6 @@ Ext.define("MIS.common.DictManager", {
      * 初始化字典项
      */
     initialize: function () {
-    	debugger;
       for (var i = this.dicts.length - 1; i >= 0; i--) {
         this.getDictStore(this.dicts[i]);
       }

@@ -98,7 +98,7 @@ Ext.define("MIS.view.order.OrderModify", {
 					} else {
 		                Ext.ComponentQuery.query("ordergrid")[0].store.reload();
 		                Ext.ComponentQuery.query("ordergrid")[0].getView().getSelectionModel().deselectAll();
-		                component.up("ordermodify").close();
+		                component.up("#ordermodifywindow").close();
 					}
 				},
 				failure: function (conn, request, option, eOpts) {

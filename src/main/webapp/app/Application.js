@@ -20,6 +20,7 @@ Ext.define('MIS.Application', {
                   "MIS.controller.mainviewport.MainNavigation",
                   "MIS.controller.catalog.CatalogController",
                   "MIS.controller.order.OrderController",
+                  "MIS.controller.order.SubOrderController",
                   "MIS.controller.dict.DictController"
     ],
 

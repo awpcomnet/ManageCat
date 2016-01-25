@@ -50,6 +50,27 @@ Ext.define("MIS.model.order.SubOrder", {
 	}, {
 		name: "updateDateFormat",
 		type: "string"
+	}, {
+		name: "brandName",
+		type: "string"
+	}, {
+		name: "seriesName",
+		type: "string"
+	}, {
+		name: "singleName",
+		type: "string"
+	}, {
+		name: "sumOrderPrice",
+		type: "string"
+	}, {
+		name: "sumTransferPrice",
+		type: "string"
+	}, {
+		name: "sumCostPrice",
+		type: "string"
+	}, {
+		name: "sumSellingPrice",
+		type: "string"
 	}]
 });
 

@@ -87,6 +87,23 @@ public class SubOrderService {
 	}
 	
 	/**
+	 * 根据主订单单号删除子订单
+	 * @param parentId
+	 */
+	public void deleteSubOrderByParentId(Integer parentId){
+		subOrderDao.deleteSubOrderByParentId(parentId);
+	}
+	
+	/**
+	 * 修改子订单状态
+	 * @param suborderId
+	 * @param curState
+	 */
+	public void updateSubOrderForStatus(Integer orderId, String curState){
+		subOrderDao.updateSubOrderForStatus(orderId, curState);
+	}
+	
+	/**
 	 * 合并子订单
 	 * @param subOrderIds 需要合并的所有子订单ID
 	 * @param orderPrice 合并后下单单价

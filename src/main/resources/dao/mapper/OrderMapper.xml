@@ -10,6 +10,10 @@
 		<result property="updateDate" column="update_date"/>
 		<result property="createDateFormat" column="createDateFormat"/>
 		<result property="updateDateFormat" column="updateDateFormat"/>
+		<result property="sumOrderPrice" column="sum_order_price"/>
+		<result property="sumTransferPrice" column="sum_transfer_price"/>
+		<result property="sumCostPrice" column="sum_cost_price"/>
+		<result property="sumSellingPrice" column="sum_selling_price"/>
 		
 	</resultMap>
 	
@@ -21,13 +25,24 @@
 	
 	<!-- 查询单个订单 -->
 	<select id="queryOrderById" parameterType="java.lang.Integer">
-		select order_id, foreign_state, transfer, affirm_state, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat from t_order where order_id = #{orderId}
+		select order_id, foreign_state, transfer, affirm_state, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat, 
+		IFNULL((select num*order_price from t_suborder where super_order_id = order_id),0.00) as sum_order_price,
+		IFNULL((select num*transfer_price from t_suborder where super_order_id = order_id),0.00) as sum_transfer_price,
+		IFNULL((select num*cost_price from t_suborder where super_order_id = order_id),0.00) as sum_cost_price,
+		IFNULL((select num*selling_price from t_suborder where super_order_id = order_id),0.00) as sum_selling_price
+		
+		from t_order where order_id = #{orderId}
 	</select>
 	
 	<!-- 查询所有订单 -->
 	<select id="queryOrderAll" parameterType="com.cat.manage.order.domain.Order" resultMap="orderResultMap">
-		select order_id, foreign_state, transfer, affirm_state, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat from t_order
-		where 1=1 
+		select order_id, foreign_state, transfer, affirm_state, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat, 
+		IFNULL((select num*order_price from t_suborder where super_order_id = order_id),0.00) as sum_order_price,
+		IFNULL((select num*transfer_price from t_suborder where super_order_id = order_id),0.00) as sum_transfer_price,
+		IFNULL((select num*cost_price from t_suborder where super_order_id = order_id),0.00) as sum_cost_price,
+		IFNULL((select num*selling_price from t_suborder where super_order_id = order_id),0.00) as sum_selling_price
+		
+		from t_order where 1=1 
 		<if test="param1.foreignState != null and param1.foreignState != ''">
 			and foreign_state = #{param1.foreignState}
 		</if>

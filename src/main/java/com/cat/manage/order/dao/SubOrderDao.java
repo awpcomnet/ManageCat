@@ -62,5 +62,5 @@ public interface SubOrderDao {
 	 * @param suborderId
 	 * @param curState
 	 */
-	public void updateSubOrderForStatus(Integer suborderId, String curState);
+	public void updateSubOrderForStatus(Integer orderId, String curState);
 }

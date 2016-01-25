@@ -39,6 +39,10 @@ Ext.define("MIS.view.order.OrderGrid", {
 			    { header: '确认收货状态', dataIndex: 'affirmState', sortable: true, width: 15, align: "center", renderer: function (value, rowindex, record, column) {
                     return MIS.common.DictManager.getDictItemName("affirmState", value);
                 }},
+                { header: '总下单价格', dataIndex: 'sumOrderPrice', sortable: true, width: 16, align: "center"},
+                { header: '运费总价', dataIndex: 'sumTransferPrice', sortable: true, width: 16, align: "center"},
+                { header: '成本价总价', dataIndex: 'sumCostPrice', sortable: true, width: 16, align: "center"},
+                { header: '售价(总价)', dataIndex: 'sumSellingPrice', sortable: true, width: 16, align: "center"},
 			    { header: '创建时间', dataIndex: 'createDateFormat', sortable: true, width: 25, align: "center"},
 			    { header: '修改时间', dataIndex: 'updateDateFormat', sortable: true, width: 25, align: "center"}
 			],
@@ -72,11 +76,17 @@ Ext.define("MIS.view.order.OrderGrid", {
 					scope: this,
 					handler: this.onDeleteClick
 				}, '-', {
-					iconCls: ' icon-arrow-up',
+					iconCls: 'icon-arrow-up',
 					text: '一键确认收货',
 					itemId: 'oneConfirm',
 					scope: this,
 					handler: this.onConfirmClick
+				}, '-', {
+					iconCls: 'icon-file-alt',
+					text: '操作子订单',
+					itemId: 'subOrderSet',
+					scope: this,
+					handler: this.onsubOrderSetClick
 				}, '->', {
 					iconCls: 'icon-refresh',
 					text: '刷新',
@@ -288,6 +298,10 @@ Ext.define("MIS.view.order.OrderGrid", {
 		        });
 			}
 		})
+    },
+    
+    onsubOrderSetClick: function(component){
+    	alert("操作子订单设计中");
     },
 	
 	onExpandSearchClick: function(component){

@@ -160,7 +160,7 @@
 		<if test="param2 != null and param2 != ''">
 			, curstate= #{param2}
 		</if>
-		where suborder_id = #{param1}
+		where super_order_id = #{param1}
 	</update>
 	
 	

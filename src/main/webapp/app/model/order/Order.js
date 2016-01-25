@@ -29,6 +29,18 @@ Ext.define("MIS.model.order.Order", {
 	}, {
 		name: "updateDateFormat",
 		type: "string"
+	}, {
+		name: "sumOrderPrice",
+		type: "string"
+	}, {
+		name: "sumTransferPrice",
+		type: "string"
+	}, {
+		name: "sumCostPrice",
+		type: "string"
+	}, {
+		name: "sumSellingPrice",
+		type: "string"
 	}]
 });
 
