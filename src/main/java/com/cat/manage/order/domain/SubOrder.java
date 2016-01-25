@@ -22,6 +22,11 @@ public class SubOrder implements Serializable{
 	private String brandName;//品牌名称
 	private String seriesName;//系列名称
 	private String singleName;//单品名称
+	/*非数据库字段*/
+	private String sumOrderPrice; //下单总价
+	private String sumTransferPrice; //运费总价
+	private String sumCostPrice; //成本价总价
+	private String sumSellingPrice; //售价(总价)
 	
 	public Integer getSuborderId() {
 		return suborderId;
@@ -131,7 +136,30 @@ public class SubOrder implements Serializable{
 	public void setSingleName(String singleName) {
 		this.singleName = singleName;
 	}
-	
+	public String getSumOrderPrice() {
+		return sumOrderPrice;
+	}
+	public void setSumOrderPrice(String sumOrderPrice) {
+		this.sumOrderPrice = sumOrderPrice;
+	}
+	public String getSumTransferPrice() {
+		return sumTransferPrice;
+	}
+	public void setSumTransferPrice(String sumTransferPrice) {
+		this.sumTransferPrice = sumTransferPrice;
+	}
+	public String getSumCostPrice() {
+		return sumCostPrice;
+	}
+	public void setSumCostPrice(String sumCostPrice) {
+		this.sumCostPrice = sumCostPrice;
+	}
+	public String getSumSellingPrice() {
+		return sumSellingPrice;
+	}
+	public void setSumSellingPrice(String sumSellingPrice) {
+		this.sumSellingPrice = sumSellingPrice;
+	}
 	@Override
 	public String toString() {
 		return "SubOrder [suborderId=" + suborderId + ", superOrderId="
