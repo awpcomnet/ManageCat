@@ -85,4 +85,17 @@ public class SubOrderService {
 		if(modifyFlag == 0)
 			throw new BusinessException("1", "拆分子订单失败，未查询到要拆分的订单");
 	}
+	
+	/**
+	 * 合并子订单
+	 * @param subOrderIds 需要合并的所有子订单ID
+	 * @param orderPrice 合并后下单单价
+	 * @param transferPrice 合并后运费（单个）
+	 * @param costPrice 合并后成本单价
+	 * @param sellingPrice 合并后销售单价
+	 * @param curState 合并后子订单状态
+	 */
+	public void mergeSubOrder(Integer[] subOrderIds, Double orderPrice, Double transferPrice, Double costPrice, Double sellingPrice, String curState){
+		//TODO 合并子订单
+	}
 }
