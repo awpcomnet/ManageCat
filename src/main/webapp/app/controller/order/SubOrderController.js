@@ -15,7 +15,8 @@ Ext.define("MIS.controller.order.SubOrderController", {
 	views: [
 	    "MIS.view.order.subOrderView",
 	    "MIS.view.order.SubOrderGrid",
-	    "MIS.view.order.SubOrderSearch"
+	    "MIS.view.order.SubOrderSearch",
+	    "MIS.view.order.SubOrderModify"
 	    
 	],
 	

@@ -81,16 +81,16 @@ Ext.define("MIS.view.order.SubOrderGrid", {
 					handler: this.onDeleteClick
 				}, '-', {
 					iconCls: 'icon-arrow-up',
-					text: '一键确认收货',
-					itemId: 'oneConfirm',
+					text: '订单拆分',
+					itemId: 'orderSplit',
 					scope: this,
-					handler: this.onConfirmClick
-				}, '-', {
-					iconCls: 'icon-file-alt',
-					text: '操作子订单',
-					itemId: 'subOrderSet',
+					handler: this.onOrderSplitClick
+				}, {
+					iconCls: 'icon-arrow-down',
+					text: '订单合并',
+					itemId: 'orderMerge',
 					scope: this,
-					handler: this.onsubOrderSetClick
+					handler: this.onOrderMergeClick
 				}, '->', {
 					iconCls: 'icon-refresh',
 					text: '刷新',
@@ -114,7 +114,7 @@ Ext.define("MIS.view.order.SubOrderGrid", {
     },
 	
 	onAddClick: function(grid, rindex, cindex){
-		
+		alert("暂未开发");
 //		Ext.MessageBox.confirm("暂停提示", "确定要添加新的主订单", function(confirmId){
 //			if(confirmId == "yes"){
 //				Ext.Ajax.request({
@@ -148,52 +148,62 @@ Ext.define("MIS.view.order.SubOrderGrid", {
 	},
 	
 	onModifyClick: function(component){
-//    	var selections = this.getView().getSelectionModel().getSelection();
-//    	var selectionNum = selections.length;
-//    	if(selectionNum != 1){
-//    		Ext.MessageBox.alert("请求失败", "请选择单个主订单进行修改");
-//    		return;
-//    	}
-//    	var orderview = Ext.ComponentQuery.query("orderview")[0];
-//    	orderview.getEl().mask();
-//    	
-//    	var editWindow = Ext.create("Ext.window.Window", {
-//        	title: "修改主订单",
-//        	id: "ordermodifywindow",
-//        	extraData: selections[0].raw,
-//        	renderTo: orderview.getEl(),
-//        	height: 200,
-//        	width: 580,
-//        	layout: "fit",
-//        	closeAction: "destroy",
-//        	items: [{
-//        		xtype: "ordermodify"
-//        	}],
-//        	listeners: {
-//        		close: function(){
-//        			orderview.getEl().unmask();
-//        		},
-//        		beforerender: function () {
-//               	 	var foreignState = Ext.ComponentQuery.query("ordermodify combobox[name=foreignState]")[0];
-//                    var foreignStateStore = foreignState.getStore();
-//                    foreignStateStore.load();
-//                    
-//                    var transfer = Ext.ComponentQuery.query("ordermodify combobox[name=transfer]")[0];
-//                    var transferStore = transfer.getStore();
-//                    transferStore.load();
-//                    
-//                    var affirmState = Ext.ComponentQuery.query("ordermodify combobox[name=affirmState]")[0];
-//                    var affirmStateStore = affirmState.getStore();
-//                    affirmStateStore.load();
-//               },
-//        		afterrender: function(component, eOpts){
-//        			var form = component.down("form");
-//                    var params = Ext.clone(this.extraData);
-//    				form.getForm().setValues(params);
-//    			}
-//        	}
-//        });
-//    	editWindow.show();
+    	var selections = this.getView().getSelectionModel().getSelection();
+    	var selectionNum = selections.length;
+    	if(selectionNum != 1){
+    		Ext.MessageBox.alert("请求失败", "请选择单个子订单进行修改");
+    		return;
+    	}
+    	var suborderview = Ext.ComponentQuery.query("suborderview")[0];
+    	suborderview.getEl().mask();
+    	
+    	var editWindow = Ext.create("Ext.window.Window", {
+        	title: "修改子订单",
+        	id: "subordermodifywindow",
+        	extraData: selections[0].raw,
+        	renderTo: suborderview.getEl(),
+        	height: 350,
+        	width: 575,
+        	layout: "fit",
+        	closeAction: "destroy",
+        	items: [{
+        		xtype: "subordermodify"
+        	}],
+        	listeners: {
+        		close: function(){
+        			suborderview.getEl().unmask();
+        		},
+        		beforerender: function () {
+               	 	var curState = Ext.ComponentQuery.query("subordermodify combobox[name=curState]")[0];
+                    var curStateStore = curState.getStore();
+                    curStateStore.load();
+                    
+                    var brandId = Ext.ComponentQuery.query("subordermodify combobox[name=brandId]")[0];
+                    var brandIdStore = brandId.getStore();
+                    brandIdStore.proxy.extraParams.isUse = 1;
+                    brandIdStore.load();
+                    
+                    var seriesId = Ext.ComponentQuery.query("subordermodify combobox[name=seriesId]")[0];
+                    var seriesIdStore = seriesId.getStore();
+                    seriesIdStore.proxy.extraParams.isUse = 1;
+                    seriesIdStore.proxy.extraParams.ofOrigin = this.extraData.brandId;
+                    seriesIdStore.load();
+                    
+                    var singleId = Ext.ComponentQuery.query("subordermodify combobox[name=singleId]")[0];
+                    var singleIdStore = singleId.getStore();
+                    singleIdStore.proxy.extraParams.isUse = 1;
+                    singleIdStore.proxy.extraParams.ofOrigin = this.extraData.seriesId;
+                    singleIdStore.load();
+                    
+               },
+        		afterrender: function(component, eOpts){
+        			var form = component.down("form");
+                    var params = Ext.clone(this.extraData);
+    				form.getForm().setValues(params);
+    			}
+        	}
+        });
+    	editWindow.show();
     },
     
     onDeleteClick: function(component){
@@ -250,66 +260,16 @@ Ext.define("MIS.view.order.SubOrderGrid", {
 //        });
     },
     
-    onConfirmClick: function(component){
-//    	var selections = this.getView().getSelectionModel().getSelection();
-//    	var selectionNum = selections.length;
-//    	if(selectionNum < 1){
-//    		Ext.MessageBox.alert("请求失败", "请至少选择一个主订单进行一键确认");
-//    		return;
-//    	}
-//    	
-//    	var tipText = "";
-//        if(selectionNum == 1){
-//        	tipText = "确定要确认该主订单,编号["+selections[0].raw.orderId+"],确认后所有主订单状态将归为最终状态，同时->子订单状态也将归为[入库状态]<-";
-//        } else {
-//        	tipText = "确定要确认这些主订单,编号[";
-//        	for(var num=0; num<selectionNum; num++){
-//        		tipText += selections[num].raw.orderId;
-//        		if(num != selectionNum - 1){
-//        			tipText += ",";
-//        		}
-//        	}
-//        	tipText += "],确认后所有主订单状态将归为最终状态，同时->子订单状态也将归为[入库状态]<-";
-//        	
-//        }
-//        
-//        var orderIds = [];
-//        var i = 0;
-//        for(;i<selectionNum; i++){
-//        	orderIds[i] = selections[i].raw.orderId;
-//        }
-//        
-//    	Ext.MessageBox.confirm("一键确认提示", tipText, function(confirmId){
-//			if(confirmId == "yes"){
-//				Ext.Ajax.request({
-//		            url: "/order/confirm",
-//		            params: {
-//		            	orderIds : orderIds
-//		            	
-//		            },
-//		            success: function (conn, request, option, eOpts) {
-//		                var result = Ext.JSON.decode(conn.responseText, true);
-//		                if (result.resultCode != 0) {
-//		                    Ext.MessageBox.alert("请求失败", "确认主订单失败 " + result.resultMessage);
-//		                } else {
-//		                	Ext.MessageBox.alert("请求成功", "确认主订单成功 ");
-//		                    Ext.ComponentQuery.query("ordergrid")[0].store.reload();
-//		                }
-//		            },
-//		            failure: function (conn, request, option, eOpts) {
-//		                Ext.MessageBox.alert("请求失败", "服务器繁忙, 稍后重试!");
-//		            }
-//		        });
-//			}
-//		})
+    onOrderSplitClick: function(component){
+    	alert("订单拆分");
     },
     
-    onsubOrderSetClick: function(component){
-    	alert("操作子订单设计中");
+    onOrderMergeClick: function(component){
+    	alert("订单合并");
     },
-	
+    
 	onExpandSearchClick: function(component){
-		var searchwindow = Ext.ComponentQuery.query("suborderSearchpanel")[0];
+		var searchwindow = Ext.ComponentQuery.query("subOrderSearchpanel")[0];
     	if(searchwindow.isHidden()){
     		searchwindow.show();
     	} else {

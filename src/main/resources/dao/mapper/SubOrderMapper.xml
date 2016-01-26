@@ -57,10 +57,10 @@
 	<select id="querySubOrderAllForName" resultMap="subOrderResultMap">
 		select suborder_id, super_order_id, brand_id, series_id, single_id, num, order_price,transfer_price, cost_price,selling_price, curstate, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat,
 		(num*order_price) as sum_order_price, (num*transfer_price) as sum_transfer_price, (num*cost_price) as sum_cost_price, (num*selling_price) as sum_selling_price,
-		(select brand_name from t_brand where brand_id = brand_id) as brand_name,
-		(select series_name from t_series where series_id = series_id) as series_name,
-		(select single_name from t_singleproduct where single_id = single_id) as single_name 
-		from t_suborder where 1=1
+		(select brand_name from t_brand where brand_id = t.brand_id) as brand_name,
+		(select series_name from t_series where series_id = t.series_id) as series_name,
+		(select single_name from t_singleproduct where single_id = t.single_id) as single_name 
+		from t_suborder t where 1=1
 		<if test="param1.superOrderId != null and param1.superOrderId != ''">
 			and super_order_id = #{param1.superOrderId}
 		</if>
