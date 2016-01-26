@@ -282,6 +282,7 @@ public class ExcelUtil {
 		
 		//获取模板内容
 		return getResultList(fromWorkbook, title, arg, sheetNum, rowNum);
+		
 	}
 	
 	
@@ -298,8 +299,6 @@ public class ExcelUtil {
 		if(!fromFile.canRead())
 			throw new Exception("源模板不可读取");
         
-		
-		InputStream ins = new FileInputStream(fromFile);
 		Workbook workBook = Workbook.getWorkbook(fromFile);
 		return workBook;
 	}
