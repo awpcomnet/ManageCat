@@ -50,6 +50,7 @@ Ext.define("MIS.view.order.SubOrderAdd", {
             	seriesId.setValue("");
             	var seriesIdStore = seriesId.getStore();
             	seriesIdStore.proxy.extraParams.ofOrigin = record;
+            	seriesIdStore.proxy.extraParams.isUse = 1;
             	seriesIdStore.reload();
             }
         },
@@ -68,9 +69,10 @@ Ext.define("MIS.view.order.SubOrderAdd", {
                 record = parseInt(combobox.getValue());
             	var singleId = combobox.up("form").down("combobox[name='singleId']");
             	singleId.setValue("");
-            	var seriesIdStore = singleId.getStore();
-            	seriesIdStore.proxy.extraParams.ofOrigin = record;
-            	seriesIdStore.reload();
+            	var singleIdStore = singleId.getStore();
+            	singleIdStore.proxy.extraParams.ofOrigin = record;
+            	singleIdStore.proxy.extraParams.isUse = 1;
+            	singleIdStore.reload();
             }
         },
         mode: "local",
@@ -156,13 +158,13 @@ Ext.define("MIS.view.order.SubOrderAdd", {
 	buttons: [{
 		text: "取消",
 		handler: function(component){
-			component.up("#subordermodifywindow").close();
+			component.up("#suborderaddwindow").close();
 		}
 	}, {
 		text: "确认",
 		handler: function(component){
 			var subOrderAdd = component.up("suborderadd");
-			var extraData = component.up("subordermodify").extraData;
+			var extraData = component.up("suborderadd").extraData;
 			
 			var superOrderId = subOrderAdd.down("textfield[name=superOrderId]").getValue().trim(),
 				curState = subOrderAdd.down("combobox[name=curState]").getValue(),
@@ -197,7 +199,7 @@ Ext.define("MIS.view.order.SubOrderAdd", {
 				success: function(conn, request, option, eOpts){
 					var result = Ext.JSON.decode(conn.responseText, true);
 					if(result.resultCode != 0){
-						Ext.MessageBox.alert("添加子订单失败, 稍后重试!");
+						Ext.MessageBox.alert("添加子订单失败, 原因:" + result.resultMessage);
 					} else {
 		                Ext.ComponentQuery.query("subordergrid")[0].store.reload();
 		                Ext.ComponentQuery.query("subordergrid")[0].getView().getSelectionModel().deselectAll();

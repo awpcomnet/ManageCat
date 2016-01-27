@@ -50,7 +50,7 @@
 			and DATE_FORMAT(create_date, '%Y%m%d') &lt;= #{endTime, jdbcType=VARCHAR}
 		</if>
 		
-		 order by create_date desc
+		 order by update_date desc
 	</select>
 	
 	<!-- 查询所有子订单 -->
@@ -98,7 +98,7 @@
 			and DATE_FORMAT(create_date, '%Y%m%d') &lt;= #{param3}
 		</if>
 		
-		 order by create_date desc
+		 order by update_date desc
 	</select>
 	
 	<!-- 修改单个子订单 -->
@@ -164,7 +164,7 @@
 	</update>
 	
 	<!-- 根据多个子订单ID查询子订单 -->
-	<select id="querySubOrderByIds">
+	<select id="querySubOrderByIds" resultMap="subOrderResultMap">
 		select suborder_id, super_order_id, brand_id, series_id, single_id, num, order_price,transfer_price, cost_price,selling_price, curstate, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
 		from t_suborder where suborder_id in
 		<foreach collection="param1" item="suborderId" open="(" separator="," close=")">#{suborderId}</foreach>
@@ -172,15 +172,16 @@
 			and curstate not in 
 			<foreach collection="param2" item="state" open="(" separator="," close=")">#{state}</foreach>
 		</if>
-		order by create_date desc
+		order by update_date desc
 	</select>
 	
 	<!-- 根据子订单ID合并子订单 -->
+	<!-- num值被select两次是因为mysql不允许在表查到的数据直接修改同一条数据 -->
 	<update id="updateSubOrderForMerge">
 		update t_suborder set update_date=now()
-			, num= (select SUM(num) from t_suborder where suborder_id in 
+			, num= ( select t.num from (select SUM(IFNULL(num, 0)) as num from t_suborder where suborder_id in 
 			<foreach collection="param2" item="id"  open="(" separator="," close=")">#{id}</foreach>
-			)
+			) t )
 			, order_price= #{param3}
 			, transfer_price= #{param4}
 			, cost_price= #{param5}
