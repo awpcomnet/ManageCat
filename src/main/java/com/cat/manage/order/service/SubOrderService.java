@@ -1,5 +1,6 @@
 package com.cat.manage.order.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import com.cat.manage.order.dao.SubOrderDao;
 import com.cat.manage.order.domain.SubOrder;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.base.Strings;
 
 @Service
 public class SubOrderService {
@@ -113,6 +115,48 @@ public class SubOrderService {
 	 * @param curState 合并后子订单状态
 	 */
 	public void mergeSubOrder(Integer[] subOrderIds, Double orderPrice, Double transferPrice, Double costPrice, Double sellingPrice, String curState){
-		//TODO 合并子订单
+		Integer subOrderId = subOrderIds[0];
+		int orderNum = subOrderIds.length;
+		
+		//查询子订单是否存在, 排除已砍单订单
+		List<SubOrder> list = subOrderDao.querySubOrderByIds(subOrderIds, new String[]{"8"});
+		if(list.size() != orderNum)
+			throw new BusinessException("1", "记录子订单数和要合并的子订单数不一致");
+		
+		//校验子订单数量是否一致，校验子订单品牌、系列、单品是否一致, 校验子订单当前状态是否为已砍单
+		String brandId = "";
+		String seriesId = "";
+		String singleId = "";
+		
+		for(SubOrder subOrder: list){
+			if(subOrder.getCurState().equals("8")){//已砍单
+				throw new BusinessException("1", "合并的订单中存在[已砍单]的订单，主订单编号["+subOrder.getSuperOrderId()+"]，子订单编号["+subOrder.getSuborderId()+"]");
+			}
+			if(Strings.isNullOrEmpty(brandId))
+				brandId = String.valueOf(subOrder.getBrandId());
+			if(Strings.isNullOrEmpty(seriesId))
+				seriesId = String.valueOf(subOrder.getSeriesId());
+			if(Strings.isNullOrEmpty(singleId))
+				singleId = String.valueOf(subOrder.getSingleId());
+			
+			if(!brandId.equals(String.valueOf(subOrder.getBrandId())))
+				throw new BusinessException("1", "合并的订单中品牌存在差异");
+			if(!seriesId.equals(String.valueOf(subOrder.getSeriesId())))
+				throw new BusinessException("1", "合并的订单中系列存在差异");
+			if(!singleId.equals(String.valueOf(subOrder.getSingleId())))
+				throw new BusinessException("1", "合并的订单中单品存在差异");
+		}
+		
+		//合并至一个子订单中
+		subOrderDao.updateSubOrderForMerge(subOrderId, subOrderIds, orderPrice, transferPrice, costPrice, sellingPrice, curState);
+		
+		//剔除合并后的子订单，剩余订单删除
+		subOrderIds = Arrays.copyOfRange(subOrderIds, 1, subOrderIds.length);
+		
+		//删除剩余子订单
+		int deleteNum = subOrderDao.deleteSubOrderForMoreId(subOrderIds);
+		if(deleteNum != subOrderIds.length){
+			throw new BusinessException("1", "删除剩余子订单失败，需要删除["+subOrderIds.length+"]条子订单，实际删除["+deleteNum+"]条");
+		}
 	}
 }

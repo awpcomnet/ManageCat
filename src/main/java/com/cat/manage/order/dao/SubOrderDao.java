@@ -63,4 +63,31 @@ public interface SubOrderDao {
 	 * @param curState
 	 */
 	public void updateSubOrderForStatus(Integer orderId, String curState);
+	
+	/**
+	 * 根据多个子订单ID查询数据
+	 * @param subOrderIds
+	 * @param excludeStare 不包含的状态
+	 * @return
+	 */
+	public List<SubOrder> querySubOrderByIds(Integer[] subOrderIds, String[] excludeStare);
+	
+	/**
+	 * 根据子订单ID合并子订单
+	 * @param subOrderIds
+	 * @param orderPrice
+	 * @param transferPrice
+	 * @param costPrice
+	 * @param sellingPrice
+	 * @param curState
+	 * @return
+	 */
+	public Integer updateSubOrderForMerge(Integer subOrderId, Integer[] subOrderIds, Double orderPrice, Double transferPrice, Double costPrice, Double sellingPrice, String curState);
+	
+	/**
+	 * 根据多个ID删除子订单
+	 * @param subOrderIds
+	 * @return
+	 */
+	public Integer deleteSubOrderForMoreId(Integer[] subOrderIds); 
 }

@@ -61,4 +61,17 @@ public class SubOrderController {
 		subOrderService.updateSubOrderForGroup(subOrderId, num);
 		return new Srm().setResultCode("0").setResultMessage("拆分子订单成功");
 	}
+	
+	@RequestMapping("/merge")
+	public Srm mergeSubOrder(Integer[] subOrderIds, HttpServletRequest request){
+		HttpParams params = HttpParams.buildFrom(request);
+		Double orderPrice = params.getDouble("orderPrice");
+		Double transferPrice = params.getDouble("transferPrice");
+		Double costPrice = params.getDouble("costPrice");
+		Double sellingPrice = params.getDouble("sellingPrice");
+		String curState = params.getStr("curState");
+		
+		subOrderService.mergeSubOrder(subOrderIds, orderPrice, transferPrice, costPrice, sellingPrice, curState);
+		return new Srm().setResultCode("0").setResultMessage("订单合并成功");
+	}
 }
