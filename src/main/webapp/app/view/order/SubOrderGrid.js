@@ -114,32 +114,60 @@ Ext.define("MIS.view.order.SubOrderGrid", {
     },
 	
 	onAddClick: function(grid, rindex, cindex){
-		alert("暂未开发");
-//		Ext.MessageBox.confirm("暂停提示", "确定要添加新的主订单", function(confirmId){
-//			if(confirmId == "yes"){
-//				Ext.Ajax.request({
-//		            url: "/order/add",
-//		            params: {
-//		            	foreignState: 0,//国外订单状态
-//		            	transfer: 0,//转运状态
-//		            	affirmState: 0//确认收货状态
-//		            	
-//		            },
-//		            success: function (conn, request, option, eOpts) {
-//		                var result = Ext.JSON.decode(conn.responseText, true);
-//		                if (result.resultCode != 0) {
-//		                    Ext.MessageBox.alert("请求失败", "添加主订单失败 " + result.resultMessage);
-//		                } else {
-//		                	Ext.MessageBox.alert("请求成功", "添加主订单成功 ");
-//		                    Ext.ComponentQuery.query("ordergrid")[0].store.reload();
-//		                }
-//		            },
-//		            failure: function (conn, request, option, eOpts) {
-//		                Ext.MessageBox.alert("请求失败", "服务器繁忙, 稍后重试!");
-//		            }
-//		        });
-//			}
-//		})
+		var selections = this.getView().getSelectionModel().getSelection();
+    	var selectionNum = selections.length;
+    	if(selectionNum != 1){
+    		Ext.MessageBox.alert("请求失败", "请选择一个子订单进行添加");
+    		return;
+    	}
+    	var suborderview = Ext.ComponentQuery.query("suborderview")[0];
+    	suborderview.getEl().mask();
+    	
+    	var editWindow = Ext.create("Ext.window.Window", {
+        	title: "添加子订单",
+        	id: "suborderaddwindow",
+        	extraData: selections[0].raw,
+        	renderTo: suborderview.getEl(),
+        	height: 350,
+        	width: 575,
+        	layout: "fit",
+        	closeAction: "destroy",
+        	items: [{
+        		xtype: "suborderadd"
+        	}],
+        	listeners: {
+        		close: function(){
+        			suborderview.getEl().unmask();
+        		},
+        		beforerender: function () {
+               	 	var curState = Ext.ComponentQuery.query("subordermodify combobox[name=curState]")[0];
+                    var curStateStore = curState.getStore();
+                    curStateStore.load();
+                    
+                    var brandId = Ext.ComponentQuery.query("subordermodify combobox[name=brandId]")[0];
+                    var brandIdStore = brandId.getStore();
+                    brandIdStore.proxy.extraParams.isUse = 1;
+                    brandIdStore.load();
+                    
+                    var seriesId = Ext.ComponentQuery.query("subordermodify combobox[name=seriesId]")[0];
+                    var seriesIdStore = seriesId.getStore();
+                    seriesIdStore.proxy.extraParams.isUse = 1;
+                    seriesIdStore.proxy.extraParams.ofOrigin = this.extraData.brandId;
+                    seriesIdStore.load();
+                    
+                    var singleId = Ext.ComponentQuery.query("subordermodify combobox[name=singleId]")[0];
+                    var singleIdStore = singleId.getStore();
+                    singleIdStore.proxy.extraParams.isUse = 1;
+                    singleIdStore.proxy.extraParams.ofOrigin = this.extraData.seriesId;
+                    singleIdStore.load();
+                    
+               },
+        		afterrender: function(component, eOpts){
+        			component.down("textfield[name=superOrderId]").setValue(this.extraData.superOrderId);
+    			}
+        	}
+        });
+    	editWindow.show();
 		
 	},
 	
