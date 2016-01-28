@@ -46,7 +46,7 @@ public class ExcelUtil {
 	
 	//添加map转换bean所需额外类型
 	static{
-		 ConvertUtils.convert(new BigDecimalConverter(), BigDecimal.class);
+		 ConvertUtils.register(new BigDecimalConverter(), BigDecimal.class);
 	}
 
 	/**
