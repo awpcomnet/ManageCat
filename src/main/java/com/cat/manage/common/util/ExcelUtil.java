@@ -1,10 +1,10 @@
 package com.cat.manage.common.util;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,9 +26,12 @@ import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.cat.manage.common.util.converter.BigDecimalConverter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -40,6 +43,11 @@ import com.google.common.collect.Maps;
 public class ExcelUtil {
 
 	private ExcelUtil() {}
+	
+	//添加map转换bean所需额外类型
+	static{
+		 ConvertUtils.register(new BigDecimalConverter(), BigDecimal.class);
+	}
 
 	/**
 	 * 描述：导出单工作表Excel
@@ -249,7 +257,7 @@ public class ExcelUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static List<Object> importExcel(File fromFile, List<String> title, Class<?> arg) throws Exception{
+	public static List<?> importExcel(File fromFile, List<String> title, Class<?> arg) throws Exception{
 		return importExcel(fromFile, title, arg, 0, 0);
 	}
 	
@@ -261,7 +269,7 @@ public class ExcelUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static List<Object> importExcel(File fromFile, List<String> title, Class<?> arg, int sheetNum) throws Exception{
+	public static List<?> importExcel(File fromFile, List<String> title, Class<?> arg, int sheetNum) throws Exception{
 		return importExcel(fromFile, title, arg, sheetNum, 0);
 	}
 	
@@ -274,7 +282,7 @@ public class ExcelUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static List<Object> importExcel(File fromFile, List<String> title, Class<?> arg, int sheetNum, int rowNum) throws Exception{
+	public static List<?> importExcel(File fromFile, List<String> title, Class<?> arg, int sheetNum, int rowNum) throws Exception{
 		Workbook fromWorkbook = null;
 		
 		//读取源模板
@@ -336,7 +344,7 @@ public class ExcelUtil {
 	 * @return
 	 * @throws Exception 
 	 */
-	private static List<Object> getResultList(Workbook workBook, List<String> title, Class<?> arg, int sheetNum, int rowNum) throws Exception{
+	private static List<?> getResultList(Workbook workBook, List<String> title, Class<?> arg, int sheetNum, int rowNum) throws Exception{
 		List<Object> resultList = Lists.newArrayList();
 		
 		//获取目标工作簿
@@ -355,8 +363,9 @@ public class ExcelUtil {
 	 * @return
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException 
 	 */
-	private static List<Object> getResultHandle(Class<?> arg, Sheet fromSheet, List<String> title, int rowNum) throws InstantiationException, IllegalAccessException{
+	private static List<?> getResultHandle(Class<?> arg, Sheet fromSheet, List<String> title, int rowNum) throws InstantiationException, IllegalAccessException, InvocationTargetException{
 		if(arg == null)
 			return getMapList(fromSheet, title, rowNum);
 		
@@ -370,28 +379,22 @@ public class ExcelUtil {
 	 * @return
 	 * @throws IllegalAccessException 
 	 * @throws InstantiationException 
+	 * @throws InvocationTargetException 
 	 */
-	private static List<Object> getArgList(Class<?> arg, Sheet fromSheet, List<String> title, int rowNum) throws InstantiationException, IllegalAccessException{
+	private static List<?> getArgList(Class<?> arg, Sheet fromSheet, List<String> title, int rowNum) throws InstantiationException, IllegalAccessException, InvocationTargetException{
 		List<Object> resultList = Lists.newArrayList();
 		int rows = fromSheet.getRows();
 		
 		for(int i=rowNum; i<rows; i++){
 			Cell[] cells = fromSheet.getRow(i);//行
+			Map<String, String> map = Maps.newHashMap();
 			Object obj = arg.newInstance();
 			for(int j=0,len=title.size(); j<len; j++){
 				Cell cell = cells[j];
 				String paramValue = cell.getContents();
 				String paramName = title.get(j);//
-				
-				Field field;
-				try {
-					field = obj.getClass().getDeclaredField(paramName);
-					field.setAccessible(true);
-					field.set(obj, paramValue);
-				} catch (NoSuchFieldException e) {
-					e.printStackTrace();
-				}
-				
+				map.put(paramName, paramValue);
+				BeanUtils.populate(obj, map);
 			}
 			resultList.add(obj);
 		}
@@ -405,20 +408,20 @@ public class ExcelUtil {
 	 * @param title
 	 * @return
 	 */
-	private static List<Object> getMapList(Sheet fromSheet, List<String> title, int rowNum){
+	private static List<?> getMapList(Sheet fromSheet, List<String> title, int rowNum){
 		List<Object> resultList = Lists.newArrayList();
 		int rows = fromSheet.getRows();
 		
 		for(int i=rowNum; i<rows; i++){
 			Cell[] cells = fromSheet.getRow(i);//行
+			Map<String, String> map = Maps.newHashMap();
 			for(int j=0,len=title.size(); j<len; j++){
 				Cell cell = cells[j];
 				String paramValue = cell.getContents();
 				String paramName = title.get(j);//
-				Map<String, String> map = Maps.newHashMap();
 				map.put(paramName, paramValue);
-				resultList.add(map);
 			}
+			resultList.add(map);
 		}
 		
 		return resultList;
