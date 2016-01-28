@@ -27,19 +27,12 @@ Ext.define("MIS.view.order.SubOrderSearch", {
 			layout: "anchor",
 			items:[{
 				margin: "0 10",
-				width: 150,
-				fieldLabel: "国外转运状态",
-				labelWidth: 80,
-				name: "foreignState",
-				anchor: "55%",
-				xtype: "combo",
-		        store: Ext.create("MIS.store.dict.DictQueryStore", {
-	            	dictcode: "foreignState"
-	            }),
-		        mode: "local",
-		        displayField: 'name',
-		        valueField: "value",
-		        editable:false
+				width: 200,
+				xtype: "textfield",
+				fieldLabel: "主订单编号",
+				labelWidth: 40,
+				name: "superOrderId",
+				anchor: "55%" 
 			}, {
 				margin: "5 10",
 				xtype: "button",
@@ -52,18 +45,22 @@ Ext.define("MIS.view.order.SubOrderSearch", {
                 	var subOrderStore = component.up("suborderview").down("subordergrid").getStore();
                 	
                 	// 设置Store参数
-                	var foreignState = component.up("subOrderSearchpanel").down("combo[name=foreignState]").getValue(),
-                		transfer = component.up("subOrderSearchpanel").down("combo[name=transfer]").getValue(),
-                		affirmState = component.up("subOrderSearchpanel").down("combo[name=affirmState]").getValue(),
+                	var superOrderId = component.up("subOrderSearchpanel").down("textfield[name=superOrderId]").getValue().trim(),
+                		curState = component.up("subOrderSearchpanel").down("combobox[name=curState]").getValue(),
+                		brandId = component.up("subOrderSearchpanel").down("combobox[name=brandId]").getValue(),
+                		seriesId = component.up("subOrderSearchpanel").down("combobox[name=seriesId]").getValue(),
+                		singleId = component.up("subOrderSearchpanel").down("combobox[name=singleId]").getValue(),
                 		startTime = component.up("subOrderSearchpanel").down("datefield[name=startTime]").getValue(),
                 		endTime = component.up("subOrderSearchpanel").down("datefield[name=endTime]").getValue();
                 	
-                	console.log(foreignState+"|"+transfer+"|"+affirmState+"|"+Ext.util.Format.date(startTime,'Ymd')+"|"+Ext.util.Format.date(endTime,'Ymd'));
+                	console.log(superOrderId+"|"+curState+"|"+brandId+"|"+seriesId+"|"+singleId+"|"+Ext.util.Format.date(startTime,'Ymd')+"|"+Ext.util.Format.date(endTime,'Ymd'));
                 	
                 	var params = subOrderStore.proxy.extraParams;
-                	params.foreignState = foreignState;
-                	params.transfer = transfer;
-                	params.affirmState = affirmState;
+                	params.superOrderId = superOrderId;
+                	params.curState = curState;
+                	params.brandId = brandId;
+                	params.seriesId = seriesId;
+                	params.singleId = singleId;
                 	params.startTime = Ext.util.Format.date(startTime,'Ymd');
                 	params.endTime = Ext.util.Format.date(endTime,'Ymd');
                 	
@@ -80,53 +77,109 @@ Ext.define("MIS.view.order.SubOrderSearch", {
 				}
 			}]
 		}, {
-			margin: "0 10",
-			width: 180,
-			fieldLabel: "转运状态",
-			labelWidth: 60,
-			name: "transfer",
-			anchor: "55%",
-			xtype: "combo",
-	        store: Ext.create("MIS.store.dict.DictQueryStore", {
-            	dictcode: "transfer"
-            }),
+			xtype: "container",
+			layout: "anchor",
+			items:[{
+				fieldLabel: "订单状态",
+		        name: "curState",
+		        xtype: "combobox",
+		        store: Ext.create("MIS.store.dict.DictQueryStore", {
+		        	dictcode: "subOrderState"
+		        }),
+		        mode: "local",
+		        displayField: 'name',
+		        valueField: "value",
+		        allowBlank: true,
+		        anchor: "55%",
+		        labelWidth: 60,
+		        width: 190,
+		        margin: "0 10",
+		        editable:false
+			}, {
+				margin: "5 10",
+				width: 190,
+				xtype: 'datefield',
+				fieldLabel: "起始时间",
+				labelWidth: 60,
+				name: "startTime",
+				anchor: "55%",
+	            format: 'Y年m月d日'
+			}]
+		}, {
+			xtype: "container",
+			layout: "anchor",
+			items:[{
+				fieldLabel: "品牌名称",
+		        name: "brandId",
+		        xtype: "combobox",
+		        store: Ext.create("MIS.store.brand.BrandStore"),
+		        listeners: {
+		            select: function (combobox, record) {
+		                record = parseInt(combobox.getValue());
+		            	var seriesId = combobox.up("form").down("combobox[name='seriesId']");
+		            	seriesId.setValue("");
+		            	var seriesIdStore = seriesId.getStore();
+		            	seriesIdStore.proxy.extraParams.ofOrigin = record;
+		            	seriesIdStore.reload();
+		            }
+		        },
+		        mode: "local",
+		        displayField: 'brandName',
+		        valueField: "brandId",
+		        allowBlank: true,
+		        anchor: "55%",
+		        labelWidth: 60,
+		        width: 190,
+		        margin: "0 10",
+		        editable:false
+			}, {
+				margin: "5 10",
+				width: 190,
+				xtype: 'datefield',
+				fieldLabel: "结束时间",
+				labelWidth: 60,
+				name: "endTime",
+				anchor: "55%" ,
+	            format: 'Y年m月d日'
+			}]
+		}, {
+			fieldLabel: "系列名称",
+	        name: "seriesId",
+	        xtype: "combobox",
+	        store: Ext.create("MIS.store.series.SeriesStore"),
+	        listeners: {
+	            select: function (combobox, record) {
+	                record = parseInt(combobox.getValue());
+	            	var singleId = combobox.up("form").down("combobox[name='singleId']");
+	            	singleId.setValue("");
+	            	var seriesIdStore = singleId.getStore();
+	            	seriesIdStore.proxy.extraParams.ofOrigin = record;
+	            	seriesIdStore.reload();
+	            }
+	        },
 	        mode: "local",
-	        displayField: 'name',
-	        valueField: "value",
+	        displayField: 'seriesName',
+	        valueField: "seriesId",
+	        allowBlank: true,
+	        anchor: "55%",
+	        labelWidth: 60,
+	        width: 190,
+	        margin: "0 10",
 	        editable:false
 		}, {
-			margin: "0 10",
-			width: 180,
-			fieldLabel: "确认收货状态",
-			labelWidth: 80,
-			name: "affirmState",
-			anchor: "55%",
-			xtype: 'combo',
-	        editable:false,
-	        store: Ext.create("MIS.store.dict.DictQueryStore", {
-            	dictcode: "affirmState"
-            }),
-	        displayField : 'name',
-			valueField : "value",
-	        mode: "local"
-		}, {
-			margin: "0 15",
-			width: 200,
-			xtype: 'datefield',
-			fieldLabel: "起始时间",
-			labelWidth: 60,
-			name: "startTime",
-			anchor: "55%",
-            format: 'Y年m月d日'
-		}, {
-			margin: "0 15",
-			width: 200,
-			xtype: 'datefield',
-			fieldLabel: "结束时间",
-			labelWidth: 60,
-			name: "endTime",
-			anchor: "55%" ,
-            format: 'Y年m月d日'
+			fieldLabel: "单品名称",
+	        name: "singleId",
+	        xtype: "combobox",
+	        store: Ext.create("MIS.store.singleproduct.SingleproductStore"),
+	        mode: "local",
+	        displayField: 'singleName',
+	        valueField: "singleId",
+	        allowBlank: true,
+	        anchor: "55%",
+	        labelWidth: 60,
+	        width: 190,
+	        margin: "0 10",
+	        editable:false
 		}]
 	}]
 });

@@ -1,5 +1,5 @@
 /**
- * 主订单数据显示
+ * 子订单数据显示
  */
 Ext.define("MIS.view.order.SubOrderGrid", {
 	extend: "Ext.grid.Panel",
@@ -45,7 +45,7 @@ Ext.define("MIS.view.order.SubOrderGrid", {
 //			    { header: '成本总价', dataIndex: 'sumCostPrice', sortable: true, width: 15, align: "center"},
 //			    { header: '销售总价', dataIndex: 'sumSellingPrice', sortable: true, width: 15, align: "center"},
 			    { header: '当前状态', dataIndex: 'curState', sortable: true, width: 13, align: "center", renderer: function (value, rowindex, record, column) {
-			    	return MIS.common.DictManager.getDictItemName("foreignState", value);
+			    	return MIS.common.DictManager.getDictItemName("subOrderState", value);
                 }},
 			    //{ header: '创建时间', dataIndex: 'createDateFormat', sortable: true, width: 25, align: "center"},
 			    { header: '修改时间', dataIndex: 'updateDateFormat', sortable: true, width: 24, align: "center"}
@@ -481,6 +481,26 @@ Ext.define("MIS.view.order.SubOrderGrid", {
 	onExpandSearchClick: function(component){
 		var searchwindow = Ext.ComponentQuery.query("subOrderSearchpanel")[0];
     	if(searchwindow.isHidden()){
+    		var curState = Ext.ComponentQuery.query("subOrderSearchpanel combobox[name=curState]")[0];
+            var curStateStore = curState.getStore();
+            curStateStore.load();
+            
+            var brandId = Ext.ComponentQuery.query("subOrderSearchpanel combobox[name=brandId]")[0];
+            var brandIdStore = brandId.getStore();
+            brandIdStore.proxy.extraParams.isUse = 1;
+            brandIdStore.load();
+            
+            var seriesId = Ext.ComponentQuery.query("subOrderSearchpanel combobox[name=seriesId]")[0];
+            var seriesIdStore = seriesId.getStore();
+            seriesIdStore.proxy.extraParams.isUse = 1;
+            seriesIdStore.proxy.extraParams.ofOrigin = -1;
+            seriesIdStore.load();
+            
+            var singleId = Ext.ComponentQuery.query("subOrderSearchpanel combobox[name=singleId]")[0];
+            var singleIdStore = singleId.getStore();
+            singleIdStore.proxy.extraParams.isUse = 1;
+            singleIdStore.proxy.extraParams.ofOrigin = -1;
+            singleIdStore.load();
     		searchwindow.show();
     	} else {
     		searchwindow.form.reset();

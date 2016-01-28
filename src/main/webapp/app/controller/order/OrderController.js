@@ -15,7 +15,8 @@ Ext.define("MIS.controller.order.OrderController", {
 	views: [
 	    "MIS.view.order.OrderView",
 	    "MIS.view.order.OrderSearch",
-	    "MIS.view.order.OrderModify"
+	    "MIS.view.order.OrderModify",
+	    "MIS.view.order.SubOrderAddForOrder"
 	    
 	],
 	

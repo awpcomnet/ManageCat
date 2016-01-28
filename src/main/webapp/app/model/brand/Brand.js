@@ -19,7 +19,7 @@ Ext.define("MIS.model.brand.Brand", {
 		type: "string"
 	}, {
 		name: "isUse",
-		type: "date"
+		type: "string"
 	}, {
 		name: "createDate",
 		type: "date"

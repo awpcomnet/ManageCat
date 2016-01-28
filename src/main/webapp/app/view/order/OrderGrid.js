@@ -84,7 +84,7 @@ Ext.define("MIS.view.order.OrderGrid", {
 					handler: this.onConfirmClick
 				}, '-', {
 					iconCls: 'icon-file-alt',
-					text: '操作子订单',
+					text: '添加子订单',
 					itemId: 'subOrderSet',
 					scope: this,
 					handler: this.onsubOrderSetClick
@@ -302,7 +302,62 @@ Ext.define("MIS.view.order.OrderGrid", {
     },
     
     onsubOrderSetClick: function(component){
-    	alert("操作子订单设计中");
+    	var selections = this.getView().getSelectionModel().getSelection();
+    	var selectionNum = selections.length;
+    	if(selectionNum != 1){
+    		Ext.MessageBox.alert("请求失败", "请选择一个主订单进行子订单添加");
+    		return;
+    	}
+    	var orderview = Ext.ComponentQuery.query("orderview")[0];
+    	orderview.getEl().mask();
+    	
+    	var editWindow = Ext.create("Ext.window.Window", {
+        	title: "添加子订单",
+        	id: "suborderaddfororderwindow",
+        	extraData: selections[0].raw,
+        	renderTo: orderview.getEl(),
+        	height: 350,
+        	width: 575,
+        	layout: "fit",
+        	closeAction: "destroy",
+        	items: [{
+        		xtype: "suborderaddfororder"
+        	}],
+        	listeners: {
+        		close: function(){
+        			orderview.getEl().unmask();
+        		},
+        		beforerender: function () {
+               	 	var curState = Ext.ComponentQuery.query("suborderaddfororder combobox[name=curState]")[0];
+                    var curStateStore = curState.getStore();
+                    curStateStore.load();
+                    
+                    var brandId = Ext.ComponentQuery.query("suborderaddfororder combobox[name=brandId]")[0];
+                    var brandIdStore = brandId.getStore();
+                    brandIdStore.proxy.extraParams.isUse = 1;
+                    brandIdStore.load();
+                    
+                    var seriesId = Ext.ComponentQuery.query("suborderaddfororder combobox[name=seriesId]")[0];
+                    var seriesIdStore = seriesId.getStore();
+                    seriesIdStore.proxy.extraParams.isUse = 1;
+                    seriesIdStore.proxy.extraParams.ofOrigin = -1;
+                    seriesIdStore.load();
+                    
+                    var singleId = Ext.ComponentQuery.query("suborderaddfororder combobox[name=singleId]")[0];
+                    var singleIdStore = singleId.getStore();
+                    singleIdStore.proxy.extraParams.isUse = 1;
+                    singleIdStore.proxy.extraParams.ofOrigin = -1;
+                    singleIdStore.load();
+                    
+               },
+        		afterrender: function(component, eOpts){
+        			component.down("textfield[name=superOrderId]").setValue(this.extraData.orderId);
+        			component.down("combobox[name=curState]").setValue('0');
+        			component.down("numberfield[name=num]").setValue(1);
+    			}
+        	}
+        });
+    	editWindow.show();
     },
 	
 	onExpandSearchClick: function(component){
