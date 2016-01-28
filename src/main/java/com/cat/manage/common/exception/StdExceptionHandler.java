@@ -22,6 +22,7 @@ public class StdExceptionHandler implements HandlerExceptionResolver {
 	/**
 	 * 异常处理
 	 */
+	@Override
 	public ModelAndView resolveException(HttpServletRequest request,
 			HttpServletResponse response, Object handler, Exception ex) {
 

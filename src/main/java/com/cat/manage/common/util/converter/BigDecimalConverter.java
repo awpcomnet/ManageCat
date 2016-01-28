@@ -8,6 +8,7 @@ import com.google.common.base.Strings;
 
 public class BigDecimalConverter implements Converter {
 
+	@Override
     public Object convert(Class type, Object value) {
         if (value == null)
             return null;
