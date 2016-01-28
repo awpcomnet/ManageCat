@@ -56,7 +56,7 @@ public class SubOrderController {
 		return new Srm().setResultCode("0").setResultMessage("修改子订单成功");
 	}
 	
-	@RequestMapping("/group")
+	@RequestMapping("/split")
 	public Srm modifySubOrderForGroup(Integer subOrderId, Integer num){
 		subOrderService.updateSubOrderForGroup(subOrderId, num);
 		return new Srm().setResultCode("0").setResultMessage("拆分子订单成功");
@@ -73,5 +73,13 @@ public class SubOrderController {
 		
 		subOrderService.mergeSubOrder(subOrderIds, orderPrice, transferPrice, costPrice, sellingPrice, curState);
 		return new Srm().setResultCode("0").setResultMessage("订单合并成功");
+	}
+	
+	@RequestMapping("/delete")
+	public Srm deleteSubOrder(Integer[] subOrderIds){
+		if(subOrderIds == null || subOrderIds.length <= 0)
+			return new Srm().setResultCode("1").setResultMessage("子订单删除失败，原因参数异常");
+		subOrderService.deleteSubOrderByIds(subOrderIds);
+		return new Srm().setResultCode("0").setResultMessage("子订单删除成功");
 	}
 }

@@ -17,6 +17,7 @@ public class Order implements Serializable{
 	private String sumTransferPrice; //运费总价
 	private String sumCostPrice; //成本价总价
 	private String sumSellingPrice; //售价(总价)
+	private String sumSubOrderNum;//总子订单数
 	
 	
 	public Integer getOrderId() {
@@ -136,7 +137,25 @@ public class Order implements Serializable{
 		this.sumSellingPrice = sumSellingPrice;
 	}
 
+	public String getSumSubOrderNum() {
+		return sumSubOrderNum;
+	}
 
+	public void setSumSubOrderNum(String sumSubOrderNum) {
+		this.sumSubOrderNum = sumSubOrderNum;
+	}
+
+	@Override
+	public String toString() {
+		return "Order [orderId=" + orderId + ", foreignState=" + foreignState
+				+ ", transfer=" + transfer + ", affirmState=" + affirmState
+				+ ", createDate=" + createDate + ", updateDate=" + updateDate
+				+ ", createDateFormat=" + createDateFormat
+				+ ", updateDateFormat=" + updateDateFormat + ", sumOrderPrice="
+				+ sumOrderPrice + ", sumTransferPrice=" + sumTransferPrice
+				+ ", sumCostPrice=" + sumCostPrice + ", sumSellingPrice="
+				+ sumSellingPrice + ", sumSubOrderNum=" + sumSubOrderNum + "]";
+	}
 
 	private static final long serialVersionUID = 617094632310826077L;
 }

@@ -13,7 +13,7 @@ Ext.define("MIS.view.order.SubOrderSearch", {
 	
 	items: [{
 		xtype:'fieldset',
-        title: '主订单查询',
+        title: '子订单查询',
         padding: "5 5 0 5",
         margin: "0 10",
         defaults: {

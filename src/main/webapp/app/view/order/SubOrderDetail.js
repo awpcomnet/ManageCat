@@ -1,9 +1,9 @@
 /**
- * 子订单修改
+ * 子订单详情
  */
-Ext.define("MIS.view.order.SubOrderModify", {
+Ext.define("MIS.view.order.SubOrderDetail", {
 	extend: "Ext.form.Panel",
-	alias: "widget.subordermodify",
+	alias: "widget.suborderdetail",
 	
 //	width: 600,
 //	height: 185,
@@ -17,19 +17,19 @@ Ext.define("MIS.view.order.SubOrderModify", {
     },
     layout: {
     	type: 'table',
-    	columns:2
+    	columns:3
     },
 	
 	
 	items: [{
 		fieldLabel: "主订单编号",
 	    name: "superOrderId",
-	    disabled:true,
+	    readOnly: true,
 	    allowBlank: true
     }, {
 		fieldLabel: "子订单编号",
 	    name: "suborderId",
-	    disabled:true,
+	    readOnly: true,
 	    allowBlank: true
     }, {
 		fieldLabel: "订单状态",
@@ -42,6 +42,7 @@ Ext.define("MIS.view.order.SubOrderModify", {
         displayField: 'name',
         valueField: "value",
         allowBlank: true,
+        readOnly: true,
         editable:false
 	}, {
 		fieldLabel: "品牌名称",
@@ -62,6 +63,7 @@ Ext.define("MIS.view.order.SubOrderModify", {
         displayField: 'brandName',
         valueField: "brandId",
         allowBlank: true,
+        readOnly: true,
         editable:false
 	}, {
 		fieldLabel: "系列名称",
@@ -82,6 +84,7 @@ Ext.define("MIS.view.order.SubOrderModify", {
         displayField: 'seriesName',
         valueField: "seriesId",
         allowBlank: true,
+        readOnly: true,
         editable:false
     }, {
 		fieldLabel: "单品名称",
@@ -92,6 +95,7 @@ Ext.define("MIS.view.order.SubOrderModify", {
         displayField: 'singleName',
         valueField: "singleId",
         allowBlank: true,
+        readOnly: true,
         editable:false
     }, {
 		fieldLabel: "数量",
@@ -99,14 +103,15 @@ Ext.define("MIS.view.order.SubOrderModify", {
         xtype: "numberfield",
         minValue: 1, 
         allowBlank: true,
+        readOnly: true,
         editable:true
     }, {
 		fieldLabel: "下单单价",
 	    name: "orderPrice",
 	    listeners : {
 	       change : function(field,newValue,oldValue){
-	    	   var transferPrice = Ext.ComponentQuery.query("subordermodify textfield[name=transferPrice]")[0].getValue();
-	    	   var costPrice = Ext.ComponentQuery.query("subordermodify textfield[name=costPrice]")[0];
+	    	   var transferPrice = Ext.ComponentQuery.query("suborderdetail textfield[name=transferPrice]")[0].getValue();
+	    	   var costPrice = Ext.ComponentQuery.query("suborderdetail textfield[name=costPrice]")[0];
 	    	   if(newValue == '')
 	    		   newValue = 0;
 	    	   if(transferPrice == '')
@@ -116,14 +121,15 @@ Ext.define("MIS.view.order.SubOrderModify", {
 	       }
 		},
 	    allowBlank: true,
+	    readOnly: true,
 	    editable:true
     }, {
 		fieldLabel: "运费(平均)",
 	    name: "transferPrice",
 	    listeners : {
 		       change : function(field,newValue,oldValue){
-		    	   var orderPrice = Ext.ComponentQuery.query("subordermodify textfield[name=orderPrice]")[0].getValue();
-		    	   var costPrice = Ext.ComponentQuery.query("subordermodify textfield[name=costPrice]")[0];
+		    	   var orderPrice = Ext.ComponentQuery.query("suborderdetail textfield[name=orderPrice]")[0].getValue();
+		    	   var costPrice = Ext.ComponentQuery.query("suborderdetail textfield[name=costPrice]")[0];
 		    	   if(newValue == '')
 		    		   newValue = 0;
 		    	   if(orderPrice == '')
@@ -133,19 +139,21 @@ Ext.define("MIS.view.order.SubOrderModify", {
 		       }
 			},
 	    allowBlank: true,
+	    readOnly: true,
 	    editable:true
     }, {
 		fieldLabel: "售价(单个)",
 	    name: "sellingPrice",
 	    allowBlank: true,
+	    readOnly: true,
 	    editable:true
     }, {
 		fieldLabel: "成本价(单个)",
 	    name: "costPrice",
 	    listeners : {
 		       change : function(field,newValue,oldValue){
-		    	   var orderPrice = Ext.ComponentQuery.query("subordermodify textfield[name=orderPrice]")[0].getValue();
-		    	   var transferPrice = Ext.ComponentQuery.query("subordermodify textfield[name=transferPrice]")[0];
+		    	   var orderPrice = Ext.ComponentQuery.query("suborderdetail textfield[name=orderPrice]")[0].getValue();
+		    	   var transferPrice = Ext.ComponentQuery.query("suborderdetail textfield[name=transferPrice]")[0];
 		    	   if(newValue == '')
 		    		   newValue = 0;
 		    	   if(orderPrice == '')
@@ -155,65 +163,48 @@ Ext.define("MIS.view.order.SubOrderModify", {
 		       }
 		},
 	    allowBlank: true,
+	    readOnly: true,
 	    editable:true
+    }, {
+		fieldLabel: "下单总价",
+	    name: "sumOrderPrice",
+	    readOnly: true,
+	    allowBlank: true
+    }, {
+		fieldLabel: "运费总价",
+	    name: "sumTransferPrice",
+	    readOnly: true,
+	    allowBlank: true
+    }, {
+		fieldLabel: "成本总价",
+	    name: "sumCostPrice",
+	    readOnly: true,
+	    allowBlank: true
+    }, {
+		fieldLabel: "售价总价",
+	    name: "sumSellingPrice",
+	    readOnly: true,
+	    allowBlank: true
+    }, {
+		fieldLabel: "修改时间",
+	    name: "updateDateFormat",
+	    colspan: 3,
+	    width: 270,
+	    readOnly: true,
+	    allowBlank: true
+    }, {
+		fieldLabel: "创建时间",
+	    name: "createDateFormat",
+	    colspan: 3,
+	    width: 270,
+	    readOnly: true,
+	    allowBlank: true
     }],
 	
 	buttons: [{
-		text: "取消",
+		text: "关闭",
 		handler: function(component){
-			component.up("#subordermodifywindow").close();
-		}
-	}, {
-		text: "确认",
-		handler: function(component){
-			var subOrderModify = component.up("subordermodify");
-			var extraData = component.up("subordermodify").extraData;
-			
-			var suborderId = subOrderModify.down("textfield[name=suborderId]").getValue().trim(),
-				curState = subOrderModify.down("combobox[name=curState]").getValue(),
-				brandId = subOrderModify.down("combobox[name=brandId]").getValue(),
-				seriesId = subOrderModify.down("combobox[name=seriesId]").getValue(),
-				singleId = subOrderModify.down("combobox[name=singleId]").getValue(),
-				num = subOrderModify.down("numberfield[name=num]").getValue(),
-				orderPrice = subOrderModify.down("textfield[name=orderPrice]").getValue().trim(),
-				transferPrice = subOrderModify.down("textfield[name=transferPrice]").getValue().trim(),
-				sellingPrice = subOrderModify.down("textfield[name=sellingPrice]").getValue().trim(),
-				costPrice = subOrderModify.down("textfield[name=costPrice]").getValue().trim();
-			
-			
-			
-			var params = {
-					suborderId: suborderId,
-					curState: curState,
-					brandId: brandId,
-					seriesId: seriesId,
-					singleId: singleId,
-					num: num,
-					orderPrice: orderPrice,
-					transferPrice: transferPrice,
-					sellingPrice: sellingPrice,
-					costPrice: costPrice
-					
-	        };
-			
-			Ext.Ajax.request({
-				url: "/subOrder/modify",
-				params: params,
-				success: function(conn, request, option, eOpts){
-					var result = Ext.JSON.decode(conn.responseText, true);
-					if(result.resultCode != 0){
-						Ext.MessageBox.alert("修改子订单失败, 原因:" + result.resultMessage);
-					} else {
-		                Ext.ComponentQuery.query("subordergrid")[0].store.reload();
-		                Ext.ComponentQuery.query("subordergrid")[0].getView().getSelectionModel().deselectAll();
-		                component.up("#subordermodifywindow").close();
-					}
-				},
-				failure: function (conn, request, option, eOpts) {
-                    Ext.MessageBox.alert("服务器繁忙, 稍后重试!");
-                }
-				
-			});
+			component.up("#suborderdetailwindow").close();
 		}
 	}]
 	

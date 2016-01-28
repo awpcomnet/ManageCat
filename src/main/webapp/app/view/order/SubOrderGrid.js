@@ -29,10 +29,10 @@ Ext.define("MIS.view.order.SubOrderGrid", {
 			loadMask: true,
 			
 			columns: [
-			    { header: '所属主订单编号', dataIndex: 'superOrderId', sortable: true, width: 10, align: "center"},
-			    { header: '品牌名称', dataIndex: 'brandName', sortable: true, width: 15, align: "center"},
-			    { header: '系列名称', dataIndex: 'seriesName', sortable: true, width: 15, align: "center"},
-			    { header: '单品名称', dataIndex: 'singleName', sortable: true, width: 15, align: "center"},
+			    { header: '所属主订单', dataIndex: 'superOrderId', sortable: true, width: 10, align: "center"},
+			    { header: '品牌名称', dataIndex: 'brandName', sortable: true, width: 16, align: "center"},
+			    { header: '系列名称', dataIndex: 'seriesName', sortable: true, width: 16, align: "center"},
+			    { header: '单品名称', dataIndex: 'singleName', sortable: true, width: 17, align: "center"},
 			    { header: '数量', dataIndex: 'num', sortable: true, width: 7, align: "center"},
 			    
 			    { header: '下单单价', dataIndex: 'orderPrice', sortable: true, width: 10, align: "center"},
@@ -44,11 +44,11 @@ Ext.define("MIS.view.order.SubOrderGrid", {
 //			    { header: '运费总价', dataIndex: 'sumTransferPrice', sortable: true, width: 15, align: "center"},
 //			    { header: '成本总价', dataIndex: 'sumCostPrice', sortable: true, width: 15, align: "center"},
 //			    { header: '销售总价', dataIndex: 'sumSellingPrice', sortable: true, width: 15, align: "center"},
-			    { header: '当前状态', dataIndex: 'curState', sortable: true, width: 15, align: "center", renderer: function (value, rowindex, record, column) {
+			    { header: '当前状态', dataIndex: 'curState', sortable: true, width: 13, align: "center", renderer: function (value, rowindex, record, column) {
 			    	return MIS.common.DictManager.getDictItemName("foreignState", value);
                 }},
-			    { header: '创建时间', dataIndex: 'createDateFormat', sortable: true, width: 25, align: "center"},
-			    { header: '修改时间', dataIndex: 'updateDateFormat', sortable: true, width: 25, align: "center"}
+			    //{ header: '创建时间', dataIndex: 'createDateFormat', sortable: true, width: 25, align: "center"},
+			    { header: '修改时间', dataIndex: 'updateDateFormat', sortable: true, width: 24, align: "center"}
 			],
 		    
 			bbar: Ext.create('Ext.PagingToolbar', {
@@ -79,6 +79,12 @@ Ext.define("MIS.view.order.SubOrderGrid", {
 					itemId: 'delete',
 					scope: this,
 					handler: this.onDeleteClick
+				}, '-', {
+					iconCls: 'icon-eye-open',
+					text: '订单详情',
+					itemId: 'orderDetail',
+					scope: this,
+					handler: this.onOrderDetailClick
 				}, '-', {
 					iconCls: 'icon-arrow-up',
 					text: '订单拆分',
@@ -140,30 +146,32 @@ Ext.define("MIS.view.order.SubOrderGrid", {
         			suborderview.getEl().unmask();
         		},
         		beforerender: function () {
-               	 	var curState = Ext.ComponentQuery.query("subordermodify combobox[name=curState]")[0];
+               	 	var curState = Ext.ComponentQuery.query("suborderadd combobox[name=curState]")[0];
                     var curStateStore = curState.getStore();
                     curStateStore.load();
                     
-                    var brandId = Ext.ComponentQuery.query("subordermodify combobox[name=brandId]")[0];
+                    var brandId = Ext.ComponentQuery.query("suborderadd combobox[name=brandId]")[0];
                     var brandIdStore = brandId.getStore();
                     brandIdStore.proxy.extraParams.isUse = 1;
                     brandIdStore.load();
                     
-                    var seriesId = Ext.ComponentQuery.query("subordermodify combobox[name=seriesId]")[0];
+                    var seriesId = Ext.ComponentQuery.query("suborderadd combobox[name=seriesId]")[0];
                     var seriesIdStore = seriesId.getStore();
                     seriesIdStore.proxy.extraParams.isUse = 1;
-                    seriesIdStore.proxy.extraParams.ofOrigin = this.extraData.brandId;
+                    seriesIdStore.proxy.extraParams.ofOrigin = -1;
                     seriesIdStore.load();
                     
-                    var singleId = Ext.ComponentQuery.query("subordermodify combobox[name=singleId]")[0];
+                    var singleId = Ext.ComponentQuery.query("suborderadd combobox[name=singleId]")[0];
                     var singleIdStore = singleId.getStore();
                     singleIdStore.proxy.extraParams.isUse = 1;
-                    singleIdStore.proxy.extraParams.ofOrigin = this.extraData.seriesId;
+                    singleIdStore.proxy.extraParams.ofOrigin = -1;
                     singleIdStore.load();
                     
                },
         		afterrender: function(component, eOpts){
         			component.down("textfield[name=superOrderId]").setValue(this.extraData.superOrderId);
+        			component.down("combobox[name=curState]").setValue('0');
+        			component.down("numberfield[name=num]").setValue(1);
     			}
         	}
         });
@@ -235,65 +243,239 @@ Ext.define("MIS.view.order.SubOrderGrid", {
     },
     
     onDeleteClick: function(component){
-//    	var selections = this.getView().getSelectionModel().getSelection();
-//        var selectionNum = selections.length;
-//        var orderIds = [];
-//        
-//        if (selectionNum <= 0) {
-//            return;
-//        } 
-//
-//        //删除提示语言
-//        var tipText = "";
-//        if(selectionNum == 1){
-//        	tipText = "确定删除主订单,编号["+selections[0].raw.orderId+"],将同时删除该订单下的->所有子订单<-";
-//        } else {
-//        	tipText = "确定删除主订单,编号[";
-//        	for(var num=0; num<selectionNum; num++){
-//        		tipText += selections[num].raw.orderId;
-//        		if(num != selectionNum - 1){
-//        			tipText += ",";
-//        		}
-//        	}
-//        	tipText += "],将同时删除该订单下的->所有子订单<-";
-//        	
-//        }
-//        
-//        var i = 0;
-//        for(;i<selectionNum; i++){
-//        	orderIds[i] = selections[i].raw.orderId;
-//        }
-//        
-//        Ext.MessageBox.confirm("删除提示", tipText, function (confirmId) {
-//        	if(confirmId == "yes"){
-//        		Ext.Ajax.request({
-//                	url: "/order/delete",
-//                	params: {
-//                		id: orderIds
-//                	},
-//                	success: function(conn, request, option, eOpts){
-//                		var result = Ext.JSON.decode(conn.responseText, true);
-//                		if(result.resultCode != 0){
-//                			Ext.MessageBox.alert("请求失败", "删除公告失败" + result.resultMessage);
-//                		} else {
-//                			Ext.ComponentQuery.query("noticegrid")[0].store.reload();
-//                		}
-//                	},
-//                	failure: function(conn, request, option, eOpts){
-//                		Ext.MessageBox.alert("请求失败", "服务器繁忙，稍后重试!");
-//                	}
-//                	
-//                });
-//        	}
-//        });
+    	var selections = this.getView().getSelectionModel().getSelection();
+        var selectionNum = selections.length;
+        var subOrderIds = [];
+        
+        if (selectionNum <= 0) {
+        	Ext.MessageBox.alert("请求失败", "请选择子订单进行删除");
+            return;
+        } 
+
+        //删除提示语言
+        var tipText = "";
+        if(selectionNum == 1){
+        	tipText = "确定删除子订单,编号["+selections[0].raw.suborderId+"],所属主订单单号["+selections[0].raw.superOrderId+"]";
+        } else {
+        	tipText = "确定删除子订单,编号[";
+        	for(var num=0; num<selectionNum; num++){
+        		tipText += selections[num].raw.suborderId;
+        		if(num != selectionNum - 1){
+        			tipText += ",";
+        		}
+        	}
+        	tipText += "]";
+        	
+        }
+        
+        var i = 0;
+        for(;i<selectionNum; i++){
+        	subOrderIds[i] = selections[i].raw.suborderId;
+        }
+        
+        Ext.MessageBox.confirm("删除提示", tipText, function (confirmId) {
+        	if(confirmId == "yes"){
+        		Ext.Ajax.request({
+                	url: "/subOrder/delete",
+                	params: {
+                		subOrderIds: subOrderIds
+                	},
+                	success: function(conn, request, option, eOpts){
+                		var result = Ext.JSON.decode(conn.responseText, true);
+                		if(result.resultCode != 0){
+                			Ext.MessageBox.alert("请求失败", "删除子订单失败" + result.resultMessage);
+                		} else {
+                			Ext.ComponentQuery.query("subordergrid")[0].store.reload();
+                		}
+                	},
+                	failure: function(conn, request, option, eOpts){
+                		Ext.MessageBox.alert("请求失败", "服务器繁忙，稍后重试!");
+                	}
+                	
+                });
+        	}
+        });
+    },
+    
+    onOrderDetailClick: function(component){
+    	var selections = this.getView().getSelectionModel().getSelection();
+    	var selectionNum = selections.length;
+    	if(selectionNum != 1){
+    		Ext.MessageBox.alert("请求失败", "请选择单个子订单进行查看");
+    		return;
+    	}
+    	var suborderview = Ext.ComponentQuery.query("suborderview")[0];
+    	suborderview.getEl().mask();
+    	
+    	var editWindow = Ext.create("Ext.window.Window", {
+        	title: "子订单详情",
+        	id: "suborderdetailwindow",
+        	extraData: selections[0].raw,
+        	renderTo: suborderview.getEl(),
+        	height: 380,
+        	width: 840,
+        	layout: "fit",
+        	closeAction: "destroy",
+        	items: [{
+        		xtype: "suborderdetail"
+        	}],
+        	listeners: {
+        		close: function(){
+        			suborderview.getEl().unmask();
+        		},
+        		beforerender: function () {
+               	 	var curState = Ext.ComponentQuery.query("suborderdetail combobox[name=curState]")[0];
+                    var curStateStore = curState.getStore();
+                    curStateStore.load();
+                    
+                    var brandId = Ext.ComponentQuery.query("suborderdetail combobox[name=brandId]")[0];
+                    var brandIdStore = brandId.getStore();
+                    brandIdStore.proxy.extraParams.isUse = 1;
+                    brandIdStore.load();
+                    
+                    var seriesId = Ext.ComponentQuery.query("suborderdetail combobox[name=seriesId]")[0];
+                    var seriesIdStore = seriesId.getStore();
+                    seriesIdStore.proxy.extraParams.isUse = 1;
+                    seriesIdStore.proxy.extraParams.ofOrigin = this.extraData.brandId;
+                    seriesIdStore.load();
+                    
+                    var singleId = Ext.ComponentQuery.query("suborderdetail combobox[name=singleId]")[0];
+                    var singleIdStore = singleId.getStore();
+                    singleIdStore.proxy.extraParams.isUse = 1;
+                    singleIdStore.proxy.extraParams.ofOrigin = this.extraData.seriesId;
+                    singleIdStore.load();
+                    
+               },
+        		afterrender: function(component, eOpts){
+        			var form = component.down("form");
+                    var params = Ext.clone(this.extraData);
+    				form.getForm().setValues(params);
+    			}
+        	}
+        });
+    	editWindow.show();
     },
     
     onOrderSplitClick: function(component){
-    	alert("订单拆分");
+    	var selections = this.getView().getSelectionModel().getSelection();
+    	var selectionNum = selections.length;
+    	if(selectionNum != 1){
+    		Ext.MessageBox.alert("请求失败", "请选择单个子订单进行修改");
+    		return;
+    	}
+    	var suborderview = Ext.ComponentQuery.query("suborderview")[0];
+    	suborderview.getEl().mask();
+    	
+    	var editWindow = Ext.create("Ext.window.Window", {
+        	title: "拆分子订单",
+        	id: "subordersplitwindow",
+        	extraData: selections[0].raw,
+        	renderTo: suborderview.getEl(),
+        	height: 350,
+        	width: 575,
+        	layout: "fit",
+        	closeAction: "destroy",
+        	items: [{
+        		xtype: "subordersplit"
+        	}],
+        	listeners: {
+        		close: function(){
+        			suborderview.getEl().unmask();
+        		},
+        		beforerender: function () {
+                    var brandId = Ext.ComponentQuery.query("subordersplit combobox[name=brandId]")[0];
+                    var brandIdStore = brandId.getStore();
+                    brandIdStore.proxy.extraParams.isUse = 1;
+                    brandIdStore.load();
+                    
+                    var seriesId = Ext.ComponentQuery.query("subordersplit combobox[name=seriesId]")[0];
+                    var seriesIdStore = seriesId.getStore();
+                    seriesIdStore.proxy.extraParams.isUse = 1;
+                    seriesIdStore.proxy.extraParams.ofOrigin = this.extraData.brandId;
+                    seriesIdStore.load();
+                    
+                    var singleId = Ext.ComponentQuery.query("subordersplit combobox[name=singleId]")[0];
+                    var singleIdStore = singleId.getStore();
+                    singleIdStore.proxy.extraParams.isUse = 1;
+                    singleIdStore.proxy.extraParams.ofOrigin = this.extraData.seriesId;
+                    singleIdStore.load();
+                    
+               },
+        		afterrender: function(component, eOpts){
+        			var form = component.down("form");
+                    var params = Ext.clone(this.extraData);
+    				form.getForm().setValues(params);
+    			}
+        	}
+        });
+    	editWindow.show();
     },
     
     onOrderMergeClick: function(component){
-    	alert("订单合并");
+    	var selections = this.getView().getSelectionModel().getSelection();
+    	var selectionNum = selections.length;
+    	var subOrderIds = [];
+    	
+    	if(selectionNum <= 1){
+    		Ext.MessageBox.alert("请求失败", "请至少选择两个子订单进行合并");
+    		return;
+    	}
+    	var suborderview = Ext.ComponentQuery.query("suborderview")[0];
+    	suborderview.getEl().mask();
+    	
+    	var i = 0;
+        for(;i<selectionNum; i++){
+        	subOrderIds[i] = selections[i].raw.suborderId;
+        }
+    	
+    	var editWindow = Ext.create("Ext.window.Window", {
+        	title: "合并子订单",
+        	id: "subordermergewindow",
+        	extraData: selections[0].raw,
+        	renderTo: suborderview.getEl(),
+        	height: 350,
+        	width: 590,
+        	layout: "fit",
+        	closeAction: "destroy",
+        	items: [{
+        		xtype: "subordermerge"
+        	}],
+        	listeners: {
+        		close: function(){
+        			suborderview.getEl().unmask();
+        		},
+        		beforerender: function () {
+        			var curState = Ext.ComponentQuery.query("subordermerge combobox[name=curState]")[0];
+                    var curStateStore = curState.getStore();
+                    curStateStore.load();
+                    
+                    var brandId = Ext.ComponentQuery.query("subordermerge combobox[name=brandId]")[0];
+                    var brandIdStore = brandId.getStore();
+                    brandIdStore.proxy.extraParams.isUse = 1;
+                    brandIdStore.load();
+                    
+                    var seriesId = Ext.ComponentQuery.query("subordermerge combobox[name=seriesId]")[0];
+                    var seriesIdStore = seriesId.getStore();
+                    seriesIdStore.proxy.extraParams.isUse = 1;
+                    seriesIdStore.proxy.extraParams.ofOrigin = this.extraData.brandId;
+                    seriesIdStore.load();
+                    
+                    var singleId = Ext.ComponentQuery.query("subordermerge combobox[name=singleId]")[0];
+                    var singleIdStore = singleId.getStore();
+                    singleIdStore.proxy.extraParams.isUse = 1;
+                    singleIdStore.proxy.extraParams.ofOrigin = this.extraData.seriesId;
+                    singleIdStore.load();
+                    
+               },
+        		afterrender: function(component, eOpts){
+        			var form = component.down("form");
+                    var params = Ext.clone(this.extraData);
+    				form.getForm().setValues(params);
+    				component.down("textfield[name=subOrderIds]").setValue(subOrderIds);
+    			}
+        	}
+        });
+    	editWindow.show();
     },
     
 	onExpandSearchClick: function(component){

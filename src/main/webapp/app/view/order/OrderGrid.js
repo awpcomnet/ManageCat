@@ -39,11 +39,12 @@ Ext.define("MIS.view.order.OrderGrid", {
 			    { header: '确认收货状态', dataIndex: 'affirmState', sortable: true, width: 15, align: "center", renderer: function (value, rowindex, record, column) {
                     return MIS.common.DictManager.getDictItemName("affirmState", value);
                 }},
-                { header: '总下单价格', dataIndex: 'sumOrderPrice', sortable: true, width: 16, align: "center"},
-                { header: '运费总价', dataIndex: 'sumTransferPrice', sortable: true, width: 16, align: "center"},
-                { header: '成本价总价', dataIndex: 'sumCostPrice', sortable: true, width: 16, align: "center"},
-                { header: '售价(总价)', dataIndex: 'sumSellingPrice', sortable: true, width: 16, align: "center"},
-			    { header: '创建时间', dataIndex: 'createDateFormat', sortable: true, width: 25, align: "center"},
+                { header: '子订单数', dataIndex: 'sumSubOrderNum', sortable: true, width: 10, align: "center"},
+                { header: '总下单价格', dataIndex: 'sumOrderPrice', sortable: true, width: 13, align: "center"},
+                { header: '运费总价', dataIndex: 'sumTransferPrice', sortable: true, width: 13, align: "center"},
+                { header: '成本价总价', dataIndex: 'sumCostPrice', sortable: true, width: 13, align: "center"},
+                { header: '售价(总价)', dataIndex: 'sumSellingPrice', sortable: true, width: 13, align: "center"},
+			    //{ header: '创建时间', dataIndex: 'createDateFormat', sortable: true, width: 25, align: "center"},
 			    { header: '修改时间', dataIndex: 'updateDateFormat', sortable: true, width: 25, align: "center"}
 			],
 		    

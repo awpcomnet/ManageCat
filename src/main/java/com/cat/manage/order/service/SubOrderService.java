@@ -97,6 +97,14 @@ public class SubOrderService {
 	}
 	
 	/**
+	 * 根据子订单单号删除子订单
+	 * @param subOrderIds
+	 */
+	public void deleteSubOrderByIds(Integer[] subOrderIds){
+		subOrderDao.deleteSubOrderForMoreId(subOrderIds);
+	}
+	
+	/**
 	 * 修改子订单状态
 	 * @param suborderId
 	 * @param curState

@@ -41,6 +41,9 @@ Ext.define("MIS.model.order.Order", {
 	}, {
 		name: "sumSellingPrice",
 		type: "string"
+	}, {
+		name: "sumSubOrderNum",
+		type: "string"
 	}]
 });
 
