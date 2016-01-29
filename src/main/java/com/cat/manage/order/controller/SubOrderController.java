@@ -82,4 +82,15 @@ public class SubOrderController {
 		subOrderService.deleteSubOrderByIds(subOrderIds);
 		return new Srm().setResultCode("0").setResultMessage("子订单删除成功");
 	}
+	
+	@RequestMapping("/sellandback")
+	public Srm modifySubOrderForSell(Integer subOrderId, Integer num, Integer flag){
+		if(flag == null || num == null)
+			return new Srm().setResultCode("1").setResultMessage("售出订单失败，原因参数异常");
+		
+		if(flag < 0)
+			num = num * (-1);
+		subOrderService.updateForSelled(subOrderId, num);
+		return new Srm().setResultCode("0").setResultMessage("售出订单/退回订单成功");
+	}
 }

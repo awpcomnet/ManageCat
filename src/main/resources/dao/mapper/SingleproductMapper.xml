@@ -68,6 +68,12 @@
 		<if test="isUse != null and isUse != ''">
 			and is_use = #{isUse}
 		</if>
+		<if test="singleName != null and singleName != ''">
+			and single_name like '%${singleName}%'
+		</if>
+		<if test="singleEname != null and singleEname != ''">
+			and single_ename like '%${singleEname}%' 
+		</if>
 		order by create_date desc
 	</select>
 </mapper>

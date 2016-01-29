@@ -20,7 +20,8 @@ Ext.define("MIS.controller.order.SubOrderController", {
 	    "MIS.view.order.SubOrderAdd",
 	    "MIS.view.order.SubOrderSplit",
 	    "MIS.view.order.SubOrderMerge",
-	    "MIS.view.order.SubOrderDetail"
+	    "MIS.view.order.SubOrderDetail",
+	    "MIS.view.order.SellAndBack"
 	    
 	],
 	

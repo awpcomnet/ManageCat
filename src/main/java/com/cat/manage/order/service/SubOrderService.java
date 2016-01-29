@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.cat.manage.common.exception.BusinessException;
 import com.cat.manage.order.dao.SubOrderDao;
 import com.cat.manage.order.domain.SubOrder;
+import com.cat.manage.selledstore.service.SelledStoreService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Strings;
@@ -18,6 +19,9 @@ public class SubOrderService {
 	
 	@Autowired
 	private SubOrderDao subOrderDao;
+	
+	@Autowired
+	private SelledStoreService selledStoreService;
 	
 	/**
 	 * 添加子订单
@@ -58,7 +62,55 @@ public class SubOrderService {
 	 * @param subOrder
 	 */
 	public void updateSubOrder(SubOrder subOrder){
+		SubOrder sub = subOrderDao.querySubOrderById(subOrder.getSuborderId());
+		if(!sub.getCurState().equals(subOrder.getCurState())){
+			if(sub.getCurState().equals("20"))
+				throw new BusinessException("1", "子订单已在销售中，不支持更改状态");
+			if(sub.getCurState().equals("29"))
+				throw new BusinessException("1", "子订单已售罄，不支持更改状态");
+		}
+		
+		if(subOrder.getCurState().equals("20"))
+			throw new BusinessException("1", "子订单不支持直接修改为销售中");
+		if(subOrder.getCurState().equals("29"))
+			throw new BusinessException("1", "子订单不支持直接修改为已售罄");
+		
 		subOrderDao.updateSubOrder(subOrder);
+	}
+	
+	/**
+	 * 销售商品
+	 */
+	public void updateForSelled(Integer subOrderId, Integer num){
+		SubOrder subOrder = subOrderDao.querySubOrderById(subOrderId);
+		if(subOrder == null)
+			return;
+		
+		if(!"9".equals(subOrder.getCurState()) && !"20".equals(subOrder.getCurState()))
+			throw new BusinessException("1", "订单状态非[已入库/销售中]状态");
+		
+		int subnum = subOrder.getNum();
+		int sellnum = subOrder.getSellNum();
+		
+		if(subnum - sellnum < num)
+			throw new BusinessException("1", "存货数量不足");
+		
+		String currState = "";
+		if(sellnum == 0){
+			currState = "20";//销售中
+		}else if(subnum == sellnum + num){
+			currState = "29";//已售罄
+		}else {
+			currState = "20";//销售中
+		}
+		
+		subOrder.setCurState(currState);
+		subOrder.setSellNum(num+sellnum);
+		subOrderDao.updateSubOrder(subOrder);
+		
+		subOrder.setSellNum(num);
+		selledStoreService.addSelledStore(subOrder);
+		
 	}
 	
 	/**
@@ -71,10 +123,10 @@ public class SubOrderService {
 		SubOrder subOrder = subOrderDao.querySubOrderById(subOrderId);
 		if(subOrder == null)
 			return;
-		//TODO 需要将"销售中"和"已售罄"替换
-		if(subOrder.getCurState().equals("销售中"))
+		
+		if(subOrder.getCurState().equals("20"))
 			throw new BusinessException("1", "子订单正在销售中，不支持拆分");
-		if(subOrder.getCurState().equals("已售罄"))
+		if(subOrder.getCurState().equals("29"))
 			throw new BusinessException("1", "子订单已售罄，不支持拆分");
 		
 		Integer sum = subOrder.getNum();
@@ -135,11 +187,11 @@ public class SubOrderService {
 		List<SubOrder> list = subOrderDao.querySubOrderByIds(subOrderIds, new String[]{"8"});
 		if(list.size() != orderNum)
 			throw new BusinessException("1", "记录子订单数和要合并的子订单数不一致");
-		//TODO 需要将"销售中"和"已售罄"替换
+		
 		for(SubOrder so : list){
-			if(so.getCurState().equals("销售中"))
+			if(so.getCurState().equals("20"))
 				throw new BusinessException("1", "子订单存在状态为销售中，不支持合并");
-			if(so.getCurState().equals("已售罄"))
+			if(so.getCurState().equals("29"))
 				throw new BusinessException("1", "子订单存在状态为已售罄，不支持合并");
 		}
 		

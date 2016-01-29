@@ -54,6 +54,12 @@
 		<if test="isUse != null and isUse != ''">
 			and is_use = #{isUse}
 		</if>
+		<if test="seriesName != null and seriesName != ''">
+			and series_name like '%${seriesName}%'
+		</if>
+		<if test="seriesEname != null and seriesEname != ''">
+			and series_ename like '%${seriesEname}%' 
+		</if>
 		order by create_date desc
 	</select>
 </mapper>

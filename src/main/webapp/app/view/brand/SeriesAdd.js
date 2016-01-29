@@ -9,7 +9,7 @@ Ext.define("MIS.view.brand.SeriesAdd", {
     defaultType: "textfield",
     defaults: {
         anchor: "100%",
-        padding: "5 5"
+        padding: "15 10"
     },
     layout: {
     	type: 'table',

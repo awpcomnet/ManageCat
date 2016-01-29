@@ -99,7 +99,7 @@ Ext.define("MIS.view.brand.BrandGrid", {
         	title: "添加品牌",
         	id: "brandaddwindow",
         	renderTo: brandview.getEl(),
-        	height: 200,
+        	height: 180,
         	width: 580,
         	layout: "fit",
         	closeAction: "destroy",
@@ -140,7 +140,7 @@ Ext.define("MIS.view.brand.BrandGrid", {
         	id: "brandmodifywindow",
         	extraData: selections[0].raw,
         	renderTo: brandview.getEl(),
-        	height: 200,
+        	height: 180,
         	width: 580,
         	layout: "fit",
         	closeAction: "destroy",
@@ -185,7 +185,7 @@ Ext.define("MIS.view.brand.BrandGrid", {
         	id: "seriesaddwindow",
         	extraData: selections[0].raw,
         	renderTo: brandview.getEl(),
-        	height: 350,
+        	height: 180,
         	width: 575,
         	layout: "fit",
         	closeAction: "destroy",
@@ -211,7 +211,7 @@ Ext.define("MIS.view.brand.BrandGrid", {
     },
 	
 	onExpandSearchClick: function(component){
-		var searchwindow = Ext.ComponentQuery.query("orderSearchpanel")[0];
+		var searchwindow = Ext.ComponentQuery.query("brandSearchpanel")[0];
     	if(searchwindow.isHidden()){
     		searchwindow.show();
     	} else {

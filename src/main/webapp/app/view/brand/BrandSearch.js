@@ -13,7 +13,7 @@ Ext.define("MIS.view.brand.BrandSearch", {
 	
 	items: [{
 		xtype:'fieldset',
-        title: '主订单查询',
+        title: '品牌查询',
         padding: "5 5 0 5",
         margin: "0 10",
         defaults: {
@@ -27,14 +27,14 @@ Ext.define("MIS.view.brand.BrandSearch", {
 			layout: "anchor",
 			items:[{
 				margin: "0 10",
-				width: 150,
-				fieldLabel: "国外转运状态",
+				width: 170,
+				fieldLabel: "所属国家",
 				labelWidth: 80,
-				name: "foreignState",
+				name: "ofOrigin",
 				anchor: "55%",
 				xtype: "combo",
 		        store: Ext.create("MIS.store.dict.DictQueryStore", {
-	            	dictcode: "foreignState"
+	            	dictcode: "country"
 	            }),
 		        mode: "local",
 		        displayField: 'name',
@@ -49,26 +49,23 @@ Ext.define("MIS.view.brand.BrandSearch", {
         		scope: this,
                 handler: function(component){
                 	// 找到store
-                	var orderStore = component.up("orderview").down("ordergrid").getStore();
+                	var brandStore = component.up("brandview").down("brandgrid").getStore();
                 	
                 	// 设置Store参数
-                	var foreignState = component.up("orderSearchpanel").down("combo[name=foreignState]").getValue(),
-                		transfer = component.up("orderSearchpanel").down("combo[name=transfer]").getValue(),
-                		affirmState = component.up("orderSearchpanel").down("combo[name=affirmState]").getValue(),
-                		startTime = component.up("orderSearchpanel").down("datefield[name=startTime]").getValue(),
-                		endTime = component.up("orderSearchpanel").down("datefield[name=endTime]").getValue();
+                	var ofOrigin = component.up("brandSearchpanel").down("combo[name=ofOrigin]").getValue(),
+                		isUse = component.up("brandSearchpanel").down("combo[name=isUse]").getValue(),
+                		brandName = component.up("brandSearchpanel").down("textfield[name=brandName]").getValue(),
+                		brandEname = component.up("brandSearchpanel").down("textfield[name=brandEname]").getValue();
                 	
-                	console.log(foreignState+"|"+transfer+"|"+affirmState+"|"+Ext.util.Format.date(startTime,'Ymd')+"|"+Ext.util.Format.date(endTime,'Ymd'));
                 	
-                	var params = orderStore.proxy.extraParams;
-                	params.foreignState = foreignState;
-                	params.transfer = transfer;
-                	params.affirmState = affirmState;
-                	params.startTime = Ext.util.Format.date(startTime,'Ymd');
-                	params.endTime = Ext.util.Format.date(endTime,'Ymd');
+                	var params = brandStore.proxy.extraParams;
+                	params.ofOrigin = ofOrigin;
+                	params.isUse = isUse;
+                	params.brandName = brandName;
+                	params.brandEname = brandEname;
                 	
                 	// reload store
-                	orderStore.reload();
+                	brandStore.reload();
                 }
 			}, {
 				margin: "5 10",
@@ -76,19 +73,19 @@ Ext.define("MIS.view.brand.BrandSearch", {
 				text: "重置",
 				scope: this,
 				handler: function(component){
-					component.up("orderSearchpanel").form.reset();
+					component.up("brandSearchpanel").form.reset();
 				}
 			}]
 		}, {
 			margin: "0 10",
 			width: 180,
-			fieldLabel: "转运状态",
+			fieldLabel: "是否生效",
 			labelWidth: 60,
-			name: "transfer",
+			name: "isUse",
 			anchor: "55%",
 			xtype: "combo",
 	        store: Ext.create("MIS.store.dict.DictQueryStore", {
-            	dictcode: "transfer"
+            	dictcode: "onOff"
             }),
 	        mode: "local",
 	        displayField: 'name',
@@ -96,37 +93,20 @@ Ext.define("MIS.view.brand.BrandSearch", {
 	        editable:false
 		}, {
 			margin: "0 10",
-			width: 180,
-			fieldLabel: "确认收货状态",
+			width: 200,
+			xtype: "textfield",
+			fieldLabel: "品牌名称",
+			labelWidth: 60,
+			name: "brandName",
+			anchor: "55%" 
+		}, {
+			margin: "0 10",
+			width: 200,
+			xtype: "textfield",
+			fieldLabel: "品牌英文名称",
 			labelWidth: 80,
-			name: "affirmState",
-			anchor: "55%",
-			xtype: 'combo',
-	        editable:false,
-	        store: Ext.create("MIS.store.dict.DictQueryStore", {
-            	dictcode: "affirmState"
-            }),
-	        displayField : 'name',
-			valueField : "value",
-	        mode: "local"
-		}, {
-			margin: "0 15",
-			width: 200,
-			xtype: 'datefield',
-			fieldLabel: "起始时间",
-			labelWidth: 60,
-			name: "startTime",
-			anchor: "55%",
-            format: 'Y年m月d日'
-		}, {
-			margin: "0 15",
-			width: 200,
-			xtype: 'datefield',
-			fieldLabel: "结束时间",
-			labelWidth: 60,
-			name: "endTime",
-			anchor: "55%" ,
-            format: 'Y年m月d日'
+			name: "brandEname",
+			anchor: "55%" 
 		}]
 	}]
 });

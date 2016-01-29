@@ -13,7 +13,7 @@ Ext.define("MIS.view.brand.BrandModify", {
     defaultType: "textfield",
     defaults: {
         anchor: "100%",
-        padding: "10 10"
+        padding: "15 10"
     },
     layout: {
     	type: 'table',

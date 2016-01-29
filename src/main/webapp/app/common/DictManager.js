@@ -5,7 +5,7 @@
 Ext.define("MIS.common.DictManager", {
     singleton:true,
 
-    dicts: ["foreignState", "transfer", "affirmState", "subOrderState", "unitDict", "country", "onOff"],
+    dicts: ["foreignState", "transfer", "affirmState", "subOrderState", "unitDict", "country", "onOff", "sellandback"],
 
     /**
      * 缓存字典Store, 防止反复创建字典实例

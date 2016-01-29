@@ -19,8 +19,8 @@ Ext.define("MIS.store.brand.BrandStore", {
         	brandId:"",
         	isUse: "",
         	ofOrigin: "",
-        	startTime: "",
-        	endTime: ""
+        	brandName: "",
+        	brandEname: ""
         }
 	}
 	

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.manage.selledstore.dao.SelledStoreDao">
+	<resultMap type="com.cat.manage.selledstore.domain.SelledStore" id="selledStoreResultMap">
+		<id property="storeId" column="store_id"/>
+		<result property="superOrderId" column="super_order_id"/>
+		<result property="suborderId" column="suborder_id"/>
+		<result property="brandId" column="brand_id"/>
+		<result property="seriesId" column="series_id"/>
+		<result property="singleId" column="single_id"/>
+		<result property="num" column="num"/>
+		<result property="orderPrice" column="order_price"/>
+		<result property="transferPrice" column="transfer_price"/>
+		<result property="costPrice" column="cost_price"/>
+		<result property="sellingPrice" column="selling_price"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="createDateFormat" column="createDateFormat"/>
+		<result property="updateDateFormat" column="updateDateFormat"/>
+	</resultMap>
+	
+	<resultMap type="com.cat.manage.order.domain.SubOrder" id="subOrderResultMap">
+		<id property="suborderId" column="suborder_id"/>
+		<result property="superOrderId" column="super_order_id"/>
+		<result property="brandId" column="brand_id"/>
+		<result property="seriesId" column="series_id"/>
+		<result property="singleId" column="single_id"/>
+		<result property="num" column="num"/>
+		<result property="sellNum" column="sell_num"/>
+		<result property="orderPrice" column="order_price"/>
+		<result property="transferPrice" column="transfer_price"/>
+		<result property="costPrice" column="cost_price"/>
+		<result property="sellingPrice" column="selling_price"/>
+		<result property="curState" column="curstate"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="createDateFormat" column="createDateFormat"/>
+		<result property="updateDateFormat" column="updateDateFormat"/>
+		<result property="brandName" column="brand_name"/>
+		<result property="seriesName" column="series_name"/>
+		<result property="singleName" column="single_name"/>
+		<result property="sumOrderPrice" column="sum_order_price"/>
+		<result property="sumTransferPrice" column="sum_transfer_price"/>
+		<result property="sumCostPrice" column="sum_cost_price"/>
+		<result property="sumSellingPrice" column="sum_selling_price"/>
+	</resultMap>
+	
+	<!-- 添加售出信息 -->
+	<insert id="addSelledStore" parameterType="com.cat.manage.order.domain.SubOrder">
+		insert into t_selledstore( super_order_id, suborder_id, brand_id, series_id, single_id, num, order_price, transfer_price, cost_price, selling_price, create_date, update_date)
+		values(#{superOrderId}, #{suborderId}, #{brandId}, #{seriesId}, #{singleId}, #{sellNum}, #{orderPrice}, #{transferPrice}, 
+				#{costPrice}, #{sellingPrice}, now(), now())
+	</insert>
+	
+	<!-- 修改售出信息 -->
+	<update id="updateSelledStore" parameterType="com.cat.manage.selledstore.domain.SelledStore">
+		update t_selledstore set update_date=now() 
+		<if test="num != null and num != ''">
+			, num = #{num}
+		</if>
+		where store_id = #{storeId}
+	</update>
+	
+	<!-- 删除系列信息 -->
+	<delete id="deleteSelledStore" parameterType="java.lang.Integer">
+		delete from t_selledstore where store_id = #{selledStoreId}
+	</delete>
+	
+</mapper>

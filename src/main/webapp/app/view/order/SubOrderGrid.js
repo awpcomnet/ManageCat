@@ -36,10 +36,10 @@ Ext.define("MIS.view.order.SubOrderGrid", {
 			    { header: '数量', dataIndex: 'num', sortable: true, width: 7, align: "center"},
 			    { header: '售出数量', dataIndex: 'sellNum', sortable: true, width: 7, align: "center"},
 			    
-			    { header: '下单单价', dataIndex: 'orderPrice', sortable: true, width: 10, align: "center"},
-			    { header: '平均运费', dataIndex: 'transferPrice', sortable: true, width: 10, align: "center"},
+			    //{ header: '下单单价', dataIndex: 'orderPrice', sortable: true, width: 10, align: "center"},
+			    //{ header: '平均运费', dataIndex: 'transferPrice', sortable: true, width: 10, align: "center"},
 			    { header: '单个成本', dataIndex: 'costPrice', sortable: true, width: 10, align: "center"},
-			    { header: '单个售价', dataIndex: 'sellingPrice', sortable: true, width: 10, align: "center"},
+			    { header: '单个售价', dataIndex: 'sellingPrice', sortable: true, width: 12, align: "center"},
 			    
 //			    { header: '下单总价', dataIndex: 'sumOrderPrice', sortable: true, width: 15, align: "center"},
 //			    { header: '运费总价', dataIndex: 'sumTransferPrice', sortable: true, width: 15, align: "center"},
@@ -49,7 +49,7 @@ Ext.define("MIS.view.order.SubOrderGrid", {
 			    	return MIS.common.DictManager.getDictItemName("subOrderState", value);
                 }},
 			    //{ header: '创建时间', dataIndex: 'createDateFormat', sortable: true, width: 25, align: "center"},
-			    { header: '修改时间', dataIndex: 'updateDateFormat', sortable: true, width: 24, align: "center"}
+			    { header: '修改时间', dataIndex: 'updateDateFormat', sortable: true, width: 22, align: "center"}
 			],
 		    
 			bbar: Ext.create('Ext.PagingToolbar', {
@@ -98,6 +98,12 @@ Ext.define("MIS.view.order.SubOrderGrid", {
 					itemId: 'orderMerge',
 					scope: this,
 					handler: this.onOrderMergeClick
+				}, '-', {
+					iconCls: 'icon-twitter',
+					text: '售出/召回',
+					itemId: 'sellAndBack',
+					scope: this,
+					handler: this.onSellAndBackClick
 				}, '->', {
 					iconCls: 'icon-refresh',
 					text: '刷新',
@@ -473,6 +479,55 @@ Ext.define("MIS.view.order.SubOrderGrid", {
                     var params = Ext.clone(this.extraData);
     				form.getForm().setValues(params);
     				component.down("textfield[name=subOrderIds]").setValue(subOrderIds);
+    			}
+        	}
+        });
+    	editWindow.show();
+    },
+    
+    onSellAndBackClick: function(component){
+    	var selections = this.getView().getSelectionModel().getSelection();
+    	var selectionNum = selections.length;
+    	if(selectionNum != 1){
+    		Ext.MessageBox.alert("请求失败", "请选择单个子订单进行售出/召回");
+    		return;
+    	}
+    	var suborderview = Ext.ComponentQuery.query("suborderview")[0];
+    	suborderview.getEl().mask();
+    	
+    	var maxNum = Number.parseInt(selections[0].raw.num) - Number.parseInt(selections[0].raw.sellNum);
+    	
+    	var editWindow = Ext.create("Ext.window.Window", {
+        	title: "售出/召回",
+        	id: "sellandbackwindow",
+        	extraData: selections[0].raw,
+        	renderTo: suborderview.getEl(),
+        	height: 150,
+        	width: 575,
+        	layout: "fit",
+        	closeAction: "destroy",
+        	items: [{
+        		xtype: "sellandback"
+        	}],
+        	listeners: {
+        		close: function(){
+        			suborderview.getEl().unmask();
+        		},
+        		beforerender: function () {
+               	 	var flag = Ext.ComponentQuery.query("sellandback combobox[name=flag]")[0];
+                    var flagStore = flag.getStore();
+                    flagStore.load();
+                    
+                    var flag = Ext.ComponentQuery.query("sellandback numberfield[name=num]")[0];
+                    flag.maxValue = maxNum;
+               },
+        		afterrender: function(component, eOpts){
+        			var form = component.down("form");
+                    var params = Ext.clone(this.extraData);
+    				form.getForm().setValues(params);
+    				
+    				component.down("numberfield[name=num]").setValue(maxNum);
+    				component.down("combobox[name=flag]").setValue("1");
     			}
         	}
         });
