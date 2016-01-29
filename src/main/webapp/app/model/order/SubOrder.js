@@ -24,6 +24,9 @@ Ext.define("MIS.model.order.SubOrder", {
 		name: "num",
 		type: "int"
 	}, {
+		name: "sellNum",
+		type: "int"
+	}, {
 		name: "orderPrice",
 		type: "string"
 	}, {
