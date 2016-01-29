@@ -8,6 +8,7 @@
 		<result property="seriesId" column="series_id"/>
 		<result property="singleId" column="single_id"/>
 		<result property="num" column="num"/>
+		<result property="sellNum" column="sell_num"/>
 		<result property="orderPrice" column="order_price"/>
 		<result property="transferPrice" column="transfer_price"/>
 		<result property="costPrice" column="cost_price"/>
@@ -28,20 +29,20 @@
 	
 	<!-- 添加订单 -->
 	<insert id="addSubOrder" parameterType="com.cat.manage.order.domain.SubOrder">
-		insert into t_suborder (super_order_id, brand_id, series_id, single_id, num, order_price,transfer_price, cost_price,selling_price, curstate,create_date, update_date)
-		values(#{superOrderId}, #{brandId}, #{seriesId}, #{singleId}, #{num}, #{orderPrice}, #{transferPrice}, #{costPrice}, #{sellingPrice}, #{curState}, now(), now())
+		insert into t_suborder (super_order_id, brand_id, series_id, single_id, num, sell_num, order_price,transfer_price, cost_price,selling_price, curstate,create_date, update_date)
+		values(#{superOrderId}, #{brandId}, #{seriesId}, #{singleId}, #{num}, 0, #{orderPrice}, #{transferPrice}, #{costPrice}, #{sellingPrice}, #{curState}, now(), now())
 	</insert>
 	
 	<!-- 查询单个订单 -->
 	<select id="querySubOrderById" parameterType="java.lang.Integer" resultMap="subOrderResultMap">
-		select suborder_id, super_order_id, brand_id, series_id, single_id, num, order_price,transfer_price, cost_price,selling_price, curstate,create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat 
+		select suborder_id, super_order_id, brand_id, series_id, single_id, num, sell_num, order_price,transfer_price, cost_price,selling_price, curstate,create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat 
 		from t_suborder where suborder_id = #{suborderId}
 	</select>
 	
 	
 	<!-- 查询所有订单 -->
 	<select id="querySubOrderAll" resultMap="subOrderResultMap">
-		select suborder_id, super_order_id, brand_id, series_id, single_id, num, order_price,transfer_price, cost_price,selling_price, curstate, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
+		select suborder_id, super_order_id, brand_id, series_id, single_id, num, sell_num, order_price,transfer_price, cost_price,selling_price, curstate, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
 		from t_suborder where 1=1
 		<if test="startTime != null and startTime != ''">
 			and DATE_FORMAT(create_date, '%Y%m%d') &gt;= #{startTime, jdbcType=VARCHAR}
@@ -55,7 +56,7 @@
 	
 	<!-- 查询所有子订单 -->
 	<select id="querySubOrderAllForName" resultMap="subOrderResultMap">
-		select suborder_id, super_order_id, brand_id, series_id, single_id, num, order_price,transfer_price, cost_price,selling_price, curstate, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat,
+		select suborder_id, super_order_id, brand_id, series_id, single_id, num, sell_num, order_price,transfer_price, cost_price,selling_price, curstate, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat,
 		(num*order_price) as sum_order_price, (num*transfer_price) as sum_transfer_price, (num*cost_price) as sum_cost_price, (num*selling_price) as sum_selling_price,
 		(select brand_name from t_brand where brand_id = t.brand_id) as brand_name,
 		(select series_name from t_series where series_id = t.series_id) as series_name,
@@ -119,6 +120,9 @@
 		<if test="num != null and num != ''">
 			, num= #{num}
 		</if>
+		<if test="sellNum != null and sellNum != ''">
+			, sell_num= #{sellNum}
+		</if>
 		<if test="orderPrice != null and orderPrice != ''">
 			, order_price= #{orderPrice}
 		</if>
@@ -138,8 +142,8 @@
 	</update>
 	
 	<insert id="addSubOrderForCopy" parameterType="java.lang.Integer">
-		insert into t_suborder(super_order_id, brand_id, series_id, single_id, num, order_price,transfer_price, cost_price,selling_price, curstate,create_date, update_date)
-		select super_order_id, brand_id, series_id, single_id, #{num,jdbcType=INTEGER} , order_price,transfer_price, cost_price,selling_price, curstate, now(), now()
+		insert into t_suborder(super_order_id, brand_id, series_id, single_id, num, sell_num, order_price,transfer_price, cost_price,selling_price, curstate,create_date, update_date)
+		select super_order_id, brand_id, series_id, single_id, #{num,jdbcType=INTEGER} , 0, order_price,transfer_price, cost_price,selling_price, curstate, now(), now()
 		from t_suborder where suborder_id = #{subOrderId,jdbcType=INTEGER}
 	</insert>
 	
@@ -165,7 +169,7 @@
 	
 	<!-- 根据多个子订单ID查询子订单 -->
 	<select id="querySubOrderByIds" resultMap="subOrderResultMap">
-		select suborder_id, super_order_id, brand_id, series_id, single_id, num, order_price,transfer_price, cost_price,selling_price, curstate, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
+		select suborder_id, super_order_id, brand_id, series_id, single_id, num, sell_num, order_price,transfer_price, cost_price,selling_price, curstate, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
 		from t_suborder where suborder_id in
 		<foreach collection="param1" item="suborderId" open="(" separator="," close=")">#{suborderId}</foreach>
 		<if test="param2 != null and param2 != ''">

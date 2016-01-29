@@ -71,6 +71,11 @@ public class SubOrderService {
 		SubOrder subOrder = subOrderDao.querySubOrderById(subOrderId);
 		if(subOrder == null)
 			return;
+		//TODO 需要将"销售中"和"已售罄"替换
+		if(subOrder.getCurState().equals("销售中"))
+			throw new BusinessException("1", "子订单正在销售中，不支持拆分");
+		if(subOrder.getCurState().equals("已售罄"))
+			throw new BusinessException("1", "子订单已售罄，不支持拆分");
 		
 		Integer sum = subOrder.getNum();
 		//复制订单
@@ -130,6 +135,13 @@ public class SubOrderService {
 		List<SubOrder> list = subOrderDao.querySubOrderByIds(subOrderIds, new String[]{"8"});
 		if(list.size() != orderNum)
 			throw new BusinessException("1", "记录子订单数和要合并的子订单数不一致");
+		//TODO 需要将"销售中"和"已售罄"替换
+		for(SubOrder so : list){
+			if(so.getCurState().equals("销售中"))
+				throw new BusinessException("1", "子订单存在状态为销售中，不支持合并");
+			if(so.getCurState().equals("已售罄"))
+				throw new BusinessException("1", "子订单存在状态为已售罄，不支持合并");
+		}
 		
 		//校验子订单数量是否一致，校验子订单品牌、系列、单品是否一致, 校验子订单当前状态是否为已砍单
 		String brandId = "";

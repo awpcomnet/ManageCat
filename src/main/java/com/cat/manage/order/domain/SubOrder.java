@@ -10,6 +10,7 @@ public class SubOrder implements Serializable{
 	private Integer seriesId; //系列编号
 	private Integer singleId; //单品编号
 	private Integer num; //数量
+	private Integer sellNum;//销售数量
 	private Double orderPrice; //下单单价
 	private Double transferPrice; //运费(平均)
 	private Double costPrice; //成本价(单个)
@@ -160,15 +161,27 @@ public class SubOrder implements Serializable{
 	public void setSumSellingPrice(String sumSellingPrice) {
 		this.sumSellingPrice = sumSellingPrice;
 	}
+	public Integer getSellNum() {
+		return sellNum;
+	}
+	public void setSellNum(Integer sellNum) {
+		this.sellNum = sellNum;
+	}
 	@Override
 	public String toString() {
 		return "SubOrder [suborderId=" + suborderId + ", superOrderId="
-				+ superOrderId + ", singleId=" + singleId + ", num=" + num
-				+ ", orderPrice=" + orderPrice + ", transferPrice="
-				+ transferPrice + ", costPrice=" + costPrice
-				+ ", sellingPrice=" + sellingPrice + ", curState=" + curState
-				+ ", createDate=" + createDate + ", updateDate=" + updateDate
-				+ "]";
+				+ superOrderId + ", brandId=" + brandId + ", seriesId="
+				+ seriesId + ", singleId=" + singleId + ", num=" + num
+				+ ", sellNum=" + sellNum + ", orderPrice=" + orderPrice
+				+ ", transferPrice=" + transferPrice + ", costPrice="
+				+ costPrice + ", sellingPrice=" + sellingPrice + ", curState="
+				+ curState + ", createDate=" + createDate + ", updateDate="
+				+ updateDate + ", createDateFormat=" + createDateFormat
+				+ ", updateDateFormat=" + updateDateFormat + ", brandName="
+				+ brandName + ", seriesName=" + seriesName + ", singleName="
+				+ singleName + ", sumOrderPrice=" + sumOrderPrice
+				+ ", sumTransferPrice=" + sumTransferPrice + ", sumCostPrice="
+				+ sumCostPrice + ", sumSellingPrice=" + sumSellingPrice + "]";
 	}
 
 	private static final long serialVersionUID = -471158871458947793L;

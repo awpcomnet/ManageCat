@@ -34,6 +34,7 @@ Ext.define("MIS.view.order.SubOrderGrid", {
 			    { header: '系列名称', dataIndex: 'seriesName', sortable: true, width: 16, align: "center"},
 			    { header: '单品名称', dataIndex: 'singleName', sortable: true, width: 17, align: "center"},
 			    { header: '数量', dataIndex: 'num', sortable: true, width: 7, align: "center"},
+			    { header: '售出数量', dataIndex: 'sellNum', sortable: true, width: 7, align: "center"},
 			    
 			    { header: '下单单价', dataIndex: 'orderPrice', sortable: true, width: 10, align: "center"},
 			    { header: '平均运费', dataIndex: 'transferPrice', sortable: true, width: 10, align: "center"},
