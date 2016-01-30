@@ -34,4 +34,11 @@ public interface BrandDao {
 	 * @return
 	 */
 	public List<Brand> queryBrands(Brand brand);
+	
+	/**
+	 * 根据品牌编号查询品牌信息
+	 * @param brandId
+	 * @return
+	 */
+	public Brand queryBrandById(Integer brandId);
 }

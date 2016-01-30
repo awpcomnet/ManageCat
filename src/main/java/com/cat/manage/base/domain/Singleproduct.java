@@ -22,6 +22,7 @@ public class Singleproduct implements Serializable{
 	private String updateBy;//更新人
 	private String createDateFormat;//格式化后的创建时间
 	private String updateDateFormat;//格式化后的更新时间
+	private String ofOriginName;//所属系列名称
 	
 	public Integer getSingleId() {
 		return singleId;
@@ -125,6 +126,14 @@ public class Singleproduct implements Serializable{
 
 	public void setUpdateDateFormat(String updateDateFormat) {
 		this.updateDateFormat = updateDateFormat;
+	}
+
+	public String getOfOriginName() {
+		return ofOriginName;
+	}
+
+	public void setOfOriginName(String ofOriginName) {
+		this.ofOriginName = ofOriginName;
 	}
 
 	@Override

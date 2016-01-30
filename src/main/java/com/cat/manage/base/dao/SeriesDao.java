@@ -13,6 +13,7 @@ import com.cat.manage.base.domain.Series;
  */
 @Repository
 public interface SeriesDao {
+	
 	/**
 	 * 添加系列
 	 * @param series
@@ -37,4 +38,11 @@ public interface SeriesDao {
 	 * @return
 	 */
 	public List<Series> querySeries(Series series);
+	
+	/**
+	 * 根据系列编号查询系列信息
+	 * @param seriesId
+	 * @return
+	 */
+	public Series querySeriesById(Integer seriesId);
 }

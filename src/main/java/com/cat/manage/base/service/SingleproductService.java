@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cat.manage.base.dao.SingleproductDao;
+import com.cat.manage.base.domain.Series;
 import com.cat.manage.base.domain.Singleproduct;
+import com.cat.manage.common.exception.BusinessException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -20,11 +22,20 @@ public class SingleproductService {
 	@Autowired
 	private SingleproductDao singleproductDao;
 	
+	@Autowired
+	private SeriesService seriesService;
+	
 	/**
 	 * 添加单品信息
 	 * @param singleproduct
 	 */
 	public void addSingleproduct(Singleproduct singleproduct){
+		Series Series = seriesService.querySeriesById(Integer.valueOf(singleproduct.getOfOrigin()));
+		if(Series == null)
+			throw new BusinessException("1", "系列信息不存在");
+		if(!"1".equals(Series.getIsUse()))
+			throw new BusinessException("1", "系列已失效");
+		
 		singleproductDao.addSingleproduct(singleproduct);
 	}
 	

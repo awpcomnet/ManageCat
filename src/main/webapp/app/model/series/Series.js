@@ -19,7 +19,7 @@ Ext.define("MIS.model.series.Series", {
 		type: "string"
 	}, {
 		name: "isUse",
-		type: "date"
+		type: "string"
 	}, {
 		name: "createDate",
 		type: "date"
@@ -37,6 +37,9 @@ Ext.define("MIS.model.series.Series", {
 		type: "string"
 	}, {
 		name: "updateDateFormat",
+		type: "string"
+	}, {
+		name: "ofOriginName",
 		type: "string"
 	}]
 });

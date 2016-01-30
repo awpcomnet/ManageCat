@@ -15,6 +15,7 @@
 		<result property="updateBy" column="update_by"/>
 		<result property="createDateFormat" column="createDateFormat"/>
 		<result property="updateDateFormat" column="updateDateFormat"/>
+		<result property="ofOriginName" column="of_origin_name"/>
 	</resultMap>
 	
 	<!-- 添加单品信息 -->
@@ -54,7 +55,7 @@
 	
 	<!-- 查询单品信息 -->
 	<select id="querySingleproducts" parameterType="com.cat.manage.base.domain.Singleproduct" resultMap="singleproductResultMap">
-		select single_id, single_name, single_ename, capacity, unit, of_origin, is_use, create_date, create_by, update_date, update_by, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat 
+		select single_id, single_name, single_ename, capacity, unit, of_origin, (select series_name from t_series where series_id = t_singleproduct.of_origin) as of_origin_name, is_use, create_date, create_by, update_date, update_by, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat 
 		from t_singleproduct where 1=1
 		<if test="capacity != null and capacity != ''">
 			and capacity = #{capacity}

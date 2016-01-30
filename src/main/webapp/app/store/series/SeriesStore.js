@@ -16,6 +16,8 @@ Ext.define("MIS.store.series.SeriesStore", {
 			totalProperty: "meta.totalRecord"
 		},
         extraParams: {
+        	seriesName: "",
+        	seriesEname: "",
         	seriesId:"",
         	isUse: "",
         	ofOrigin: "",

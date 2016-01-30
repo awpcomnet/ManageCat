@@ -13,6 +13,7 @@
 		<result property="updateBy" column="update_by"/>
 		<result property="createDateFormat" column="createDateFormat"/>
 		<result property="updateDateFormat" column="updateDateFormat"/>
+		<result property="ofOriginName" column="of_origin_name"/>
 	</resultMap>
 	
 	<!-- 添加系列信息 -->
@@ -46,7 +47,7 @@
 	
 	<!-- 查询系列信息 -->
 	<select id="querySeries" parameterType="com.cat.manage.base.domain.Series" resultMap="seriesResultMap">
-		select series_id, series_name, series_ename, of_origin, is_use, create_date, create_by, update_date, update_by, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat 
+		select series_id, series_name, series_ename, of_origin, (select brand_name from t_brand where brand_id = t_series.of_origin) as of_origin_name, is_use, create_date, create_by, update_date, update_by, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat 
 		from t_series where 1=1
 		<if test="ofOrigin != null and ofOrigin != ''">
 			and of_origin = #{ofOrigin}
@@ -61,5 +62,11 @@
 			and series_ename like '%${seriesEname}%' 
 		</if>
 		order by create_date desc
+	</select>
+	
+	<!-- 根据系列编号查询系列信息 -->
+	<select id="querySeriesById" parameterType="java.lang.Integer" resultMap="seriesResultMap">
+		select series_id, series_name, series_ename, of_origin, (select brand_name from t_brand where brand_id = t_series.of_origin) as of_origin_name, is_use, create_date, create_by, update_date, update_by, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat 
+		from t_series where series_id = #{seriesId}
 	</select>
 </mapper>

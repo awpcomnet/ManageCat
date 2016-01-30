@@ -16,6 +16,10 @@ Ext.define("MIS.store.singleproduct.SingleproductStore", {
 			totalProperty: "meta.totalRecord"
 		},
         extraParams: {
+        	singleName: "",
+        	singleEname: "",
+        	capacity: "",
+        	unit: "",
         	singleId:"",
         	isUse: "",
         	ofOrigin: "",

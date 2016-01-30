@@ -55,4 +55,13 @@ public class BrandService {
 		PageInfo<Brand> page = new PageInfo<Brand>(list);
 		return page;
 	}
+	
+	/**
+	 * 根据品牌编号查询品牌
+	 * @param brandId
+	 * @return
+	 */
+	public Brand queryBrandById(Integer brandId){
+		return brandDao.queryBrandById(brandId);
+	}
 }

@@ -22,7 +22,9 @@ Ext.define('MIS.Application', {
                   "MIS.controller.order.OrderController",
                   "MIS.controller.order.SubOrderController",
                   "MIS.controller.dict.DictController",
-                  "MIS.controller.brand.BrandController"
+                  "MIS.controller.brand.BrandController",
+                  "MIS.controller.series.SeriesController",
+                  "MIS.controller.singleproduct.SingleController"
     ],
 
     stores: [

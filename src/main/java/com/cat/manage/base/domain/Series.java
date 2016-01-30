@@ -20,6 +20,7 @@ public class Series implements Serializable{
 	private String updateBy;//更新人
 	private String createDateFormat;//格式化后的创建时间
 	private String updateDateFormat;//格式化后的更新时间
+	private String ofOriginName;//所属品牌名称
 	
 	public Integer getSeriesId() {
 		return seriesId;
@@ -107,6 +108,14 @@ public class Series implements Serializable{
 
 	public void setUpdateDateFormat(String updateDateFormat) {
 		this.updateDateFormat = updateDateFormat;
+	}
+
+	public String getOfOriginName() {
+		return ofOriginName;
+	}
+
+	public void setOfOriginName(String ofOriginName) {
+		this.ofOriginName = ofOriginName;
 	}
 
 	@Override

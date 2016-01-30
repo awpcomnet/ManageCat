@@ -25,7 +25,7 @@ Ext.define("MIS.model.singleproduct.Singleproduct", {
 		type: "string"
 	}, {
 		name: "isUse",
-		type: "date"
+		type: "string"
 	}, {
 		name: "createDate",
 		type: "date"
@@ -43,6 +43,9 @@ Ext.define("MIS.model.singleproduct.Singleproduct", {
 		type: "string"
 	}, {
 		name: "updateDateFormat",
+		type: "string"
+	}, {
+		name: "ofOriginName",
 		type: "string"
 	}]
 });

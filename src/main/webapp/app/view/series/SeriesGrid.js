@@ -1,9 +1,9 @@
 /**
- * 品牌数据显示
+ * 系列数据显示
  */
-Ext.define("MIS.view.brand.BrandGrid", {
+Ext.define("MIS.view.series.SeriesGrid", {
 	extend: "Ext.grid.Panel",
-	alias: "widget.brandgrid",
+	alias: "widget.seriesgrid",
 	
 	requires: [
 	     'Ext.form.field.Text',
@@ -11,7 +11,7 @@ Ext.define("MIS.view.brand.BrandGrid", {
 	     'Ext.toolbar.Paging'
 	],
 	
-	store: "MIS.store.brand.BrandStore",
+	store: "MIS.store.series.SeriesStore",
 	
 	initComponent: function(){
 		//创建多选框
@@ -29,11 +29,9 @@ Ext.define("MIS.view.brand.BrandGrid", {
 			loadMask: true,
 			
 			columns: [
-			    { header: '品牌名称', dataIndex: 'brandName', sortable: true, width: 20, align: "center"},
-			    { header: '品牌英文名', dataIndex: 'brandEname', sortable: true, width: 20, align: "center"},
-			    { header: '所属国家', dataIndex: 'ofOrigin', sortable: true, width: 20, align: "center", renderer: function (value, rowindex, record, column) {
-                    return MIS.common.DictManager.getDictItemName("country", value);
-                }},
+			    { header: '系列名称', dataIndex: 'seriesName', sortable: true, width: 20, align: "center"},
+			    { header: '系列英文名', dataIndex: 'seriesEname', sortable: true, width: 20, align: "center"},
+			    { header: '所属品牌', dataIndex: 'ofOriginName', sortable: true, width: 20, align: "center"},
 			    { header: '是否可用', dataIndex: 'isUse', sortable: true, width: 20, align: "center", renderer: function (value, rowindex, record, column) {
 			    	return MIS.common.DictManager.getDictItemName("onOff", value);
                 }},
@@ -65,10 +63,10 @@ Ext.define("MIS.view.brand.BrandGrid", {
 					handler: this.onModifyClick
 				}, '-', {
 					iconCls: 'icon-file-alt',
-					text: '添加系列',
-					itemId: 'seriesAdd',
+					text: '添加单品',
+					itemId: 'singleAdd',
 					scope: this,
-					handler: this.onSeriesAddClick
+					handler: this.onSingleAddClick
 				}, '->', {
 					iconCls: 'icon-refresh',
 					text: '刷新',
@@ -92,28 +90,36 @@ Ext.define("MIS.view.brand.BrandGrid", {
     },
 	
 	onAddClick: function(grid, rindex, cindex){
-    	var brandview = Ext.ComponentQuery.query("brandview")[0];
-    	brandview.getEl().mask();
+    	var seriesview = Ext.ComponentQuery.query("seriesview")[0];
+    	seriesview.getEl().mask();
     	
     	var editWindow = Ext.create("Ext.window.Window", {
-        	title: "添加品牌",
-        	id: "brandaddwindow",
-        	renderTo: brandview.getEl(),
+        	title: "添加系列",
+        	id: "seriesaddwindow",
+        	renderTo: seriesview.getEl(),
         	height: 180,
         	width: 580,
         	layout: "fit",
         	closeAction: "destroy",
         	items: [{
-        		xtype: "brandadd"
+        		xtype: "seriesadd"
         	}],
         	listeners: {
         		close: function(){
-        			brandview.getEl().unmask();
+        			seriesview.getEl().unmask();
         		},
         		beforerender: function () {
-        			
+        			var ofOrigin = Ext.ComponentQuery.query("seriesadd combo[name=ofOrigin]")[0];
+                    var ofOriginStore = ofOrigin.getStore();
+                    ofOriginStore.proxy.extraParams.isUse = 1;
+                    ofOriginStore.load();
+                    
+                    var isUse = Ext.ComponentQuery.query("seriesadd combo[name=isUse]")[0];
+                    var isUseStore = isUse.getStore();
+                    isUseStore.load();
         		},
         		afterrender: function(component, eOpts){
+        			component.down("combo[name=isUse]").setValue("1");
     			}
         	}
         });
@@ -129,34 +135,35 @@ Ext.define("MIS.view.brand.BrandGrid", {
     	var selections = this.getView().getSelectionModel().getSelection();
     	var selectionNum = selections.length;
     	if(selectionNum != 1){
-    		Ext.MessageBox.alert("请求失败", "请选择单个品牌进行修改");
+    		Ext.MessageBox.alert("请求失败", "请选择单个系列进行修改");
     		return;
     	}
-    	var brandview = Ext.ComponentQuery.query("brandview")[0];
-    	brandview.getEl().mask();
+    	var seriesview = Ext.ComponentQuery.query("seriesview")[0];
+    	seriesview.getEl().mask();
     	
     	var editWindow = Ext.create("Ext.window.Window", {
-        	title: "修改品牌",
-        	id: "brandmodifywindow",
+        	title: "修改系列",
+        	id: "seriesmodifywindow",
         	extraData: selections[0].raw,
-        	renderTo: brandview.getEl(),
+        	renderTo: seriesview.getEl(),
         	height: 180,
         	width: 580,
         	layout: "fit",
         	closeAction: "destroy",
         	items: [{
-        		xtype: "brandmodify"
+        		xtype: "seriesmodify"
         	}],
         	listeners: {
         		close: function(){
-        			brandview.getEl().unmask();
+        			seriesview.getEl().unmask();
         		},
         		beforerender: function () {
-        			var ofOrigin = Ext.ComponentQuery.query("brandmodify combo[name=ofOrigin]")[0];
+        			var ofOrigin = Ext.ComponentQuery.query("seriesmodify combo[name=ofOrigin]")[0];
                     var ofOriginStore = ofOrigin.getStore();
+                    ofOriginStore.proxy.extraParams.isUse = 1;
                     ofOriginStore.load();
                     
-                    var isUse = Ext.ComponentQuery.query("brandmodify combo[name=isUse]")[0];
+                    var isUse = Ext.ComponentQuery.query("seriesmodify combo[name=isUse]")[0];
                     var isUseStore = isUse.getStore();
                     isUseStore.load();
         		},
@@ -164,52 +171,57 @@ Ext.define("MIS.view.brand.BrandGrid", {
         			var form = component.down("form");
                     var params = Ext.clone(this.extraData);
     				form.getForm().setValues(params);
+    				component.down("combo[name=ofOrigin]").setValue(Number.parseInt(this.extraData.ofOrigin));
     			}
         	}
         });
     	editWindow.show();
     },
     
-    onSeriesAddClick: function(component){
+    onSingleAddClick: function(component){
     	var selections = this.getView().getSelectionModel().getSelection();
     	var selectionNum = selections.length;
     	if(selectionNum != 1){
-    		Ext.MessageBox.alert("请求失败", "请选择一个品牌进行系列添加");
+    		Ext.MessageBox.alert("请求失败", "请选择一个系列进行单品添加");
     		return;
     	}
-    	
     	var isUse = selections[0].raw.isUse;
     	if(isUse != 1){
-    		Ext.MessageBox.alert("请求失败", "品牌已失效");
+    		Ext.MessageBox.alert("请求失败", "系列已失效");
     		return;
     	}
     	
-    	var brandview = Ext.ComponentQuery.query("brandview")[0];
-    	brandview.getEl().mask();
+    	var seriesview = Ext.ComponentQuery.query("seriesview")[0];
+    	seriesview.getEl().mask();
     	
     	var editWindow = Ext.create("Ext.window.Window", {
-        	title: "添加系列,所属品牌["+selections[0].raw.brandName+"]",
-        	id: "seriesaddwindow",
+        	title: "添加单品,所属系列["+selections[0].raw.seriesName+"]",
+        	id: "singleaddwindow",
         	extraData: selections[0].raw,
-        	renderTo: brandview.getEl(),
-        	height: 180,
+        	renderTo: seriesview.getEl(),
+        	height: 250,
         	width: 575,
         	layout: "fit",
         	closeAction: "destroy",
         	items: [{
-        		xtype: "seriesadd"
+        		xtype: "singleadd"
         	}],
         	listeners: {
         		close: function(){
-        			brandview.getEl().unmask();
+        			seriesview.getEl().unmask();
         		},
         		beforerender: function () {
-               	 	var isUse = Ext.ComponentQuery.query("seriesadd combo[name=isUse]")[0];
+        			var ofOrigin = Ext.ComponentQuery.query("singleadd combo[name=ofOrigin]")[0];
+                    var ofOriginStore = ofOrigin.getStore();
+                    ofOriginStore.proxy.extraParams.isUse = 1;
+                    ofOriginStore.load();
+        			
+                    var isUse = Ext.ComponentQuery.query("singleadd combo[name=isUse]")[0];
                     var isUseStore = isUse.getStore();
                     isUseStore.load();
                },
         		afterrender: function(component, eOpts){
-        			component.down("textfield[name=ofOrigin]").setValue(this.extraData.brandId);
+        			component.down("combo[name=ofOrigin]").setValue(this.extraData.seriesId);
         			component.down("combo[name=isUse]").setValue("1");
     			}
         	}
@@ -218,8 +230,13 @@ Ext.define("MIS.view.brand.BrandGrid", {
     },
 	
 	onExpandSearchClick: function(component){
-		var searchwindow = Ext.ComponentQuery.query("brandSearchpanel")[0];
+		var searchwindow = Ext.ComponentQuery.query("seriesSearchpanel")[0];
     	if(searchwindow.isHidden()){
+    		var ofOrigin = Ext.ComponentQuery.query("seriesSearchpanel combo[name=ofOrigin]")[0];
+            var ofOriginStore = ofOrigin.getStore();
+            ofOriginStore.proxy.extraParams.isUse = 1;
+            ofOriginStore.load();
+            
     		searchwindow.show();
     	} else {
     		searchwindow.form.reset();
