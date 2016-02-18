@@ -154,8 +154,15 @@ Ext.define("MIS.view.order.SubOrderModify", {
 		    	   transferPrice.setValue(Number.parseFloat(newValue)-Number.parseFloat(orderPrice));
 		       }
 		},
+		colspan: 2,
 	    allowBlank: true,
 	    editable:true
+    }, {
+		fieldLabel: "备注",
+        name: "remark",
+        xtype: "textarea",
+        colspan: 2,
+        width: 530
     }],
 	
 	buttons: [{
@@ -178,7 +185,8 @@ Ext.define("MIS.view.order.SubOrderModify", {
 				orderPrice = subOrderModify.down("textfield[name=orderPrice]").getValue().trim(),
 				transferPrice = subOrderModify.down("textfield[name=transferPrice]").getValue().trim(),
 				sellingPrice = subOrderModify.down("textfield[name=sellingPrice]").getValue().trim(),
-				costPrice = subOrderModify.down("textfield[name=costPrice]").getValue().trim();
+				costPrice = subOrderModify.down("textfield[name=costPrice]").getValue().trim(),
+				remark = subOrderModify.down("textarea[name=remark]").getValue().trim();
 			
 			
 			
@@ -192,7 +200,8 @@ Ext.define("MIS.view.order.SubOrderModify", {
 					orderPrice: orderPrice,
 					transferPrice: transferPrice,
 					sellingPrice: sellingPrice,
-					costPrice: costPrice
+					costPrice: costPrice,
+					remark: remark
 					
 	        };
 			

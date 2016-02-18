@@ -81,7 +81,7 @@ public class SubOrderService {
 	/**
 	 * 销售商品
 	 */
-	public void updateForSelled(Integer subOrderId, Integer num){
+	public void updateForSelled(Integer subOrderId, Integer num, String remark, Double sellingPrice){
 		SubOrder subOrder = subOrderDao.querySubOrderById(subOrderId);
 		if(subOrder == null)
 			return;
@@ -109,6 +109,12 @@ public class SubOrderService {
 		subOrderDao.updateSubOrder(subOrder);
 		
 		subOrder.setSellNum(num);
+		if(!"".equals(remark)){
+			subOrder.setRemark(remark);
+		}
+		if(sellingPrice != null){
+			subOrder.setSellingPrice(sellingPrice);
+		}
 		selledStoreService.addSelledStore(subOrder);
 		
 	}

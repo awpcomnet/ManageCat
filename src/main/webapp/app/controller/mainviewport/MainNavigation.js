@@ -13,6 +13,7 @@ Ext.define("MIS.controller.mainviewport.MainNavigation", {
     views: [
         "MIS.view.mainviewport.MainNavigation", 
         "MIS.view.mainviewport.MainNavigationItem"
+        //"MIS.view.mainviewport.MainHeader"
     ],
 
     stores: [

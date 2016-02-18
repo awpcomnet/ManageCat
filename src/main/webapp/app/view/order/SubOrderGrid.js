@@ -48,7 +48,9 @@ Ext.define("MIS.view.order.SubOrderGrid", {
 			    { header: '当前状态', dataIndex: 'curState', sortable: true, width: 13, align: "center", renderer: function (value, rowindex, record, column) {
 			    	return MIS.common.DictManager.getDictItemName("subOrderState", value);
                 }},
-			    //{ header: '创建时间', dataIndex: 'createDateFormat', sortable: true, width: 25, align: "center"},
+			    { header: '备注', dataIndex: 'remark', sortable: true, width: 5, align: "center", renderer: function (value, rowindex, record, column) {
+			    	return (value == '' || value == null) ? '--' : '!';
+                }},
 			    { header: '修改时间', dataIndex: 'updateDateFormat', sortable: true, width: 22, align: "center"}
 			],
 		    
@@ -141,7 +143,7 @@ Ext.define("MIS.view.order.SubOrderGrid", {
         	id: "suborderaddwindow",
         	extraData: selections[0].raw,
         	renderTo: suborderview.getEl(),
-        	height: 350,
+        	height: 400,
         	width: 575,
         	layout: "fit",
         	closeAction: "destroy",
@@ -205,7 +207,7 @@ Ext.define("MIS.view.order.SubOrderGrid", {
         	id: "subordermodifywindow",
         	extraData: selections[0].raw,
         	renderTo: suborderview.getEl(),
-        	height: 350,
+        	height: 440,
         	width: 575,
         	layout: "fit",
         	closeAction: "destroy",
@@ -320,7 +322,7 @@ Ext.define("MIS.view.order.SubOrderGrid", {
         	extraData: selections[0].raw,
         	renderTo: suborderview.getEl(),
         	height: 380,
-        	width: 840,
+        	width: 860,
         	layout: "fit",
         	closeAction: "destroy",
         	items: [{
@@ -502,7 +504,7 @@ Ext.define("MIS.view.order.SubOrderGrid", {
         	id: "sellandbackwindow",
         	extraData: selections[0].raw,
         	renderTo: suborderview.getEl(),
-        	height: 150,
+        	height: 250,
         	width: 575,
         	layout: "fit",
         	closeAction: "destroy",

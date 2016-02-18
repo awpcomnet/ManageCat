@@ -188,14 +188,22 @@ Ext.define("MIS.view.order.SubOrderDetail", {
     }, {
 		fieldLabel: "修改时间",
 	    name: "updateDateFormat",
-	    colspan: 3,
+	    colspan: 1,
 	    width: 270,
 	    readOnly: true,
 	    allowBlank: true
+    },{
+    	fieldLabel: "备注",
+        name: "remark",
+        xtype: "textarea",
+        colspan: 2,
+        rowspan: 2,
+        readOnly: true,
+        width: 530
     }, {
 		fieldLabel: "创建时间",
 	    name: "createDateFormat",
-	    colspan: 3,
+	    colspan: 1,
 	    width: 270,
 	    readOnly: true,
 	    allowBlank: true

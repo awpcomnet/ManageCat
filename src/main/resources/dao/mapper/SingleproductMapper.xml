@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cat.manage.base.dao.SingleproductDao">
+
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
 	<resultMap type="com.cat.manage.base.domain.Singleproduct" id="singleproductResultMap">
 		<id property="singleId" column="single_id"/>
 		<result property="singleName" column="single_name"/>

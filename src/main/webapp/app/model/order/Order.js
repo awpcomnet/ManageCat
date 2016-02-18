@@ -18,6 +18,9 @@ Ext.define("MIS.model.order.Order", {
 		name: "affirmState",
 		type: "string"
 	}, {
+		name: "remark",
+		type: "string"
+	}, {
 		name: "createDate",
 		type: "date"
 	}, {
@@ -43,6 +46,9 @@ Ext.define("MIS.model.order.Order", {
 		type: "string"
 	}, {
 		name: "sumSubOrderNum",
+		type: "string"
+	}, {
+		name: "payby",
 		type: "string"
 	}]
 });

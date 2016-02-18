@@ -153,6 +153,12 @@ Ext.define("MIS.view.order.SubOrderAdd", {
 		},
 	    allowBlank: true,
 	    editable:true
+    }, {
+		fieldLabel: "备注",
+        name: "remark",
+        xtype: "textarea",
+        colspan: 2,
+        width: 530
     }],
 	
 	buttons: [{
@@ -175,7 +181,8 @@ Ext.define("MIS.view.order.SubOrderAdd", {
 				orderPrice = subOrderAdd.down("textfield[name=orderPrice]").getValue().trim(),
 				transferPrice = subOrderAdd.down("textfield[name=transferPrice]").getValue().trim(),
 				sellingPrice = subOrderAdd.down("textfield[name=sellingPrice]").getValue().trim(),
-				costPrice = subOrderAdd.down("textfield[name=costPrice]").getValue().trim();
+				costPrice = subOrderAdd.down("textfield[name=costPrice]").getValue().trim(),
+				remark = subOrderAdd.down("textarea[name=remark]").getValue().trim();
 			
 			
 			
@@ -189,7 +196,8 @@ Ext.define("MIS.view.order.SubOrderAdd", {
 					orderPrice: orderPrice,
 					transferPrice: transferPrice,
 					sellingPrice: sellingPrice,
-					costPrice: costPrice
+					costPrice: costPrice,
+					remark: remark
 					
 	        };
 			

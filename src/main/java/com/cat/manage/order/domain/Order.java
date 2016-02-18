@@ -8,6 +8,8 @@ public class Order implements Serializable{
 	private String foreignState;//国外订单状态
 	private String transfer;//转运状态
 	private String affirmState;//确认收货状态
+	private String remark;//备注
+	private String payby;//付款人
 	private Date createDate; //创建时间
 	private Date updateDate; //更新时间
 	/*非数据库字段*/
@@ -19,7 +21,22 @@ public class Order implements Serializable{
 	private String sumSellingPrice; //售价(总价)
 	private String sumSubOrderNum;//总子订单数
 	
-	
+	public String getPayby() {
+		return payby;
+	}
+
+	public void setPayby(String payby) {
+		this.payby = payby;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
 	public Integer getOrderId() {
 		return orderId;
 	}

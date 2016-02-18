@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.manage.shipped.dao.ShippedDao">
+
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
+	<resultMap type="com.cat.manage.shipped.domain.Shipped" id="ShippedResultMap">
+		<id property="id" column="id"/>
+		<result property="headId" column="head_id"/>
+		<result property="checkId" column="check_id"/>
+		<result property="trackingNumber" column="tracking_number"/>
+		<result property="transferCompany" column="transfer_company"/>
+		<result property="brandId" column="brand_id"/>
+		<result property="seriesId" column="series_id"/>
+		<result property="singleId" column="single_id"/>	
+		<result property="num" column="num"/>
+		<result property="unitPrice" column="unit_price"/>
+		<result property="payby" column="payby"/>
+		<result property="planRmb" column="plan_rmb"/>
+		<result property="planPostage" column="plan_postage"/>	
+		<result property="planCost" column="plan_cost"/>
+		<result property="remark" column="remark"/>
+		<result property="shippedStatus" column="shipped_status"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="createDateFormat" column="createDateFormat"/>	
+		<result property="updateDateFormat" column="updateDateFormat"/>	
+		<result property="brandName" column="brand_name"/>	
+		<result property="seriesName" column="series_name"/>	
+		<result property="singleName" column="single_name"/>	
+		<result property="sumPrice" column="sum_price"/>	
+	</resultMap>
+	
+	<resultMap type="com.cat.manage.check.domain.Check" id="checkResultMap">
+		<id property="id" column="id"/>
+		<result property="trackingNumber" column="tracking_number"/>
+		<result property="orderTime" column="order_time"/>
+		<result property="transferCompany" column="transfer_company"/>
+		<result property="orderAddr" column="order_addr"/>
+		<result property="brandId" column="brand_id"/>
+		<result property="seriesId" column="series_id"/>
+		<result property="singleId" column="single_id"/>
+		<result property="num" column="num"/>
+		<result property="unitPrice" column="unit_price"/>
+		<result property="remark" column="remark"/>
+		<result property="payby" column="payby"/>
+		<result property="orderStatus" column="order_status"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="createDateFormat" column="createDateFormat"/>
+		<result property="updateDateFormat" column="updateDateFormat"/>
+		<result property="brandName" column="brand_name"/>
+		<result property="seriesName" column="series_name"/>
+		<result property="singleName" column="single_name"/>
+	</resultMap>
+	
+	<resultMap type="com.cat.manage.shipped.domain.ShippedHead" id="shippedHeadResultMap">
+		<id property="id" column="id"/>
+		<result property="trackingNumber" column="tracking_number"/>
+		<result property="submitTime" column="submit_time"/>
+		<result property="transferCompany" column="transfer_company"/>
+		<result property="postage" column="postage"/>
+		<result property="createDate" column="create_date"/>
+		<result property="createDateFormat" column="createDateFormat"/>		
+	</resultMap>
+	
+	<!-- 添加邮寄清单（子单） -->
+	<insert id="addShipped">
+	insert into t_shipped(head_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, plan_rmb, plan_postage, plan_cost, remark, shipped_status, create_date, update_date)
+	values(#{param1.id}, #{param3.id}, #{param1.trackingNumber}, #{param1.transferCompany}, #{param3.brandId}, #{param3.seriesId}, #{param3.singleId}, #{param3.num}, #{param3.unitPrice}, #{param3.payby}, #{param2.planRmb}, #{param2.planPostage}, #{param2.planCost}, #{param2.remark}, #{param2.shippedStatus}, now(), now())
+	</insert>
+	
+	<!-- 修改邮寄清单（子单） -->
+	
+	<!-- 根据邮寄清单子单唯一编号删除记录 -->
+	
+	<!-- 查询邮寄清单子单信息 -->
+	
+	
+</mapper>

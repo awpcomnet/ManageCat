@@ -24,7 +24,8 @@ Ext.define('MIS.Application', {
                   "MIS.controller.dict.DictController",
                   "MIS.controller.brand.BrandController",
                   "MIS.controller.series.SeriesController",
-                  "MIS.controller.singleproduct.SingleController"
+                  "MIS.controller.singleproduct.SingleController",
+                  "MIS.controller.check.CheckController"//下单清单
     ],
 
     stores: [

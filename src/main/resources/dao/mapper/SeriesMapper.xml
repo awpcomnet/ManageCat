@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cat.manage.base.dao.SeriesDao">
+
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
 	<resultMap type="com.cat.manage.base.domain.Series" id="seriesResultMap">
 		<id property="seriesId" column="series_id"/>
 		<result property="seriesName" column="series_name"/>

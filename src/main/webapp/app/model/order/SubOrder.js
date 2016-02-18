@@ -42,6 +42,9 @@ Ext.define("MIS.model.order.SubOrder", {
 		name: "curState",
 		type: "string"
 	}, {
+		name: "remark",
+		type: "string"
+	}, {
 		name: "createDate",
 		type: "date"
 	}, {

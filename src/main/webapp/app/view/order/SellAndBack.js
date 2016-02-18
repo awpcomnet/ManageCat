@@ -45,7 +45,20 @@ Ext.define("MIS.view.order.SellAndBack", {
         valueField: "value",
         allowBlank: true,
         editable:false
-	}],
+	}, {
+		fieldLabel: "售价(单个)",
+	    name: "sellingPrice",
+	    xtype: "numberfield",
+	    minValue: 0.01, 
+	    allowBlank: true,
+	    editable:true
+    }, {
+		fieldLabel: "备注",
+        name: "remark",
+        xtype: "textarea",
+        colspan: 2,
+        width: 530
+    }],
 	
 	buttons: [{
 		text: "取消",
@@ -60,7 +73,9 @@ Ext.define("MIS.view.order.SellAndBack", {
 			
 			var subOrderId = subOrderModify.down("textfield[name=suborderId]").getValue().trim(),
 				num = subOrderModify.down("numberfield[name=num]").getValue(),
-				flag = subOrderModify.down("combobox[name=flag]").getValue();
+				flag = subOrderModify.down("combobox[name=flag]").getValue(),
+				remark = subOrderModify.down("textarea[name=remark]").getValue(),
+				sellingPrice = subOrderModify.down("numberfield[name=sellingPrice]").getValue();
 				
 			
 			
@@ -68,7 +83,9 @@ Ext.define("MIS.view.order.SellAndBack", {
 			var params = {
 					subOrderId: subOrderId,
 					num: num,
-					flag: flag
+					flag: flag,
+					remark: remark,
+					sellingPrice:sellingPrice
 					
 	        };
 			

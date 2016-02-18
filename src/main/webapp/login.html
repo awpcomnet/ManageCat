@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>专业代购猫</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/resources/component/normalize/normalize.css">
+    <link rel="stylesheet" type="text/css" href="/resources/component/login/login.css">
+    <link rel="stylesheet" type="text/css" href="/resources/component/alertify/alertify.core.css">
+    <link rel="stylesheet" type="text/css" href="/resources/component/alertify/alertify.default.css">
+    <link rel="stylesheet" type="text/css" href="/resources/component/tip/tip-yellow/tip-yellow.css">
+    
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" type="text/css" href="resources/component/login/login_ie.css">
+        <script src="/component/html5/respond.min.js"></script>
+        <script src="/component/html5/html5shiv.min.js"></script>
+        <![endif]-->    <!--[if lte IE 9]>
+        <script src="/component/html5/respond.min.js"></script>
+        <script src="/component/html5/html5shiv.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="bground"></div>
+    <div class="container">
+        <div class="loginBox">
+            <div class="title">
+               专业代购猫
+            </div>
+            <form action="/authc/login" method="POST">
+                <div class="formRow">
+                    <span class="input">
+                        <input name="username" class="input__field" type="text" id="input-username" />
+                        <label class="input__label" for="input-username">
+                            <span class="input__label-content">用户名 :</span>
+                        </label>
+                    </span>
+                </div>
+                <div class="formRow">
+                    <span class="input">
+                        <input name="password" class="input__field" type="password" id="input-password"/>
+                        <label class="input__label" for="input-password">
+                            <span class="input__label-content">密码 :</span>
+                        </label>
+                    </span>
+                </div>
+                <div class="formRow">
+                    <span class="input">
+                        <input name="captcha" class="input__field" type="text" id="input-captcha"/>
+                        <span class="captchaImage"><img alt="验证码" src="/authc/captcha"></span>
+                        <label class="input__label" for="input-captcha">
+                            <span class="input__label-content">验证码 :</span>
+                        </label>
+                    </span>
+                </div>
+                <div class="formRow">
+                    <span class="input">
+                        <input class="submit" type="button" value="登录" /> 
+                    </span>
+                </div>
+                <div class="formRow">
+                    <span class="check">
+                        <input class="rememberme" name="rememberme" type="checkbox" id="check-rememberme" />
+                        <label class="check__label" for="check-rememberme">
+                            <span class="check__label-content">记住我一周</span>
+                        </label>
+                    </span>
+                </div>
+            </form>
+        </div>            
+    </div>
+    <script type="text/javascript" src="/resources/component/jquery/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/resources/component/alertify/alertify.min.js"></script>
+    <script type="text/javascript" src="/resources/component/tip/jquery.poshytip.min.js"></script>
+    <script type="text/javascript" src="/resources/component/login/login.js"></script>
+</body>
+</html>

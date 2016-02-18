@@ -62,6 +62,12 @@ Ext.define("MIS.view.order.OrderModify", {
         valueField: "value",
         allowBlank: true,
         editable:false
+    }, {
+		fieldLabel: "备注",
+        name: "remark",
+        xtype: "textarea",
+        colspan: 2,
+        width: 530
     }],
 	
 	buttons: [{
@@ -78,14 +84,16 @@ Ext.define("MIS.view.order.OrderModify", {
 			var orderId = orderModify.down("textfield[name=orderId]").getValue().trim(),
 				foreignState = orderModify.down("combobox[name=foreignState]").getValue(),
 				transfer = orderModify.down("combobox[name=transfer]").getValue(),
-				affirmState = orderModify.down("combobox[name=affirmState]").getValue();
-			
+				affirmState = orderModify.down("combobox[name=affirmState]").getValue(),
+			    remark = orderModify.down("textarea[name=remark]").getValue();
+			    
 			
 			var params = {
 				orderId: orderId,
 		        foreignState: foreignState,
 		        transfer: transfer,
-		        affirmState: affirmState
+		        affirmState: affirmState,
+		        remark: remark
 	        };
 			
 			Ext.Ajax.request({

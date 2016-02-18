@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cat.manage.order.dao.OrderDao">
+
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
 	<resultMap type="com.cat.manage.order.domain.Order" id="orderResultMap">
 		<id property="orderId" column="order_id"/>
 		<result property="foreignState" column="foreign_state"/>
 		<result property="transfer" column="transfer"/>
 		<result property="affirmState" column="affirm_state"/>
+		<result property="remark" column="remark"/>
+		<result property="payby" column="payby"/>
 		<result property="createDate" column="create_date"/>
 		<result property="updateDate" column="update_date"/>
 		<result property="createDateFormat" column="createDateFormat"/>
@@ -20,13 +25,13 @@
 	
 	<!-- 添加订单 -->
 	<insert id="addOrder" parameterType="com.cat.manage.order.domain.Order">
-		insert t_order (foreign_state, transfer, affirm_state, create_date, update_date)
-		values(#{foreignState},#{transfer},#{affirmState}, now(), now())
+		insert t_order (foreign_state, transfer, affirm_state, payby, create_date, update_date)
+		values(#{foreignState},#{transfer},#{affirmState}, #{payby}, now(), now())
 	</insert>
 	
 	<!-- 查询单个订单 -->
 	<select id="queryOrderById" parameterType="java.lang.Integer">
-		select order_id, foreign_state, transfer, affirm_state, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat, 
+		select order_id, foreign_state, transfer, affirm_state, remark, payby, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat, 
 		IFNULL((select num*order_price from t_suborder where super_order_id = t.order_id),0.00) as sum_order_price,
 		IFNULL((select num*transfer_price from t_suborder where super_order_id = t.order_id),0.00) as sum_transfer_price,
 		IFNULL((select num*cost_price from t_suborder where super_order_id = t.order_id),0.00) as sum_cost_price,
@@ -37,7 +42,7 @@
 	
 	<!-- 查询所有订单 -->
 	<select id="queryOrderAll" parameterType="com.cat.manage.order.domain.Order" resultMap="orderResultMap">
-		select order_id, foreign_state, transfer, affirm_state, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat, 
+		select order_id, foreign_state, transfer, affirm_state, remark, payby, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat, 
 		IFNULL((select sum(num*order_price) from t_suborder where super_order_id = t.order_id),0.00) as sum_order_price,
 		IFNULL((select sum(num*transfer_price) from t_suborder where super_order_id = t.order_id),0.00) as sum_transfer_price,
 		IFNULL((select sum(num*cost_price) from t_suborder where super_order_id = t.order_id),0.00) as sum_cost_price,
@@ -65,7 +70,7 @@
 		
 	</select>
 	
-	<!-- 修改单个日历 -->
+	<!-- 修改单个主订单 -->
 	<update id="updateOrder" parameterType="com.cat.manage.order.domain.Order">
 		update t_order set update_date=now()
 		<if test="foreignState != null and foreignState != ''">
@@ -76,6 +81,12 @@
 		</if>
 		<if test="affirmState != null and affirmState != ''">
 			, affirm_state = #{affirmState}
+		</if>
+		<if test="remark != null and remark != ''">
+			, remark = #{remark}
+		</if>
+		<if test="payby != null and payby != ''">
+			, payby = #{payby}
 		</if>
 		 where order_id = #{orderId}
 	</update>

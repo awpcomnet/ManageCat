@@ -44,7 +44,9 @@ Ext.define("MIS.view.order.OrderGrid", {
                 { header: '运费总价', dataIndex: 'sumTransferPrice', sortable: true, width: 13, align: "center"},
                 { header: '成本价总价', dataIndex: 'sumCostPrice', sortable: true, width: 13, align: "center"},
                 { header: '售价(总价)', dataIndex: 'sumSellingPrice', sortable: true, width: 13, align: "center"},
-			    //{ header: '创建时间', dataIndex: 'createDateFormat', sortable: true, width: 25, align: "center"},
+			    { header: '备注', dataIndex: 'remark', sortable: true, width: 5, align: "center", renderer: function (value, rowindex, record, column) {
+                    return (value == '' || value == null) ? '--' : '!';
+                }},
 			    { header: '修改时间', dataIndex: 'updateDateFormat', sortable: true, width: 25, align: "center"}
 			],
 		    
@@ -111,32 +113,60 @@ Ext.define("MIS.view.order.OrderGrid", {
     },
 	
 	onAddClick: function(grid, rindex, cindex){
-		
-		Ext.MessageBox.confirm("暂停提示", "确定要添加新的主订单", function(confirmId){
-			if(confirmId == "yes"){
-				Ext.Ajax.request({
-		            url: "/order/add",
-		            params: {
-		            	foreignState: 0,//国外订单状态
-		            	transfer: 0,//转运状态
-		            	affirmState: 0//确认收货状态
-		            	
-		            },
-		            success: function (conn, request, option, eOpts) {
-		                var result = Ext.JSON.decode(conn.responseText, true);
-		                if (result.resultCode != 0) {
-		                    Ext.MessageBox.alert("请求失败", "添加主订单失败 " + result.resultMessage);
-		                } else {
-		                	Ext.MessageBox.alert("请求成功", "添加主订单成功 ");
-		                    Ext.ComponentQuery.query("ordergrid")[0].store.reload();
-		                }
-		            },
-		            failure: function (conn, request, option, eOpts) {
-		                Ext.MessageBox.alert("请求失败", "服务器繁忙, 稍后重试!");
-		            }
-		        });
-			}
-		})
+		var orderview = Ext.ComponentQuery.query("orderview")[0];
+    	orderview.getEl().mask();
+    	
+    	var editWindow = Ext.create("Ext.window.Window", {
+        	title: "添加主订单",
+        	id: "orderaddwindow",
+        	renderTo: orderview.getEl(),
+        	height: 120,
+        	width: 330,
+        	layout: "fit",
+        	closeAction: "destroy",
+        	items: [{
+        		xtype: "orderadd"
+        	}],
+        	listeners: {
+        		close: function(){
+        			orderview.getEl().unmask();
+        		},
+        		beforerender: function () {
+        			var payby = Ext.ComponentQuery.query("orderadd combobox[name=payby]")[0];
+                    var paybyStore = payby.getStore();
+                    paybyStore.load();
+        		},
+        		afterrender: function(component, eOpts){
+        			
+    			}
+        	}
+        });
+    	editWindow.show();
+//		Ext.MessageBox.confirm("暂停提示", "确定要添加新的主订单", function(confirmId){
+//			if(confirmId == "yes"){
+//				Ext.Ajax.request({
+//		            url: "/order/add",
+//		            params: {
+//		            	foreignState: 0,//国外订单状态
+//		            	transfer: 0,//转运状态
+//		            	affirmState: 0//确认收货状态
+//		            	
+//		            },
+//		            success: function (conn, request, option, eOpts) {
+//		                var result = Ext.JSON.decode(conn.responseText, true);
+//		                if (result.resultCode != 0) {
+//		                    Ext.MessageBox.alert("请求失败", "添加主订单失败 " + result.resultMessage);
+//		                } else {
+//		                	Ext.MessageBox.alert("请求成功", "添加主订单成功 ");
+//		                    Ext.ComponentQuery.query("ordergrid")[0].store.reload();
+//		                }
+//		            },
+//		            failure: function (conn, request, option, eOpts) {
+//		                Ext.MessageBox.alert("请求失败", "服务器繁忙, 稍后重试!");
+//		            }
+//		        });
+//			}
+//		})
 		
 	},
 	
@@ -159,7 +189,7 @@ Ext.define("MIS.view.order.OrderGrid", {
         	id: "ordermodifywindow",
         	extraData: selections[0].raw,
         	renderTo: orderview.getEl(),
-        	height: 200,
+        	height: 250,
         	width: 580,
         	layout: "fit",
         	closeAction: "destroy",
@@ -316,7 +346,7 @@ Ext.define("MIS.view.order.OrderGrid", {
         	id: "suborderaddfororderwindow",
         	extraData: selections[0].raw,
         	renderTo: orderview.getEl(),
-        	height: 350,
+        	height: 400,
         	width: 575,
         	layout: "fit",
         	closeAction: "destroy",
@@ -354,6 +384,7 @@ Ext.define("MIS.view.order.OrderGrid", {
         			component.down("textfield[name=superOrderId]").setValue(this.extraData.orderId);
         			component.down("combobox[name=curState]").setValue('0');
         			component.down("numberfield[name=num]").setValue(1);
+        			component.down("textfield[name=payby]").setValue(this.extraData.payby);
     			}
         	}
         });

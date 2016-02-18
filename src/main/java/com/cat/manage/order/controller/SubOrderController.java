@@ -84,13 +84,13 @@ public class SubOrderController {
 	}
 	
 	@RequestMapping("/sellandback")
-	public Srm modifySubOrderForSell(Integer subOrderId, Integer num, Integer flag){
+	public Srm modifySubOrderForSell(Integer subOrderId, Integer num, Integer flag, String remark, Double sellingPrice){
 		if(flag == null || num == null)
 			return new Srm().setResultCode("1").setResultMessage("售出订单失败，原因参数异常");
 		
 		if(flag < 0)
 			num = num * (-1);
-		subOrderService.updateForSelled(subOrderId, num);
+		subOrderService.updateForSelled(subOrderId, num, remark, sellingPrice);
 		return new Srm().setResultCode("0").setResultMessage("售出订单/退回订单成功");
 	}
 }

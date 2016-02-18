@@ -153,6 +153,15 @@ Ext.define("MIS.view.order.SubOrderAddForOrder", {
 		},
 	    allowBlank: true,
 	    editable:true
+    }, {
+		fieldLabel: "备注",
+        name: "remark",
+        xtype: "textarea",
+        colspan: 2,
+        width: 530
+    }, {
+        name: "payby",
+        hidden: true
     }],
 	
 	buttons: [{
@@ -175,7 +184,9 @@ Ext.define("MIS.view.order.SubOrderAddForOrder", {
 				orderPrice = subOrderAdd.down("textfield[name=orderPrice]").getValue().trim(),
 				transferPrice = subOrderAdd.down("textfield[name=transferPrice]").getValue().trim(),
 				sellingPrice = subOrderAdd.down("textfield[name=sellingPrice]").getValue().trim(),
-				costPrice = subOrderAdd.down("textfield[name=costPrice]").getValue().trim();
+				costPrice = subOrderAdd.down("textfield[name=costPrice]").getValue().trim(),
+				remark = subOrderAdd.down("textarea[name=remark]").getValue().trim(),
+				payby = subOrderAdd.down("textfield[name=payby]").getValue().trim();
 			
 			
 			
@@ -189,7 +200,9 @@ Ext.define("MIS.view.order.SubOrderAddForOrder", {
 					orderPrice: orderPrice,
 					transferPrice: transferPrice,
 					sellingPrice: sellingPrice,
-					costPrice: costPrice
+					costPrice: costPrice,
+					remark: remark,
+					payby: payby
 					
 	        };
 			

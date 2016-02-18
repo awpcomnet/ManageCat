@@ -1,0 +1,26 @@
+/**
+ * 登录页面
+ */
+.loginBox {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    width: 450px;
+    height: 300px;
+    margin: -150px 0px 0px -225px;
+
+    background-color: white;
+
+    /**
+     * 边框圆角透明
+     */
+    border: 6px solid #cccccc;
+    -webkit-border-radius: 12px;
+       -moz-border-radius: 12px;
+        -ms-border-radius: 12px;
+            border-radius: 12px;
+
+    z-index: 10000;
+}

@@ -19,7 +19,7 @@ Ext.define("MIS.view.mainviewport.MainHeader", {
         layout: "fit",
         html: "<div class=\"userBox\"><span class=\"userImage\"><img src=\"/resources/component/header/user.png\" /></span><div class=\"show\"><span class=\"username\"></span><br /><span class=\"currentDate\"></span></div><div class=\"details\" style=\"display:none;\">"+
             "<div class=\"userInfo\"></div>" +
-            "<div class=\"changePass\"><div class=\"fakeButton\">修改密码</div></div>" +
+            //"<div class=\"changePass\"><div class=\"fakeButton\">修改密码</div></div>" +
             "<div class=\"logout\"><div class=\"fakeButton\">退出系统</div></div>" +
             "</div></div>",
         listeners: {
@@ -27,10 +27,10 @@ Ext.define("MIS.view.mainviewport.MainHeader", {
                 /**
                  * 将用户名, 组织机构填充
                  */
-                BAMS.common.CurrentUser.load(function (user) {
-                    var usernameBox = Ext.DomQuery.selectNode(".show .username");
-                    usernameBox.innerHTML = user.realname;
-                });
+//                MIS.common.CurrentUser.load(function (user) {
+//                    var usernameBox = Ext.DomQuery.selectNode(".show .username");
+//                    usernameBox.innerHTML = user.realname;
+//                });
                 
                 /**
                  * 将时间日期填充

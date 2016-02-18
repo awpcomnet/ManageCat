@@ -16,6 +16,8 @@ public class SubOrder implements Serializable{
 	private Double costPrice; //成本价(单个)
 	private Double sellingPrice; //售价(单个)
 	private String curState;//当前状态(0:国外下单成功 1:国外已砍单 2:已到转运公司 3:转运中 4:已到海关 5:已入库 6:售出 99:损坏)
+	private String remark;//备注
+	private String payby;//付款人
 	private Date createDate; //创建时间
 	private Date updateDate; //更新时间
 	private String createDateFormat;//格式化后的创建时间
@@ -29,6 +31,18 @@ public class SubOrder implements Serializable{
 	private String sumCostPrice; //成本价总价
 	private String sumSellingPrice; //售价(总价)
 	
+	public String getPayby() {
+		return payby;
+	}
+	public void setPayby(String payby) {
+		this.payby = payby;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 	public Integer getSuborderId() {
 		return suborderId;
 	}

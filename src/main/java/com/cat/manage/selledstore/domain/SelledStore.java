@@ -20,11 +20,29 @@ public class SelledStore implements Serializable{
 	private Double transferPrice;//运费(单个)
 	private Double costPrice;//成本价(单个)
 	private Double sellingPrice;//售价(单个)
+	private String remark;//备注
+	private String payby;//付款人(下单时)
 	private Date createDate;//创建时间
 	private Date updateDate;//更新时间
 	private String createDateFormat;//格式化后的创建时间
 	private String updateDateFormat;//格式化后的更新时间
 	
+	public String getPayby() {
+		return payby;
+	}
+
+	public void setPayby(String payby) {
+		this.payby = payby;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
 	public Integer getStoreId() {
 		return storeId;
 	}
