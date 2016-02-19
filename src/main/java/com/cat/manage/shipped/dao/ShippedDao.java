@@ -34,6 +34,12 @@ public interface ShippedDao {
 	public void deleteShipped(Integer id);
 	
 	/**
+	 * 根据下单清单唯一编号删除记录
+	 * @param CheckId
+	 */
+	public void deleteShippedByCheckId(Integer checkId);
+	
+	/**
 	 * 查询邮寄清单子单信息
 	 * @param shipped
 	 * @return

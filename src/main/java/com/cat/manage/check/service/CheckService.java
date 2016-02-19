@@ -36,6 +36,15 @@ public class CheckService {
 	}
 	
 	/**
+	 * 根据下单清单唯一编号修改订单状态
+	 * @param ids
+	 * @param orderStatus
+	 */
+	public void updateCheckForStatus(Integer[] ids, String orderStatus){
+		checkDao.updateCheckForStatus(ids, orderStatus);
+	}
+	
+	/**
 	 * 删除一条下单清单
 	 * @param id
 	 */
@@ -64,4 +73,14 @@ public class CheckService {
 		PageInfo<Check> page = new PageInfo<Check>(list);
 		return page;
 	}
+	
+	/**
+	 * 根据下单清单唯一编号查询记录
+	 * @param ids
+	 * @return
+	 */
+	public List<Check> queryCheckByIds(Integer[] ids){
+		return checkDao.queryCheckById(ids);
+	}
+	
 }

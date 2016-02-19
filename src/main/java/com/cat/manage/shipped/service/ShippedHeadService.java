@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cat.manage.check.domain.Check;
+import com.cat.manage.check.service.CheckService;
 import com.cat.manage.common.exception.BusinessException;
-import com.cat.manage.order.domain.SubOrder;
 import com.cat.manage.shipped.dao.ShippedHeadDao;
+import com.cat.manage.shipped.domain.Shipped;
 import com.cat.manage.shipped.domain.ShippedHead;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -21,6 +23,12 @@ import com.github.pagehelper.PageInfo;
 public class ShippedHeadService {
 	@Autowired
 	private ShippedHeadDao shippedHeadDao;
+	
+	@Autowired
+	private ShippedService shippedService;
+	
+	@Autowired
+	private CheckService checkService;
 	
 	/**
 	 * 添加邮寄清单（主单）
@@ -78,5 +86,30 @@ public class ShippedHeadService {
 		}
 	}
 	
-	
+	/**
+	 * 添加邮寄清单（主单）
+	 * 查询下单清单，添加下单清单内容到邮寄清单子单
+	 * 修改下单清单状态
+	 * @param shippedHead
+	 * @param checkIds
+	 */
+	public void addShippedHeadAndShipped(ShippedHead shippedHead, Integer[] checkIds){
+		//添加邮寄清单主单
+		shippedHeadDao.addShippedHead(shippedHead);
+		
+		//设置邮寄清单子单
+		Shipped shipped = new Shipped();
+		shipped.setShippedStatus("1");//1邮寄中 
+		
+		//查询下单清单记录
+		List<Check> checks = checkService.queryCheckByIds(checkIds);
+		
+		//轮询添加
+		for(Check c : checks){
+			shippedService.addShipped(shippedHead, shipped, c);
+		}
+		
+		//修改下单清单状态
+		checkService.updateCheckForStatus(checkIds, "1");//1邮寄中
+	}
 }

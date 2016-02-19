@@ -26,6 +26,12 @@ public interface CheckDao {
 	public void updateCheck(Check check);
 	
 	/**
+	 * 根据下单清单唯一编号修改订单记录状态
+	 * @param ids
+	 */
+	public void updateCheckForStatus(Integer[] ids, String orderStatus);
+	
+	/**
 	 * 删除一条下单订单
 	 * @param id
 	 */
@@ -49,4 +55,11 @@ public interface CheckDao {
 	 * @return
 	 */
 	//public List<Check> queryCheckExclusiveStatus(Check check, String startTime, String endTime, String status);
+	
+	/**
+	 * 根据下单清单唯一编号查询记录
+	 * @param ids
+	 * @return
+	 */
+	public List<Check> queryCheckById(Integer[] ids);
 }

@@ -25,6 +25,7 @@
 		<result property="brandName" column="brand_name"/>
 		<result property="seriesName" column="series_name"/>
 		<result property="singleName" column="single_name"/>
+		<result property="sumPrice" column="sumprice"/>
 	</resultMap>
 	
 	<!-- 添加下单清单 -->
@@ -75,6 +76,16 @@
 		where id = #{id}
 	</update>
 	
+	<!-- 根据下单清单唯一编号修改订单记录状态 -->
+	<update id="updateCheckForStatus">
+	update t_check set update_date = now()
+	<if test="orderStatus != null and orderStatus != ''">
+		, order_status = #{orderStatus}
+	</if>
+		where id in
+	<foreach collection="array" item="id" open="(" separator="," close=")">#{id}</foreach>
+	</update>
+	
 	<!-- 删除下单清单 -->
 	<delete id="deleteCheck" parameterType="java.lang.Integer">
 	delete from t_check where id = #{id}
@@ -123,5 +134,15 @@
 	</if>
 	</select>
 	
+	<!-- 根据下单清单唯一编号查询记录 -->
+	<select id="queryCheckById" resultMap="checkResultMap">
+	select id, tracking_number, order_time, transfer_company, order_addr, brand_id, series_id, single_id, num, unit_price, remark, payby, order_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat, FORMAT(num*unit_price ,2) as sumprice  
+	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
+    ,(select series_name from t_series where series_id = t.series_id) as series_name
+    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
+	from t_check t
+	where id in
+	<foreach collection="array" item="id" open="(" separator="," close=")">#{id}</foreach>
+	</select>
 	
 </mapper>
