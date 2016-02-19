@@ -28,7 +28,7 @@
 		<result property="brandName" column="brand_name"/>	
 		<result property="seriesName" column="series_name"/>	
 		<result property="singleName" column="single_name"/>	
-		<result property="sumPrice" column="sum_price"/>	
+		<result property="sumPrice" column="sumprice"/>	
 	</resultMap>
 	
 	<resultMap type="com.cat.manage.check.domain.Check" id="checkResultMap">
@@ -67,14 +67,70 @@
 	<!-- 添加邮寄清单（子单） -->
 	<insert id="addShipped">
 	insert into t_shipped(head_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, plan_rmb, plan_postage, plan_cost, remark, shipped_status, create_date, update_date)
-	values(#{param1.id}, #{param3.id}, #{param1.trackingNumber}, #{param1.transferCompany}, #{param3.brandId}, #{param3.seriesId}, #{param3.singleId}, #{param3.num}, #{param3.unitPrice}, #{param3.payby}, #{param2.planRmb}, #{param2.planPostage}, #{param2.planCost}, #{param2.remark}, #{param2.shippedStatus}, now(), now())
+	values(#{param1.id}, #{param3.id}, #{param1.trackingNumber}, #{param1.transferCompany}, #{param3.brandId}, #{param3.seriesId}, #{param3.singleId}, #{param3.num}, #{param3.unitPrice}, #{param3.payby}, #{param2.planRmb}, #{param2.planPostage}, #{param2.planCost}, #{param3.remark}, #{param2.shippedStatus}, now(), now())
 	</insert>
 	
 	<!-- 修改邮寄清单（子单） -->
+	<update id="updateShipped" parameterType="com.cat.manage.shipped.domain.Shipped">
+	update t_shipped set update_date=now() 
+	<if test="headId != null and headId != ''">
+		, head_id = #{headId}
+	</if>
+	<if test="trackingNumber != null and trackingNumber != ''">
+		, tracking_number = #{trackingNumber}
+	</if>
+	<if test="transferCompany != null and transferCompany != ''">
+		, transfer_company = #{transferCompany}
+	</if>
+	<if test="planRmb != null and planRmb != ''">
+		, plan_rmb = #{planRmb}
+	</if>
+	<if test="planPostage != null and planPostage != ''">
+		, plan_postage = #{planPostage}
+	</if>
+	<if test="planCost != null and planCost != ''">
+		, plan_cost = #{planCost}
+	</if>
+	<if test="remark != null and remark != ''">
+		, remark = #{remark}
+	</if>
+	<if test="shippedStatus != null and shippedStatus != ''">
+		, shipped_status = #{shippedStatus}
+	</if>
+	where id = #{id}
+	</update>
 	
 	<!-- 根据邮寄清单子单唯一编号删除记录 -->
+	<delete id="deleteShipped" parameterType="java.lang.Integer">
+	delete from t_shipped where id = #{id} 
+	</delete>
+	
+	<!-- 根据下单清单唯一编号删除记录 -->
+	<delete id="deleteShippedByCheckId" parameterType="java.lang.Integer">
+	delete from t_shipped where check_id = #{checkId} 
+	</delete>
 	
 	<!-- 查询邮寄清单子单信息 -->
-	
-	
+	select id, head_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, plan_rmb, plan_postage, plan_cost, remark, shipped_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
+    ,(select series_name from t_series where series_id = t.series_id) as series_name
+    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
+	, FORMAT(num*unit_price ,2) as sumprice
+	from t_shipped
+	where 1=1
+	<if test="trackingNumber != null and trackingNumber != ''">
+		and tracking_number = #{trackingNumber}
+	</if>
+	<if test="transferCompany != null and transferCompany != ''">
+		and transfer_company = #{transferCompany}
+	</if>
+	<if test="checkId != null and checkId != ''">
+		and check_id = #{checkId}
+	</if>
+	<if test="headId != null and headId != ''">
+		and head_id = #{headId}
+	</if>
+	<if test="id != null and id != ''">
+		and id = #{id}
+	</if>
 </mapper>
