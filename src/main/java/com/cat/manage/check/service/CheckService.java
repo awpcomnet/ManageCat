@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.cat.manage.check.dao.CheckDao;
 import com.cat.manage.check.domain.Check;
+import com.cat.manage.shipped.service.ShippedService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -19,6 +20,9 @@ import com.github.pagehelper.PageInfo;
 public class CheckService {
 	@Autowired
 	private CheckDao checkDao;
+	
+	@Autowired
+	private ShippedService shippedService;
 	
 	/**
 	 * 添加一条下单清单
@@ -51,8 +55,10 @@ public class CheckService {
 	public void  deleteCheck(Integer id){
 		//删除下单清单记录
 		checkDao.deleteCheck(id);
+		
 		//删除邮寄清单记录
-		//TODO
+		shippedService.deleteShippedByCheckId(id);
+		
 		//删除入库清单记录
 		
 		//删除售出清单记录

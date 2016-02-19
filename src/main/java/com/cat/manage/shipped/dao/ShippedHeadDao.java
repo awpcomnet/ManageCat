@@ -37,4 +37,11 @@ public interface ShippedHeadDao {
 	 */
 	public List<ShippedHead> queryShippedHead(ShippedHead shippedHead);
 	
+	/**
+	 * 根据快递单号查询邮寄清单主单
+	 * @param trackingNumber
+	 * @return
+	 */
+	public ShippedHead queryShippedHeadByTrackingNumber(String trackingNumber);
+	
 }

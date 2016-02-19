@@ -48,9 +48,6 @@ Ext.define("MIS.model.check.Check", {
 		name: "remark",
 		type: "string"
 	}, {
-		name: "curState",
-		type: "string"
-	}, {
 		name: "remark",
 		type: "string"
 	}, {

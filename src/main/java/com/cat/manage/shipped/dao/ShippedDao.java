@@ -40,9 +40,22 @@ public interface ShippedDao {
 	public void deleteShippedByCheckId(Integer checkId);
 	
 	/**
+	 * 根据邮寄清单主单唯一编号删除子单信息
+	 * @param headId
+	 */
+	public void deleteShippedByHeadId(Integer headId);
+	
+	/**
 	 * 查询邮寄清单子单信息
 	 * @param shipped
 	 * @return
 	 */
 	public List<Shipped> queryShipped(Shipped shipped);
+	
+	/**
+	 * 根据邮寄清单主单唯一编号查询子订单
+	 * @param headId
+	 * @return
+	 */
+	public List<Shipped> queryShippedByHeadId(Integer headId);
 }

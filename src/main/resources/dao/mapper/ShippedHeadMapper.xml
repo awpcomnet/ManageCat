@@ -61,4 +61,10 @@
 	</if>
 	</select>
 	
+	<!-- 根据快递单号查询邮寄清单主单 -->
+	<select id="queryShippedHeadByTrackingNumber" parameterType="java.lang.String" resultMap="shippedHeadResultMap">
+	select id, tracking_number, transfer_company, submit_time, postage, create_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat from t_shipped_head 
+	where tracking_number = #{trackingNumber}
+	</select>
+	
 </mapper>

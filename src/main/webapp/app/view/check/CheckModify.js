@@ -152,10 +152,10 @@ Ext.define("MIS.view.check.CheckModify", {
         width: 530
     }, {
         name: "id",
-        hide: true
+        hidden: true
     }, {
         name: "orderStatus",
-        hide: true
+        hidden: true
     }],
 	
 	buttons: [{

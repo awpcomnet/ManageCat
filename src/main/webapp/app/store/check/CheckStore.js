@@ -16,7 +16,7 @@ Ext.define("MIS.store.check.CheckStore", {
 			totalProperty: "meta.totalRecord"
 		},
         extraParams: {
-        	
+        	orderStatus: ""
         }
 	}
 	

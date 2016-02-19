@@ -285,54 +285,54 @@ Ext.define("MIS.view.check.CheckGrid", {
     	var selections = this.getView().getSelectionModel().getSelection();
     	var selectionNum = selections.length;
     	if(selectionNum < 1){
-    		Ext.MessageBox.alert("请求失败", "请至少选择一个主订单进行一键确认");
+    		Ext.MessageBox.alert("请求失败", "请至少选择一条下单记录进行一键邮寄");
     		return;
     	}
     	
-    	var tipText = "";
-        if(selectionNum == 1){
-        	tipText = "确定要确认该主订单,编号["+selections[0].raw.orderId+"],确认后所有主订单状态将归为最终状态，同时->子订单状态也将归为[入库状态]<-";
-        } else {
-        	tipText = "确定要确认这些主订单,编号[";
-        	for(var num=0; num<selectionNum; num++){
-        		tipText += selections[num].raw.orderId;
-        		if(num != selectionNum - 1){
-        			tipText += ",";
-        		}
-        	}
-        	tipText += "],确认后所有主订单状态将归为最终状态，同时->子订单状态也将归为[入库状态]<-";
-        	
-        }
-        
-        var orderIds = [];
+        var checkIds = [];
         var i = 0;
         for(;i<selectionNum; i++){
-        	orderIds[i] = selections[i].raw.orderId;
+        	checkIds[i] = selections[i].raw.id;
+        	
+        	if(selections[i].raw.orderStatus != 0){
+        		Ext.MessageBox.alert("请求失败", "下单清单，快递单号["+selections[i].raw.trackingNumber+"]，单品名称["+selections[i].raw.singleName+"]，状态不为[已下单]");
+        		return;
+        	}
         }
         
-    	Ext.MessageBox.confirm("一键确认提示", tipText, function(confirmId){
-			if(confirmId == "yes"){
-				Ext.Ajax.request({
-		            url: "/order/confirm",
-		            params: {
-		            	orderIds : orderIds
-		            	
-		            },
-		            success: function (conn, request, option, eOpts) {
-		                var result = Ext.JSON.decode(conn.responseText, true);
-		                if (result.resultCode != 0) {
-		                    Ext.MessageBox.alert("请求失败", "确认主订单失败 " + result.resultMessage);
-		                } else {
-		                	Ext.MessageBox.alert("请求成功", "确认主订单成功 ");
-		                    Ext.ComponentQuery.query("ordergrid")[0].store.reload();
-		                }
-		            },
-		            failure: function (conn, request, option, eOpts) {
-		                Ext.MessageBox.alert("请求失败", "服务器繁忙, 稍后重试!");
-		            }
-		        });
-			}
-		})
+        var checkview = Ext.ComponentQuery.query("checkview")[0];
+    	checkview.getEl().mask();
+    	
+    	var editWindow = Ext.create("Ext.window.Window", {
+        	title: "添加邮寄清单",
+        	id: "shippedheadaddwindow",
+        	extraData: selections[0].raw,
+        	renderTo: checkview.getEl(),
+        	height: 180,
+        	width: 580,
+        	layout: "fit",
+        	closeAction: "destroy",
+        	items: [{
+        		xtype: "shippedheadadd"
+        	}],
+        	listeners: {
+        		close: function(){
+        			checkview.getEl().unmask();
+        		},
+        		beforerender: function () {
+               	 	var transferCompany = Ext.ComponentQuery.query("shippedheadadd combobox[name=transferCompany]")[0];
+                    var transferCompanyStore = transferCompany.getStore();
+                    transferCompanyStore.load();
+               },
+        		afterrender: function(component, eOpts){
+        			var form = component.down("form");
+                    var params = Ext.clone(this.extraData);
+    				form.getForm().setValues(params);
+    				component.down("textfield[name=checkIds]").setValue(checkIds);
+    			}
+        	}
+        });
+    	editWindow.show();
     },
     
     onsubOrderSetClick: function(component){

@@ -79,11 +79,11 @@
 	<!-- 根据下单清单唯一编号修改订单记录状态 -->
 	<update id="updateCheckForStatus">
 	update t_check set update_date = now()
-	<if test="orderStatus != null and orderStatus != ''">
-		, order_status = #{orderStatus}
+	<if test="param2 != null and param2 != ''">
+		, order_status = #{param2}
 	</if>
 		where id in
-	<foreach collection="array" item="id" open="(" separator="," close=")">#{id}</foreach>
+	<foreach collection="param1" item="id" open="(" separator="," close=")">#{id}</foreach>
 	</update>
 	
 	<!-- 删除下单清单 -->
@@ -132,6 +132,7 @@
 	<if test="param3 != null and param3 != ''">
 		and DATE_FORMAT(create_date, '%Y%m%d') &lt;= #{param3}
 	</if>
+	order by create_date desc
 	</select>
 	
 	<!-- 根据下单清单唯一编号查询记录 -->
