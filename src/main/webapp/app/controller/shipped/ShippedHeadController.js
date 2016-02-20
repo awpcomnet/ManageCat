@@ -13,19 +13,23 @@ Ext.define("MIS.controller.shipped.ShippedHeadController", {
 	],
 	
 	views: [
-	    "MIS.view.check.ShippedHeadAdd"
+	    "MIS.view.check.ShippedHeadAdd",
+	    "MIS.view.shipped.ShippedView",
+	    "MIS.view.shipped.ShippedGrid",
+	    "MIS.view.shipped.ShippedSearch",
+	    "MIS.view.shipped.ShippedModify"
 	    
 	],
 	
 	init: function(){
 		this.control({
-			"shippedheadgrid": {
-				render: this.onShippedHeadGridRender
+			"shippedgrid": {
+				render: this.onShippedGridRender
 			}
 		});
 	},
 	
-	onShippedHeadGridRender: function(component, options){
+	onShippedGridRender: function(component, options){
 		component.getStore().load();
 	}
 	

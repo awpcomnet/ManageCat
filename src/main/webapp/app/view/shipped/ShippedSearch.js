@@ -1,9 +1,9 @@
 /**
- * 下单清单查询
+ * 邮寄清单查询
  */
-Ext.define("MIS.view.check.CheckSearch", {
+Ext.define("MIS.view.shipped.ShippedSearch", {
 	extend: "Ext.form.Panel",
-	alias: "widget.checkSearchpanel",
+	alias: "widget.shippedSearchpanel",
 	
 	defaultType: "textfield",
 	defaults: {

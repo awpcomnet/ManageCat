@@ -16,7 +16,15 @@ Ext.define("MIS.store.check.CheckStore", {
 			totalProperty: "meta.totalRecord"
 		},
         extraParams: {
-        	orderStatus: ""
+        	orderStatus: "0",
+        	trackingNumber: "",
+        	transferCompany: "",
+        	orderTime: "",
+        	orderAddr: "",
+        	brandId: "",
+        	seriesId: "",
+        	singleId: "",
+        	payby: ""
         }
 	}
 	
