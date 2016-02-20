@@ -57,6 +57,48 @@ Ext.define("MIS.view.check.ShippedHeadAdd", {
     }],
 	
 	buttons: [{
+		text: "校验快递单号",
+		handler: function(component){
+			var shippedheadadd = component.up("shippedheadadd");
+			
+			var trackingNumber = shippedheadadd.down("textfield[name=trackingNumber]").getValue().trim();
+			
+			var params = {
+				trackingNumber:trackingNumber
+			}
+			
+			Ext.Ajax.request({
+				url: "/shippedHead/queryAll",
+				params: params,
+				success: function(conn, request, option, eOpts){
+					var result = Ext.JSON.decode(conn.responseText, true);
+					if(result.resultCode != 0){
+						Ext.MessageBox.alert("校验快递单号失败, 原因:" + result.resultMessage);
+					} else {
+						var results = result.results;
+						if(results.length != 0){
+							shippedheadadd.down("datefield[name=submitTime]").setValue(results[0].submitTime);
+							shippedheadadd.down("combobox[name=transferCompany]").setValue(results[0].transferCompany);
+							shippedheadadd.down("textfield[name=postage]").setValue(results[0].postage);
+							
+							shippedheadadd.down("textfield[name=trackingNumber]").setReadOnly(true);
+							shippedheadadd.down("datefield[name=submitTime]").setReadOnly(true);
+							shippedheadadd.down("combobox[name=transferCompany]").setReadOnly(true);
+							shippedheadadd.down("textfield[name=postage]").setReadOnly(true);
+							
+							Ext.MessageBox.alert("友情提示", "该快递单号已经存在邮寄清单中，记录将记录在已存在邮寄清单中");
+						}else{
+							Ext.MessageBox.alert("友情提示", "该快递单号不存在邮寄清单中，提交将建立新的邮寄清单");
+						}
+					}
+				},
+				failure: function (conn, request, option, eOpts) {
+                    Ext.MessageBox.alert("服务器繁忙, 稍后重试!");
+                }
+				
+			});
+		}
+	}, {
 		text: "取消",
 		handler: function(component){
 			component.up("#shippedheadaddwindow").close();

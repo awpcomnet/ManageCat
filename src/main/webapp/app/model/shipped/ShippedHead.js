@@ -26,6 +26,12 @@ Ext.define("MIS.model.shipped.ShippedHead", {
 	}, {
 		name: "createDateFormat",
 		type: "string"
+	}, {
+		name: "shippedNum",
+		type: "string"
+	}, {
+		name: "storeNum",
+		type: "string"
 	}]
 });
 

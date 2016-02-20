@@ -1,9 +1,9 @@
 /**
- * 下单清单数据显示
+ * 邮寄清单数据显示
  */
-Ext.define("MIS.view.check.CheckGrid", {
+Ext.define("MIS.view.shipped.ShippedGrid", {
 	extend: "Ext.grid.Panel",
-	alias: "widget.checkgrid",
+	alias: "widget.shippedgrid",
 	
 	requires: [
 	     'Ext.form.field.Text',
@@ -11,7 +11,7 @@ Ext.define("MIS.view.check.CheckGrid", {
 	     'Ext.toolbar.Paging'
 	],
 	
-	store: "MIS.store.check.CheckStore",
+	store: "MIS.store.shipped.ShippedHeadStore",
 	
 	initComponent: function(){
 		//创建多选框
@@ -30,25 +30,13 @@ Ext.define("MIS.view.check.CheckGrid", {
 			
 			columns: [
 			    { header: '快递单号', dataIndex: 'trackingNumber', sortable: true, width: 15, align: "center"},
-			    { header: '下单时间', dataIndex: 'orderTime', sortable: true, width: 10, align: "center"},
+			    { header: '提交邮寄时间', dataIndex: 'submitTime', sortable: true, width: 10, align: "center"},
 			    { header: '转运公司', dataIndex: 'transferCompany', sortable: true, width: 10, align: "center", renderer: function (value, rowindex, record, column) {
 			    	return MIS.common.DictManager.getDictItemName("transferCompany", value);
                 }},
-			    { header: '下单网站', dataIndex: 'orderAddr', sortable: true, width: 10, align: "center", renderer: function (value, rowindex, record, column) {
-			    	return MIS.common.DictManager.getDictItemName("orderAddr", value);
-                }},
-			    { header: '品牌名称', dataIndex: 'brandName', sortable: true, width: 15, align: "center"},
-			    { header: '系列名称', dataIndex: 'seriesName', sortable: true, width: 15, align: "center"},
-			    { header: '单品名称', dataIndex: 'singleName', sortable: true, width: 15, align: "center"},
-			    { header: '数量', dataIndex: 'num', sortable: true, width: 5, align: "center"},
-			    { header: '单价($)', dataIndex: 'unitPrice', sortable: true, width: 10, align: "center"},
-			    { header: '总价($)', dataIndex: 'sumPrice', sortable: true, width: 10, align: "center"},
-			    { header: '付款人', dataIndex: 'payby', sortable: true, width: 10, align: "center"},
-			    { header: '备注', dataIndex: 'remark', sortable: true, width: 10, align: "center"},
-			    { header: '订单状态', dataIndex: 'orderStatus', sortable: true, width: 10, align: "center", renderer: function (value, rowindex, record, column) {
-			    	return MIS.common.DictManager.getDictItemName("orderStatus", value);
-                }}
-			    
+			    { header: '邮费总价(￥)', dataIndex: 'postage', sortable: true, width: 10, align: "center"},
+			    { header: '内含邮寄清单数量', dataIndex: 'shippedNum', sortable: true, width: 10, align: "center"},
+			    { header: '内含入库清单数量', dataIndex: 'storeNum', sortable: true, width: 10, align: "center"}
 			],
 		    
 			bbar: Ext.create('Ext.PagingToolbar', {
@@ -62,12 +50,6 @@ Ext.define("MIS.view.check.CheckGrid", {
 			dockedItems: [{
 				xtype: 'toolbar',
 				items: [{
-					iconCls: 'icon-plus',
-					text: '新增',
-					itemId: 'add',
-					scope: this,
-					handler: this.onAddClick
-				}, {
 					iconCls: 'icon-edit',
 					text: '修改',
 					itemId: 'modify',
@@ -79,39 +61,27 @@ Ext.define("MIS.view.check.CheckGrid", {
 					itemId: 'delete',
 					scope: this,
 					handler: this.onDeleteClick
-				}, '-', {
-					iconCls: 'icon-arrow-up',
-					text: '一键邮寄',
-					itemId: 'onPost',
+				}, {
+					iconCls: 'icon-folder-open-alt',
+					text: '详情',
+					itemId: 'detail',
 					scope: this,
-					handler: this.onPostClick
+					handler: this.onDetailClick
 				}, '-', {
 					iconCls: 'icon-file-alt',
-					text: '已下单清单',
+					text: '未入库(或部分未入库)',
 					itemId: 'partA',
 					scope: this,
 					handler: this.onQueryPartAClick
 				}, {
 					iconCls: 'icon-file-alt',
-					text: '已邮寄清单',
+					text: '已入库(全部)',
 					itemId: 'partB',
 					scope: this,
 					handler: this.onQueryPartBClick
-				}, {
-					iconCls: 'icon-file-alt',
-					text: '已入库清单',
-					itemId: 'partC',
-					scope: this,
-					handler: this.onQueryPartCClick
-				}, {
-					iconCls: 'icon-file-alt',
-					text: '已售出清单',
-					itemId: 'partD',
-					scope: this,
-					handler: this.onQueryPartDClick
 				}, '-', {
 					iconCls: 'icon-file-alt',
-					text: '所有清单记录',
+					text: '所有邮寄清单记录',
 					itemId: 'all',
 					scope: this,
 					handler: this.onQueryAllClick
@@ -137,38 +107,6 @@ Ext.define("MIS.view.check.CheckGrid", {
 //        this.down('#pause').setDisabled(selections.length === 0);
     },
 	
-	onAddClick: function(grid, rindex, cindex){
-		var checkview = Ext.ComponentQuery.query("checkview")[0];
-		checkview.getEl().mask();
-    	
-    	var editWindow = Ext.create("Ext.window.Window", {
-        	title: "添加下单清单",
-        	id: "checkaddwindow",
-        	renderTo: checkview.getEl(),
-        	height: 380,
-        	width: 570,
-        	layout: "fit",
-        	closeAction: "destroy",
-        	items: [{
-        		xtype: "checkadd"
-        	}],
-        	listeners: {
-        		close: function(){
-        			checkview.getEl().unmask();
-        		},
-        		beforerender: function () {
-        			var payby = Ext.ComponentQuery.query("checkadd combobox[name=payby]")[0];
-                    var paybyStore = payby.getStore();
-                    paybyStore.load();
-        		},
-        		afterrender: function(component, eOpts){
-        			
-    			}
-        	}
-        });
-    	editWindow.show();
-	},
-	
 	onRefreshClick: function(component){
 		this.store.reload();
 	},
@@ -181,55 +119,29 @@ Ext.define("MIS.view.check.CheckGrid", {
     		return;
     	}
     	
-    	//只有状态为已下单才可修改订单信息
-    	if(selections[0].raw.orderStatus != "0"){
-    		Ext.MessageBox.alert("请求失败", "订单状态错误！【已下单】才可修改");
-    		return;
-    	}
-    	
-    	var checkview = Ext.ComponentQuery.query("checkview")[0];
-    	checkview.getEl().mask();
+    	var shippedview = Ext.ComponentQuery.query("shippedview")[0];
+    	shippedview.getEl().mask();
     	
     	var editWindow = Ext.create("Ext.window.Window", {
-        	title: "修改下单清单",
-        	id: "checkmodifywindow",
+        	title: "修改邮寄清单",
+        	id: "shippedmodifywindow",
         	extraData: selections[0].raw,
-        	renderTo: checkview.getEl(),
-        	height: 380,
+        	renderTo: shippedview.getEl(),
+        	height: 170,
         	width: 580,
         	layout: "fit",
         	closeAction: "destroy",
         	items: [{
-        		xtype: "checkmodify"
+        		xtype: "shippedmodify"
         	}],
         	listeners: {
         		close: function(){
-        			checkview.getEl().unmask();
+        			shippedview.getEl().unmask();
         		},
         		beforerender: function () {
-               	 	var transferCompany = Ext.ComponentQuery.query("checkmodify combobox[name=transferCompany]")[0];
+               	 	var transferCompany = Ext.ComponentQuery.query("shippedmodify combobox[name=transferCompany]")[0];
                     var transferCompanyStore = transferCompany.getStore();
                     transferCompanyStore.load();
-                    
-                    var orderAddr = Ext.ComponentQuery.query("checkmodify combobox[name=orderAddr]")[0];
-                    var orderAddrStore = orderAddr.getStore();
-                    orderAddrStore.load();
-                    
-                    var brandId = Ext.ComponentQuery.query("checkmodify combobox[name=brandId]")[0];
-                    var brandIdStore = brandId.getStore();
-                    brandIdStore.load();
-                    
-                    var seriesId = Ext.ComponentQuery.query("checkmodify combobox[name=seriesId]")[0];
-                    var seriesIdStore = seriesId.getStore();
-                    seriesIdStore.load();
-                    
-                    var singleId = Ext.ComponentQuery.query("checkmodify combobox[name=singleId]")[0];
-                    var singleIdStore = singleId.getStore();
-                    singleIdStore.load();
-                    
-                    var payby = Ext.ComponentQuery.query("checkmodify combobox[name=payby]")[0];
-                    var paybyStore = payby.getStore();
-                    paybyStore.load();
                },
         		afterrender: function(component, eOpts){
         			var form = component.down("form");
@@ -250,24 +162,22 @@ Ext.define("MIS.view.check.CheckGrid", {
             return;
         } 
 
-        orderAddrName = MIS.common.DictManager.getDictItemName("orderAddr", selections[0].raw.orderAddr);
-        
         //删除提示语言
-        var tipText = "确定删除下单清单,下单网站["+orderAddrName+"],快递单号["+selections[0].raw.trackingNumber+"],同时会删除<邮寄清单><入库清单><销售清单>中的相应记录";
+        var tipText = "确定删除邮寄清单,快递单号["+selections[0].raw.trackingNumber+"],同时会恢复<下单清单>相应记录的状态到[已下单]。注：邮寄清单中存在[已入库]状态清单时，删除失败。";
         
         Ext.MessageBox.confirm("删除提示", tipText, function (confirmId) {
         	if(confirmId == "yes"){
         		Ext.Ajax.request({
-                	url: "/check/delete",
+                	url: "/shippedHead/delete",
                 	params: {
                 		id: selections[0].raw.id
                 	},
                 	success: function(conn, request, option, eOpts){
                 		var result = Ext.JSON.decode(conn.responseText, true);
                 		if(result.resultCode != 0){
-                			Ext.MessageBox.alert("请求失败", "删除清单失败" + result.resultMessage);
+                			Ext.MessageBox.alert("请求失败", "删除邮寄清单失败" + result.resultMessage);
                 		} else {
-                			Ext.ComponentQuery.query("checkgrid")[0].store.reload();
+                			Ext.ComponentQuery.query("shippedgrid")[0].store.reload();
                 		}
                 	},
                 	failure: function(conn, request, option, eOpts){
@@ -277,6 +187,10 @@ Ext.define("MIS.view.check.CheckGrid", {
                 });
         	}
         });
+    },
+    
+    onDetailClick: function(component){
+    	Ext.MessageBox.alert("邮寄清单详情，开发中...");
     },
     
     onPostClick: function(component){

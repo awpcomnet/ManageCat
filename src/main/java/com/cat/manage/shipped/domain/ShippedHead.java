@@ -16,6 +16,8 @@ public class ShippedHead implements Serializable{
 	private Double postage;//邮费
 	private Date createDate;//创建时间
 	private String createDateFormat;//格式化后的创建时间
+	private String shippedNum;//内含邮寄中清单数量
+	private String storeNum;//内含入库清单数量
 	
 	public Integer getId() {
 		return id;
@@ -71,6 +73,22 @@ public class ShippedHead implements Serializable{
 
 	public void setCreateDateFormat(String createDateFormat) {
 		this.createDateFormat = createDateFormat;
+	}
+
+	public String getShippedNum() {
+		return shippedNum;
+	}
+
+	public void setShippedNum(String shippedNum) {
+		this.shippedNum = shippedNum;
+	}
+
+	public String getStoreNum() {
+		return storeNum;
+	}
+
+	public void setStoreNum(String storeNum) {
+		this.storeNum = storeNum;
 	}
 
 	@Override

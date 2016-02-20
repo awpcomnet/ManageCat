@@ -12,6 +12,8 @@
 		<result property="postage" column="postage"/>
 		<result property="createDate" column="create_date"/>
 		<result property="createDateFormat" column="createDateFormat"/>		
+		<result property="shippedNum" column="shipped_num"/>
+		<result property="storeNum" column="store_num"/>
 	</resultMap>
 	
 	<!-- 添加邮寄清单（主单） -->
@@ -45,7 +47,10 @@
 	
 	<!-- 查询邮寄清单（主单）记录 -->
 	<select id="queryShippedHead" parameterType="com.cat.manage.shipped.domain.ShippedHead" resultMap="shippedHeadResultMap">
-	select id, tracking_number, transfer_company, submit_time, postage, create_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat from t_shipped_head 
+	select id, tracking_number, transfer_company, submit_time, postage, create_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat 
+	, (select count(1) from t_shipped where head_id = t.id and shipped_status = '1') as shipped_num
+	, (select count(1) from t_shipped where head_id = t.id and shipped_status = '2') as store_num
+	from t_shipped_head t
 	where 1=1
 	<if test="trackingNumber != null and trackingNumber != ''">
 		and tracking_number = #{trackingNumber}
@@ -59,6 +64,7 @@
 	<if test="id != null and id != ''">
 		and id = #{id}
 	</if>
+	order by create_date desc
 	</select>
 	
 	<!-- 根据快递单号查询邮寄清单主单 -->
