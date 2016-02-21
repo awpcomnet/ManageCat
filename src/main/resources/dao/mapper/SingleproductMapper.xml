@@ -80,4 +80,10 @@
 		</if>
 		order by create_date desc
 	</select>
+	
+	<!-- 根据单品编号查询单品信息 -->
+	<select id="querySingleproductBySingleId" parameterType="java.lang.Integer" resultMap="singleproductResultMap">
+		select single_id, single_name, single_ename, capacity, unit, of_origin, (select series_name from t_series where series_id = t_singleproduct.of_origin) as of_origin_name, is_use, create_date, create_by, update_date, update_by, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat 
+		from t_singleproduct where single_id = #{singleId}
+	</select>
 </mapper>

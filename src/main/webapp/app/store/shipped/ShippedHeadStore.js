@@ -19,7 +19,8 @@ Ext.define("MIS.store.shipped.ShippedHeadStore", {
         	id: "",
         	trackingNumber: "",
         	transferCompany:"",
-        	submitTime: ""
+        	submitTime: "",
+        	flag: ""
         }
 	}
 	

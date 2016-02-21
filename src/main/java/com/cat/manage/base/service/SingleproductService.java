@@ -68,4 +68,13 @@ public class SingleproductService {
 		PageInfo<Singleproduct> page = new PageInfo<Singleproduct>(list);
 		return page;
 	}
+	
+	/**
+	 * 通过单品编号查询单品信息
+	 * @param singleId
+	 * @return
+	 */
+	public Singleproduct querySingleproductBySingleId(Integer singleId){
+		return singleproductDao.querySingleproductBySingleId(singleId);
+	}
 }

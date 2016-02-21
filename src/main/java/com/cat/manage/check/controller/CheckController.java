@@ -6,11 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cat.manage.base.domain.Brand;
+import com.cat.manage.base.domain.Series;
+import com.cat.manage.base.domain.Singleproduct;
+import com.cat.manage.base.service.BrandService;
+import com.cat.manage.base.service.SeriesService;
+import com.cat.manage.base.service.SingleproductService;
 import com.cat.manage.check.domain.Check;
 import com.cat.manage.check.service.CheckService;
+import com.cat.manage.common.exception.BusinessException;
 import com.cat.manage.common.model.Srm;
 import com.cat.manage.common.param.HttpParams;
-import com.cat.manage.order.domain.SubOrder;
 import com.github.pagehelper.PageInfo;
 
 @RestController
@@ -19,8 +25,37 @@ public class CheckController {
 	@Autowired
 	private CheckService checkService;
 	
+	@Autowired
+	private BrandService brandService;
+	
+	@Autowired
+	private SeriesService seriesService;
+	
+	@Autowired
+	private SingleproductService singleproductService;
+	
 	@RequestMapping("/add")
 	public Srm addCheck(Check check){
+		Integer brandId = check.getBrandId();
+		Integer seriesId = check.getSeriesId();
+		Integer singleId = check.getSingleId();
+		/**参数合法性校验*/
+		//存在性验证
+		Brand brand = brandService.queryBrandById(brandId);
+		if(brand == null)
+			throw new BusinessException("1", "品牌参数["+brandId+"]非法");
+		Series series = seriesService.querySeriesById(seriesId);
+		if(series == null)
+			throw new BusinessException("1", "系列参数["+seriesId+"]非法");
+		Singleproduct singleproduct = singleproductService.querySingleproductBySingleId(singleId);
+		if(singleproduct == null)
+			throw new BusinessException("1", "单品参数["+singleId+"]非法");
+		//关联性验证
+		if(!series.getOfOrigin().equals(brandId+""))
+			throw new BusinessException("1", "品牌["+brand.getBrandName()+"]与系列["+series.getSeriesName()+"]从属关系非法");
+		if(!singleproduct.getOfOrigin().equals(seriesId+""))
+			throw new BusinessException("1", "系列["+series.getSeriesName()+"]与单品["+singleproduct.getSingleName()+"]从属关系非法");
+		
 		//添加下单清单是设置状态
 		check.setOrderStatus("0");//已下单
 		checkService.addCheck(check);

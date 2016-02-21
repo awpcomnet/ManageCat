@@ -9,7 +9,8 @@ Ext.define("MIS.controller.shipped.ShippedHeadController", {
 	],
 
 	stores : [ 
-	    "MIS.store.shipped.ShippedHeadStore"
+	    "MIS.store.shipped.ShippedHeadStore",
+	    "MIS.store.shipped.ShippedStore"
 	],
 	
 	views: [
@@ -17,7 +18,10 @@ Ext.define("MIS.controller.shipped.ShippedHeadController", {
 	    "MIS.view.shipped.ShippedView",
 	    "MIS.view.shipped.ShippedGrid",
 	    "MIS.view.shipped.ShippedSearch",
-	    "MIS.view.shipped.ShippedModify"
+	    "MIS.view.shipped.ShippedModify",
+	    
+	    "MIS.view.shipped.ShippedsGrid",
+	    "MIS.view.shipped.ShippedsModify"
 	    
 	],
 	

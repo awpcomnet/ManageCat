@@ -49,6 +49,7 @@ public class ShippedHeadService {
 	
 	/**
 	 * 根据邮寄清单（主单）唯一编号删除记录
+	 * 同时删除子订单
 	 * @param id
 	 */
 	public void deleteShippedHead(Integer id){
@@ -78,15 +79,24 @@ public class ShippedHeadService {
 	}
 	
 	/**
+	 * 根据邮寄清单主单唯一编号删除主单记录
+	 * 仅删除主单记录
+	 * @param id
+	 */
+	public void deleteShippedHeadById(Integer id){
+		shippedHeadDao.deleteShippedHead(id);
+	}
+	
+	/**
 	 * 查询邮寄清单主单
 	 * @param shippedHead
 	 * @param pageNum
 	 * @param pageSize
 	 * @return
 	 */
-	public PageInfo<ShippedHead> queryShippedHead(ShippedHead shippedHead, Integer pageNum, Integer pageSize){
+	public PageInfo<ShippedHead> queryShippedHead(ShippedHead shippedHead, String flag, Integer pageNum, Integer pageSize){
 		PageHelper.startPage(pageNum, pageSize);
-		List<ShippedHead> list = shippedHeadDao.queryShippedHead(shippedHead);
+		List<ShippedHead> list = shippedHeadDao.queryShippedHead(shippedHead, flag);
 		PageInfo<ShippedHead> page = new PageInfo<ShippedHead>(list);
 		return page;
 	}
@@ -99,7 +109,7 @@ public class ShippedHeadService {
 	public ShippedHead queryShippedHeadBytrackingNumber(String trackingNumber){
 		ShippedHead shippedHead = new ShippedHead();
 		shippedHead.setTrackingNumber(trackingNumber);
-		List<ShippedHead> list = shippedHeadDao.queryShippedHead(shippedHead);
+		List<ShippedHead> list = shippedHeadDao.queryShippedHead(shippedHead, "");
 		if(list.size() > 1)
 			throw new BusinessException("1", "快递单号【"+trackingNumber+"】存在"+list.size()+"个主邮寄清单！");
 		if(list.size() == 1){
@@ -110,12 +120,21 @@ public class ShippedHeadService {
 	}
 	
 	/**
+	 * 根据邮寄清单主单唯一编号查询主单信息
+	 * @param id
+	 * @return
+	 */
+	public ShippedHead queryShippedHeadById(Integer id){
+		return shippedHeadDao.queryShippedHeadById(id);
+	}
+	
+	/**
 	 * 根据查询所有邮寄清单主单信息
 	 * @param trackingNumber
 	 * @return
 	 */
 	public List<ShippedHead> queryShippedHeadAll(ShippedHead shippedHead){
-		return shippedHeadDao.queryShippedHead(shippedHead);
+		return shippedHeadDao.queryShippedHead(shippedHead, "");
 	}
 	
 	/**

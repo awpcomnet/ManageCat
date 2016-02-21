@@ -1,9 +1,9 @@
 /**
- * 邮寄清单数据显示
+ * 邮寄清单子单数据显示
  */
-Ext.define("MIS.view.shipped.ShippedGrid", {
+Ext.define("MIS.view.shipped.ShippedsGrid", {
 	extend: "Ext.grid.Panel",
-	alias: "widget.shippedgrid",
+	alias: "widget.shippedsgrid",
 	
 	requires: [
 	     'Ext.form.field.Text',
@@ -11,7 +11,7 @@ Ext.define("MIS.view.shipped.ShippedGrid", {
 	     'Ext.toolbar.Paging'
 	],
 	
-	store: "MIS.store.shipped.ShippedHeadStore",
+	store: "MIS.store.shipped.ShippedStore",
 	
 	initComponent: function(){
 		//创建多选框
@@ -30,13 +30,23 @@ Ext.define("MIS.view.shipped.ShippedGrid", {
 			
 			columns: [
 			    { header: '快递单号', dataIndex: 'trackingNumber', sortable: true, width: 15, align: "center"},
-			    { header: '提交邮寄时间', dataIndex: 'submitTime', sortable: true, width: 10, align: "center"},
 			    { header: '转运公司', dataIndex: 'transferCompany', sortable: true, width: 10, align: "center", renderer: function (value, rowindex, record, column) {
 			    	return MIS.common.DictManager.getDictItemName("transferCompany", value);
                 }},
-			    { header: '邮费总价(￥)', dataIndex: 'postage', sortable: true, width: 10, align: "center"},
-			    { header: '内含邮寄清单数量', dataIndex: 'shippedNum', sortable: true, width: 10, align: "center"},
-			    { header: '内含入库清单数量', dataIndex: 'storeNum', sortable: true, width: 10, align: "center"}
+                { header: '品牌', dataIndex: 'brandName', sortable: true, width: 10, align: "center"},
+                { header: '系列', dataIndex: 'seriesName', sortable: true, width: 10, align: "center"},
+                { header: '单品', dataIndex: 'singleName', sortable: true, width: 10, align: "center"},
+                { header: '数量', dataIndex: 'num', sortable: true, width: 10, align: "center"},
+                { header: '下单单价($)', dataIndex: 'unitPrice', sortable: true, width: 10, align: "center"},
+                { header: '总价($)', dataIndex: 'sumPrice', sortable: true, width: 10, align: "center"},
+                { header: '付款人', dataIndex: 'payby', sortable: true, width: 10, align: "center"},
+                { header: '预计单价(￥)', dataIndex: 'planRmb', sortable: true, width: 10, align: "center"},
+                { header: '预计邮费(￥)', dataIndex: 'planPostage', sortable: true, width: 10, align: "center"},
+                { header: '预计成本(￥)', dataIndex: 'planCost', sortable: true, width: 10, align: "center"},
+                { header: '备注', dataIndex: 'remark', sortable: true, width: 10, align: "center"},
+			    { header: '邮寄状态', dataIndex: 'shippedStatus', sortable: true, width: 10, align: "center", renderer: function (value, rowindex, record, column) {
+			    	return MIS.common.DictManager.getDictItemName("orderStatus", value);
+                }}
 			],
 		    
 			bbar: Ext.create('Ext.PagingToolbar', {
@@ -52,50 +62,32 @@ Ext.define("MIS.view.shipped.ShippedGrid", {
 				items: [{
 					iconCls: 'icon-edit',
 					text: '修改',
-					itemId: 'modify',
+					itemId: 'shippedmodify',
 					scope: this,
 					handler: this.onModifyClick
 				}, {
 					iconCls: 'icon-remove',
 					text: '删除',
-					itemId: 'delete',
+					itemId: 'shippeddelete',
 					scope: this,
 					handler: this.onDeleteClick
-				}, {
-					iconCls: 'icon-folder-open-alt',
-					text: '详情',
-					itemId: 'detail',
-					scope: this,
-					handler: this.onDetailClick
 				}, '-', {
-					iconCls: 'icon-file-alt',
-					text: '未入库(或部分未入库)',
-					itemId: 'partA',
+					iconCls: 'icon-truck',
+					text: '单条入库',
+					itemId: 'shippedstore',
 					scope: this,
-					handler: this.onQueryPartAClick
+					handler: this.onStoreClick
 				}, {
-					iconCls: 'icon-file-alt',
-					text: '已入库(全部)',
-					itemId: 'partB',
+					iconCls: 'icon-truck',
+					text: '批量入库',
+					itemId: 'shippedstoremore',
 					scope: this,
-					handler: this.onQueryPartBClick
-				}, '-', {
-					iconCls: 'icon-file-alt',
-					text: '所有邮寄清单记录',
-					itemId: 'all',
-					scope: this,
-					handler: this.onQueryAllClick
+					handler: this.onStoreMoreClick
 				}, '->', {
 					iconCls: 'icon-refresh',
 					text: '刷新',
 					scope: this,
 					handler: this.onRefreshClick
-				}, {
-					iconCls: 'icon-double-angle-up',
-					text: '搜索',
-					itemId: 'expand-search',
-					scope: this,
-					handler: this.onExpandSearchClick
 				}]
 			}]
 		});
@@ -119,30 +111,28 @@ Ext.define("MIS.view.shipped.ShippedGrid", {
     		return;
     	}
     	
-    	var shippedview = Ext.ComponentQuery.query("shippedview")[0];
-    	shippedview.getEl().mask();
+    	var shippedsgridview = Ext.ComponentQuery.query("shippedsgrid")[0];
+    	shippedsgridview.getEl().mask();
     	
     	var editWindow = Ext.create("Ext.window.Window", {
-        	title: "修改邮寄清单",
-        	id: "shippedmodifywindow",
+        	title: "修改邮寄清单子单",
+        	id: "shippedsmodifywindow",
         	extraData: selections[0].raw,
-        	renderTo: shippedview.getEl(),
-        	height: 170,
+        	renderTo: shippedsgridview.getEl(),
+        	height: 330,
         	width: 580,
         	layout: "fit",
         	closeAction: "destroy",
         	items: [{
-        		xtype: "shippedmodify"
+        		xtype: "shippedsmodify"
         	}],
         	listeners: {
         		close: function(){
-        			shippedview.getEl().unmask();
+        			shippedsgridview.getEl().unmask();
         		},
         		beforerender: function () {
-               	 	var transferCompany = Ext.ComponentQuery.query("shippedmodify combobox[name=transferCompany]")[0];
-                    var transferCompanyStore = transferCompany.getStore();
-                    transferCompanyStore.load();
-               },
+        			
+        		},
         		afterrender: function(component, eOpts){
         			var form = component.down("form");
                     var params = Ext.clone(this.extraData);
@@ -157,26 +147,38 @@ Ext.define("MIS.view.shipped.ShippedGrid", {
     	var selections = this.getView().getSelectionModel().getSelection();
         var selectionNum = selections.length;
         
-        if (selectionNum != 1) {
-        	Ext.MessageBox.alert("请求失败", "请选择单条记录进行删除");
+        if (selectionNum < 1) {
+        	Ext.MessageBox.alert("请求失败", "请选择至少一条记录进行删除");
             return;
         } 
 
+        var ids = [];
+        var i = 0;
+        for(;i<selectionNum; i++){
+        	ids[i] = selections[i].raw.id;
+        }
         //删除提示语言
-        var tipText = "确定删除邮寄清单,快递单号["+selections[0].raw.trackingNumber+"],同时会恢复<下单清单>相应记录的状态到[已下单]。注：邮寄清单中存在[已入库]状态清单时，删除失败。";
+        var tipText = "";
+        if(selectionNum == 1){
+        	tipText = "确定删除邮寄清单,快递单号["+selections[0].raw.trackingNumber+"],同时会恢复<下单清单>相应记录的状态到[已下单]。注：邮寄清单子单记录全部删除完毕，邮寄清单主单将自动删除。";
+        } else {
+        	tipText = "确定删除邮寄清单,["+selectionNum+"]个,同时会恢复<下单清单>相应记录的状态到[已下单]。注：邮寄清单子单记录全部删除完毕，邮寄清单主单将自动删除。";
+        }
+        
         
         Ext.MessageBox.confirm("删除提示", tipText, function (confirmId) {
         	if(confirmId == "yes"){
         		Ext.Ajax.request({
-                	url: "/shippedHead/delete",
+                	url: "/shipped/delete",
                 	params: {
-                		id: selections[0].raw.id
+                		ids: ids
                 	},
                 	success: function(conn, request, option, eOpts){
                 		var result = Ext.JSON.decode(conn.responseText, true);
                 		if(result.resultCode != 0){
                 			Ext.MessageBox.alert("请求失败", "删除邮寄清单失败" + result.resultMessage);
                 		} else {
+                			Ext.ComponentQuery.query("shippedsgrid")[0].store.reload();
                 			Ext.ComponentQuery.query("shippedgrid")[0].store.reload();
                 		}
                 	},
@@ -189,70 +191,48 @@ Ext.define("MIS.view.shipped.ShippedGrid", {
         });
     },
     
-    onDetailClick: function(component){
+    onStoreClick: function(component){
     	var selections = this.getView().getSelectionModel().getSelection();
     	var selectionNum = selections.length;
     	if(selectionNum != 1){
-    		Ext.MessageBox.alert("请求失败", "请选择一条下单记录进行查看");
+    		Ext.MessageBox.alert("请求失败", "请选择单条记录入库");
     		return;
     	}
     	
-        var shippedview = Ext.ComponentQuery.query("shippedview")[0];
-        shippedview.getEl().mask();
+    	var shippedsgridview = Ext.ComponentQuery.query("shippedsgrid")[0];
+    	shippedsgridview.getEl().mask();
     	
     	var editWindow = Ext.create("Ext.window.Window", {
-        	title: "邮寄清单详情,快递单号["+selections[0].raw.trackingNumber+"]",
-        	id: "shippedswindow",
+        	title: "邮寄清单子单入库",
+        	id: "shippedstorewindow",
         	extraData: selections[0].raw,
-        	renderTo: shippedview.getEl(),
-        	height: 500,
-        	width: 1000,
+        	renderTo: shippedsgridview.getEl(),
+        	height: 330,
+        	width: 580,
         	layout: "fit",
         	closeAction: "destroy",
         	items: [{
-        		xtype: "shippedsgrid"
+        		xtype: "shippedstore"
         	}],
         	listeners: {
         		close: function(){
-        			shippedview.getEl().unmask();
+        			shippedsgridview.getEl().unmask();
         		},
         		beforerender: function () {
-        			var shippedsgrid = Ext.ComponentQuery.query("shippedsgrid")[0];
-        			var shippedsgridStore = shippedsgrid.getStore();
-        			shippedsgridStore.proxy.extraParams.headId = selections[0].raw.id;
-        			shippedsgridStore.load();
+        			
         		},
         		afterrender: function(component, eOpts){
-        			
+        			var form = component.down("form");
+                    var params = Ext.clone(this.extraData);
+    				form.getForm().setValues(params);
     			}
         	}
         });
     	editWindow.show();
     },
     
-    onQueryAllClick: function(component){
-    	this.store.proxy.extraParams.flag = '';
-    	this.store.reload();
-    },
+    onStoreMoreClick: function(component){
+    	
+    }
     
-    onQueryPartAClick: function(component){
-    	this.store.proxy.extraParams.flag = '1';
-    	this.store.reload();
-    },
-    
-    onQueryPartBClick: function(component){
-    	this.store.proxy.extraParams.flag = '2';
-    	this.store.reload();
-    },
-    
-	onExpandSearchClick: function(component){
-		var searchwindow = Ext.ComponentQuery.query("shippedSearchpanel")[0];
-    	if(searchwindow.isHidden()){
-    		searchwindow.show();
-    	} else {
-    		searchwindow.form.reset();
-    		searchwindow.hide();
-    	}
-	}
-	
 });

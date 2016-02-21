@@ -46,6 +46,12 @@ public interface ShippedDao {
 	public void deleteShippedByHeadId(Integer headId);
 	
 	/**
+	 * 根据邮寄清单子单唯一编号，批量删除记录
+	 * @param ids
+	 */
+	public void deleteShippedByIds(Integer[] ids);
+	
+	/**
 	 * 查询邮寄清单子单信息
 	 * @param shipped
 	 * @return
@@ -58,4 +64,11 @@ public interface ShippedDao {
 	 * @return
 	 */
 	public List<Shipped> queryShippedByHeadId(Integer headId);
+	
+	/**
+	 * 根据邮寄清单子单唯一编号查询子单信息
+	 * @param ids
+	 * @return
+	 */
+	public List<Shipped> queryShippedByIds(Integer[] ids);
 }

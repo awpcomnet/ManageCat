@@ -1,0 +1,61 @@
+package com.cat.manage.store.dao;
+
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import com.cat.manage.shipped.domain.Shipped;
+import com.cat.manage.store.domain.Store;
+
+/**
+ * 仓库DAO
+ * @author wanghang
+ *
+ */
+@Repository
+public interface StoreDao {
+	/**
+	 * 添加仓库信息
+	 * @param store
+	 */
+	public void addStore(Shipped shipped, Store store);
+	
+	/**
+	 * 修改仓库信息
+	 * @param store
+	 */
+	public void updateStore(Store store);
+	
+	/**
+	 * 根据仓库唯一编号删除仓库信息
+	 * @param id
+	 */
+	public void deleteStoreById(Integer id);
+	
+	/**
+	 * 根据下单清单唯一编号删除仓库信息
+	 * @param checkId
+	 */
+	public void deleteStoreByCheckId(Integer checkId);
+	
+	/**
+	 * 查询仓库信息
+	 * @param store
+	 * @return
+	 */
+	public List<Store> queryStore(Store store);
+	
+	/**
+	 * 根据仓库唯一编号查询仓库信息
+	 * @param id
+	 * @return
+	 */
+	public Store queryStoreById(Integer id);
+	
+	/**
+	 * 根据下单清单唯一编号查询仓库信息
+	 * @param checkId
+	 * @return
+	 */
+	public Store queryStoreByCheckId(Integer checkId);
+}

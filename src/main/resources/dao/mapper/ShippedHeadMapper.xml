@@ -46,24 +46,33 @@
 	</delete>
 	
 	<!-- 查询邮寄清单（主单）记录 -->
-	<select id="queryShippedHead" parameterType="com.cat.manage.shipped.domain.ShippedHead" resultMap="shippedHeadResultMap">
+	<select id="queryShippedHead" resultMap="shippedHeadResultMap">
 	select id, tracking_number, transfer_company, submit_time, postage, create_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat 
 	, (select count(1) from t_shipped where head_id = t.id and shipped_status = '1') as shipped_num
 	, (select count(1) from t_shipped where head_id = t.id and shipped_status = '2') as store_num
 	from t_shipped_head t
 	where 1=1
-	<if test="trackingNumber != null and trackingNumber != ''">
-		and tracking_number = #{trackingNumber}
+	<if test="param1.trackingNumber != null and param1.trackingNumber != ''">
+		and tracking_number = #{param1.trackingNumber}
 	</if>
-	<if test="submitTime != null and submitTime != ''">
-		and submit_time = #{submitTime}
+	<if test="param1.submitTime != null and param1.submitTime != ''">
+		and submit_time = #{param1.submitTime}
 	</if>
-	<if test="transferCompany != null and transferCompany != ''">
-		and transfer_company = #{transferCompany}
+	<if test="param1.transferCompany != null and param1.transferCompany != ''">
+		and transfer_company = #{param1.transferCompany}
 	</if>
-	<if test="id != null and id != ''">
-		and id = #{id}
+	<if test="param1.id != null and param1.id != ''">
+		and id = #{param1.id}
 	</if>
+	<!-- 筛选邮寄清单中子单未入库主单 -->
+	<if test="param2 == 1">
+		and id in (select head_id from t_shipped where shipped_status = '1')
+	</if>
+	<!-- 筛选邮寄清单中子单全已入库主单 -->
+	<if test="param2 == 2">
+		and id not in (select head_id from t_shipped where shipped_status = '1')
+	</if>
+	
 	order by create_date desc
 	</select>
 	
@@ -71,6 +80,12 @@
 	<select id="queryShippedHeadByTrackingNumber" parameterType="java.lang.String" resultMap="shippedHeadResultMap">
 	select id, tracking_number, transfer_company, submit_time, postage, create_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat from t_shipped_head 
 	where tracking_number = #{trackingNumber}
+	</select>
+	
+	<!-- 根据邮寄清单主单唯一编号查询记录 -->
+	<select id="queryShippedHeadById" parameterType="java.lang.Integer" resultMap="shippedHeadResultMap">
+	select id, tracking_number, transfer_company, submit_time, postage, create_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat from t_shipped_head 
+	where id = #{id}
 	</select>
 	
 </mapper>

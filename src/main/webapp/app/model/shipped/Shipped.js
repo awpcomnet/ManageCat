@@ -1,0 +1,83 @@
+/**
+ * 描述：邮寄清单子单模型
+ * 作者：王航
+ */
+Ext.define("MIS.model.shipped.Shipped", {
+	extend: "Ext.data.Model",
+	
+	fields: [{
+		name: "id",
+		type: "int"
+	}, {
+		name: "headId",
+		type: "int"
+	}, {
+		name: "checkId",
+		type: "int"
+	}, {
+		name: "trackingNumber",
+		type: "string"
+	}, {
+		name: "transferCompany",
+		type: "string"
+	}, {
+		name: "brandId",
+		type: "int"
+	}, {
+		name: "seriesId",
+		type: "int"
+	}, {
+		name: "singleId",
+		type: "int"
+	}, {
+		name: "num",
+		type: "int"
+	}, {
+		name: "unitPrice",
+		type: "string"
+	}, {
+		name: "payby",
+		type: "string"
+	}, {
+		name: "planRmb",
+		type: "string"
+	}, {
+		name: "planPostage",
+		type: "string"
+	}, {
+		name: "planCost",
+		type: "string"
+	}, {
+		name: "remark",
+		type: "string"
+	}, {
+		name: "shippedStatus",
+		type: "string"
+	}, {
+		name: "createDate",
+		type: "date"
+	}, {
+		name: "updateDate",
+		type: "date"
+	}, {
+		name: "createDateFormat",
+		type: "string"
+	}, {
+		name: "updateDateFormat",
+		type: "string"
+	}, {
+		name: "brandName",
+		type: "string"
+	}, {
+		name: "seriesName",
+		type: "string"
+	}, {
+		name: "singleName",
+		type: "string"
+	}, {
+		name: "sumPrice",
+		type: "string"
+	}]
+});
+
+

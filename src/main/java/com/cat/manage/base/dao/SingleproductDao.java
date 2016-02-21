@@ -38,4 +38,11 @@ public interface SingleproductDao {
 	 * @return
 	 */
 	public List<Singleproduct> querySingleproducts(Singleproduct singleId);
+	
+	/**
+	 * 根据单品编号查询单品信息
+	 * @param singleId
+	 * @return
+	 */
+	public Singleproduct querySingleproductBySingleId(Integer singleId);
 }

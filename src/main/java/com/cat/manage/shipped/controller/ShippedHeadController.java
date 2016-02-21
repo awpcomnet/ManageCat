@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cat.manage.common.model.Srm;
 import com.cat.manage.common.param.HttpParams;
-import com.cat.manage.order.domain.SubOrder;
 import com.cat.manage.shipped.domain.ShippedHead;
 import com.cat.manage.shipped.service.ShippedHeadService;
 import com.github.pagehelper.PageInfo;
@@ -80,12 +79,12 @@ public class ShippedHeadController {
 	 * @return
 	 */
 	@RequestMapping("/query")
-	public Srm queryShippedHeadForPage(ShippedHead shippedHead, HttpServletRequest request){
+	public Srm queryShippedHeadForPage(ShippedHead shippedHead,String flag, HttpServletRequest request){
 		HttpParams params = HttpParams.buildFrom(request);
 		Integer pageNum = params.getInt("page");
 		Integer pageSize = params.getInt("limit");
 		
-		PageInfo<ShippedHead> page = shippedHeadService.queryShippedHead(shippedHead, pageNum, pageSize);
+		PageInfo<ShippedHead> page = shippedHeadService.queryShippedHead(shippedHead, flag, pageNum, pageSize);
 		return new Srm().setResultCode("0").setResultMessage("查询邮寄清单主单成功").buildPageInfo(page);
 	}
 }

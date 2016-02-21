@@ -35,7 +35,7 @@ public interface ShippedHeadDao {
 	 * 查询邮寄清单（主单）记录
 	 * @return
 	 */
-	public List<ShippedHead> queryShippedHead(ShippedHead shippedHead);
+	public List<ShippedHead> queryShippedHead(ShippedHead shippedHead, String flag);
 	
 	/**
 	 * 根据快递单号查询邮寄清单主单
@@ -43,5 +43,12 @@ public interface ShippedHeadDao {
 	 * @return
 	 */
 	public ShippedHead queryShippedHeadByTrackingNumber(String trackingNumber);
+	
+	/**
+	 * 根据邮寄清单主单唯一编号查询记录
+	 * @param id
+	 * @return
+	 */
+	public ShippedHead queryShippedHeadById(Integer id);
 	
 }
