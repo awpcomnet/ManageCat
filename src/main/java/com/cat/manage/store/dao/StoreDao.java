@@ -43,7 +43,7 @@ public interface StoreDao {
 	 * @param store
 	 * @return
 	 */
-	public List<Store> queryStore(Store store);
+	public List<Store> queryStore(Store store, String[] includeStatus);
 	
 	/**
 	 * 根据仓库唯一编号查询仓库信息
@@ -65,4 +65,11 @@ public interface StoreDao {
 	 * @return
 	 */
 	public Store queryStoreByShippedId(Integer shippedId);
+	
+	/**
+	 * 根据入库清单唯一编号查询记录（多个）
+	 * @param ids
+	 * @return
+	 */
+	public List<Store> queryStoreByIds(Integer[] ids);
 }

@@ -1,5 +1,7 @@
 package com.cat.manage.store.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import com.cat.manage.common.param.HttpParams;
 import com.cat.manage.store.domain.Store;
 import com.cat.manage.store.service.StoreService;
 import com.github.pagehelper.PageInfo;
+import com.google.common.base.Strings;
 
 /**
  * @Description: 入库清单控制器
@@ -24,12 +27,16 @@ public class StoreController {
 	private StoreService storeService;
 	
 	@RequestMapping("/query")
-	public Srm queryStoreForPage(Store store, HttpServletRequest request){
+	public Srm queryStoreForPage(Store store, String includeStatus, HttpServletRequest request){
 		HttpParams params = HttpParams.buildFrom(request);
 		Integer pageNum = params.getInt("page");
 		Integer pageSize = params.getInt("limit");
 		
-		PageInfo<Store> page = storeService.queryStoreForPage(store, pageNum, pageSize);
+		String[] status = null;
+		if(!Strings.isNullOrEmpty(includeStatus))
+			status = includeStatus.split("\\|");
+		
+		PageInfo<Store> page = storeService.queryStoreForPage(store, status, pageNum, pageSize);
 		return new Srm().setResultCode("0").setResultMessage("查询入库清单成功").buildPageInfo(page);
 	}
 	
@@ -41,7 +48,13 @@ public class StoreController {
 	
 	@RequestMapping("/calculate")
 	public Srm calculatePost(Integer shippedId){
-		
-		return new Srm().setResultCode("0").setResultMessage("计算邮费成功");
+		Map<String, Double> map = storeService.calculatePost(shippedId);
+		return new Srm().setResultCode("0").setResultMessage("计算邮费成功").addResult(map);
+	}
+	
+	@RequestMapping("/delete")
+	public Srm deleteStoreByIds(Integer[] ids){
+		storeService.deleteStoreByIds(ids);
+		return new Srm().setResultCode("0").setResultMessage("删除入库清单成功");
 	}
 }

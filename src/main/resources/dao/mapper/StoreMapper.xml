@@ -77,7 +77,7 @@
 	</delete>
 	
 	<!-- 查询仓库信息 -->
-	<select id="queryStore" parameterType="com.cat.manage.store.domain.Store" resultMap="StoreResultMap">
+	<select id="queryStore" resultMap="StoreResultMap">
 	select id, shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, sell_num, store_time, store_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
 	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
     ,(select series_name from t_series where series_id = t.series_id) as series_name
@@ -85,45 +85,49 @@
     , (num - IFNULL(sell_num,0)) as residue_num 
 	from t_store t 
 	where 1=1
-	<if test="id != null and id != ''">
-		and id = #{id}
+	<if test="param1.id != null and param1.id != ''">
+		and id = #{param1.id}
 	</if>
-	<if test="shippedId != null and shippedId != ''">
-		and shipped_id = #{shippedId}
+	<if test="param1.shippedId != null and param1.shippedId != ''">
+		and shipped_id = #{param1.shippedId}
 	</if>
-	<if test="checkId != null and checkId != ''">
-		and check_id = #{checkId}
+	<if test="param1.checkId != null and param1.checkId != ''">
+		and check_id = #{param1.checkId}
 	</if>
-	<if test="trackingNumber != null and trackingNumber != ''">
-		and tracking_number = #{trackingNumber}
+	<if test="param1.trackingNumber != null and param1.trackingNumber != ''">
+		and tracking_number = #{param1.trackingNumber}
 	</if>
-	<if test="transferCompany != null and transferCompany != ''">
-		and transfer_company = #{transferCompany}
+	<if test="param1.transferCompany != null and param1.transferCompany != ''">
+		and transfer_company = #{param1.transferCompany}
 	</if>
-	<if test="brandId != null and brandId != ''">
-		and brand_id = #{brandId}
+	<if test="param1.brandId != null and param1.brandId != ''">
+		and brand_id = #{param1.brandId}
 	</if>
-	<if test="seriesId != null and seriesId != ''">
-		and series_id = #{seriesId}
+	<if test="param1.seriesId != null and param1.seriesId != ''">
+		and series_id = #{param1.seriesId}
 	</if>
-	<if test="singleId != null and singleId != ''">
-		and single_id = #{singleId}
+	<if test="param1.singleId != null and param1.singleId != ''">
+		and single_id = #{param1.singleId}
 	</if>
-	<if test="payby != null and payby != ''">
-		and payby = #{payby}
+	<if test="param1.payby != null and param1.payby != ''">
+		and payby = #{param1.payby}
 	</if>
-	<if test="storeTime != null and storeTime != ''">
-		and store_time = #{storeTime}
+	<if test="param1.storeTime != null and param1.storeTime != ''">
+		and store_time = #{param1.storeTime}
 	</if>
-	<if test="storeStatus != null and storeStatus != ''">
-		and store_status = #{storeStatus}
+	<if test="param1.storeStatus != null and param1.storeStatus != ''">
+		and store_status = #{param1.storeStatus}
+	</if>
+	<if test="param2 != null and param2 != ''">
+		and store_status in 
+		<foreach collection="param2" item="status" open="(" separator="," close=")">#{status}</foreach>
 	</if>
 	
 	order by create_date desc
 	</select>
 	
 	<!-- 根据仓库唯一编号查询仓库信息 -->
-	<select id="queryStoreById" parameterType="java.lang.Integer">
+	<select id="queryStoreById" parameterType="java.lang.Integer" resultMap="StoreResultMap">
 	select id, shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, sell_num, store_time, store_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
 	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
     ,(select series_name from t_series where series_id = t.series_id) as series_name
@@ -134,7 +138,7 @@
 	</select>
 	
 	<!-- 根据下单清单唯一编号查询仓库信息 -->
-	<select id="queryStoreByCheckId" parameterType="java.lang.Integer">
+	<select id="queryStoreByCheckId" parameterType="java.lang.Integer" resultMap="StoreResultMap">
 	select id, shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, sell_num, store_time, store_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
 	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
     ,(select series_name from t_series where series_id = t.series_id) as series_name
@@ -145,7 +149,7 @@
 	</select>
 	
 	<!-- 根据邮寄清单唯一编号查询入库清单信息 -->
-	<select id="queryStoreByCheckId" parameterType="java.lang.Integer">
+	<select id="queryStoreByShippedId" parameterType="java.lang.Integer" resultMap="StoreResultMap">
 	select id, shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, sell_num, store_time, store_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
 	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
     ,(select series_name from t_series where series_id = t.series_id) as series_name
@@ -153,6 +157,18 @@
     , (num - IFNULL(sell_num,0)) as residue_num 
 	from t_store t 
 	where shipped_id = #{shippedId}
+	</select>
+	
+	<!-- 根据入库清单唯一编号查询记录（多个） -->
+	<select id="queryStoreByIds" resultMap="StoreResultMap">
+	select id, shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, sell_num, store_time, store_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
+    ,(select series_name from t_series where series_id = t.series_id) as series_name
+    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
+    , (num - IFNULL(sell_num,0)) as residue_num 
+	from t_store t 
+	where id in 
+	<foreach collection="array" item="id" open="(" separator="," close=")">#{id}</foreach>
 	</select>
 	
 </mapper>

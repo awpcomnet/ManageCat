@@ -16,6 +16,7 @@ import com.cat.manage.store.dao.StoreDao;
 import com.cat.manage.store.domain.Store;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Maps;
 
 /**
  * 仓库服务类
@@ -77,9 +78,9 @@ public class StoreService {
 	 * @param pageSize
 	 * @return
 	 */
-	public PageInfo<Store> queryStoreForPage(Store store, Integer pageNum, Integer pageSize){
+	public PageInfo<Store> queryStoreForPage(Store store, String[] includeStatus, Integer pageNum, Integer pageSize){
 		PageHelper.startPage(pageNum, pageSize);
-		List<Store> list = storeDao.queryStore(store);
+		List<Store> list = storeDao.queryStore(store, includeStatus);
 		PageInfo<Store> page = new PageInfo<Store>(list);
 		return page;
 	}
@@ -133,6 +134,41 @@ public class StoreService {
 		//计算的邮费
 		Double calculatePost = (HeadTotalPost - postTotal) * scale;
 		
-		return null;
+		Map<String, Double> resultMap = Maps.newHashMap();
+		resultMap.put("calculatePost", calculatePost);
+		return resultMap;
+	}
+	
+	/**
+	 * 根据入库清单唯一编号批量删除记录
+	 * 同时更新 邮寄清单  下单清单 状态为[已邮寄]
+	 * 
+	 * 注：[已入库]状态可删除，其他状态禁止删除
+	 * @param ids
+	 */
+	public void deleteStoreByIds(Integer[] ids){
+		//查询入库清单记录
+		List<Store> list = storeDao.queryStoreByIds(ids);
+		if(list == null){
+			throw new BusinessException("1", "仓库记录不存在");
+		} else {
+			if(list.size() != ids.length)
+				throw new BusinessException("1", "要删除的记录与仓库记录不符；要删除["+ids.length+"]条，仓库记录["+list.size()+"]条");
+		}
+		
+		//循环删除记录
+		for(Store store : list){
+			Integer checkId = store.getCheckId();
+			Integer shippedId = store.getShippedId();
+			
+			//删除仓库记录
+			storeDao.deleteStoreById(store.getId());
+			
+			//修改邮寄清单状态
+			shippedService.updateShippedForStatus(new Integer[]{shippedId}, "1");//已邮寄
+			
+			//修改下单清单状态
+			checkService.updateCheckForStatus(new Integer[]{checkId}, "1");//已邮寄
+		}
 	}
 }

@@ -16,7 +16,8 @@ Ext.define("MIS.store.shipped.ShippedStore", {
 			totalProperty: "meta.totalRecord"
 		},
         extraParams: {
-        	headId: ""
+        	headId: "",
+        	shippedStatus: "1"
         }
 	}
 	

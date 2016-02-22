@@ -123,6 +123,9 @@
 	<if test="headId != null and headId != ''">
 		and head_id = #{headId}
 	</if>
+	<if test="shippedStatus != null and shippedStatus != ''">
+		and shipped_status = #{shippedStatus}
+	</if>
 	<if test="id != null and id != ''">
 		and id = #{id}
 	</if>

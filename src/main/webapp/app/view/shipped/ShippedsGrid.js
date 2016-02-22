@@ -92,12 +92,32 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
 					itemId: 'shippedstore',
 					scope: this,
 					handler: this.onStoreClick
-				}, {
-					iconCls: 'icon-truck',
-					text: '批量入库',
-					itemId: 'shippedstoremore',
+				}
+//				, {
+//					iconCls: 'icon-truck',
+//					text: '批量入库',
+//					itemId: 'shippedstoremore',
+//					scope: this,
+//					handler: this.onStoreMoreClick
+//				}
+				, '-', {
+					iconCls: 'icon-file-alt',
+					text: '邮寄清单',
+					itemId: 'partC',
 					scope: this,
-					handler: this.onStoreMoreClick
+					handler: this.onPartCClick
+				}, {
+					iconCls: 'icon-file-alt',
+					text: '入库清单',
+					itemId: 'partD',
+					scope: this,
+					handler: this.onPartDClick
+				}, {
+					iconCls: 'icon-file-alt',
+					text: '所有',
+					itemId: 'partE',
+					scope: this,
+					handler: this.onPartEClick
 				}, '->', {
 					iconCls: 'icon-refresh',
 					text: '刷新',
@@ -298,6 +318,21 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
                 });
         	}
         });
+    },
+    
+    onPartCClick: function(component){
+    	this.store.proxy.extraParams.shippedStatus = '1';
+    	this.store.reload();
+    },
+    
+    onPartDClick: function(component){
+    	this.store.proxy.extraParams.shippedStatus = '2';
+    	this.store.reload();
+    },
+    
+    onPartEClick: function(component){
+    	this.store.proxy.extraParams.shippedStatus = '';
+    	this.store.reload();
     }
     
 });

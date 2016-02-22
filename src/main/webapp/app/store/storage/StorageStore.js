@@ -16,7 +16,12 @@ Ext.define("MIS.store.storage.StorageStore", {
 			totalProperty: "meta.totalRecord"
 		},
         extraParams: {
-        	
+        	seriesId: "",
+        	brandId: "",
+        	singleId: "",
+        	storeTime: "",
+        	storeStatus: "",
+        	includeStatus: ""
         }
 	}
 	

@@ -133,44 +133,43 @@ Ext.define("MIS.view.shipped.StorageAdd", {
 	buttons: [{
 		text: "计算邮费",
 		handler: function(component){
-//			var shippedheadadd = component.up("shippedheadadd");
-//			
-//			var trackingNumber = shippedheadadd.down("textfield[name=trackingNumber]").getValue().trim();
-//			
-//			var params = {
-//				trackingNumber:trackingNumber
-//			}
-//			
-//			Ext.Ajax.request({
-//				url: "/shippedHead/queryAll",
-//				params: params,
-//				success: function(conn, request, option, eOpts){
-//					var result = Ext.JSON.decode(conn.responseText, true);
-//					if(result.resultCode != 0){
-//						Ext.MessageBox.alert("校验快递单号失败, 原因:" + result.resultMessage);
-//					} else {
-//						var results = result.results;
-//						if(results.length != 0){
-//							shippedheadadd.down("datefield[name=submitTime]").setValue(results[0].submitTime);
-//							shippedheadadd.down("combobox[name=transferCompany]").setValue(results[0].transferCompany);
-//							shippedheadadd.down("textfield[name=postage]").setValue(results[0].postage);
-//							
-//							shippedheadadd.down("textfield[name=trackingNumber]").setReadOnly(true);
-//							shippedheadadd.down("datefield[name=submitTime]").setReadOnly(true);
-//							shippedheadadd.down("combobox[name=transferCompany]").setReadOnly(true);
-//							shippedheadadd.down("textfield[name=postage]").setReadOnly(true);
-//							
-//							Ext.MessageBox.alert("友情提示", "该快递单号已经存在邮寄清单中，记录将记录在已存在邮寄清单中");
-//						}else{
-//							Ext.MessageBox.alert("友情提示", "该快递单号不存在邮寄清单中，提交将建立新的邮寄清单");
-//						}
-//					}
-//				},
-//				failure: function (conn, request, option, eOpts) {
-//                    Ext.MessageBox.alert("服务器繁忙, 稍后重试!");
-//                }
-//				
-//			});
+			var storageadd = component.up("storageadd");
+			
+			var shippedId = storageadd.down("textfield[name=shippedId]").getValue().trim();
+			
+			var params = {
+				shippedId: shippedId
+			}
+			
+			Ext.Ajax.request({
+				url: "/store/calculate",
+				params: params,
+				success: function(conn, request, option, eOpts){
+					var result = Ext.JSON.decode(conn.responseText, true);
+					if(result.resultCode != 0){
+						Ext.MessageBox.alert("计算邮费失败", "原因:" + result.resultMessage);
+					} else {
+						var calculatePost = result.results[0].calculatePost;
+						
+						var unitRmb = Ext.ComponentQuery.query("storageadd numberfield[name=unitRmb]")[0].getValue();
+			   	    	var unitCost = Ext.ComponentQuery.query("storageadd numberfield[name=unitCost]")[0];
+		   	    	    if(calculatePost == '' || calculatePost == null)
+		   	    	    	calculatePost = 0;
+		   	    	    if(unitRmb == '' || unitRmb == null)
+		   	    		    unitRmb = 0;
+		   	    	   
+		   	    	    unitCost.setValue(Number.parseFloat(calculatePost)+Number.parseFloat(unitRmb));
+		   	    	    
+		   	    	    var unitPostage = Ext.ComponentQuery.query("storageadd numberfield[name=unitPostage]")[0];
+		   	    	    unitPostage.setValue(calculatePost);
+		   	    	    Ext.MessageBox.alert("温馨提示", "计算所得邮费仅供参考");
+					}
+				},
+				failure: function (conn, request, option, eOpts) {
+                    Ext.MessageBox.alert("服务器繁忙, 稍后重试!");
+                }
+				
+			});
 		}
 	}, {
 		text: "取消",
@@ -182,10 +181,9 @@ Ext.define("MIS.view.shipped.StorageAdd", {
 		handler: function(component){
 			var form = component.up("storageadd");
         	var params = form.getForm().getValues();
-			console.log(params);
         	
 			Ext.Ajax.request({
-				url: "/shippedHead/add",
+				url: "/store/add",
 				params: params,
 				success: function(conn, request, option, eOpts){
 					var result = Ext.JSON.decode(conn.responseText, true);
