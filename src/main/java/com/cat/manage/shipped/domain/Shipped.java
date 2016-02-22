@@ -27,6 +27,7 @@ public class Shipped implements Serializable{
 	private String shippedStatus;//邮寄状态
 	private Date createDate;//创建时间
 	private Date updateDate;//更新时间
+	private String weight;//重量(kg/个)
 	
 	private String createDateFormat;//格式化后的创建时间
 	private String updateDateFormat;//格式化后的修改时间
@@ -225,6 +226,14 @@ public class Shipped implements Serializable{
 
 	public void setSumPrice(String sumPrice) {
 		this.sumPrice = sumPrice;
+	}
+
+	public String getWeight() {
+		return weight;
+	}
+
+	public void setWeight(String weight) {
+		this.weight = weight;
 	}
 
 	@Override

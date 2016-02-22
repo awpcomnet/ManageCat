@@ -28,6 +28,12 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
 			columnLines: true,
 			loadMask: true,
 			
+			plugins:[  
+	                 Ext.create('Ext.grid.plugin.CellEditing',{  
+	                     clicksToEdit:2 //设置单击单元格编辑  
+	                 })  
+	        ],
+			
 			columns: [
 			    { header: '快递单号', dataIndex: 'trackingNumber', sortable: true, width: 15, align: "center"},
 			    { header: '转运公司', dataIndex: 'transferCompany', sortable: true, width: 10, align: "center", renderer: function (value, rowindex, record, column) {
@@ -46,6 +52,10 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
                 { header: '备注', dataIndex: 'remark', sortable: true, width: 10, align: "center"},
 			    { header: '邮寄状态', dataIndex: 'shippedStatus', sortable: true, width: 10, align: "center", renderer: function (value, rowindex, record, column) {
 			    	return MIS.common.DictManager.getDictItemName("orderStatus", value);
+                }},
+                { header: '重量(kg/个)', dataIndex: 'weight', sortable: true, width: 10, align: "center", editor:{ 
+                	decimalPrecision: 2,
+                	xtype: 'numberfield'
                 }}
 			],
 		    
@@ -71,6 +81,11 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
 					itemId: 'shippeddelete',
 					scope: this,
 					handler: this.onDeleteClick
+				}, {
+					iconCls: 'icon-briefcase',
+					text: '保存重量',
+					scope: this,
+					handler: this.onWeightClick
 				}, '-', {
 					iconCls: 'icon-truck',
 					text: '单条入库',
@@ -199,20 +214,21 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
     		return;
     	}
     	
+    	var shippedgridview = Ext.ComponentQuery.query("shippedgrid")[0];
     	var shippedsgridview = Ext.ComponentQuery.query("shippedsgrid")[0];
     	shippedsgridview.getEl().mask();
     	
     	var editWindow = Ext.create("Ext.window.Window", {
-        	title: "邮寄清单子单入库",
+        	title: "["+selections[0].raw.singleName+"]邮寄入库信息",
         	id: "shippedstorewindow",
         	extraData: selections[0].raw,
-        	renderTo: shippedsgridview.getEl(),
-        	height: 330,
+        	renderTo: shippedgridview.getEl(),
+        	height: 390,
         	width: 580,
         	layout: "fit",
         	closeAction: "destroy",
         	items: [{
-        		xtype: "shippedstore"
+        		xtype: "storageadd"
         	}],
         	listeners: {
         		close: function(){
@@ -222,9 +238,14 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
         			
         		},
         		afterrender: function(component, eOpts){
-        			var form = component.down("form");
-                    var params = Ext.clone(this.extraData);
-    				form.getForm().setValues(params);
+        			component.down("textfield[name=num]").setValue(selections[0].raw.num);
+        			component.down("textfield[name=unitPrice]").setValue(selections[0].raw.unitPrice);
+        			component.down("numberfield[name=weight]").setValue(selections[0].raw.weight);
+        			component.down("numberfield[name=unitRmb]").setValue(selections[0].raw.planRmb);
+        			component.down("numberfield[name=unitPostage]").setValue(selections[0].raw.planPostage);
+        			component.down("numberfield[name=unitCost]").setValue(selections[0].raw.planCost);
+        			component.down("textarea[name=remark]").setValue(selections[0].raw.remark);
+        			component.down("textfield[name=shippedId]").setValue(selections[0].raw.id);
     			}
         	}
         });
@@ -233,6 +254,50 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
     
     onStoreMoreClick: function(component){
     	
+    },
+    
+    onWeightClick: function(component){
+    	var selections = this.getView().getSelectionModel().getSelection();
+        var selectionNum = selections.length;
+        
+        if (selectionNum < 1) {
+        	Ext.MessageBox.alert("请求失败", "请选择至少一条记录进行保存");
+            return;
+        } 
+        debugger;
+        var idAndWeights = [];
+        var i = 0;
+        for(;i<selectionNum; i++){
+        	idAndWeights[i] = selections[i].raw.id + "|" + selections[i].data.weight.trim();
+        	console.log(idAndWeights[i]);
+        }
+        //提示语言
+        var tipText = "确定保存相应记录的重量";
+        
+        
+        Ext.MessageBox.confirm("保存提示", tipText, function (confirmId) {
+        	if(confirmId == "yes"){
+        		Ext.Ajax.request({
+                	url: "/shipped/weight",
+                	params: {
+                		params: idAndWeights
+                	},
+                	success: function(conn, request, option, eOpts){
+                		var result = Ext.JSON.decode(conn.responseText, true);
+                		if(result.resultCode != 0){
+                			Ext.MessageBox.alert("请求失败", "修改邮寄清单失败" + result.resultMessage);
+                		} else {
+                			Ext.ComponentQuery.query("shippedsgrid")[0].store.reload();
+                			Ext.ComponentQuery.query("shippedgrid")[0].store.reload();
+                		}
+                	},
+                	failure: function(conn, request, option, eOpts){
+                		Ext.MessageBox.alert("请求失败", "服务器繁忙，稍后重试!");
+                	}
+                	
+                });
+        	}
+        });
     }
     
 });

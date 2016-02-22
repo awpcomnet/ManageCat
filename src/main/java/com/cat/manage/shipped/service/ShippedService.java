@@ -49,6 +49,28 @@ public class ShippedService {
 	}
 	
 	/**
+	 * 单独用于修改邮寄清单重量
+	 * @param shippedList
+	 */
+	public void updateShippedForWeight(List<Shipped> shippedList){
+		if(shippedList == null || shippedList.size() <= 0)
+			return;
+		
+		for(Shipped sh : shippedList){
+			updateShipped(sh);
+		}
+	}
+	
+	/**
+	 * 根据邮寄清单子单编号修改清单状态
+	 * @param ids
+	 * @param shippedStatus
+	 */
+	public void updateShippedForStatus(Integer[] ids, String shippedStatus){
+		shippedDao.updateShippedForStatus(ids, shippedStatus);
+	}
+	
+	/**
 	 * 根据邮寄清单唯一编号删除记录
 	 * @param id
 	 */
@@ -170,6 +192,15 @@ public class ShippedService {
 	 */
 	public List<Shipped> queryShippedByHeadId(Integer headId){
 		return shippedDao.queryShippedByHeadId(headId);
+	}
+	
+	/**
+	 * 根据邮寄清单子单唯一编号查询记录
+	 * @param id
+	 * @return
+	 */
+	public Shipped queryShippedById(Integer id){
+		return shippedDao.queryShippedById(id);
 	}
 	
 }

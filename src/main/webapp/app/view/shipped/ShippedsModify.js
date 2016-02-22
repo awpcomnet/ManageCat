@@ -52,7 +52,6 @@ Ext.define("MIS.view.shipped.ShippedsModify", {
 	    	   var unitPrice = Ext.ComponentQuery.query("shippedsmodify textfield[name=unitPrice]")[0].getValue();
 	    	   var planRmb = Ext.ComponentQuery.query("shippedsmodify numberfield[name=planRmb]")[0];
 	    	   var planPostage = Ext.ComponentQuery.query("shippedsmodify numberfield[name=planPostage]")[0].getValue();
-	    	   debugger;
 	    	   var planCost = Ext.ComponentQuery.query("shippedsmodify numberfield[name=planCost]")[0];
 	    	   if(newValue == '' || newValue == null)
 	    		   newValue = 0;

@@ -35,6 +35,7 @@ public class Store implements Serializable{
 	private String brandName;//品牌名称
 	private String seriesName;//系列名称
 	private String singleName;//单品名称
+	private Integer residueNum;//剩余数量
 	
 	public Integer getId() {
 		return id;
@@ -234,6 +235,14 @@ public class Store implements Serializable{
 
 	public void setSingleName(String singleName) {
 		this.singleName = singleName;
+	}
+
+	public Integer getResidueNum() {
+		return residueNum;
+	}
+
+	public void setResidueNum(Integer residueNum) {
+		this.residueNum = residueNum;
 	}
 
 	@Override
