@@ -30,6 +30,7 @@
 		<result property="brandName" column="brand_name"/>
 		<result property="seriesName" column="series_name"/>
 		<result property="singleName" column="single_name"/>
+		<result property="residueNum" column="residue_num"/>
 	</resultMap>
 	
 	<!-- 添加仓库信息 -->
@@ -81,6 +82,7 @@
 	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
     ,(select series_name from t_series where series_id = t.series_id) as series_name
     ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
+    , (num - IFNULL(sell_num,0)) as residue_num 
 	from t_store t 
 	where 1=1
 	<if test="id != null and id != ''">
@@ -126,6 +128,7 @@
 	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
     ,(select series_name from t_series where series_id = t.series_id) as series_name
     ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
+    , (num - IFNULL(sell_num,0)) as residue_num 
 	from t_store t 
 	where id = #{id}
 	</select>
@@ -136,8 +139,20 @@
 	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
     ,(select series_name from t_series where series_id = t.series_id) as series_name
     ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
+    , (num - IFNULL(sell_num,0)) as residue_num 
 	from t_store t 
 	where check_id = #{checkId}
+	</select>
+	
+	<!-- 根据邮寄清单唯一编号查询入库清单信息 -->
+	<select id="queryStoreByCheckId" parameterType="java.lang.Integer">
+	select id, shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, sell_num, store_time, store_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
+    ,(select series_name from t_series where series_id = t.series_id) as series_name
+    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
+    , (num - IFNULL(sell_num,0)) as residue_num 
+	from t_store t 
+	where shipped_id = #{shippedId}
 	</select>
 	
 </mapper>

@@ -202,7 +202,7 @@ Ext.define("MIS.view.shipped.ShippedGrid", {
     	
     	var editWindow = Ext.create("Ext.window.Window", {
         	title: "邮寄清单详情,快递单号["+selections[0].raw.trackingNumber+"]",
-        	id: "shippedswindow",
+        	//id: "shippedswindow",
         	extraData: selections[0].raw,
         	renderTo: shippedview.getEl(),
         	height: 500,

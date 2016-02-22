@@ -28,6 +28,13 @@ public interface ShippedDao {
 	public void updateShipped(Shipped shipped);
 	
 	/**
+	 * 根据邮寄清单子单编号修改清单状态
+	 * @param ids
+	 * @param shippedStatus
+	 */
+	public void updateShippedForStatus(Integer[] ids, String shippedStatus);
+	
+	/**
 	 * 根据邮寄清单子单唯一编号删除记录
 	 * @param id
 	 */
@@ -71,4 +78,11 @@ public interface ShippedDao {
 	 * @return
 	 */
 	public List<Shipped> queryShippedByIds(Integer[] ids);
+	
+	/**
+	 * 根据邮寄清单子单唯一编号查询单条信息
+	 * @param id
+	 * @return
+	 */
+	public Shipped queryShippedById(Integer id);
 }

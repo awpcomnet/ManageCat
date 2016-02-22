@@ -1,15 +1,15 @@
 /**
- * 描述：邮寄清单子单模型
+ * 描述：入库清单模型
  * 作者：王航
  */
-Ext.define("MIS.model.shipped.Shipped", {
+Ext.define("MIS.model.storage.Storage", {
 	extend: "Ext.data.Model",
 	
 	fields: [{
 		name: "id",
 		type: "int"
 	}, {
-		name: "headId",
+		name: "shippedId",
 		type: "int"
 	}, {
 		name: "checkId",
@@ -39,19 +39,25 @@ Ext.define("MIS.model.shipped.Shipped", {
 		name: "payby",
 		type: "string"
 	}, {
-		name: "planRmb",
+		name: "unitRmb",
 		type: "string"
 	}, {
-		name: "planPostage",
+		name: "unitPostage",
 		type: "string"
 	}, {
-		name: "planCost",
+		name: "unitCost",
 		type: "string"
 	}, {
 		name: "remark",
 		type: "string"
 	}, {
-		name: "shippedStatus",
+		name: "sellNum",
+		type: "int"
+	}, {
+		name: "storeTime",
+		type: "string"
+	}, {
+		name: "storeStatus",
 		type: "string"
 	}, {
 		name: "createDate",
@@ -75,10 +81,7 @@ Ext.define("MIS.model.shipped.Shipped", {
 		name: "singleName",
 		type: "string"
 	}, {
-		name: "sumPrice",
-		type: "string"
-	}, {
-		name: "weight",
+		name: "residueNum",
 		type: "string"
 	}]
 });

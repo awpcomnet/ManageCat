@@ -58,4 +58,11 @@ public interface StoreDao {
 	 * @return
 	 */
 	public Store queryStoreByCheckId(Integer checkId);
+	
+	/**
+	 * 根据邮寄清单唯一编号查询入库清单信息
+	 * @param shippedId
+	 * @return
+	 */
+	public Store queryStoreByShippedId(Integer shippedId);
 }
