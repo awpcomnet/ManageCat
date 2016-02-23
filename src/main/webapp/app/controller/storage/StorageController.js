@@ -16,7 +16,8 @@ Ext.define("MIS.controller.storage.StorageController", {
 	    "MIS.view.storage.StorageView",
 	    "MIS.view.storage.StorageGrid",
 	    "MIS.view.storage.StorageSearch",
-	    "MIS.view.shipped.StorageAdd"
+	    "MIS.view.shipped.StorageAdd",
+	    "MIS.view.storage.StorageModify"
 	],
 	
 	init: function(){

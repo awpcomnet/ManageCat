@@ -129,10 +129,12 @@ public class StoreService {
 				postTotal += Double.parseDouble(store.getUnitPostage());
 			}
 		}
-		//计算比例值
-		Double scale = Double.parseDouble(weight)/weightTotal;
-		//计算的邮费
-		Double calculatePost = (HeadTotalPost - postTotal) * scale;
+		//剩余邮费
+		Double lastPost = HeadTotalPost - postTotal;
+		//计算本批货物分配邮费
+		Double thisPost = lastPost * (num * Double.parseDouble(weight)/weightTotal);
+		//计算本批每份邮费
+		Double calculatePost = thisPost / num;
 		
 		Map<String, Double> resultMap = Maps.newHashMap();
 		resultMap.put("calculatePost", calculatePost);
@@ -161,6 +163,9 @@ public class StoreService {
 			Integer checkId = store.getCheckId();
 			Integer shippedId = store.getShippedId();
 			
+			if(!"2".equals(store.getStoreStatus()))
+				throw new BusinessException("1", "仓库记录状态不为[已入库]");
+			
 			//删除仓库记录
 			storeDao.deleteStoreById(store.getId());
 			
@@ -170,5 +175,22 @@ public class StoreService {
 			//修改下单清单状态
 			checkService.updateCheckForStatus(new Integer[]{checkId}, "1");//已邮寄
 		}
+	}
+	
+	/**
+	 * 根据仓库唯一编号查询仓库记录
+	 * @param id
+	 * @return
+	 */
+	public Store queryStoreById(Integer id){
+		return storeDao.queryStoreById(id);
+	}
+	
+	/**
+	 * 修改仓库入库信息
+	 * @param store
+	 */
+	public void updateStore(Store store){
+		storeDao.updateStore(store);
 	}
 }
