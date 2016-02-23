@@ -21,7 +21,7 @@ Ext.define("MIS.store.storage.StorageStore", {
         	singleId: "",
         	storeTime: "",
         	storeStatus: "",
-        	includeStatus: ""
+        	includeStatus: "2|4|6"
         }
 	}
 	

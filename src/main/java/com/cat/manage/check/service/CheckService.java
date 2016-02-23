@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.cat.manage.check.dao.CheckDao;
 import com.cat.manage.check.domain.Check;
+import com.cat.manage.selled.service.SelledService;
 import com.cat.manage.shipped.service.ShippedService;
+import com.cat.manage.store.service.StoreService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -23,6 +25,12 @@ public class CheckService {
 	
 	@Autowired
 	private ShippedService shippedService;
+	
+	@Autowired
+	private StoreService storeService;
+	
+	@Autowired
+	private SelledService selledService;
 	
 	/**
 	 * 添加一条下单清单
@@ -60,8 +68,10 @@ public class CheckService {
 		shippedService.deleteShippedByCheckId(id);
 		
 		//删除入库清单记录
-		
+		storeService.deleteStoreByCheckId(id);
+
 		//删除售出清单记录
+		selledService.deleteSelledByCheckId(id);
 	}
 	
 	/**
@@ -81,12 +91,21 @@ public class CheckService {
 	}
 	
 	/**
-	 * 根据下单清单唯一编号查询记录
+	 * 根据下单清单唯一编号查询记录(多条)
 	 * @param ids
 	 * @return
 	 */
 	public List<Check> queryCheckByIds(Integer[] ids){
-		return checkDao.queryCheckById(ids);
+		return checkDao.queryCheckByIds(ids);
 	}
 	
+	
+	/**
+	 * 根据下单清单唯一编号查询记录
+	 * @param id
+	 * @return
+	 */
+	public Check queryCheckById(Integer id){
+		return checkDao.queryCheckById(id);
+	}
 }

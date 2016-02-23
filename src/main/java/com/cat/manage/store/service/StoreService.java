@@ -193,4 +193,12 @@ public class StoreService {
 	public void updateStore(Store store){
 		storeDao.updateStore(store);
 	}
+	
+	/**
+	 * 根据下单清单唯一编号删除入库记录
+	 * @param checkId
+	 */
+	public void deleteStoreByCheckId(Integer checkId){
+		storeDao.deleteStoreByCheckId(checkId);
+	}
 }

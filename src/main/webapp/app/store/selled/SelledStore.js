@@ -9,14 +9,16 @@ Ext.define("MIS.store.selled.SelledStore", {
 	
 	proxy: {
 		type: "ajax",
-		url: "/",
+		url: "/selled/query",
 		reader: {
 			type: "json",
 			root: "results",
 			totalProperty: "meta.totalRecord"
 		},
         extraParams: {
-        	selledStatus: ""
+        	selledStatus: "",
+        	startTime: "",
+        	endTime: ""
         }
 	}
 	

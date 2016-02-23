@@ -44,7 +44,7 @@ public interface SelledDao {
 	 * @param selled
 	 * @return
 	 */
-	public List<Selled> querySelled(Selled selled);
+	public List<Selled> querySelled(Selled selled, String startTime, String endTime);
 	
 	/**
 	 * 根据售出清单唯一编号（多个）查询记录

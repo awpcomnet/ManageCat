@@ -57,9 +57,16 @@ public interface CheckDao {
 	//public List<Check> queryCheckExclusiveStatus(Check check, String startTime, String endTime, String status);
 	
 	/**
-	 * 根据下单清单唯一编号查询记录
+	 * 根据下单清单唯一编号查询记录(多条)
 	 * @param ids
 	 * @return
 	 */
-	public List<Check> queryCheckById(Integer[] ids);
+	public List<Check> queryCheckByIds(Integer[] ids);
+	
+	/**
+	 * 根据下单清单唯一编号查询记录
+	 * @param id
+	 * @return
+	 */
+	public Check queryCheckById(Integer id);
 }

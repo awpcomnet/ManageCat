@@ -54,7 +54,7 @@
 	<if test="remark != null and remark != ''">
 	, remark = #{remark}
 	</if>
-	<if test="sellNum != null and sellNum != ''">
+	<if test="sellNum != null">
 	, sell_num = #{sellNum}
 	</if>
 	<if test="storeTime != null and storeTime != ''">
