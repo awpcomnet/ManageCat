@@ -85,14 +85,14 @@ Ext.define("MIS.view.storage.StorageSearch", {
                 		brandId = component.up("storageSearchpanel").down("combobox[name=brandId]").getValue(),
                 		singleId = component.up("storageSearchpanel").down("combobox[name=singleId]").getValue(),
                 		storeTime = component.up("storageSearchpanel").down("datefield[name=storeTime]").getValue(),
-                		storeStatus = component.up("storageSearchpanel").down("radio[name=storeStatus]").getGroupValue();
+                		includeStatus = component.up("storageSearchpanel").down("radio[name=includeStatus]").getGroupValue();
                 	
                 	var params = storageStore.proxy.extraParams;
                 	params.seriesId = seriesId;
                 	params.brandId = brandId;
                 	params.singleId = singleId;
                 	params.storeTime = Ext.util.Format.date(storeTime,'Ymd');
-                	params.storeStatus = storeStatus;
+                	params.includeStatus = includeStatus;
                 	
                 	
                 	// reload store
@@ -112,9 +112,9 @@ Ext.define("MIS.view.storage.StorageSearch", {
 			layout: "anchor",
 			items:[{
 				margin: "0 10",
-				width: 180,
+				width: 220,
 				labelWidth: 60,
-				anchor: "55%",
+				anchor: "65%",
 				fieldLabel: "系列名称",
 		        name: "seriesId",
 		        xtype: "combobox",
@@ -155,84 +155,78 @@ Ext.define("MIS.view.storage.StorageSearch", {
 		        allowBlank: true,
 		        editable:true
 			}, {
-	        	margin: "5 10",
-	            xtype: "radio",
-	            name: "storeStatus",
-	            labelWidth: 50,
-	            inputValue: '2',
-	            boxLabel: "已入库"
+				xtype: "container",
+				layout: "hbox",
+				items:[{
+					margin: "5 10",
+		            xtype: "radio",
+		            name: "includeStatus",
+		            labelWidth: 45,
+		            inputValue: '2',
+		            boxLabel: "已入库"
+				}, {
+		        	margin: "5 10",
+		            xtype: "radio",
+		            name: "includeStatus",
+		            labelWidth: 45,
+		            inputValue: '4|6',
+		            boxLabel: "销售中|退返"
+		        }, {
+		        	margin: "5 10",
+		            xtype: "radio",
+		            name: "includeStatus",
+		            labelWidth: 45,
+		            inputValue: '3',
+		            boxLabel: "已售出"
+		        }]
+	        	
 	        }]
 			
 		}, {
-			xtype: "container",
-			layout: "anchor",
-			items:[{
-				margin: "0 10",
-				width: 230,
-				labelWidth: 60,
-				anchor: "55%",
-				fieldLabel: "单品名称",
-		        name: "singleId",
-		        xtype: "combobox",
-		        store: Ext.create("MIS.store.singleproduct.SingleproductStore"),
-		        listeners: {
-		            change : function(field,newValue,oldValue){
-		                // 找到store
-		                var singleIdStore = Ext.ComponentQuery.query('storageSearchpanel')[0].down("combobox[name=singleId]").getStore();
+			margin: "0 10",
+			width: 230,
+			labelWidth: 60,
+			anchor: "55%",
+			fieldLabel: "单品名称",
+	        name: "singleId",
+	        xtype: "combobox",
+	        store: Ext.create("MIS.store.singleproduct.SingleproductStore"),
+	        listeners: {
+	            change : function(field,newValue,oldValue){
+	                // 找到store
+	                var singleIdStore = Ext.ComponentQuery.query('storageSearchpanel')[0].down("combobox[name=singleId]").getStore();
 
-		                //对store 进行过滤
-		                singleIdStore.filterBy(function(record){
-		                    var name = record.raw.singleName,
-		                        code = record.raw.singleId;
-		                    //如果输入框为空，直接放回所有记录
-		                    if(newValue == '' || newValue == null)
-		                        return true;
+	                //对store 进行过滤
+	                singleIdStore.filterBy(function(record){
+	                    var name = record.raw.singleName,
+	                        code = record.raw.singleId;
+	                    //如果输入框为空，直接放回所有记录
+	                    if(newValue == '' || newValue == null)
+	                        return true;
 
-		                    if(name.indexOf(newValue) >= 0){
-		                        return true;
-		                    }
-		                    return false;
-		                });
-		            }
-		        },
-		        mode: "local",
-		        displayField: 'singleName',
-		        valueField: "singleId",
-		        allowBlank: true,
-		        editable:true
-			}, {
-	        	margin: "5 10",
-	            xtype: "radio",
-	            name: "storeStatus",
-	            labelWidth: 50,
-	            inputValue: '4',
-	            boxLabel: "销售中"
-	        }]
-			
+	                    if(name.indexOf(newValue) >= 0){
+	                        return true;
+	                    }
+	                    return false;
+	                });
+	            }
+	        },
+	        mode: "local",
+	        displayField: 'singleName',
+	        valueField: "singleId",
+	        allowBlank: true,
+	        editable:true
         }, {
-        	xtype: "container",
-			layout: "anchor",
-			items:[{
-				margin: "0 10",
-				width: 200,
-				xtype: 'datefield',
-				fieldLabel: "入库时间",
-				name: "storeTime",
-				anchor: "55%",
-		        format: 'Ymd',
-		        editable:false,
-				labelWidth: 80,
-				anchor: "55%"
-			}, {
-	        	margin: "5 10",
-	            xtype: "radio",
-	            name: "storeStatus",
-	            labelWidth: 50,
-	            inputValue: '3',
-	            boxLabel: "已售出"
-	        }]
-			
-			
+        	margin: "0 10",
+			width: 200,
+			xtype: 'datefield',
+			fieldLabel: "入库时间",
+			name: "storeTime",
+			anchor: "55%",
+	        format: 'Ymd',
+	        editable:false,
+			labelWidth: 80,
+			anchor: "55%"
 		}]
 	}]
 });

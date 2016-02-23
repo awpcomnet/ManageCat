@@ -57,4 +57,10 @@ public class StoreController {
 		storeService.deleteStoreByIds(ids);
 		return new Srm().setResultCode("0").setResultMessage("删除入库清单成功");
 	}
+	
+	@RequestMapping("/modify")
+	public Srm modifyStore(Store store){
+		storeService.updateStore(store);
+		return new Srm().setResultCode("0").setResultMessage("修改仓库记录成功");
+	}
 }

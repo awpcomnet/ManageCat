@@ -54,6 +54,12 @@ Ext.define("MIS.view.storage.StorageGrid", {
 			dockedItems: [{
 				xtype: 'toolbar',
 				items: [{
+					iconCls: 'icon-edit',
+					text: '修改',
+					itemId: 'modify',
+					scope: this,
+					handler: this.onModifyClick
+				}, {
 					iconCls: 'icon-remove',
 					text: '删除',
 					itemId: 'delete',
@@ -109,6 +115,46 @@ Ext.define("MIS.view.storage.StorageGrid", {
 		this.store.reload();
 	},
 	
+	onModifyClick: function(component){
+		var selections = this.getView().getSelectionModel().getSelection();
+    	var selectionNum = selections.length;
+    	if(selectionNum != 1){
+    		Ext.MessageBox.alert("请求失败", "请选择单条记录进行修改");
+    		return;
+    	}
+    	
+    	var storageview = Ext.ComponentQuery.query("storageview")[0];
+    	storageview.getEl().mask();
+    	
+    	var editWindow = Ext.create("Ext.window.Window", {
+        	title: "修改仓库记录["+selections[0].raw.singleName+"]",
+        	id: "storagemodifywindow",
+        	extraData: selections[0].raw,
+        	renderTo: storageview.getEl(),
+        	height: 280,
+        	width: 580,
+        	layout: "fit",
+        	closeAction: "destroy",
+        	items: [{
+        		xtype: "storagemodify"
+        	}],
+        	listeners: {
+        		close: function(){
+        			storageview.getEl().unmask();
+        		},
+        		beforerender: function () {
+        			
+        		},
+        		afterrender: function(component, eOpts){
+        			var form = component.down("form");
+                    var params = Ext.clone(this.extraData);
+    				form.getForm().setValues(params);
+    			}
+        	}
+        });
+    	editWindow.show();
+	},
+	
     onDeleteClick: function(component){
     	var selections = this.getView().getSelectionModel().getSelection();
         var selectionNum = selections.length;
@@ -159,11 +205,54 @@ Ext.define("MIS.view.storage.StorageGrid", {
     },
     
     onSellClick: function(component){
-    	alert("售出开发中...");
+    	var selections = this.getView().getSelectionModel().getSelection();
+    	var selectionNum = selections.length;
+    	if(selectionNum != 1){
+    		Ext.MessageBox.alert("请求失败", "请选择一条下单记录售出");
+    		return;
+    	}
+    	
+        var storageview = Ext.ComponentQuery.query("storageview")[0];
+        storageview.getEl().mask();
+    	
+    	var editWindow = Ext.create("Ext.window.Window", {
+        	title: "["+selections[0].raw.singleName+"]售出窗口",
+        	id: "selledaddwindow",
+        	extraData: selections[0].raw,
+        	renderTo: storageview.getEl(),
+        	height: 315,
+        	width: 580,
+        	layout: "fit",
+        	closeAction: "destroy",
+        	items: [{
+        		xtype: "selledadd"
+        	}],
+        	listeners: {
+        		close: function(){
+        			storageview.getEl().unmask();
+        		},
+        		beforerender: function () {
+//        			var shippedsgrid = Ext.ComponentQuery.query("storagegrid")[0];
+//        			var shippedsgridStore = shippedsgrid.getStore();
+//        			shippedsgridStore.proxy.extraParams.headId = selections[0].raw.id;
+//        			shippedsgridStore.load();
+        		},
+        		afterrender: function(component, eOpts){
+        			component.down("textfield[name=unitCost]").setValue(selections[0].raw.unitCost);
+        			component.down("textfield[name=residueNum]").setValue(selections[0].raw.residueNum);
+        			component.down("numberfield[name=sellNum]").setValue(selections[0].raw.residueNum);
+        			component.down("numberfield[name=sellNum]").setMaxValue(selections[0].raw.residueNum)
+        			component.down("textarea[name=remark]").setValue(selections[0].raw.remark);
+        			component.down("textfield[name=storeId]").setValue(selections[0].raw.id);
+        			component.down("numberfield[name=rate]").setValue(15);
+    			}
+        	}
+        });
+    	editWindow.show();
     },
     
     onSellingClick: function(component){
-    	this.store.proxy.extraParams.includeStatus = '2|4';
+    	this.store.proxy.extraParams.includeStatus = '2|4|6';
     	this.store.reload();
     },
     
