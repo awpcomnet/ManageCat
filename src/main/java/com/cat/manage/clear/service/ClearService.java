@@ -1,5 +1,10 @@
 package com.cat.manage.clear.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.cat.manage.check.domain.Check;
 import com.cat.manage.check.service.CheckService;
 import com.cat.manage.clear.domain.MonthClear;
+import com.cat.manage.common.util.ExcelUtil;
 import com.cat.manage.selled.domain.Selled;
 import com.cat.manage.selled.service.SelledService;
 import com.cat.manage.shipped.domain.ShippedHead;
@@ -15,6 +21,7 @@ import com.cat.manage.shipped.service.ShippedHeadService;
 import com.cat.manage.store.domain.Store;
 import com.cat.manage.store.service.StoreService;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * @Description: 结算服务类
@@ -34,6 +41,20 @@ public class ClearService {
 	
 	@Autowired
 	private SelledService selledService;
+	
+	public void outPutExcelForProfit(String startTime, String endTime, OutputStream os){
+		List<MonthClear> listContent = this.calculateMonthClear(startTime, endTime);
+		
+		LinkedHashMap title = Maps.newLinkedHashMap();
+		title.put("sumUnitPrice", "下单总金额($)");
+		title.put("sumUnitPostage", "邮费总金额(￥)");
+		title.put("sumUnitCost", "成本总金额(￥)");
+		title.put("sumSellPrice", "售出总金额(￥)");
+		title.put("sumRefund", "补损总金额(￥)");
+		title.put("sumProfit", "总利润(￥)");
+		
+		ExcelUtil.exportExcelForSingleSheet(os, startTime+"-"+endTime+"收益结算", title, listContent);
+	}
 	
 	public List<MonthClear> calculateMonthClear(String startTime, String endTime){
 		Double sumUnitPrice = 0.0;//下单总金额($)
@@ -81,15 +102,22 @@ public class ClearService {
 		}
 		
 		//计算总利润
-		sumProfit = sumSellPrice - sumRefund - sumUnitCost;
+		BigDecimal sumUnitPriceB = new BigDecimal(sumUnitPrice).setScale(2,BigDecimal.ROUND_HALF_UP);
+		BigDecimal sumUnitPostageB = new BigDecimal(sumUnitPostage).setScale(2,BigDecimal.ROUND_HALF_UP);
+		BigDecimal sumUnitCostB = new BigDecimal(sumUnitCost).setScale(2,BigDecimal.ROUND_HALF_UP);
+		BigDecimal sumSellPriceB = new BigDecimal(sumSellPrice).setScale(2,BigDecimal.ROUND_HALF_UP);
+		BigDecimal sumRefundB = new BigDecimal(sumRefund).setScale(2,BigDecimal.ROUND_HALF_UP);
+		BigDecimal sumProfitB = new BigDecimal(sumProfit).setScale(2,BigDecimal.ROUND_HALF_UP);
+		
+		sumProfitB = sumSellPriceB.subtract(sumRefundB).subtract(sumUnitCostB).setScale(2,BigDecimal.ROUND_HALF_UP);
 		
 		MonthClear monthClear = new MonthClear();
-		monthClear.setSumProfit(sumProfit);
-		monthClear.setSumSellPrice(sumSellPrice);
-		monthClear.setSumUnitCost(sumUnitCost);
-		monthClear.setSumUnitPostage(sumUnitPostage);
-		monthClear.setSumUnitPrice(sumUnitPrice);
-		monthClear.setSumRefund(sumRefund);
+		monthClear.setSumProfit(sumProfitB.doubleValue());
+		monthClear.setSumSellPrice(sumSellPriceB.doubleValue());
+		monthClear.setSumUnitCost(sumUnitCostB.doubleValue());
+		monthClear.setSumUnitPostage(sumUnitPostageB.doubleValue());
+		monthClear.setSumUnitPrice(sumUnitPriceB.doubleValue());
+		monthClear.setSumRefund(sumRefundB.doubleValue());
 		monthClear.setStartTime(startTime);
 		monthClear.setEndTime(endTime);
 		
