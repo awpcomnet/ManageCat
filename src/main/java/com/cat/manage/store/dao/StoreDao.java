@@ -72,4 +72,11 @@ public interface StoreDao {
 	 * @return
 	 */
 	public List<Store> queryStoreByIds(Integer[] ids);
+	
+	/**
+	 * 根据下单清单唯一编号（多个）查询入库信息
+	 * @param checkIds
+	 * @return
+	 */
+	public List<Store> queryStoreByCheckIds(Integer[] checkIds);
 }

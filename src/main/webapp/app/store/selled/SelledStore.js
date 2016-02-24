@@ -16,6 +16,9 @@ Ext.define("MIS.store.selled.SelledStore", {
 			totalProperty: "meta.totalRecord"
 		},
         extraParams: {
+        	brandId: "",
+        	seriesId: "",
+        	singleId: "",
         	selledStatus: "",
         	startTime: "",
         	endTime: ""

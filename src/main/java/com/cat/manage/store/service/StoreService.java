@@ -201,4 +201,13 @@ public class StoreService {
 	public void deleteStoreByCheckId(Integer checkId){
 		storeDao.deleteStoreByCheckId(checkId);
 	}
+	
+	/**
+	 * 根据下单清单唯一编号（多个）查询入库记录
+	 * @param checkIds
+	 * @return
+	 */
+	public List<Store> queryStoreByCheckIds(Integer[] checkIds){
+		return storeDao.queryStoreByCheckIds(checkIds);
+	}
 }

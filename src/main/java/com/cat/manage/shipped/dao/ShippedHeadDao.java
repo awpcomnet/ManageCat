@@ -51,4 +51,19 @@ public interface ShippedHeadDao {
 	 */
 	public ShippedHead queryShippedHeadById(Integer id);
 	
+	/**
+	 * 查询邮寄清单主单时间段信息
+	 * @param shippedHead
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public List<ShippedHead> queryShippedHeadForList(ShippedHead shippedHead, String startTime, String endTime);
+	
+	/**
+	 * 根据下单清单唯一编号（多个），查询邮寄清单主单
+	 * @param checkIds
+	 * @return
+	 */
+	public List<ShippedHead> queryShippedHeadByCheckIds(Integer[] checkIds);
 }

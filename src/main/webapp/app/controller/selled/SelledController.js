@@ -17,7 +17,9 @@ Ext.define("MIS.controller.selled.SelledController", {
 	    "MIS.view.selled.SelledSearch",
 	    "MIS.view.selled.SelledGrid",
 	    "MIS.view.selled.SelledView",
-	    "MIS.view.selled.SelledModify"
+	    "MIS.view.selled.SelledModify",
+	    "MIS.view.selled.SelledRefund",
+	    "MIS.view.storage.DestroyAdd"
 	    
 	],
 	

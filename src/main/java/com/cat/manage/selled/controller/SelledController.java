@@ -58,4 +58,16 @@ public class SelledController {
 		selledService.deleteSelled(id);
 		return new Srm().setResultCode("0").setResultMessage("删除售出记录成功");
 	}
+	
+	@RequestMapping("/refund")
+	public Srm modifySelledForRefund(Selled selled){
+		selledService.updateSelledForRefund(selled);
+		return new Srm().setResultCode("0").setResultMessage("添加补损金额成功");
+	}
+	
+	@RequestMapping("/destroy")
+	public Srm addDestroy(Selled selled){
+		selledService.addStoreForDestroy(selled);
+		return new Srm().setResultCode("0").setResultMessage("添加损坏记录成功");
+	}
 }

@@ -47,7 +47,7 @@ Ext.define("MIS.view.selled.SelledSearch", {
 		            
 		            change : function(field,newValue,oldValue){
 		                // 找到store
-		                var brandIdStore = Ext.ComponentQuery.query('storageSearchpanel')[0].down("combobox[name=brandId]").getStore();
+		                var brandIdStore = Ext.ComponentQuery.query('selledSearchpanel')[0].down("combobox[name=brandId]").getStore();
 
 		                //对store 进行过滤
 		                brandIdStore.filterBy(function(record){
@@ -78,21 +78,23 @@ Ext.define("MIS.view.selled.SelledSearch", {
         		scope: this,
                 handler: function(component){
                 	// 找到store
-                	var storageStore = component.up("storageview").down("storagegrid").getStore();
+                	var storageStore = component.up("selledview").down("selledgrid").getStore();
                 	
                 	// 设置Store参数
-                	var seriesId = component.up("storageSearchpanel").down("combobox[name=seriesId]").getValue(),
-                		brandId = component.up("storageSearchpanel").down("combobox[name=brandId]").getValue(),
-                		singleId = component.up("storageSearchpanel").down("combobox[name=singleId]").getValue(),
-                		storeTime = component.up("storageSearchpanel").down("datefield[name=storeTime]").getValue(),
-                		includeStatus = component.up("storageSearchpanel").down("radio[name=includeStatus]").getGroupValue();
+                	var seriesId = component.up("selledSearchpanel").down("combobox[name=seriesId]").getValue(),
+                		brandId = component.up("selledSearchpanel").down("combobox[name=brandId]").getValue(),
+                		singleId = component.up("selledSearchpanel").down("combobox[name=singleId]").getValue(),
+                		startTime = component.up("selledSearchpanel").down("datefield[name=startTime]").getValue(),
+                		endTime = component.up("selledSearchpanel").down("datefield[name=endTime]").getValue(),
+                		selledStatus = component.up("selledSearchpanel").down("radio[name=selledStatus]").getGroupValue();
                 	
                 	var params = storageStore.proxy.extraParams;
                 	params.seriesId = seriesId;
                 	params.brandId = brandId;
                 	params.singleId = singleId;
-                	params.storeTime = Ext.util.Format.date(storeTime,'Ymd');
-                	params.includeStatus = includeStatus;
+                	params.startTime = Ext.util.Format.date(startTime,'Ymd');
+                	params.endTime = Ext.util.Format.date(endTime,'Ymd');
+                	params.selledStatus = selledStatus;
                 	
                 	
                 	// reload store
@@ -104,7 +106,7 @@ Ext.define("MIS.view.selled.SelledSearch", {
 				text: "重置",
 				scope: this,
 				handler: function(component){
-					component.up("storageSearchpanel").form.reset();
+					component.up("selledSearchpanel").form.reset();
 				}
 			}]
 		}, {
@@ -132,7 +134,7 @@ Ext.define("MIS.view.selled.SelledSearch", {
 		            
 		            change : function(field,newValue,oldValue){
 		                // 找到store
-		                var seriesIdStore = Ext.ComponentQuery.query('storageSearchpanel')[0].down("combobox[name=seriesId]").getStore();
+		                var seriesIdStore = Ext.ComponentQuery.query('selledSearchpanel')[0].down("combobox[name=seriesId]").getStore();
 
 		                //对store 进行过滤
 		                seriesIdStore.filterBy(function(record){
@@ -160,24 +162,24 @@ Ext.define("MIS.view.selled.SelledSearch", {
 				items:[{
 					margin: "5 10",
 		            xtype: "radio",
-		            name: "includeStatus",
-		            labelWidth: 45,
-		            inputValue: '2',
-		            boxLabel: "已入库"
-				}, {
-		        	margin: "5 10",
-		            xtype: "radio",
-		            name: "includeStatus",
-		            labelWidth: 45,
-		            inputValue: '4|6',
-		            boxLabel: "销售中|退返"
-		        }, {
-		        	margin: "5 10",
-		            xtype: "radio",
-		            name: "includeStatus",
+		            name: "selledStatus",
 		            labelWidth: 45,
 		            inputValue: '3',
 		            boxLabel: "已售出"
+				}, {
+		        	margin: "5 10",
+		            xtype: "radio",
+		            name: "selledStatus",
+		            labelWidth: 45,
+		            inputValue: '5',
+		            boxLabel: "已售出（补损）"
+		        }, {
+		        	margin: "5 10",
+		            xtype: "radio",
+		            name: "selledStatus",
+		            labelWidth: 45,
+		            inputValue: '98',
+		            boxLabel: "已损坏"
 		        }]
 	        	
 	        }]
@@ -194,7 +196,7 @@ Ext.define("MIS.view.selled.SelledSearch", {
 	        listeners: {
 	            change : function(field,newValue,oldValue){
 	                // 找到store
-	                var singleIdStore = Ext.ComponentQuery.query('storageSearchpanel')[0].down("combobox[name=singleId]").getStore();
+	                var singleIdStore = Ext.ComponentQuery.query('selledSearchpanel')[0].down("combobox[name=singleId]").getStore();
 
 	                //对store 进行过滤
 	                singleIdStore.filterBy(function(record){
@@ -220,8 +222,19 @@ Ext.define("MIS.view.selled.SelledSearch", {
         	margin: "0 10",
 			width: 200,
 			xtype: 'datefield',
-			fieldLabel: "入库时间",
-			name: "storeTime",
+			fieldLabel: "起始时间",
+			name: "startTime",
+			anchor: "55%",
+	        format: 'Ymd',
+	        editable:false,
+			labelWidth: 80,
+			anchor: "55%"
+		}, {
+        	margin: "0 10",
+			width: 200,
+			xtype: 'datefield',
+			fieldLabel: "结束时间",
+			name: "endTime",
 			anchor: "55%",
 	        format: 'Ymd',
 	        editable:false,

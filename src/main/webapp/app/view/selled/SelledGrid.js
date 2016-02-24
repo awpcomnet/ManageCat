@@ -95,6 +95,12 @@ Ext.define("MIS.view.selled.SelledGrid", {
 					itemId: 'damage',
 					scope: this,
 					handler: this.onDamageClick
+				}, {
+					iconCls: 'icon-file-alt',
+					text: '所有',
+					itemId: 'selledAll',
+					scope: this,
+					handler: this.onSelledAllClick
 				}, '->', {
 					iconCls: 'icon-refresh',
 					text: '刷新',
@@ -129,6 +135,12 @@ Ext.define("MIS.view.selled.SelledGrid", {
     		return;
     	}
     	
+    	//已损坏不能修改信息
+    	if(selections[0].raw.selledStatus == 98){
+    		Ext.MessageBox.alert("请求失败", "该商品[已损坏]，不支持修改");
+    		return;
+    	}
+    	
     	var selledview = Ext.ComponentQuery.query("selledview")[0];
     	selledview.getEl().mask();
     	
@@ -143,6 +155,52 @@ Ext.define("MIS.view.selled.SelledGrid", {
         	closeAction: "destroy",
         	items: [{
         		xtype: "selledmodify"
+        	}],
+        	listeners: {
+        		close: function(){
+        			selledview.getEl().unmask();
+        		},
+        		beforerender: function () {
+        			
+        		},
+        		afterrender: function(component, eOpts){
+        			var form = component.down("form");
+                    var params = Ext.clone(this.extraData);
+    				form.getForm().setValues(params);
+    			}
+        	}
+        });
+    	editWindow.show();
+	},
+	
+	onCompensationClick: function(component){
+		var selections = this.getView().getSelectionModel().getSelection();
+    	var selectionNum = selections.length;
+    	if(selectionNum != 1){
+    		Ext.MessageBox.alert("请求失败", "请选择单条记录进行补损");
+    		return;
+    	}
+    	
+    	//已损坏不能修改信息
+    	if(selections[0].raw.selledStatus == 98){
+    		Ext.MessageBox.alert("请求失败", "该商品[已损坏]，不支持补损");
+    		return;
+    	}
+    	
+    	var selledview = Ext.ComponentQuery.query("selledview")[0];
+    	selledview.getEl().mask();
+    	
+    	var editWindow = Ext.create("Ext.window.Window", {
+        	title: "修改售出记录["+selections[0].raw.singleName+"]",
+        	id: "selledrefundwindow",
+        	extraData: selections[0].raw,
+        	renderTo: selledview.getEl(),
+        	height: 200,
+        	width: 580,
+        	layout: "fit",
+        	closeAction: "destroy",
+        	items: [{
+        		xtype: "selledrefund"
         	}],
         	listeners: {
         		close: function(){
@@ -197,70 +255,28 @@ Ext.define("MIS.view.selled.SelledGrid", {
         });
     },
     
-    onSellClick: function(component){
-    	var selections = this.getView().getSelectionModel().getSelection();
-    	var selectionNum = selections.length;
-    	if(selectionNum != 1){
-    		Ext.MessageBox.alert("请求失败", "请选择一条下单记录售出");
-    		return;
-    	}
-    	
-        var storageview = Ext.ComponentQuery.query("storageview")[0];
-        storageview.getEl().mask();
-    	
-    	var editWindow = Ext.create("Ext.window.Window", {
-        	title: "["+selections[0].raw.singleName+"]售出窗口",
-        	id: "selledaddwindow",
-        	extraData: selections[0].raw,
-        	renderTo: storageview.getEl(),
-        	height: 315,
-        	width: 580,
-        	layout: "fit",
-        	closeAction: "destroy",
-        	items: [{
-        		xtype: "selledadd"
-        	}],
-        	listeners: {
-        		close: function(){
-        			storageview.getEl().unmask();
-        		},
-        		beforerender: function () {
-//        			var shippedsgrid = Ext.ComponentQuery.query("storagegrid")[0];
-//        			var shippedsgridStore = shippedsgrid.getStore();
-//        			shippedsgridStore.proxy.extraParams.headId = selections[0].raw.id;
-//        			shippedsgridStore.load();
-        		},
-        		afterrender: function(component, eOpts){
-        			component.down("textfield[name=unitCost]").setValue(selections[0].raw.unitCost);
-        			component.down("textfield[name=residueNum]").setValue(selections[0].raw.residueNum);
-        			component.down("numberfield[name=sellNum]").setValue(selections[0].raw.residueNum);
-        			component.down("numberfield[name=sellNum]").setMaxValue(selections[0].raw.residueNum)
-        			component.down("textarea[name=remark]").setValue(selections[0].raw.remark);
-        			component.down("textfield[name=storeId]").setValue(selections[0].raw.id);
-        			component.down("numberfield[name=rate]").setValue(15);
-    			}
-        	}
-        });
-    	editWindow.show();
-    },
-    
-    onSellingClick: function(component){
-    	this.store.proxy.extraParams.includeStatus = '2|4|6';
-    	this.store.reload();
-    },
-    
     onSelledClick: function(component){
-    	this.store.proxy.extraParams.includeStatus = '3';
+    	this.store.proxy.extraParams.selledStatus = '3';
     	this.store.reload();
     },
     
-    onStorageallClick: function(component){
-    	this.store.proxy.extraParams.includeStatus = '';
+    onSelledCompensationClick: function(component){
+    	this.store.proxy.extraParams.selledStatus = '5';
+    	this.store.reload();
+    },
+    
+    onDamageClick: function(component){
+    	this.store.proxy.extraParams.selledStatus = '98';
+    	this.store.reload();
+    },
+    
+    onSelledAllClick: function(component){
+    	this.store.proxy.extraParams.selledStatus = '';
     	this.store.reload();
     },
     
 	onExpandSearchClick: function(component){
-		var searchwindow = Ext.ComponentQuery.query("storageSearchpanel")[0];
+		var searchwindow = Ext.ComponentQuery.query("selledSearchpanel")[0];
     	if(searchwindow.isHidden()){
     		searchwindow.show();
     	} else {

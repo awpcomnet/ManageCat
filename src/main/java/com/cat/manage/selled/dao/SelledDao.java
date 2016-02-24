@@ -22,10 +22,16 @@ public interface SelledDao {
 	public void addSelled(Selled selled, Store store);
 	
 	/**
-	 * 修改售出记录
+	 * 修改售出记录(状态不能修改)
 	 * @param selled
 	 */
 	public void updateSelled(Selled selled);
+	
+	/**
+	 * 修改售出记录(可修改状态)
+	 * @param selled
+	 */
+	public void updateSelledForStatus(Selled selled);
 	
 	/**
 	 * 根据售出清单唯一编号删除记录
@@ -73,4 +79,11 @@ public interface SelledDao {
 	 * @return
 	 */
 	public Selled querySelledByShippedId(Integer shippedId);
+	
+	/**
+	 * 根据下单清单唯一编号(多个)查询记录
+	 * @param checkId
+	 * @return
+	 */
+	public List<Selled> querySelledByCheckIds(Integer[] checkIds);
 }
