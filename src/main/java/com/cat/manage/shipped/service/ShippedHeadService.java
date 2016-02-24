@@ -195,4 +195,13 @@ public class ShippedHeadService {
 		
 		
 	}
+	
+	/**
+	 * 根据下单清单唯一编号（多个），查询邮寄清单主单
+	 * @param checkIds
+	 * @return
+	 */
+	public List<ShippedHead> queryShippedHeadIncludeCheckIds(Integer[] checkIds){
+		return shippedHeadDao.queryShippedHeadByCheckIds(checkIds);
+	}
 }

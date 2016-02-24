@@ -72,6 +72,12 @@ Ext.define("MIS.view.storage.StorageGrid", {
 					scope: this,
 					handler: this.onSellClick
 				}, '-', {
+					iconCls: 'icon-trash',
+					text: '已损坏',
+					itemId: 'destroy',
+					scope: this,
+					handler: this.onDestroyClick
+				}, '-', {
 					iconCls: 'icon-file-alt',
 					text: '可售出查询',
 					itemId: 'selling',
@@ -167,6 +173,7 @@ Ext.define("MIS.view.storage.StorageGrid", {
         var ids = [];
         var i=0;
         for(;i<selectionNum;i++){
+        	debugger;
         	if(selections[i].raw.storeStatus != 2){
         		var statusText = MIS.common.DictManager.getDictItemName("orderStatus", selections[i].raw.storeStatus);
             	Ext.MessageBox.alert("请求失败", "["+selections[i].raw.singleName+"]订单状态不为[已入库],当前状态["+statusText+"]");
@@ -264,6 +271,52 @@ Ext.define("MIS.view.storage.StorageGrid", {
     onStorageallClick: function(component){
     	this.store.proxy.extraParams.includeStatus = '';
     	this.store.reload();
+    },
+    
+    onDestroyClick: function(component){
+    	var selections = this.getView().getSelectionModel().getSelection();
+    	var selectionNum = selections.length;
+    	if(selectionNum != 1){
+    		Ext.MessageBox.alert("请求失败", "请选择一条记录标记损坏");
+    		return;
+    	}
+    	
+        var storageview = Ext.ComponentQuery.query("storageview")[0];
+        storageview.getEl().mask();
+    	
+    	var editWindow = Ext.create("Ext.window.Window", {
+        	title: "["+selections[0].raw.singleName+"]已损坏窗口",
+        	id: "destroywindow",
+        	extraData: selections[0].raw,
+        	renderTo: storageview.getEl(),
+        	height: 260,
+        	width: 580,
+        	layout: "fit",
+        	closeAction: "destroy",
+        	items: [{
+        		xtype: "destroyadd"
+        	}],
+        	listeners: {
+        		close: function(){
+        			storageview.getEl().unmask();
+        		},
+        		beforerender: function () {
+//        			var shippedsgrid = Ext.ComponentQuery.query("storagegrid")[0];
+//        			var shippedsgridStore = shippedsgrid.getStore();
+//        			shippedsgridStore.proxy.extraParams.headId = selections[0].raw.id;
+//        			shippedsgridStore.load();
+        		},
+        		afterrender: function(component, eOpts){
+        			component.down("textfield[name=unitCost]").setValue(selections[0].raw.unitCost);
+        			component.down("textfield[name=residueNum]").setValue(selections[0].raw.residueNum);
+        			component.down("numberfield[name=sellNum]").setValue(1);
+        			component.down("numberfield[name=sellNum]").setMaxValue(selections[0].raw.residueNum)
+        			component.down("textarea[name=remark]").setValue(selections[0].raw.remark);
+        			component.down("textfield[name=storeId]").setValue(selections[0].raw.id);
+    			}
+        	}
+        });
+    	editWindow.show();
     },
     
 	onExpandSearchClick: function(component){

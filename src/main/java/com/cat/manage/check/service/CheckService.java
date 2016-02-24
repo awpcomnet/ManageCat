@@ -91,6 +91,17 @@ public class CheckService {
 	}
 	
 	/**
+	 * 
+	 * @param check
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public List<Check> queryCheckForList(Check check, String startTime, String endTime){
+		return checkDao.queryCheck(check, startTime, endTime);
+	}
+	
+	/**
 	 * 根据下单清单唯一编号查询记录(多条)
 	 * @param ids
 	 * @return

@@ -284,7 +284,14 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
         	Ext.MessageBox.alert("请求失败", "请选择至少一条记录进行保存");
             return;
         } 
-        debugger;
+        
+    	//判断状态
+    	if(selections[0].raw.shippedStatus != 1){
+    		var statusText = MIS.common.DictManager.getDictItemName("orderStatus", selections[0].raw.shippedStatus);
+        	Ext.MessageBox.alert("请求失败", "订单状态不为[已邮寄],当前状态["+statusText+"]");
+            return;
+    	}
+        
         var idAndWeights = [];
         var i = 0;
         for(;i<selectionNum; i++){
