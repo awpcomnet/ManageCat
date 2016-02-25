@@ -34,4 +34,39 @@
 		<aop:pointcut id="serviceMethods" expression="execution(* com.cat..service..*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods" />
 	</aop:config>
+
+
+	<!-- 邮件 -->
+	<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.qq.com" />
+		<property name="port" value="587" />
+		<property name="username" value="awpcomnet@qq.com" />
+		<property name="password" value="qtiayueevierbjcc" />
+		<!-- <property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtp.auth">true</prop>
+			</props>
+		</property> -->
+	</bean>
+
+	<!-- <bean id="emailTemplate" class="org.springframework.mail.SimpleMailMessage">
+		<property name="from" value="83629931@qq.com" />
+		<property name="to" value="joe@javapapers.com" />
+		<property name="subject" value="Send Email using Spring and Java" />
+		<property name="text">
+			<value>
+		<![CDATA[
+		Hi %s,
+		
+		This is a test email sent from Spring framework using JavaMail.
+		
+		Regards,
+		%s.
+		]]>
+			</value>
+		</property>
+	</bean> -->
+	
 </beans>

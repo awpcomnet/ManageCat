@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.manage.shipped.dao.ShippedHeadDao">
+
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
+	<resultMap type="com.cat.manage.shipped.domain.ShippedHead" id="shippedHeadResultMap">
+		<id property="id" column="id"/>
+		<result property="trackingNumber" column="tracking_number"/>
+		<result property="submitTime" column="submit_time"/>
+		<result property="transferCompany" column="transfer_company"/>
+		<result property="postage" column="postage"/>
+		<result property="createDate" column="create_date"/>
+		<result property="createDateFormat" column="createDateFormat"/>		
+		<result property="shippedNum" column="shipped_num"/>
+		<result property="storeNum" column="store_num"/>
+	</resultMap>
+	
+	<!-- 添加邮寄清单（主单） -->
+	<insert id="addShippedHead" parameterType="com.cat.manage.shipped.domain.ShippedHead">
+	insert into t_shipped_head(tracking_number, transfer_company, submit_time, postage, create_date)
+	values(#{trackingNumber}, #{transferCompany}, #{submitTime}, #{postage}, now())
+	</insert>
+	
+	<!-- 修改邮寄清单(主单) -->
+	<update id="updateShippedHead" parameterType="com.cat.manage.shipped.domain.ShippedHead">
+	update t_shipped_head set create_date=create_date 
+	<if test="trackingNumber != null and trackingNumber != ''">
+		, tracking_number = #{trackingNumber}
+	</if>
+	<if test="submitTime != null and submitTime != ''">
+		, submit_time = #{submitTime}
+	</if>
+	<if test="transferCompany != null and transferCompany != ''">
+		, transfer_company = #{transferCompany}
+	</if>
+	<if test="postage != null and postage != ''">
+		, postage = #{postage}
+	</if>
+	where id = #{id}
+	</update>
+	
+	<!-- 根据邮寄清单（主单）唯一编号删除记录 -->
+	<delete id="deleteShippedHead" parameterType="java.lang.Integer">
+	delete from t_shipped_head where id = #{id}
+	</delete>
+	
+	<!-- 查询邮寄清单（主单）记录 -->
+	<select id="queryShippedHead" resultMap="shippedHeadResultMap">
+	select id, tracking_number, transfer_company, submit_time, postage, create_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat 
+	, (select count(1) from t_shipped where head_id = t.id and shipped_status = '1') as shipped_num
+	, (select count(1) from t_shipped where head_id = t.id and shipped_status = '2') as store_num
+	from t_shipped_head t
+	where 1=1
+	<if test="param1.trackingNumber != null and param1.trackingNumber != ''">
+		and tracking_number = #{param1.trackingNumber}
+	</if>
+	<if test="param1.submitTime != null and param1.submitTime != ''">
+		and submit_time = #{param1.submitTime}
+	</if>
+	<if test="param1.transferCompany != null and param1.transferCompany != ''">
+		and transfer_company = #{param1.transferCompany}
+	</if>
+	<if test="param1.id != null and param1.id != ''">
+		and id = #{param1.id}
+	</if>
+	<!-- 筛选邮寄清单中子单未入库主单 -->
+	<if test="param2 == 1">
+		and id in (select head_id from t_shipped where shipped_status = '1')
+	</if>
+	<!-- 筛选邮寄清单中子单全已入库主单 -->
+	<if test="param2 == 2">
+		and id not in (select head_id from t_shipped where shipped_status = '1')
+	</if>
+	
+	order by create_date desc
+	</select>
+	
+	<!-- 根据快递单号查询邮寄清单主单 -->
+	<select id="queryShippedHeadByTrackingNumber" parameterType="java.lang.String" resultMap="shippedHeadResultMap">
+	select id, tracking_number, transfer_company, submit_time, postage, create_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat from t_shipped_head 
+	where tracking_number = #{trackingNumber}
+	</select>
+	
+	<!-- 根据邮寄清单主单唯一编号查询记录 -->
+	<select id="queryShippedHeadById" parameterType="java.lang.Integer" resultMap="shippedHeadResultMap">
+	select id, tracking_number, transfer_company, submit_time, postage, create_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat from t_shipped_head 
+	where id = #{id}
+	</select>
+	
+	<!-- 查询邮寄清单主单时间段信息 -->
+	<select id="queryShippedHeadForList" resultMap="shippedHeadResultMap">
+	select id, tracking_number, transfer_company, submit_time, postage, create_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat from t_shipped_head 
+	where 1=1
+	<if test="param1.trackingNumber != null and param1.trackingNumber != ''">
+		and tracking_number = #{param1.trackingNumber}
+	</if>
+	<if test="param1.submitTime != null and param1.submitTime != ''">
+		and submit_time = #{param1.submitTime}
+	</if>
+	<if test="param1.transferCompany != null and param1.transferCompany != ''">
+		and transfer_company = #{param1.transferCompany}
+	</if>
+	<if test="param1.id != null and param1.id != ''">
+		and id = #{param1.id}
+	</if>
+	<if test="param2 != null and param2 != ''">
+		and submit_time &gt;= #{param2}
+	</if>
+	<if test="param3 != null and param3 != ''">
+		and submit_time &lt;= #{param3}
+	</if>
+	
+	order by create_date desc
+	</select>
+	
+	<!-- 根据下单清单唯一编号（多个），查询邮寄清单主单 -->
+	<select id="queryShippedHeadByCheckIds" resultMap="shippedHeadResultMap">
+	select id, tracking_number, transfer_company, submit_time, postage, create_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat from t_shipped_head 
+	where id in 
+	(select head_id from t_shipped where check_id in
+	<foreach collection="array" item="checkId" open="(" separator="," close=")">#{checkId}</foreach>
+	)
+	</select>
+	
+</mapper>

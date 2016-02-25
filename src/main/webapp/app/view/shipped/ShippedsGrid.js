@@ -234,6 +234,12 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
     		return;
     	}
     	
+    	if(selections[0].raw.shippedStatus != 1){
+    		var statusText = MIS.common.DictManager.getDictItemName("orderStatus", selections[0].raw.shippedStatus);
+        	Ext.MessageBox.alert("请求失败", "订单状态不为[已邮寄],当前状态["+statusText+"]");
+            return;
+    	}
+    	
     	var shippedgridview = Ext.ComponentQuery.query("shippedgrid")[0];
     	var shippedsgridview = Ext.ComponentQuery.query("shippedsgrid")[0];
     	shippedsgridview.getEl().mask();

@@ -14,7 +14,7 @@ import com.cat.manage.user.service.UserService;
 
 /**
  * @Description: 注解解析器
- * @author 汪博
+ * @author 
  * @date 2015年12月4日 上午10:55:37
  */
 public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentResolver {

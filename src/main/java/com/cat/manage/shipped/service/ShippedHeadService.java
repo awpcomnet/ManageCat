@@ -204,4 +204,15 @@ public class ShippedHeadService {
 	public List<ShippedHead> queryShippedHeadIncludeCheckIds(Integer[] checkIds){
 		return shippedHeadDao.queryShippedHeadByCheckIds(checkIds);
 	}
+	
+	/**
+	 * 查询邮寄清单主单时间段内记录
+	 * @param shippedHead
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public List<ShippedHead> queryShippedHeadForList(ShippedHead shippedHead, String startTime, String endTime){
+		return shippedHeadDao.queryShippedHeadForList(shippedHead, startTime, endTime);
+	}
 }

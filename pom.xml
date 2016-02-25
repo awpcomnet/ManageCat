@@ -1,18 +1,20 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.cat.dog</groupId>
-  <artifactId>ManageWeb</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
-  
-  	<properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.cat.dog</groupId>
+	<artifactId>ManageWeb</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+
+	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<slf4j.version>1.7.12</slf4j.version>
 		<logback.version>1.1.3</logback.version>
 		<spring.version>4.2.1.RELEASE</spring.version>
 		<jetty.version>9.2.13.v20150730</jetty.version>
 	</properties>
-  
+
 	<build>
 		<plugins>
 			<plugin>
@@ -51,6 +53,17 @@
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<compilerVersion>1.7</compilerVersion>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<version>1.7</version>
 				<executions>
@@ -59,7 +72,8 @@
 						<phase>prepare-package</phase>
 						<configuration>
 							<target>
-								<move todir="${project.build.directory}/${project.artifactId}-${project.version}/">
+								<move
+									todir="${project.build.directory}/${project.artifactId}-${project.version}/">
 									<fileset dir="${project.build.directory}/classes/">
 										<include name="Runner.class" />
 									</fileset>
@@ -84,7 +98,8 @@
 							<goal>unpack-dependencies</goal>
 						</goals>
 						<configuration>
-							<includeGroupIds>org.eclipse.jetty, org.eclipse.jetty.orbit, javax.servlet</includeGroupIds>
+							<includeGroupIds>org.eclipse.jetty, org.eclipse.jetty.orbit,
+								javax.servlet</includeGroupIds>
 							<includeScope>provided</includeScope>
 							<!-- remove some files in order to decrease size -->
 							<excludes>*, about_files/*, META-INF/*</excludes>
@@ -97,10 +112,10 @@
 			</plugin>
 		</plugins>
 	</build>
-  
-  
-  <dependencies>
-  <!-- @@ 基本工具 -->
+
+
+	<dependencies>
+		<!-- @@ 基本工具 -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -215,6 +230,17 @@
 			<artifactId>aspectjweaver</artifactId>
 			<version>1.8.7</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- 邮件 -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.3</version>
+		</dependency>
 
 		<!-- @@ mybatis -->
 		<dependency>
@@ -246,11 +272,11 @@
 		</dependency>
 
 		<!-- @@ 数据库连接池 & JDBC组件 -->
-		<dependency>  
-            <groupId>com.alibaba</groupId>  
-            <artifactId>druid</artifactId>  
-            <version>0.2.15</version>  
-        </dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>0.2.15</version>
+		</dependency>
 		<dependency>
 			<groupId>com.googlecode.log4jdbc</groupId>
 			<artifactId>log4jdbc</artifactId>
@@ -268,11 +294,8 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.38</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>oracle-driver</artifactId>
-			<version>6.0.0</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>com.oracle</groupId> <artifactId>oracle-driver</artifactId> 
+			<version>6.0.0</version> </dependency> -->
 
 		<!-- @@ JSON数据格式组件 -->
 		<dependency>
@@ -328,14 +351,14 @@
 			<version>2.2.0</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- 文件上传工具 -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.3.1</version>
 		</dependency>
-  
-  </dependencies>
-  
+
+	</dependencies>
+
 </project>

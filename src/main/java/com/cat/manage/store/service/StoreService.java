@@ -126,7 +126,7 @@ public class StoreService {
 			}
 			if("2".equals(sh.getShippedStatus())){//已入库
 				Store store = storeDao.queryStoreByShippedId(sh.getId());
-				postTotal += Double.parseDouble(store.getUnitPostage());
+				postTotal += (Double.parseDouble(store.getUnitPostage()) * store.getNum());
 			}
 		}
 		//剩余邮费
@@ -209,5 +209,16 @@ public class StoreService {
 	 */
 	public List<Store> queryStoreByCheckIds(Integer[] checkIds){
 		return storeDao.queryStoreByCheckIds(checkIds);
+	}
+	
+	/**
+	 * 查询入库时间段内记录
+	 * @param store
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public List<Store> queryStoreForList(Store store, String startTime, String endTime){
+		return storeDao.queryStoreForTimeQuantum(store, startTime, endTime);
 	}
 }
