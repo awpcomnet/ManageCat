@@ -96,7 +96,7 @@
 	
 	<!-- 查询售出清单记录 -->
 	<select id="querySelled" resultMap="SelledResultMap">
-	select id, store_id, check_id, brand_id, series_id, single_id, sell_num, unit_price, payby, unit_rmb, unit_postage, unit_cost, selling_price, refund, remark, sell_time, selled_status, create_date, update_date, DATE_FORMAT(create_date,'%Y年%m月%d日 %T') as createDateFormat, DATE_FORMAT(update_date,'%Y年%m月%d日 %T') as updateDateFormat
+	select id, store_id, check_id, brand_id, series_id, single_id, sell_num, unit_price, payby, unit_rmb, unit_postage, unit_cost, selling_price, IFNULL(refund, 0) as refund, remark, sell_time, selled_status, create_date, update_date, DATE_FORMAT(create_date,'%Y年%m月%d日 %T') as createDateFormat, DATE_FORMAT(update_date,'%Y年%m月%d日 %T') as updateDateFormat
 	,(select brand_name from t_brand where brand_id = t.brand_id) as brand_name
 	,(select series_name from t_series where series_id = t.series_id) as series_name
 	,(select single_name from t_singleproduct where single_id = t.single_id) as single_name

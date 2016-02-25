@@ -11,11 +11,15 @@ public class MonthClear implements Serializable{
 	private String startTime;//结算开始日期
 	private String endTime;//结算结束日期
 	private Double sumUnitPrice;//下单总金额($)
+	private Double sumUnitRmb;//下单总金额(￥)
 	private Double sumUnitPostage;//邮费总金额(￥)
-	private Double sumUnitCost;//成本总金额(￥)
+	private Double sumUnitCost;//实际成本总金额(￥)
+	private Double sumUnitCostPlan;//定义成本总金额(￥)
 	private Double sumSellPrice;//售出总金额(￥)
 	private Double sumRefund;//补损总金额(￥)
-	private Double sumProfit;//总利润(￥)
+	private Double sumProfit;//实际总利润(￥)
+	private Double sumProfitPlan;//定义总利润(￥)
+	private String remark;//备注
 	
 	public String getStartTime() {
 		return startTime;
@@ -79,6 +83,38 @@ public class MonthClear implements Serializable{
 
 	public void setSumRefund(Double sumRefund) {
 		this.sumRefund = sumRefund;
+	}
+
+	public Double getSumUnitRmb() {
+		return sumUnitRmb;
+	}
+
+	public void setSumUnitRmb(Double sumUnitRmb) {
+		this.sumUnitRmb = sumUnitRmb;
+	}
+
+	public Double getSumUnitCostPlan() {
+		return sumUnitCostPlan;
+	}
+
+	public void setSumUnitCostPlan(Double sumUnitCostPlan) {
+		this.sumUnitCostPlan = sumUnitCostPlan;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public Double getSumProfitPlan() {
+		return sumProfitPlan;
+	}
+
+	public void setSumProfitPlan(Double sumProfitPlan) {
+		this.sumProfitPlan = sumProfitPlan;
 	}
 
 	@Override
