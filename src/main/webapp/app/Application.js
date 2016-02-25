@@ -28,7 +28,8 @@ Ext.define('MIS.Application', {
                   "MIS.controller.check.CheckController",//下单清单
                   "MIS.controller.shipped.ShippedHeadController",//邮寄清单
                   "MIS.controller.storage.StorageController",//仓库清单
-                  "MIS.controller.selled.SelledController" //售出清单
+                  "MIS.controller.selled.SelledController", //售出清单
+                  "MIS.controller.output.OutputController" //导出控制
     ],
 
     stores: [

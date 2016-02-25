@@ -31,7 +31,7 @@ public class ClearTest {
 	public void testAddOrder() throws FileNotFoundException{
 		
 		LOG.info("测试清算开始");
-		String startTime = "20160219";
+		String startTime = "20160216";
 		String endTime = "20160220";
 		List<MonthClear> listContent = clearService.calculateMonthClear(startTime, endTime);
 		
@@ -43,7 +43,7 @@ public class ClearTest {
 		title.put("sumRefund", "补损总金额(￥)");
 		title.put("sumProfit", "总利润(￥)");
 		
-		File f = new File("E:\\结算文件.xls");
+		File f = new File("F:\\结算文件.xls");
 		FileOutputStream os = new FileOutputStream(f);
 		ExcelUtil.exportExcelForSingleSheet(os, startTime+"-"+endTime+"收益结算", title, listContent);
 		LOG.info("测试清算结束");
