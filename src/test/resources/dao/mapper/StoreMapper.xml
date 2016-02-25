@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.manage.store.dao.StoreDao">
+
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
+	<resultMap type="com.cat.manage.store.domain.Store" id="StoreResultMap">
+		<id property="id" column="id"/>
+		<result property="shippedId" column="shipped_id"/>
+		<result property="checkId" column="check_id"/>
+		<result property="trackingNumber" column="tracking_number"/>
+		<result property="transferCompany" column="transfer_company"/>
+		<result property="brandId" column="brand_id"/>
+		<result property="seriesId" column="series_id"/>
+		<result property="singleId" column="single_id"/>
+		<result property="num" column="num"/>
+		<result property="unitPrice" column="unit_price"/>
+		<result property="payby" column="payby"/>
+		<result property="unitRmb" column="unit_rmb"/>
+		<result property="unitPostage" column="unit_postage"/>
+		<result property="unitCost" column="unit_cost"/>
+		<result property="remark" column="remark"/>
+		<result property="sellNum" column="sell_num"/>
+		<result property="storeTime" column="store_time"/>
+		<result property="storeStatus" column="store_status"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="createDateFormat" column="createDateFormat"/>
+		<result property="updateDateFormat" column="updateDateFormat"/>
+		<result property="brandName" column="brand_name"/>
+		<result property="seriesName" column="series_name"/>
+		<result property="singleName" column="single_name"/>
+		<result property="residueNum" column="residue_num"/>
+	</resultMap>
+	
+	<!-- 添加仓库信息 -->
+	<insert id="addStore">
+	insert into t_store(shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, store_time, store_status, create_date, update_date)
+	values(#{param1.id}, #{param1.checkId}, #{param1.trackingNumber}, #{param1.transferCompany}, #{param1.brandId}, #{param1.seriesId}, #{param1.singleId}, #{param1.num}, #{param1.unitPrice}, #{param1.payby}, #{param2.unitRmb}, #{param2.unitPostage}, #{param2.unitCost}, #{param2.remark}, #{param2.storeTime}, #{param2.storeStatus}, now(), now())
+	</insert>
+	
+	<!-- 修改仓库信息 -->
+	<update id="updateStore" parameterType="com.cat.manage.store.domain.Store">
+	update t_store set update_date=now() 
+	<if test="unitRmb != null and unitRmb != ''">
+	, unit_rmb = #{unitRmb}
+	</if>
+	<if test="unitPostage != null and unitPostage != ''">
+	, unit_postage = #{unitPostage}
+	</if>
+	<if test="unitCost != null and unitCost != ''">
+	, unit_cost = #{unitCost}
+	</if>
+	<if test="remark != null and remark != ''">
+	, remark = #{remark}
+	</if>
+	<if test="sellNum != null">
+	, sell_num = #{sellNum}
+	</if>
+	<if test="storeTime != null and storeTime != ''">
+	, store_time = #{storeTime}
+	</if>
+	<if test="storeStatus != null and storeStatus != ''">
+	, store_status = #{storeStatus}
+	</if>
+	where id = #{id}
+	</update>
+	
+	<!-- 根据仓库唯一编号删除仓库信息 -->
+	<delete id="deleteStoreById" parameterType="java.lang.Integer">
+	delete from t_store where id = #{id} 
+	</delete>
+	
+	<!-- 根据下单清单唯一编号删除仓库信息 -->
+	<delete id="deleteStoreByCheckId" parameterType="java.lang.Integer">
+	delete from t_store where check_id = #{checkId} 
+	</delete>
+	
+	<!-- 查询仓库信息 -->
+	<select id="queryStore" resultMap="StoreResultMap">
+	select id, shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, sell_num, store_time, store_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
+    ,(select series_name from t_series where series_id = t.series_id) as series_name
+    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
+    , (num - IFNULL(sell_num,0)) as residue_num 
+	from t_store t 
+	where 1=1
+	<if test="param1.id != null and param1.id != ''">
+		and id = #{param1.id}
+	</if>
+	<if test="param1.shippedId != null and param1.shippedId != ''">
+		and shipped_id = #{param1.shippedId}
+	</if>
+	<if test="param1.checkId != null and param1.checkId != ''">
+		and check_id = #{param1.checkId}
+	</if>
+	<if test="param1.trackingNumber != null and param1.trackingNumber != ''">
+		and tracking_number = #{param1.trackingNumber}
+	</if>
+	<if test="param1.transferCompany != null and param1.transferCompany != ''">
+		and transfer_company = #{param1.transferCompany}
+	</if>
+	<if test="param1.brandId != null and param1.brandId != ''">
+		and brand_id = #{param1.brandId}
+	</if>
+	<if test="param1.seriesId != null and param1.seriesId != ''">
+		and series_id = #{param1.seriesId}
+	</if>
+	<if test="param1.singleId != null and param1.singleId != ''">
+		and single_id = #{param1.singleId}
+	</if>
+	<if test="param1.payby != null and param1.payby != ''">
+		and payby = #{param1.payby}
+	</if>
+	<if test="param1.storeTime != null and param1.storeTime != ''">
+		and store_time = #{param1.storeTime}
+	</if>
+	<if test="param1.storeStatus != null and param1.storeStatus != ''">
+		and store_status = #{param1.storeStatus}
+	</if>
+	<if test="param2 != null and param2 != ''">
+		and store_status in 
+		<foreach collection="param2" item="status" open="(" separator="," close=")">#{status}</foreach>
+	</if>
+	
+	order by create_date desc
+	</select>
+	
+	<!-- 根据仓库唯一编号查询仓库信息 -->
+	<select id="queryStoreById" parameterType="java.lang.Integer" resultMap="StoreResultMap">
+	select id, shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, sell_num, store_time, store_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
+    ,(select series_name from t_series where series_id = t.series_id) as series_name
+    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
+    , (num - IFNULL(sell_num,0)) as residue_num 
+	from t_store t 
+	where id = #{id}
+	</select>
+	
+	<!-- 根据下单清单唯一编号查询仓库信息 -->
+	<select id="queryStoreByCheckId" parameterType="java.lang.Integer" resultMap="StoreResultMap">
+	select id, shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, sell_num, store_time, store_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
+    ,(select series_name from t_series where series_id = t.series_id) as series_name
+    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
+    , (num - IFNULL(sell_num,0)) as residue_num 
+	from t_store t 
+	where check_id = #{checkId}
+	</select>
+	
+	<!-- 根据邮寄清单唯一编号查询入库清单信息 -->
+	<select id="queryStoreByShippedId" parameterType="java.lang.Integer" resultMap="StoreResultMap">
+	select id, shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, sell_num, store_time, store_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
+    ,(select series_name from t_series where series_id = t.series_id) as series_name
+    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
+    , (num - IFNULL(sell_num,0)) as residue_num 
+	from t_store t 
+	where shipped_id = #{shippedId}
+	</select>
+	
+	<!-- 根据入库清单唯一编号查询记录（多个） -->
+	<select id="queryStoreByIds" resultMap="StoreResultMap">
+	select id, shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, sell_num, store_time, store_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
+    ,(select series_name from t_series where series_id = t.series_id) as series_name
+    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
+    , (num - IFNULL(sell_num,0)) as residue_num 
+	from t_store t 
+	where id in 
+	<foreach collection="array" item="id" open="(" separator="," close=")">#{id}</foreach>
+	</select>
+	
+	<!-- 根据下单清单唯一编号（多个）查询入库信息 -->
+	<select id="queryStoreByCheckIds" resultMap="StoreResultMap">
+	select id, shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, sell_num, store_time, store_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
+    ,(select series_name from t_series where series_id = t.series_id) as series_name
+    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
+    , (num - IFNULL(sell_num,0)) as residue_num 
+	from t_store t 
+	where check_id in 
+	<foreach collection="array" item="id" open="(" separator="," close=")">#{id}</foreach>
+	</select>
+	
+	<!-- 查询入库信息时间段内信息 -->
+	<select id="queryStoreForTimeQuantum" resultMap="StoreResultMap">
+	select id, shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, sell_num, store_time, store_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
+    ,(select series_name from t_series where series_id = t.series_id) as series_name
+    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
+    , (num - IFNULL(sell_num,0)) as residue_num 
+	from t_store t 
+	where 1=1
+	<if test="param1.id != null and param1.id != ''">
+		and id = #{param1.id}
+	</if>
+	<if test="param1.shippedId != null and param1.shippedId != ''">
+		and shipped_id = #{param1.shippedId}
+	</if>
+	<if test="param1.checkId != null and param1.checkId != ''">
+		and check_id = #{param1.checkId}
+	</if>
+	<if test="param1.trackingNumber != null and param1.trackingNumber != ''">
+		and tracking_number = #{param1.trackingNumber}
+	</if>
+	<if test="param1.transferCompany != null and param1.transferCompany != ''">
+		and transfer_company = #{param1.transferCompany}
+	</if>
+	<if test="param1.brandId != null and param1.brandId != ''">
+		and brand_id = #{param1.brandId}
+	</if>
+	<if test="param1.seriesId != null and param1.seriesId != ''">
+		and series_id = #{param1.seriesId}
+	</if>
+	<if test="param1.singleId != null and param1.singleId != ''">
+		and single_id = #{param1.singleId}
+	</if>
+	<if test="param1.payby != null and param1.payby != ''">
+		and payby = #{param1.payby}
+	</if>
+	<if test="param1.storeTime != null and param1.storeTime != ''">
+		and store_time = #{param1.storeTime}
+	</if>
+	<if test="param1.storeStatus != null and param1.storeStatus != ''">
+		and store_status = #{param1.storeStatus}
+	</if>
+	<if test="param2 != null and param2 != ''">
+		and store_time &gt;= #{param2}
+	</if>
+	<if test="param3 != null and param3 != ''">
+		and store_time &lt;= #{param3}
+	</if>
+	
+	order by create_date desc
+	</select>
+	
+</mapper>

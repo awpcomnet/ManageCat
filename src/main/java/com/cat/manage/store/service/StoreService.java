@@ -126,7 +126,7 @@ public class StoreService {
 			}
 			if("2".equals(sh.getShippedStatus())){//已入库
 				Store store = storeDao.queryStoreByShippedId(sh.getId());
-				postTotal += Double.parseDouble(store.getUnitPostage());
+				postTotal += (Double.parseDouble(store.getUnitPostage()) * store.getNum());
 			}
 		}
 		//剩余邮费

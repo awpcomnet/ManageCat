@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.manage.check.dao.CheckDao">
+
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
+	<resultMap type="com.cat.manage.check.domain.Check" id="checkResultMap">
+		<id property="id" column="id"/>
+		<result property="trackingNumber" column="tracking_number"/>
+		<result property="orderTime" column="order_time"/>
+		<result property="transferCompany" column="transfer_company"/>
+		<result property="orderAddr" column="order_addr"/>
+		<result property="brandId" column="brand_id"/>
+		<result property="seriesId" column="series_id"/>
+		<result property="singleId" column="single_id"/>
+		<result property="num" column="num"/>
+		<result property="unitPrice" column="unit_price"/>
+		<result property="remark" column="remark"/>
+		<result property="payby" column="payby"/>
+		<result property="orderStatus" column="order_status"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="createDateFormat" column="createDateFormat"/>
+		<result property="updateDateFormat" column="updateDateFormat"/>
+		<result property="brandName" column="brand_name"/>
+		<result property="seriesName" column="series_name"/>
+		<result property="singleName" column="single_name"/>
+		<result property="sumPrice" column="sumprice"/>
+	</resultMap>
+	
+	<!-- 添加下单清单 -->
+	<insert id="addCheck" parameterType="com.cat.manage.check.domain.Check">
+	insert into t_check (tracking_number, order_time, transfer_company, order_addr, brand_id, series_id, single_id, num, unit_price, remark, payby, order_status, create_date, update_date)
+	values(#{trackingNumber}, #{orderTime}, #{transferCompany}, #{orderAddr}, #{brandId}, #{seriesId}, #{singleId}, #{num}, #{unitPrice}, #{remark}, #{payby}, #{orderStatus}, now(), now())
+	</insert>
+	
+	<!-- 修改下单清单 -->
+	<update id="updateCheck" parameterType="com.cat.manage.check.domain.Check">
+	update t_check set update_date = now()
+	<if test="trackingNumber != null and trackingNumber != ''">
+		, tracking_number = #{trackingNumber}
+	</if>
+	<if test="orderTime != null and orderTime != ''">
+		, order_time = #{orderTime}
+	</if>
+	<if test="transferCompany != null and transferCompany != ''">
+		, transfer_company = #{transferCompany}
+	</if>
+	<if test="orderAddr != null and orderAddr != ''">
+		, order_addr = #{orderAddr}
+	</if>
+	<if test="brandId != null and brandId != ''">
+		, brand_id = #{brandId}
+	</if>
+	<if test="seriesId != null and seriesId != ''">
+		, series_id = #{seriesId}
+	</if>
+	<if test="singleId != null and singleId != ''">
+		, single_id = #{singleId}
+	</if>
+	<if test="num != null and num != ''">
+		, num = #{num}
+	</if>
+	<if test="unitPrice != null and unitPrice != ''">
+		, unit_price = #{unitPrice}
+	</if>
+	<if test="remark != null and remark != ''">
+		, remark = #{remark}
+	</if>
+	<if test="payby != null and payby != ''">
+		, payby = #{payby}
+	</if>
+	<if test="orderStatus != null and orderStatus != ''">
+		, order_status = #{orderStatus}
+	</if>
+		where id = #{id}
+	</update>
+	
+	<!-- 根据下单清单唯一编号修改订单记录状态 -->
+	<update id="updateCheckForStatus">
+	update t_check set update_date = now()
+	<if test="param2 != null and param2 != ''">
+		, order_status = #{param2}
+	</if>
+		where id in
+	<foreach collection="param1" item="id" open="(" separator="," close=")">#{id}</foreach>
+	</update>
+	
+	<!-- 删除下单清单 -->
+	<delete id="deleteCheck" parameterType="java.lang.Integer">
+	delete from t_check where id = #{id}
+	</delete>	
+	
+	<!-- 查询下单清单 -->
+	<select id="queryCheck" resultMap="checkResultMap">
+	select id, tracking_number, order_time, transfer_company, order_addr, brand_id, series_id, single_id, num, unit_price, remark, payby, order_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat, FORMAT(num*unit_price ,2) as sumprice  
+	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
+    ,(select series_name from t_series where series_id = t.series_id) as series_name
+    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
+	from t_check t
+	where 1=1 
+	<if test="param1.trackingNumber != null and param1.trackingNumber != ''">
+		and tracking_number = #{param1.trackingNumber}
+	</if>
+	<if test="param1.orderTime != null and param1.orderTime != ''">
+		and order_time = #{param1.orderTime}
+	</if>
+	<if test="param1.transferCompany != null and param1.transferCompany != ''">
+		and transfer_company = #{param1.transferCompany}
+	</if>
+	<if test="param1.orderAddr != null and param1.orderAddr != ''">
+		and order_addr = #{param1.orderAddr}
+	</if>
+	<if test="param1.brandId != null and param1.brandId != ''">
+		and brand_id = #{param1.brandId}
+	</if>
+	<if test="param1.seriesId != null and param1.seriesId != ''">
+		and series_id = #{param1.seriesId}
+	</if>
+	<if test="param1.singleId != null and param1.singleId != ''">
+		and single_id = #{param1.singleId}
+	</if>
+	<if test="param1.payby != null and param1.payby != ''">
+		and payby = #{param1.payby}
+	</if>	
+	<if test="param1.orderStatus != null and param1.orderStatus != ''">
+		and order_status = #{param1.orderStatus}
+	</if>
+	<if test="param2 != null and param2 != ''">
+		and DATE_FORMAT(create_date, '%Y%m%d') &gt;= #{param2}
+	</if>
+	<if test="param3 != null and param3 != ''">
+		and DATE_FORMAT(create_date, '%Y%m%d') &lt;= #{param3}
+	</if>
+	order by create_date desc
+	</select>
+	
+	<!-- 根据下单清单唯一编号查询记录 -->
+	<select id="queryCheckByIds" resultMap="checkResultMap">
+	select id, tracking_number, order_time, transfer_company, order_addr, brand_id, series_id, single_id, num, unit_price, remark, payby, order_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat, FORMAT(num*unit_price ,2) as sumprice  
+	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
+    ,(select series_name from t_series where series_id = t.series_id) as series_name
+    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
+	from t_check t
+	where id in
+	<foreach collection="array" item="id" open="(" separator="," close=")">#{id}</foreach>
+	</select>
+	
+	<!-- 根据下单清单唯一编号查询记录 -->
+	<select id="queryCheckById" parameterType="java.lang.Integer" resultMap="checkResultMap">
+	select id, tracking_number, order_time, transfer_company, order_addr, brand_id, series_id, single_id, num, unit_price, remark, payby, order_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat, FORMAT(num*unit_price ,2) as sumprice  
+	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
+    ,(select series_name from t_series where series_id = t.series_id) as series_name
+    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
+	from t_check t
+	where id = #{id}
+	</select>
+	
+</mapper>
