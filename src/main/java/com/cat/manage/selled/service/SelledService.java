@@ -249,4 +249,15 @@ public class SelledService {
 	public List<Selled> queryStoreByCheckIds(Integer[] checkIds){
 		return selledDao.querySelledByCheckIds(checkIds);
 	}
+	
+	/**
+	 * 查询时间段内售出记录
+	 * @param selled
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public List<Selled> querySelledForTimeQuantum(Selled selled, String startTime, String endTime){
+		return selledDao.querySelled(selled, startTime, endTime);
+	}
 }

@@ -210,4 +210,15 @@ public class StoreService {
 	public List<Store> queryStoreByCheckIds(Integer[] checkIds){
 		return storeDao.queryStoreByCheckIds(checkIds);
 	}
+	
+	/**
+	 * 查询入库时间段内记录
+	 * @param store
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public List<Store> queryStoreForList(Store store, String startTime, String endTime){
+		return storeDao.queryStoreForTimeQuantum(store, startTime, endTime);
+	}
 }

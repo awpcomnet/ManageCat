@@ -79,4 +79,13 @@ public interface StoreDao {
 	 * @return
 	 */
 	public List<Store> queryStoreByCheckIds(Integer[] checkIds);
+	
+	/**
+	 * 查询入库信息时间段内信息
+	 * @param store
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public List<Store> queryStoreForTimeQuantum(Store store, String startTime, String endTime);
 }

@@ -56,7 +56,7 @@ public class ClearService {
 		}
 		
 		//查询邮寄清单主单
-		List<ShippedHead> shippedHeadList = shippedHeadService.queryShippedHeadIncludeCheckIds((Integer[])checkIds.toArray(new Integer[]{}));
+		List<ShippedHead> shippedHeadList = shippedHeadService.queryShippedHeadForList(null, startTime, endTime);
 		if(shippedHeadList != null){
 			for(ShippedHead shippedHead : shippedHeadList){
 				sumUnitPostage += shippedHead.getPostage();
@@ -64,7 +64,7 @@ public class ClearService {
 		}
 		
 		//查询入库后信息
-		List<Store> storeList = storeService.queryStoreByCheckIds((Integer[])checkIds.toArray(new Integer[]{}));
+		List<Store> storeList = storeService.queryStoreForList(null, startTime, endTime);
 		if(storeList != null){
 			for(Store store : storeList){
 				sumUnitCost += Double.parseDouble(store.getUnitCost());
@@ -72,7 +72,7 @@ public class ClearService {
 		}
 		
 		//查询售出清单
-		List<Selled> selledList = selledService.queryStoreByCheckIds((Integer[])checkIds.toArray(new Integer[]{}));
+		List<Selled> selledList = selledService.querySelledForTimeQuantum(null, startTime, endTime);
 		if(selledList != null){
 			for(Selled selled : selledList){
 				sumSellPrice += selled.getSellingPrice();
