@@ -11,15 +11,15 @@ public class MonthClear implements Serializable{
 	private String startTime;//结算开始日期
 	private String endTime;//结算结束日期
 	private Double sumSellPrice;//售出总金额(￥)
-	private Double sumUnitCost;//实际成本总金额(￥)
+	private Double sumUnitCost;//成本总金额(￥)
 	private Double sumRefund;//补损总金额(￥)
-	private Double sumUnitCostPlan;//定义成本总金额(￥)
 	
 	private Double sumUnitPrice;//下单总金额($)
 	private Double sumUnitPostage;//邮费总金额(￥)
 	
 	private Double sumProfit;//实际总利润(￥)
-	private Double sumProfitPlan;//定义总利润(￥)
+	
+	private String profitRate;//利润率
 	
 	private String remark;//备注
 	
@@ -87,14 +87,6 @@ public class MonthClear implements Serializable{
 		this.sumRefund = sumRefund;
 	}
 
-	public Double getSumUnitCostPlan() {
-		return sumUnitCostPlan;
-	}
-
-	public void setSumUnitCostPlan(Double sumUnitCostPlan) {
-		this.sumUnitCostPlan = sumUnitCostPlan;
-	}
-
 	public String getRemark() {
 		return remark;
 	}
@@ -103,12 +95,12 @@ public class MonthClear implements Serializable{
 		this.remark = remark;
 	}
 
-	public Double getSumProfitPlan() {
-		return sumProfitPlan;
+	public String getProfitRate() {
+		return profitRate;
 	}
 
-	public void setSumProfitPlan(Double sumProfitPlan) {
-		this.sumProfitPlan = sumProfitPlan;
+	public void setProfitRate(String profitRate) {
+		this.profitRate = profitRate;
 	}
 
 	@Override

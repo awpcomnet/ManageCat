@@ -26,6 +26,7 @@ public class MailService {
 	 */
 	public void sendNoticeMail(String toMails){
 		DateTime now = new DateTime(new Date());
+		now = now.plusMonths(-1);
 		
 		String subject = "["+now.getMonthOfYear()+"月]收益提醒";
 		String htmlContext = "<p>Hi!</p><p>&nbsp;&nbsp;&nbsp;您好！经过辛苦劳作之后，现在到了收获的时候了，快去导出收益详情看一下吧！</p><br><p align='right'>lazyCatManage</p>";
