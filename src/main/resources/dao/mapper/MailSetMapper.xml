@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.manage.base.dao.MailSetDao">
+
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
+	<resultMap type="com.cat.manage.base.domain.MailSet" id="MailSetResultMap">
+		<id property="id" column="id"/>
+		<result property="host" column="host"/>
+		<result property="port" column="port"/>
+		<result property="username" column="username"/>
+		<result property="password" column="password"/>
+		<result property="arg0" column="arg0"/>
+		<result property="createDate" column="create_date"/>
+	</resultMap>
+	
+	<!-- 查询信息 -->
+	<select id="queryMailSet" resultMap="MailSetResultMap">
+	select id, host, port, username, password, arg0, create_date from t_mailset
+	where 1=1
+	</select>
+	
+</mapper>
