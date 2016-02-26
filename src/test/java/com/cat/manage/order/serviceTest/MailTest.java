@@ -23,7 +23,7 @@ public class MailTest {
 	
 	@Test
 	public void testMail() throws MessagingException{
-		String toMails = "awpcomnet@163.com,262630798@qq.com";
+		String toMails = "awpcomnet@163.com";
 		mailService.sendNoticeMail(toMails);
 		
 		

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.manage.mailuser.dao.MailUserDao">
+
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
+	<resultMap type="com.cat.manage.mailuser.domain.MailUser" id="MailUserResultMap">
+		<id property="id" column="id"/>
+		<result property="username" column="username"/>
+		<result property="arg0" column="arg0"/>
+		<result property="createDate" column="create_date"/>
+		<result property="createDateFormat" column="createDateFormat"/>
+	</resultMap>
+	
+	<!-- 查询信息 -->
+	<select id="queryMailUser" resultMap="MailUserResultMap">
+	select id, username, arg0, create_date, DATE_FORMAT(create_date,'%Y年%m月%d日 %T') as createDateFormat from t_mailuser
+	where 1=1
+	</select>
+	
+	<!-- 添加邮件用户 -->
+	<insert id="addMailUser" parameterType="com.cat.manage.mailuser.domain.MailUser">
+	insert into t_mailuser(username, arg0, create_date)
+	values(#{username}, #{arg0}, now())
+	</insert>
+	
+	<!-- 删除邮件用户 -->
+	<delete id="deleteMailUser" parameterType="java.lang.Integer">
+	delete from t_mailuser where id = #{id}
+	</delete>
+</mapper>

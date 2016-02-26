@@ -1,7 +1,5 @@
 package com.cat.manage.common.util;
 
-import java.util.List;
-
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -16,6 +14,9 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Repository;
 
+import com.cat.manage.base.domain.MailSet;
+import com.cat.manage.base.service.MailSetService;
+
 /**
  * 
  * @Description: 邮件工具
@@ -27,7 +28,10 @@ public class MailUtil {
 
 	@Autowired
 	private JavaMailSenderImpl javaMailSender;
-
+	
+	@Autowired
+	private MailSetService mailSetService;
+	
 	/**
 	 * 发送邮件
 	 * @param toMails 目标邮箱(多个以,隔开)
@@ -37,6 +41,12 @@ public class MailUtil {
 	 */
 	public void sendBaseMail(String toMails, String subject, String htmlContext)
 			throws MessagingException {
+		MailSet mailSet = mailSetService.queryMailSet();
+		javaMailSender.setHost(mailSet.getHost());
+		javaMailSender.setPort(mailSet.getPort());
+		javaMailSender.setUsername(mailSet.getUsername());
+		javaMailSender.setPassword(mailSet.getPassword());
+		
 		MimeMessage message = javaMailSender.createMimeMessage();
 
 		InternetAddress[] toList = new InternetAddress().parse(toMails);
