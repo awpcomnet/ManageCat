@@ -18,6 +18,7 @@ public class Shipped implements Serializable{
 	private Integer seriesId;//系列编号
 	private Integer singleId;//单品编号
 	private Integer num;//数量
+	private Integer storeNum;//入库数量
 	private Double unitPrice;//下单单价（美元单位）
 	private String payby;//付款人
 	private Double planRmb;//预计单价(人民币)
@@ -236,21 +237,29 @@ public class Shipped implements Serializable{
 		this.weight = weight;
 	}
 
+	public Integer getStoreNum() {
+		return storeNum;
+	}
+
+	public void setStoreNum(Integer storeNum) {
+		this.storeNum = storeNum;
+	}
+
 	@Override
 	public String toString() {
 		return "Shipped [id=" + id + ", headId=" + headId + ", checkId="
 				+ checkId + ", trackingNumber=" + trackingNumber
 				+ ", transferCompany=" + transferCompany + ", brandId="
 				+ brandId + ", seriesId=" + seriesId + ", singleId=" + singleId
-				+ ", num=" + num + ", unitPrice=" + unitPrice + ", payby="
-				+ payby + ", planRmb=" + planRmb + ", planPostage="
-				+ planPostage + ", planCost=" + planCost + ", remark=" + remark
-				+ ", shippedStatus=" + shippedStatus + ", createDate="
-				+ createDate + ", updateDate=" + updateDate
-				+ ", createDateFormat=" + createDateFormat
-				+ ", updateDateFormat=" + updateDateFormat + ", brandName="
-				+ brandName + ", seriesName=" + seriesName + ", singleName="
-				+ singleName + ", sumPrice=" + sumPrice + "]";
+				+ ", num=" + num + ", storeNum=" + storeNum + ", unitPrice="
+				+ unitPrice + ", payby=" + payby + ", planRmb=" + planRmb
+				+ ", planPostage=" + planPostage + ", planCost=" + planCost
+				+ ", remark=" + remark + ", shippedStatus=" + shippedStatus
+				+ ", createDate=" + createDate + ", updateDate=" + updateDate
+				+ ", weight=" + weight + ", createDateFormat="
+				+ createDateFormat + ", updateDateFormat=" + updateDateFormat
+				+ ", brandName=" + brandName + ", seriesName=" + seriesName
+				+ ", singleName=" + singleName + ", sumPrice=" + sumPrice + "]";
 	}
 
 	private static final long serialVersionUID = -508826833677156720L;

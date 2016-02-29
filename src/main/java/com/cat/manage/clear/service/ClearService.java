@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.nio.BufferOverflowException;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -124,4 +125,34 @@ public class ClearService {
 		return clearList;
 	}
 	
+	/**
+	 * 导出售出清单
+	 * @param startTime
+	 * @param endTime
+	 * @param os
+	 */
+	public void outPutExcelForSelled(String startTime, String endTime, OutputStream os){
+		List<Selled> listContent = selledService.querySelledForTimeQuantum(new Selled(), startTime, endTime);
+		if(listContent == null || listContent.size() <= 0 ){
+			throw new BusinessException("1", "导出数据错误");
+		}
+		
+		LinkedHashMap title = Maps.newLinkedHashMap();
+		title.put("brandName", "品牌名称");
+		title.put("seriesName", "系列名称");
+		title.put("singleName", "单品名称");
+		title.put("unitPrice", "下单单价（$）");
+		title.put("sellNum", "售出数量");
+		title.put("unitRmb", "实际单价(￥)");
+		title.put("unitPostage", "实际单个邮费(￥)");
+		title.put("unitCost", "实际成本(￥)");
+		title.put("sellingPrice", "实际售价(￥)");
+		title.put("refund", "补损金额(￥)");
+		title.put("sellTime", "售出时间");
+		title.put("sumPrice", "总售出金额(￥)");
+		title.put("payby", "下单付款人（非购买人）");
+		title.put("remark", "备注");
+		
+		ExcelUtil.exportExcelForSingleSheet(os, startTime+"-"+endTime+"售出清单", title, listContent);
+	}
 }

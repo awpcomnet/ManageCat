@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cat.manage.common.exception.BusinessException;
 import com.cat.manage.common.model.Srm;
 import com.cat.manage.common.param.HttpParams;
 import com.cat.manage.shipped.domain.ShippedHead;
@@ -34,6 +35,9 @@ public class ShippedHeadController {
 	 */
 	@RequestMapping("/add")
 	public Srm addShippedHeadAndShipped(ShippedHead shippedHead, Integer[] checkIds){
+		if(shippedHead.getTrackingNumber() == null)
+			throw new BusinessException("1", "快递单号不能为空");
+		
 		shippedHeadService.addShippedHeadAndShipped(shippedHead, checkIds);
 		return new Srm().setResultCode("0").setResultMessage("添加邮寄清单成功");
 	}
@@ -68,6 +72,9 @@ public class ShippedHeadController {
 	 */
 	@RequestMapping("/queryAll")
 	public Srm queryShippedHeadForList(ShippedHead shippedHead){
+		if(shippedHead.getTrackingNumber() == null)
+			throw new BusinessException("1", "快递单号不能为空");
+		
 		List<ShippedHead> list = shippedHeadService.queryShippedHeadAll(shippedHead);
 		return new Srm().setResultCode("0").setResultMessage("查询邮寄清单主单成功").addAll(list);
 	}

@@ -23,18 +23,26 @@ Ext.define("MIS.view.shipped.StorageAdd", {
 	
 	items: [{
 		fieldLabel: "数量",
-        name: "num",
+        name: "checkNum",
         xtype: "textfield",
         colspan: 1,
         anchor: "55%",
-        readOnly: true
+        disabled: true
     }, {
 		fieldLabel: "下单单价($)",
         name: "unitPrice",
         xtype: "textfield",
         colspan: 1,
         anchor: "55%",
-        readOnly: true
+        disabled: true
+    }, {
+		fieldLabel: "入库数量",
+        name: "num",
+        xtype: "numberfield",
+        colspan: 1,
+        anchor: "55%",
+        minValue: 1,
+        editable: true
     }, {
 		xtype: 'datefield',
 		fieldLabel: "入库时间",
@@ -67,7 +75,7 @@ Ext.define("MIS.view.shipped.StorageAdd", {
  		},
         editable:true
 	}, {
-		fieldLabel: "单个重量(kg)",
+		fieldLabel: "单个重量(磅)",
         name: "weight",
         xtype: "numberfield",
         allowBlank: true,
@@ -117,6 +125,7 @@ Ext.define("MIS.view.shipped.StorageAdd", {
         xtype: "numberfield",
         allowBlank: true,
         decimalPrecision: 2,
+        colspan: 2,
         editable:true
 	}, {
 		fieldLabel: "备注",
@@ -192,6 +201,7 @@ Ext.define("MIS.view.shipped.StorageAdd", {
 					} else {
 		                Ext.ComponentQuery.query("shippedsgrid")[0].store.reload();
 		                Ext.ComponentQuery.query("shippedsgrid")[0].getView().getSelectionModel().deselectAll();
+		                Ext.ComponentQuery.query("shippedgrid")[0].store.reload();
 		                component.up("#shippedstorewindow").close();
 					}
 				},

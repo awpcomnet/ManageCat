@@ -43,6 +43,7 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
                 { header: '系列', dataIndex: 'seriesName', sortable: true, width: 10, align: "center"},
                 { header: '单品', dataIndex: 'singleName', sortable: true, width: 10, align: "center"},
                 { header: '数量', dataIndex: 'num', sortable: true, width: 10, align: "center"},
+                { header: '入库数量', dataIndex: 'storeNum', sortable: true, width: 10, align: "center"},
                 { header: '下单单价($)', dataIndex: 'unitPrice', sortable: true, width: 10, align: "center"},
                 { header: '总价($)', dataIndex: 'sumPrice', sortable: true, width: 10, align: "center"},
                 { header: '付款人', dataIndex: 'payby', sortable: true, width: 10, align: "center"},
@@ -53,7 +54,7 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
 			    { header: '邮寄状态', dataIndex: 'shippedStatus', sortable: true, width: 10, align: "center", renderer: function (value, rowindex, record, column) {
 			    	return MIS.common.DictManager.getDictItemName("orderStatus", value);
                 }},
-                { header: '重量(kg/个)', dataIndex: 'weight', sortable: true, width: 10, align: "center", editor:{ 
+                { header: '重量(磅/个)', dataIndex: 'weight', sortable: true, width: 10, align: "center", editor:{ 
                 	decimalPrecision: 2,
                 	xtype: 'numberfield'
                 }}
@@ -92,20 +93,25 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
 					itemId: 'shippedstore',
 					scope: this,
 					handler: this.onStoreClick
+				}, {
+					iconCls: 'icon-ambulance',
+					text: '后续入库',
+					itemId: 'shippedstorecontinue',
+					scope: this,
+					handler: this.onStoreContinueClick
 				}
-//				, {
-//					iconCls: 'icon-truck',
-//					text: '批量入库',
-//					itemId: 'shippedstoremore',
-//					scope: this,
-//					handler: this.onStoreMoreClick
-//				}
 				, '-', {
 					iconCls: 'icon-file-alt',
 					text: '邮寄清单',
 					itemId: 'partC',
 					scope: this,
 					handler: this.onPartCClick
+				}, {
+					iconCls: 'icon-file-alt',
+					text: '部分入库',
+					itemId: 'partF',
+					scope: this,
+					handler: this.onPartFClick
 				}, {
 					iconCls: 'icon-file-alt',
 					text: '入库清单',
@@ -249,7 +255,7 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
         	id: "shippedstorewindow",
         	extraData: selections[0].raw,
         	renderTo: shippedgridview.getEl(),
-        	height: 390,
+        	height: 430,
         	width: 580,
         	layout: "fit",
         	closeAction: "destroy",
@@ -264,7 +270,9 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
         			
         		},
         		afterrender: function(component, eOpts){
-        			component.down("textfield[name=num]").setValue(selections[0].raw.num);
+        			component.down("textfield[name=checkNum]").setValue(selections[0].raw.num);
+        			component.down("numberfield[name=num]").setValue(selections[0].raw.num - selections[0].raw.storeNum);
+        			component.down("numberfield[name=num]").setMaxValue(selections[0].raw.num - selections[0].raw.storeNum);
         			component.down("textfield[name=unitPrice]").setValue(selections[0].raw.unitPrice);
         			component.down("numberfield[name=weight]").setValue(selections[0].raw.weight);
         			component.down("numberfield[name=unitRmb]").setValue(selections[0].raw.planRmb);
@@ -278,8 +286,53 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
     	editWindow.show();
     },
     
-    onStoreMoreClick: function(component){
+    onStoreContinueClick: function(component){
+    	var selections = this.getView().getSelectionModel().getSelection();
+    	var selectionNum = selections.length;
+    	if(selectionNum != 1){
+    		Ext.MessageBox.alert("请求失败", "请选择单条记录入库");
+    		return;
+    	}
     	
+    	if(selections[0].raw.shippedStatus != 7){
+    		var statusText = MIS.common.DictManager.getDictItemName("orderStatus", selections[0].raw.shippedStatus);
+        	Ext.MessageBox.alert("请求失败", "订单状态不为[部分入库],当前状态["+statusText+"]");
+            return;
+    	}
+    	
+    	var shippedgridview = Ext.ComponentQuery.query("shippedgrid")[0];
+    	var shippedsgridview = Ext.ComponentQuery.query("shippedsgrid")[0];
+    	shippedsgridview.getEl().mask();
+    	
+    	var editWindow = Ext.create("Ext.window.Window", {
+        	title: "["+selections[0].raw.singleName+"]邮寄后续入库信息",
+        	id: "shippedstorecontinuewindow",
+        	extraData: selections[0].raw,
+        	renderTo: shippedgridview.getEl(),
+        	height: 165,
+        	width: 580,
+        	layout: "fit",
+        	closeAction: "destroy",
+        	items: [{
+        		xtype: "storageaddcontinue"
+        	}],
+        	listeners: {
+        		close: function(){
+        			shippedsgridview.getEl().unmask();
+        		},
+        		beforerender: function () {
+        			
+        		},
+        		afterrender: function(component, eOpts){
+        			component.down("textfield[name=checkNum]").setValue(selections[0].raw.num);
+        			component.down("textfield[name=storeNum]").setValue(selections[0].raw.storeNum);
+        			component.down("numberfield[name=num]").setValue(selections[0].raw.num - selections[0].raw.storeNum);
+        			component.down("numberfield[name=num]").setMaxValue(selections[0].raw.num - selections[0].raw.storeNum);
+        			component.down("textfield[name=shippedId]").setValue(selections[0].raw.id);
+    			}
+        	}
+        });
+    	editWindow.show();
     },
     
     onWeightClick: function(component){
@@ -345,6 +398,11 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
     
     onPartEClick: function(component){
     	this.store.proxy.extraParams.shippedStatus = '';
+    	this.store.reload();
+    },
+    
+    onPartFClick: function(component){
+    	this.store.proxy.extraParams.shippedStatus = '7';
     	this.store.reload();
     }
     

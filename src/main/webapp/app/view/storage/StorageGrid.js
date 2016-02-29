@@ -173,7 +173,6 @@ Ext.define("MIS.view.storage.StorageGrid", {
         var ids = [];
         var i=0;
         for(;i<selectionNum;i++){
-        	debugger;
         	if(selections[i].raw.storeStatus != 2){
         		var statusText = MIS.common.DictManager.getDictItemName("orderStatus", selections[i].raw.storeStatus);
             	Ext.MessageBox.alert("请求失败", "["+selections[i].raw.singleName+"]订单状态不为[已入库],当前状态["+statusText+"]");
@@ -248,7 +247,7 @@ Ext.define("MIS.view.storage.StorageGrid", {
         			component.down("textfield[name=unitCost]").setValue(selections[0].raw.unitCost);
         			component.down("textfield[name=residueNum]").setValue(selections[0].raw.residueNum);
         			component.down("numberfield[name=sellNum]").setValue(selections[0].raw.residueNum);
-        			component.down("numberfield[name=sellNum]").setMaxValue(selections[0].raw.residueNum)
+        			component.down("numberfield[name=sellNum]").setMaxValue(selections[0].raw.residueNum);
         			component.down("textarea[name=remark]").setValue(selections[0].raw.remark);
         			component.down("textfield[name=storeId]").setValue(selections[0].raw.id);
         			component.down("numberfield[name=rate]").setValue(15);
