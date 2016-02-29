@@ -2,8 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cat.manage.shipped.dao.ShippedHeadDao">
 
-	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
-
 	<resultMap type="com.cat.manage.shipped.domain.ShippedHead" id="shippedHeadResultMap">
 		<id property="id" column="id"/>
 		<result property="trackingNumber" column="tracking_number"/>
@@ -48,7 +46,7 @@
 	<!-- 查询邮寄清单（主单）记录 -->
 	<select id="queryShippedHead" resultMap="shippedHeadResultMap">
 	select id, tracking_number, transfer_company, submit_time, postage, create_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat 
-	, (select count(1) from t_shipped where head_id = t.id and shipped_status = '1') as shipped_num
+	, (select count(1) from t_shipped where head_id = t.id and shipped_status in ('1', '7')) as shipped_num
 	, (select count(1) from t_shipped where head_id = t.id and shipped_status = '2') as store_num
 	from t_shipped_head t
 	where 1=1
@@ -66,11 +64,11 @@
 	</if>
 	<!-- 筛选邮寄清单中子单未入库主单 -->
 	<if test="param2 == 1">
-		and id in (select head_id from t_shipped where shipped_status = '1')
+		and id in (select head_id from t_shipped where shipped_status in ('1', '7'))
 	</if>
 	<!-- 筛选邮寄清单中子单全已入库主单 -->
 	<if test="param2 == 2">
-		and id not in (select head_id from t_shipped where shipped_status = '1')
+		and id not in (select head_id from t_shipped where shipped_status in ('1', '7'))
 	</if>
 	
 	order by create_date desc

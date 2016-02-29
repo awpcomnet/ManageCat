@@ -17,7 +17,7 @@ Ext.define("MIS.store.shipped.ShippedStore", {
 		},
         extraParams: {
         	headId: "",
-        	shippedStatus: "1"
+        	shippedStatus: ""
         }
 	}
 	

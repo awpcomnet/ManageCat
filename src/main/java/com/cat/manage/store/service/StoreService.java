@@ -54,21 +54,61 @@ public class StoreService {
 		if(shipped == null)
 			throw new BusinessException("1", "邮寄清单不存在");
 		
-		if(!"1".equals(shipped.getShippedStatus()))
-			throw new BusinessException("1", "邮寄清单状态不为[已邮寄]");
+		String status = "";//订单状态
+		Integer storeNum = store.getNum();//准备的入库数量
+		Integer checkNum = shipped.getNum();//下单时数量
+		Integer readyStoreNum = shipped.getStoreNum();//已入库数量
+		if(storeNum <= 0)
+			throw new BusinessException("1", "要入库的数量非法，值为["+storeNum+"]");
 		
-		//设置下单清单状态
-		Integer checkId = shipped.getCheckId();
-		checkService.updateCheckForStatus(new Integer[]{checkId}, "2");//已入库
+		if(checkNum - readyStoreNum < storeNum)
+			throw new BusinessException("1", "要入库的数量大于剩余入库数量。下单数量["+checkNum+"]已入库数量["+readyStoreNum+"]要入库数量["+storeNum+"]");
 		
-		//设置邮寄清单状态
-		shippedService.updateShippedForStatus(new Integer[]{shippedId}, "2");//已入库
+		if(checkNum - readyStoreNum == storeNum) {
+			status = "2";//已入库
+		} else {
+			status = "7";//部分入库
+		}
 		
-		//设置入库状态
-		store.setStoreStatus("2");//已入库
-		
-		//入库
-		storeDao.addStore(shipped, store);
+		if("1".equals(shipped.getShippedStatus()) || "7".equals(shipped.getShippedStatus())){//[已邮寄]状态
+			//设置下单清单状态
+			Integer checkId = shipped.getCheckId();
+			checkService.updateCheckForStatus(new Integer[]{checkId}, status);
+			
+			//设置邮寄清单状态和入库数量
+			shipped.setStoreNum(readyStoreNum + storeNum);
+			shipped.setShippedStatus(status);
+			shippedService.updateShipped(shipped);
+			
+			//查询是否有入库信息
+			Store readyStore = storeDao.queryStoreByCheckId(checkId);
+			if(readyStore == null){
+				//设置入库状态
+				store.setStoreStatus("2");//只要进入仓库就是[已入库]
+				
+				//入库
+				storeDao.addStore(shipped, store);
+			} else {
+				if(readyStore.getNum() != readyStoreNum)
+					throw new BusinessException("1", "邮寄清单中已入库数量与仓库中入库数量不符。已入库数量["+readyStoreNum+"]入库数量["+readyStore.getNum()+"]");
+				readyStore.setNum(readyStoreNum + storeNum);
+				
+				if(readyStore.getSellNum() > readyStoreNum){
+					throw new BusinessException("1", "仓库中收入数量大于入库数量，售出数量["+readyStore.getSellNum()+"],已入库数量["+readyStoreNum+"],要入库数量["+storeNum+"]");
+				} else if(readyStore.getSellNum() == 0){
+					readyStore.setStoreStatus("2");//已入库
+				} else if(readyStore.getSellNum() > 0){
+					readyStore.setStoreStatus("4");//销售中
+				} else if(readyStore.getSellNum() < 0){
+					throw new BusinessException("1", "入库清单中售出数量非法。售出数量["+readyStore.getSellNum()+"]");
+				}
+				
+				storeDao.updateStore(readyStore);
+			}
+			
+		} else {
+			throw new BusinessException("1", "邮寄清单状态不为[已邮寄]或[部分入库]状态");
+		}
 	}
 	
 	/**
@@ -149,6 +189,8 @@ public class StoreService {
 	 * @param ids
 	 */
 	public void deleteStoreByIds(Integer[] ids){
+		String status = "";//订单状态
+		
 		//查询入库清单记录
 		List<Store> list = storeDao.queryStoreByIds(ids);
 		if(list == null){
@@ -169,11 +211,37 @@ public class StoreService {
 			//删除仓库记录
 			storeDao.deleteStoreById(store.getId());
 			
-			//修改邮寄清单状态
-			shippedService.updateShippedForStatus(new Integer[]{shippedId}, "1");//已邮寄
+			//获取仓库中库存数
+			Integer storeNum = store.getNum();
+			if(storeNum <= 0)
+				throw new BusinessException("1", "仓库中数量非法,数量["+storeNum+"]");
+			
+			//查询邮寄清单
+			Shipped shipped = shippedService.queryShippedById(shippedId);
+			if(shipped == null)
+				throw new BusinessException("1", "邮寄清单不存在");
+			
+			Integer checkNum = shipped.getNum();//下单数量
+			Integer readyStoreNum = shipped.getStoreNum();//已入库数量
+			
+			//判断订单状态
+			if(readyStoreNum - storeNum == 0){
+				status = "1";
+			} else if(readyStoreNum - storeNum > 0){
+				status = "7";
+			} else if(readyStoreNum - storeNum < 0){
+				throw new BusinessException("1", "仓库中数量大于邮寄清单中已入库数量，邮寄清单已入库["+readyStoreNum+"]个，仓库中数量["+storeNum+"]");
+			} else if(readyStoreNum - storeNum > checkNum){
+				throw new BusinessException("1", "邮寄清单中数量与已入库数量非法，下单清单数量["+checkNum+"]个，邮寄清单已入库["+readyStoreNum+"]个，仓库中数量["+storeNum+"]");
+			}
+			
+			//修改邮寄清单
+			shipped.setShippedStatus(status);
+			shipped.setStoreNum(readyStoreNum - storeNum);
+			shippedService.updateShipped(shipped);
 			
 			//修改下单清单状态
-			checkService.updateCheckForStatus(new Integer[]{checkId}, "1");//已邮寄
+			checkService.updateCheckForStatus(new Integer[]{checkId}, status);//已邮寄
 		}
 	}
 	

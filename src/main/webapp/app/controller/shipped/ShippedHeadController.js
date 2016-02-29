@@ -21,7 +21,8 @@ Ext.define("MIS.controller.shipped.ShippedHeadController", {
 	    "MIS.view.shipped.ShippedModify",
 	    
 	    "MIS.view.shipped.ShippedsGrid",
-	    "MIS.view.shipped.ShippedsModify"
+	    "MIS.view.shipped.ShippedsModify",
+	    "MIS.view.shipped.StorageAddContinue"
 	    
 	],
 	

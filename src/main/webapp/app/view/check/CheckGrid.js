@@ -327,6 +327,7 @@ Ext.define("MIS.view.check.CheckGrid", {
                     var params = Ext.clone(this.extraData);
     				form.getForm().setValues(params);
     				component.down("textfield[name=checkIds]").setValue(checkIds);
+    				component.down("textfield[name=trackingNumber]").setValue('');
     			}
         	}
         });

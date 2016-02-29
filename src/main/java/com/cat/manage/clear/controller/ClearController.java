@@ -49,4 +49,29 @@ public class ClearController {
 		}
 		return new Srm().setResultCode("0").setResultMessage("导出利润成功");
 	}
+	
+	@RequestMapping("/selled")
+	public Srm getSelledByMonth(String startTime, String endTime, HttpServletResponse response){
+		if(Strings.isNullOrEmpty(startTime))
+			throw new BusinessException("1", "起始时间不能为空");
+		if(Strings.isNullOrEmpty(endTime))
+			throw new BusinessException("1", "结束时间不能为空");
+		
+		OutputStream os = null;
+		try {
+			String excelName = "("+startTime+"-"+endTime+")售出清单文件.xls";
+			response.setHeader("Content-disposition", "attachment;filename=" + new String(excelName.getBytes( "gb2312"), "ISO8859-1"));
+			os = response.getOutputStream();
+			clearService.outPutExcelForSelled(startTime, endTime, os);
+		} catch (IOException e) {
+			throw new BusinessException("1", "文件写出失败");
+		} finally {
+			try {
+				os.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Srm().setResultCode("0").setResultMessage("导出售出清单成功");
+	}
 }

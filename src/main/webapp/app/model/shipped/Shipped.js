@@ -33,6 +33,9 @@ Ext.define("MIS.model.shipped.Shipped", {
 		name: "num",
 		type: "int"
 	}, {
+		name: "storeNum",
+		type: "int"
+	}, {
 		name: "unitPrice",
 		type: "string"
 	}, {
