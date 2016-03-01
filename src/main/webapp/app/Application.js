@@ -30,7 +30,10 @@ Ext.define('MIS.Application', {
                   "MIS.controller.storage.StorageController",//仓库清单
                   "MIS.controller.selled.SelledController", //售出清单
                   "MIS.controller.output.OutputController", //导出控制
-                  "MIS.controller.mailuser.MailUserController" //邮件用户
+                  "MIS.controller.mailuser.MailUserController", //邮件用户
+                  "MIS.controller.user.UserController", //用户管理
+                  "MIS.controller.permission.PermissionController", //权限管理
+                  "MIS.controller.role.RoleController" //角色管理
     ],
 
     stores: [

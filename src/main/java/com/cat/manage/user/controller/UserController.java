@@ -1,5 +1,6 @@
 package com.cat.manage.user.controller;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,7 @@ public class UserController {
 	
 	@RequestMapping("/add")
 	public @ResponseBody Srm addUser(HttpServletRequest request, @CurrentUser User current) { 
-	    /** 1, 获得参数并校验 */
+		/** 1, 获得参数并校验 */
 	    HttpParams params = HttpParams.buildFrom(request);
 	    Map<String, String> requestMap = params.getMap();
 	    
@@ -53,6 +54,7 @@ public class UserController {
 	    String password = assertNotNullOrEmpty(requestMap, "password");
 	    String repeatPa = assertNotNullOrEmpty(requestMap, "repeatPassword");
 	    String userStat = assertNotNullOrEmpty(requestMap, "state");
+	    String[] roles  = request.getParameterValues("roles");
 	    
 	    /** 2, 检查输入的密码是否相等 */
 	    if (!repeatPa.equals(password)) {
@@ -69,9 +71,10 @@ public class UserController {
 	    user.setSalt(salt);
 	    user.setPassword(Md5Util.digest(password + salt));
 	    user.setCreator(current.getUsername());
+	    user.setCreateDate(new Timestamp(System.currentTimeMillis()));
 	    
 	    /** 4, 提交业务类处理 */
-	    userService.addUser(user);
+	    userService.addUser(user, roles);
 
 		return new Srm().setResultCode("0").setResultMessage("新增用户成功");
 	}
@@ -89,28 +92,27 @@ public class UserController {
 	
 	@RequestMapping("/update")
 	public @ResponseBody Srm updateUser(HttpServletRequest request, @CurrentUser User current) {
-	    /** 1, 获得参数并校验 */
+		/** 1, 获得参数并校验 */
         HttpParams params = HttpParams.buildFrom(request);
         Map<String, String> requestMap = params.getMap();
         
-        int id = params.getInt("userId");
+        int id = params.getInt("id");
         String username = assertNotNullOrEmpty(requestMap, "username");
         String realname = assertNotNullOrEmpty(requestMap, "realname");
-        String email = assertNotNullOrEmpty(requestMap, "email");
         String userStat = assertNotNullOrEmpty(requestMap, "state");
-        String depts    = requestMap.get("departments");
-        String roles    = requestMap.get("roles");
+        String[] roles    = request.getParameterValues("roles");
         
         /** 2, 组装User模型 */
         User user = new User();
         user.setUserId(id);
         user.setUsername(username);
         user.setRealname(realname);
-        user.setEmail(email);
         user.setState(userStat);
+        user.setModifier(current.getUsername());
+        user.setModifyDate(new Timestamp(System.currentTimeMillis()));
         
         /** 3, 更新行为信息 */
-        userService.updateUser(user, depts, roles);
+        userService.updateUser(user, roles);
         
 	    return new Srm().setResultCode("0").setResultMessage("更新用户数据成功");
 	}

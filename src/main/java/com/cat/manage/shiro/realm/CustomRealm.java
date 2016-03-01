@@ -32,8 +32,8 @@ public class CustomRealm extends AuthorizingRealm {
         String username = (String)principals.getPrimaryPrincipal(); 
         
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-//        authorizationInfo.setRoles(userService.findRolesByUsername(username));
-//        authorizationInfo.setStringPermissions(userService.findPermissionByUsername(username));
+        authorizationInfo.setRoles(userService.findRolesByUsername(username));
+        authorizationInfo.setStringPermissions(userService.findPermissionByUsername(username));
         
         return authorizationInfo;
     }

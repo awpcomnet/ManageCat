@@ -2,48 +2,75 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cat.manage.user.dao.UserDao">
 
-    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
 
-    <resultMap id="userMap" type="com.cat.manage.user.domain.User">
-        <id property="userId" column="user_id" />
-        <result property="username" column="user_name" />
-        <result property="realname" column="real_name" />
-        <result property="password" column="pass_word" />
-        <result property="salt" column="salt" />
-        <result property="email" column="email"/>
-        <result property="state" column="state" />
-        <result property="loginTimes" column="login_times" />
-        <result property="lastLoginDate" column="last_login_date" />
-        <result property="createDate" column="create_date" />
-        <result property="creator" column="creator" />
-        <result property="modifyDate" column="modify_date" />
-        <result property="modifier" column="modifier" />
-    </resultMap>
-    
-     <select id="getUserByUsername" resultMap="userMap">
+	<resultMap id="userMap" type="com.cat.manage.user.domain.User">
+		<id property="userId" column="user_id" />
+		<result property="username" column="user_name" />
+		<result property="realname" column="real_name" />
+		<result property="password" column="pass_word" />
+		<result property="salt" column="salt" />
+		<result property="email" column="email" />
+		<result property="state" column="state" />
+		<result property="loginTimes" column="login_times" />
+		<result property="lastLoginDate" column="last_login_date" />
+		<result property="createDate" column="create_date" />
+		<result property="creator" column="creator" />
+		<result property="modifyDate" column="modify_date" />
+		<result property="modifier" column="modifier" />
+	</resultMap>
+
+	<select id="getUserByUsername" resultMap="userMap">
         <![CDATA[
         select user_id, user_name, real_name, pass_word, salt, email, state, login_times, last_login_date, create_date, creator, 
 		modifier, modify_date from t_user where user_name = #{username}
         ]]>
-    </select>
-    
-    
-    <select id="getAllUsers" resultMap="userMap">
+	</select>
+
+
+	<select id="getAllUsers" resultMap="userMap">
         <![CDATA[
             select user_id, user_name, real_name, email, state, login_times from t_user order by user_id asc, create_date desc
         ]]>
-    </select>
-    
-    <!-- 增加一个用户 -->
-    <insert id="addUser" parameterType="com.cat.manage.user.domain.User">
-        INSERT INTO t_user (user_name, real_name, pass_word, salt, email, state, create_date, creator, modify_date, modifier) 
-        VALUES (#{username}, #{realname}, #{password}, #{salt}, #{email}, #{state}, now(), 'system', now(), 'system')
-    </insert>
-    
-    <!-- 更新一个用户 -->
-    <update id="updateUser" parameterType="com.cat.manage.user.domain.User">
-        UPDATE t_user SET user_name = #{username}, real_name = #{realname}, email=#{email}, state = #{state}, modifier = "system", modify_date = now()
-        WHERE user_id = #{userId}
-    </update>
-   
+	</select>
+
+	<!-- 增加一个用户 -->
+	<insert id="addUser" parameterType="com.cat.manage.user.domain.User">
+		INSERT INTO t_user (user_name, real_name, pass_word, salt, state,
+		create_date, creator, modify_date, modifier)
+		VALUES (#{username}, #{realname}, #{password}, #{salt}, #{state},
+		now(), 'system', now(), 'system')
+	</insert>
+	
+	<!-- 根据用户名查询用户信息 -->
+	<select id="queryByUserName" parameterType="java.lang.String" resultMap="userMap">
+	select user_id, user_name, real_name, email, state, login_times, last_login_date from t_user
+	where user_name = #{userName} 
+	</select>
+
+	<!-- 更新一个用户 -->
+	<update id="updateUser" parameterType="com.cat.manage.user.domain.User">
+		UPDATE t_user SET user_name = #{username}, real_name = #{realname}, state = #{state}, modifier = "system", modify_date = now()
+		<if test="email != null and email != ''">
+			, email=#{email}
+		</if>
+		WHERE user_id = #{userId}
+	</update>
+
+	<!-- 增加用户角色关系 -->
+	<insert id="addUserRoleRelation" parameterType="java.util.HashMap">
+	insert into t_user_role_relation (user_id, role_id)
+	values(#{userId}, #{roleId})
+	</insert>
+	
+	<!-- 通过用户Id查询用户所拥有角色Id -->
+	<select id="getRoleidByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+	select role_id from t_user_role_relation
+	where user_id = #{id}
+	</select>
+
+	<!-- 根据用户编号删除 用户角色关系信息 -->
+	<delete id="deleteUserRoleRelationByUserId" parameterType="java.lang.Integer">
+	delete from t_user_role_relation where user_id = #{userId}
+	</delete>
 </mapper>

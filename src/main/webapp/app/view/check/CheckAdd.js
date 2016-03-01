@@ -198,7 +198,7 @@ Ext.define("MIS.view.check.CheckAdd", {
         xtype: "combobox",
         store: Ext.create("MIS.store.user.UserStore"),
         mode: "local",
-        displayField: 'realname',
+        displayField: 'username',
         valueField: "realname",
         allowBlank: true,
         editable:false

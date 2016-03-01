@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.manage.permission.dao.PermissionDao">
+
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
+	<resultMap id="permissionMap" type="com.cat.manage.permission.domain.Permission">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="code" column="code" />
+		<result property="url" column="url" />
+		<result property="catalogId" column="catalog_id" />
+	</resultMap>
+	
+	<!-- 添加权限 -->
+	<insert id="addPermission" parameterType="com.cat.manage.permission.domain.Permission">
+	insert into t_permission (name, code, url, catalog_id)
+	values(#{name}, #{code}, #{url}, #{catalogId})
+	</insert>
+	
+	<!-- 修改权限 -->
+	<update id="updatePermission" parameterType="com.cat.manage.permission.domain.Permission">
+	update t_permission set name = #{name}, code = #{code}, url = #{url}, catalog_id = #{catalogId}
+	where id = #{id}
+	</update>
+	
+	<!-- 删除权限 -->
+	<delete id="deletePermissionByIds" parameterType="java.lang.Integer">
+	delete from t_permission where id in 
+		<foreach collection="array" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+	</delete>
+	
+	<!-- 查询所有权限 -->
+	<select id="queryPermissionAll" resultMap="permissionMap">
+	select id, name, code, url, catalog_id from t_permission where 1=1
+	</select>
+	
+	<!-- 根据查询条件查询符合的记录 -->
+	<select id="queryPermissionByCondition" parameterType="com.cat.manage.permission.domain.Permission" resultMap="permissionMap">
+        SELECT id, name, code, url, catalog_id FROM t_permission WHERE 1 = 1
+        <if test="name != null and name != ''">
+            and name LIKE '%' || #{name} || '%' 
+        </if>
+        <if test="code != null and code != ''">
+            and code LIKE '%' || #{code} || '%' 
+        </if>
+        <if test="url != null and url != ''">
+            and url LIKE '%' || #{url} || '%' 
+        </if>
+        <if test="catalogId != null">
+            and catalog_id = #{catalogId}
+        </if>
+        ORDER BY id ASC
+    </select>
+    
+    <!-- 读取某个目录权限 -->
+    <select id="getCatalogPermissionInfo" resultMap="permissionMap" parameterType="java.lang.Integer">
+        SELECT id, name, abbr AS code, '' AS url, parent_id AS catalog_id FROM t_work_catalog
+        WHERE id = #{id} 
+    </select>
+    
+    <!-- 查找所有栏目权限 -->
+    <select id="getCatalogPermission" resultMap="permissionMap" parameterType="java.lang.Integer">
+        SELECT id, name, abbr AS code, '' AS url, parent_id AS catalog_id FROM t_work_catalog
+        WHERE parent_id = #{id} 
+        ORDER BY id ASC
+    </select>
+    
+    <!-- 查找栏目下的功能权限 -->
+    <select id="getFunctionPermission" resultMap="permissionMap" parameterType="java.lang.Integer">
+        SELECT id, name, code, url, catalog_id AS catalog_id FROM t_permission
+        WHERE catalog_id = #{id} 
+        ORDER BY id ASC
+    </select>
+</mapper>

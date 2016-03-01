@@ -34,7 +34,7 @@ public class NewUser {
 		user.setEmail("");
 		user.setState("0");
 		
-		userService.addUser(user);
+//		userService.addUser(user);
 		LOG.info("添加用户结束");
 	}
 	

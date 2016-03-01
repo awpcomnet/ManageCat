@@ -2,6 +2,7 @@ package com.cat.manage.catalog.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cat.manage.catalog.domain.Catalog;
 import com.cat.manage.catalog.service.CatalogService;
+import com.cat.manage.common.exception.ParameterException;
 import com.cat.manage.common.model.Srm;
+import com.cat.manage.shiro.user.CurrentUser;
+import com.cat.manage.user.domain.User;
+import com.cat.manage.user.service.UserService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -25,6 +30,9 @@ public class CatalogController {
 	
 	@Autowired
 	private CatalogService catalogService;
+	
+	@Autowired
+	private UserService userService;
 	
 	/**
 	 * 查询所有栏目, 以栏目树的形式返回
@@ -130,6 +138,52 @@ public class CatalogController {
 		
 		return new Srm().setResultCode("0").setResultMessage("查询成功!").addAll(catalogList);
 	}
+	
+	@RequestMapping("/queryUserCatalog")
+    public Srm getCatalogTree(Catalog cl, @CurrentUser User user) {
+        List<Catalog> catalogs = catalogService.findSubCatalogsForFuzzy(cl);
+        List<Map<String, Object>> catalogList = Lists.newArrayList();
+
+        Integer userId = user.getUserId();
+        String username = user.getUsername();
+        if (userId == null) {
+            throw new ParameterException("3", "请先登录");
+        }
+        Set<Integer> catalogIds = userService.getUserCatalog(userId);
+        
+        if (catalogs != null && catalogs.size() > 0) {
+            for (int i = 0, len = catalogs.size(); i < len; i++) {
+                Catalog catalog = catalogs.get(i);
+                Map<String, Object> cata = Maps.newHashMap();
+
+                cata.put("id", catalog.getId());
+                cata.put("parentId", catalog.getParentId());
+                cata.put("text", catalog.getName());
+                cata.put("iconCls", catalog.getIcon());
+                cata.put("urlType", catalog.getUrlType());
+                cata.put("url", catalog.getUrl());
+                cata.put("abbr", catalog.getAbbr());
+                cata.put("description", catalog.getDescription());
+                cata.put("state", catalog.getState());
+                cata.put("orderNum", catalog.getOrder());
+
+                if (catalog.isLeaf()) {
+                    cata.put("leaf", true);
+                } else {
+                    cata.put("expanded", false);
+                }
+
+                if(catalog.getState().equals("false"))
+                	continue;
+                
+                if ((catalogIds != null && catalogIds.contains(catalog.getId())) || "admin".equals(username)) {
+                    catalogList.add(cata);
+                }
+            }
+        }
+        
+        return new Srm().setResultCode("0").setResultMessage("查询成功!").addAll(catalogList);
+    }
 	
 	private static final Logger LOG = LoggerFactory.getLogger(CatalogController.class);
 }
