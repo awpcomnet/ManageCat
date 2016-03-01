@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.manage.role.dao.RoleDao">
+
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
+	<resultMap id="roleMap" type="com.cat.manage.role.domain.Role">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="code" column="code" />
+		<result property="permissionIds" column="permission_ids" />
+	</resultMap>
+	
+	<!-- 添加角色信息 -->
+	<insert id="addRole" parameterType="com.cat.manage.role.domain.Role">
+	insert into t_role (name, code)
+	values(#{name}, #{code})
+	</insert>
+	
+	<!-- 修改角色信息 -->
+	<update id="updateRole" parameterType="com.cat.manage.role.domain.Role">
+	update t_role set name = #{name}, code = #{code}, permission_ids = #{permissionIds}
+	where id = #{id}
+	</update>
+	
+	<!-- 根据角色唯一编号删除角色信息 -->
+	<delete id="deleteRole" parameterType="java.lang.Integer">
+	delete from t_role where id in 
+		<foreach collection="array" item="item" index="index" open="(" separator="," close=")">#{item}</foreach> 
+	</delete>
+	
+	<!-- 查询所有角色信息 -->
+	<select id="queryAll" resultMap="roleMap">
+	select id, name, code, permission_ids from t_role ORDER BY id ASC
+	</select>
+	
+	<!-- 删除角色权限信息 -->
+	<delete id="deleteRolePermission" parameterType="java.lang.Integer">
+        DELETE FROM t_role_permission_relation WHERE role_id = #{roleId}
+    </delete>
+    
+    <!-- 增加角色权限信息 -->
+    <insert id="insertRolePermission" parameterType="java.util.HashMap">
+        INSERT INTO t_role_permission_relation (role_id, permission_id, permission_type)
+        VALUES (#{roleId}, #{permissionId}, #{permissionType})
+    </insert>
+    
+    <!-- 查询某角色的所有权限信息 -->
+    <select id="getRolePermission" resultType="java.util.HashMap">
+        SELECT permission_id permissionId, permission_type permissionType FROM t_role_permission_relation WHERE role_id = #{roleId}
+    </select>
+
+	<!-- 根据角色id查询所有的栏目资源id -->
+    <select id="getCatalogIdByRoleId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT permission_id FROM t_role_permission_relation WHERE role_id = #{roleId} AND permission_type = '0'
+    </select>
+</mapper>

@@ -31,6 +31,13 @@ public interface UserDao {
 	void updateUser(User user);
 	
 	/**
+	 * 根据用户名查询用户信息
+	 * @param userName
+	 * @return
+	 */
+	User queryByUserName(String userName);
+	
+	/**
 	 * 根据用户id的数组删除用户数组
 	 */
 	//void deleteByIds(int[] ids);
@@ -38,10 +45,16 @@ public interface UserDao {
 	/**
 	 * 增加用户角色关系
 	 */
-	//void addUserRoleRelation(Map<String, Integer> relation);
+	void addUserRoleRelation(Map<String, Integer> relation);
 	
 	/**
 	 * 通过用户Id查询用户所拥有角色Id
 	 */
-	//List<Integer> getRoleidByUserid(Integer id);
+	List<Integer> getRoleidByUserid(Integer id);
+	
+	/**
+	 * 根据用户编号删除 用户角色关系信息
+	 * @param userId
+	 */
+	public void deleteUserRoleRelationByUserId(Integer userId);
 }
