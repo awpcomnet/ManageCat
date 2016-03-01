@@ -57,7 +57,7 @@ public class PermissionService {
      * 构建权限树
      */
     public Permission readPermissionTree() {
-        Permission root =  permissionDao.getCatalogPermissionInfo(1);//根目录
+        Permission root =  permissionDao.getCatalogPermissionInfo(0);//根目录
         buildPermissionTree(root);
         
         return root;
@@ -78,5 +78,23 @@ public class PermissionService {
             List<Permission> permissions = permissionDao.getFunctionPermission(permission.getId());
             permission.setSubPermissions(permissions);
         }
+    }
+    
+    /**
+     * 根据角色ID在角色权限关系表中查询权限ID
+     * @param roleId
+     * @return
+     */
+    public List<Integer> getPermissionIdByRelationRoleId(Integer roleId){
+    	return permissionDao.getPermissionIdByRelationRoleId(roleId);
+    }
+    
+    /**
+     * 根据权限编号查询权限信息
+     * @param id
+     * @return
+     */
+    public Permission getPermissionById(Integer id){
+    	return permissionDao.getPermissionById(id);
     }
 }

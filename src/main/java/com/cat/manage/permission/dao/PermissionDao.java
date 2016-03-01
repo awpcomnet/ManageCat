@@ -58,4 +58,18 @@ public interface PermissionDao {
      */
     public List<Permission> getFunctionPermission(Integer id);
     
+    /**
+     * 根据角色ID在角色权限关系表中查询权限ID
+     * @param roleId
+     * @return
+     */
+    public List<Integer> getPermissionIdByRelationRoleId(Integer roleId);
+    
+    /**
+     * 根据权限编号查询权限信息
+     * @param id
+     * @return
+     */
+    public Permission getPermissionById(Integer id);
+    
 }

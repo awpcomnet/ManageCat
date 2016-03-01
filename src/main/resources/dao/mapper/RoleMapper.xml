@@ -54,4 +54,9 @@
     <select id="getCatalogIdByRoleId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT permission_id FROM t_role_permission_relation WHERE role_id = #{roleId} AND permission_type = '0'
     </select>
+    
+    <!-- 根据角色编号查询角色信息 -->
+    <select id="queryRoleById" parameterType="java.lang.Integer" resultMap="roleMap">
+	select id, name, code, permission_ids from t_role where id = #{id}
+	</select>
 </mapper>

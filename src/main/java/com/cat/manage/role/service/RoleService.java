@@ -106,4 +106,12 @@ public class RoleService {
         return roleDao.getCatalogIdByRoleId(roleId);
     }
 	
+	/**
+	 * 根据编号查询角色信息
+	 * @param id
+	 * @return
+	 */
+	public Role queryRoleById(Integer id){
+		return roleDao.queryRoleById(id);
+	}
 }

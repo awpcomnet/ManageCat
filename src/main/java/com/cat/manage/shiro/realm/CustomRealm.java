@@ -16,7 +16,7 @@ import com.cat.manage.user.service.UserService;
 
 /**
  * @Description: 安全数据源
- * @author 汪博
+ * @author 
  * @date 2015年11月30日 下午1:53:48
  */
 public class CustomRealm extends AuthorizingRealm {

@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.cat.manage.common.exception.BusinessException;
 import com.cat.manage.common.util.Md5Util;
+import com.cat.manage.permission.domain.Permission;
+import com.cat.manage.permission.service.PermissionService;
+import com.cat.manage.role.domain.Role;
 import com.cat.manage.role.service.RoleService;
 import com.cat.manage.user.dao.UserDao;
 import com.cat.manage.user.domain.User;
@@ -19,6 +22,7 @@ import com.cat.manage.user.service.exception.LoginException;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 /**
  * @Description: 管理系统用户相关业务
@@ -33,6 +37,9 @@ public class UserService {
 	
 	@Autowired
 	private RoleService roleService;
+	
+	@Autowired
+	private PermissionService permissionService;
 	
 	/**
 	 * 用户登录方法
@@ -127,6 +134,9 @@ public class UserService {
 	    
 	    //3.添加角色
 	    for(String r : roles){
+	    	if(Strings.isNullOrEmpty(r))
+	    		continue;
+	    	
 	    	Map<String, Integer> map = Maps.newHashMap();
 	    	map.put("userId", user.getUserId());
 	    	map.put("roleId", Integer.valueOf(r));
@@ -139,6 +149,24 @@ public class UserService {
 	 * 通过用户名查找用户所拥有的角色名
 	 */
 	public Set<String> findRolesByUsername(String username) {
+		Set<String> set = Sets.newHashSet();
+		
+		User user = userDao.getUserByUsername(username);
+		if(user == null)
+			throw new BusinessException("1", "["+username+"]用户不存在");
+		
+		List<Integer> roleIds = userDao.getRoleidByUserid(user.getUserId());
+		if(roleIds == null)
+			return null;
+		
+		for(int i=0,len=roleIds.size(); i<len; i++){
+			Integer roleId = roleIds.get(i);
+			Role role = roleService.queryRoleById(roleId);
+			if(role == null)
+				continue;
+			set.add(role.getCode());
+		}
+		
 	    return null;
 	}
 	
@@ -146,6 +174,35 @@ public class UserService {
 	 * 通过用户名查找用户所拥有的权限名
 	 */
 	public Set<String> findPermissionByUsername(String username) {
+		Set<String> set = Sets.newHashSet();
+		
+		User user = userDao.getUserByUsername(username);
+		if(user == null)
+			throw new BusinessException("1", "["+username+"]用户不存在");
+		
+		List<Integer> roleIds = userDao.getRoleidByUserid(user.getUserId());
+		if(roleIds == null)
+			return null;
+		
+		for(int i=0,len=roleIds.size(); i<len; i++){
+			Integer roleId = roleIds.get(i);
+			Role role = roleService.queryRoleById(roleId);
+			if(role == null)
+				continue;
+			//查询关联的权限id
+			List<Integer> permissionIds = permissionService.getPermissionIdByRelationRoleId(roleId);
+			if(permissionIds == null)
+				continue;
+			
+			for(int j=0, plen=permissionIds.size(); j<plen; j++){
+				Permission permission = permissionService.getPermissionById(permissionIds.get(j));
+				if(permission == null)
+					continue;
+				set.add(permission.getCode());
+			}
+			
+		}
+		
 	    return  null;
 	}
 	

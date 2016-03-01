@@ -34,7 +34,6 @@ Ext.define("MIS.view.permission.PermissionGrid", {
                 { header: '编号', dataIndex: 'id', sortable: true, hideable: false, width: 30, align: "center"},
                 { header: '权限名称', dataIndex: 'name', sortable: true},
                 { header: '权限代码', dataIndex: 'code', sortable: true},
-                { header: '类型', dataIndex: 'type', sortable: false},
                 { header: '关联资源地址', dataIndex: 'url', sortable: false},
                 { 
                     header: '所属栏目ID', dataIndex: 'catalogId', sortable: false

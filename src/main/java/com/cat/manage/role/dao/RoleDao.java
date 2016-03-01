@@ -58,4 +58,11 @@ public interface RoleDao {
 	 * 通过角色id查询栏目资源的id
 	 */
 	List<Integer> getCatalogIdByRoleId(Integer roleId);
+	
+	/**
+	 * 根据角色编号查询角色信息
+	 * @param id
+	 * @return
+	 */
+	public Role queryRoleById(Integer id);
 }

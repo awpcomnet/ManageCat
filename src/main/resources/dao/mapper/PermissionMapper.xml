@@ -72,4 +72,14 @@
         WHERE catalog_id = #{id} 
         ORDER BY id ASC
     </select>
+    
+    <!-- 根据角色ID在角色权限关系表中查询权限ID -->
+    <select id="getPermissionIdByRelationRoleId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select permission_id from t_role_permission_relation where role_id = #{roleId}
+    </select>
+    
+    <!-- 根据权限编号查询权限信息 -->
+    <select id="getPermissionById" parameterType="java.lang.Integer" resultMap="permissionMap">
+	select id, name, code, url, catalog_id from t_permission where id = #{id}
+	</select>
 </mapper>
