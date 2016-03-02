@@ -14,6 +14,11 @@
 		<property name="loginUrl" value="/login.html" />
 		<property name="successUrl" value="/" />
 		<property name="unauthorizedUrl" value="/403" />
+		<property name="filters">    
+           <map>    
+               <entry key="sperm" value-ref="myAuthorizerFilter"/>  
+           </map>    
+       </property> 
 		<property name="filterChainDefinitions">
 			<value>
 				/favicon.ico      = anon
@@ -30,11 +35,14 @@
 				/app.json         = anon
 				/bootstrap.css    = anon
 				/bootstrap.json   = anon
+				/bootstrap.js 	  = anon
 
 				/                 = user
-				/index.html       = user
+				/index.html       = user 
 				/druid/**         = user
-				/**               = user
+				
+				/**               = sperm
+				
 			</value>
 		</property>
 	</bean>
@@ -48,6 +56,7 @@
 	<bean id="customRealm" class="com.cat.manage.shiro.realm.CustomRealm" />
 	<bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+	<bean id="myAuthorizerFilter" class="com.cat.manage.shiro.realm.MyAuthorizerFilter"></bean>
 
 	<bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
 		<constructor-arg value="rememberMe" />

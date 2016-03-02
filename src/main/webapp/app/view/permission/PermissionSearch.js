@@ -49,13 +49,15 @@ Ext.define("MIS.view.permission.PermissionSearch", {
             fieldLabel: "资源地址",
             name: "url",
             flex: 1
-        }, {
-            xtype: "textfield",
-            fieldLabel: "权限类型",
-            name: "type",
-            flex: 1,
-            style: "margin-left: 10px;"
-        }]
+        }
+//        , {
+//            xtype: "textfield",
+//            fieldLabel: "权限类型",
+//            name: "type",
+//            flex: 1,
+//            style: "margin-left: 10px;"
+//        }
+        ]
     }],
 
     buttons: [{

@@ -15,6 +15,7 @@ public class Permission implements Serializable{
 	private String code;//代码
 	private String url;//url
 	private Integer catalogId;//栏目ID
+	private String Type;//类型
 	
 	List<Permission> subPermissions;
 	
@@ -66,10 +67,19 @@ public class Permission implements Serializable{
 		this.subPermissions = subPermissions;
 	}
 
+	public String getType() {
+		return Type;
+	}
+
+	public void setType(String type) {
+		Type = type;
+	}
+
 	@Override
 	public String toString() {
 		return "Permission [id=" + id + ", name=" + name + ", code=" + code
-				+ ", url=" + url + ", catalogId=" + catalogId + "]";
+				+ ", url=" + url + ", catalogId=" + catalogId + ", Type="
+				+ Type + ", subPermissions=" + subPermissions + "]";
 	}
 
 	private static final long serialVersionUID = 6048676420072753858L;

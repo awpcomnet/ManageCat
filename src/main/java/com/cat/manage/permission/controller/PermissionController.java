@@ -146,12 +146,12 @@ public class PermissionController {
     
     
     @RequestMapping("/tree")
-    public Srm onGetPermissionTree(Integer roleId) {
-        if (roleId == null) {
+    public Srm onGetPermissionTree(Integer id) {
+        if (id == null) {
             throw new ParameterException("1", "角色ID不能为空");
         }
         
-        List<Map<String, Object>> rolePermission = roleService.getRolePermission(roleId);
+        List<Map<String, Object>> rolePermission = roleService.getRolePermission(id);
         
         Permission root = permissionService.readPermissionTree();
         Map<String, Object> rootMap = new HashMap<String, Object>();
@@ -169,16 +169,18 @@ public class PermissionController {
         String name = permission.getName();
         String code = permission.getCode();
         String url  = permission.getUrl();
+        String type = permission.getType();
         Integer catalogId = permission.getCatalogId();
         List<Permission> pl = permission.getSubPermissions();
         
-        map.put("id", id);
+        map.put("pid", id);
         map.put("text", name);
         map.put("code", code);
         map.put("url", url);
+        map.put("type", type);
         map.put("catalogId", catalogId);
         
-        if (hasPermission(rolePermission, id, "0")) {
+        if (hasPermission(rolePermission, id, type)) {
             map.put("checked", true);
         } else {
             map.put("checked", false);
@@ -207,10 +209,10 @@ public class PermissionController {
         
         for (Iterator<Map<String, Object>> it = rolePermission.iterator(); it.hasNext();) {
             Map<String, Object> per = it.next();
-            Integer perId  = ((BigDecimal)per.get("PERMISSIONID")).intValue();
-            String perType = (String)per.get("PERMISSIONTYPE");
+            Integer perId  = (Integer)per.get("permissionId");
+            String perType = per.get("permissionType")+"";
             
-            if (perId.equals(permissionId) && perType.equals(permissionType)) {
+            if ((perId.equals(permissionId)) && perType.equals(permissionType)) {
                 return true;
             }
         }

@@ -15,7 +15,7 @@ Ext.define("MIS.view.role.RoleEditPermissionPanel", {
                 root: {
                     text: "权限根",
                     expanded: true,
-                    id: 0,
+                    pid: 0,
                     checked: true,
                     type: 0
                 },
@@ -28,7 +28,7 @@ Ext.define("MIS.view.role.RoleEditPermissionPanel", {
                         root: "results"
                     },
                     extraParams: {
-                        roleId: me.role.raw.id
+                        id: me.role.raw.id
                     }
                 }
             })

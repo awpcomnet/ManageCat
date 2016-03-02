@@ -70,13 +70,16 @@ public class PermissionService {
         List<Permission> catalogs = permissionDao.getCatalogPermission(permission.getId());
         if (catalogs != null && catalogs.size() > 0) {
             permission.setSubPermissions(catalogs);
+            //permission.setType("0");//非末节点
             
             for (Permission ca : catalogs) {
+            	//ca.setType("0");
                 buildPermissionTree(ca);
             }
         } else {
             List<Permission> permissions = permissionDao.getFunctionPermission(permission.getId());
             permission.setSubPermissions(permissions);
+            //permission.setType("1");//末节点
         }
     }
     

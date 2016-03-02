@@ -68,7 +68,7 @@ Ext.define("MIS.view.permission.PermissionModify", {
 
             component.down("textfield[name=name]").setValue(me.tempData.record.raw.name);
             component.down("textfield[name=code]").setValue(me.tempData.record.raw.code);
-            component.down("textfield[name=type]").setValue(me.tempData.record.raw.type);
+//            component.down("textfield[name=type]").setValue(me.tempData.record.raw.type);
             component.down("textfield[name=url]").setValue(me.tempData.record.raw.url);
         },
         afterrender: function (component) {
