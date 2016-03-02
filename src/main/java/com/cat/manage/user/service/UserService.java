@@ -166,8 +166,7 @@ public class UserService {
 				continue;
 			set.add(role.getCode());
 		}
-		
-	    return null;
+	    return set;
 	}
 	
 	/**
@@ -202,8 +201,7 @@ public class UserService {
 			}
 			
 		}
-		
-	    return  null;
+	    return  set;
 	}
 	
 	/**

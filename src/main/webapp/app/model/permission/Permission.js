@@ -20,5 +20,8 @@ Ext.define("MIS.model.permission.Permission", {
     }, {
         name: "catalogId",
         type: "int"
+    }, {
+    	name: "type",
+    	type: "string"
     }]  
 });

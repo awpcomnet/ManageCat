@@ -38,15 +38,16 @@ Ext.define("MIS.view.permission.PermissionDetail", {
             labelWidth: 60,
             allowBlank: false
         },
-        items: [{
-            xtype: "textfield",
-            fieldLabel: "类型",
-            name: "type"
-        }, {
+        items: [
+//                {
+//            xtype: "textfield",
+//            fieldLabel: "类型",
+//            name: "type"
+//        }, 
+        {
             xtype: "textfield",
             fieldLabel: "关联地址",
-            name: "url",
-            style: "margin-left: 10px;"
+            name: "url"
         }]
     }]
 });

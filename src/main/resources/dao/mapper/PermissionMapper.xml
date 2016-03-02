@@ -10,6 +10,7 @@
 		<result property="code" column="code" />
 		<result property="url" column="url" />
 		<result property="catalogId" column="catalog_id" />
+		<result property="type" column="type"/>
 	</resultMap>
 	
 	<!-- 添加权限 -->
@@ -20,7 +21,7 @@
 	
 	<!-- 修改权限 -->
 	<update id="updatePermission" parameterType="com.cat.manage.permission.domain.Permission">
-	update t_permission set name = #{name}, code = #{code}, url = #{url}, catalog_id = #{catalogId}
+	update t_permission set name = #{name}, code = #{code}, url = #{url} 
 	where id = #{id}
 	</update>
 	
@@ -55,20 +56,20 @@
     
     <!-- 读取某个目录权限 -->
     <select id="getCatalogPermissionInfo" resultMap="permissionMap" parameterType="java.lang.Integer">
-        SELECT id, name, abbr AS code, '' AS url, parent_id AS catalog_id FROM t_work_catalog
+        SELECT id, name, abbr AS code, 0 AS type, '' AS url, parent_id AS catalog_id FROM t_work_catalog
         WHERE id = #{id} 
     </select>
     
     <!-- 查找所有栏目权限 -->
     <select id="getCatalogPermission" resultMap="permissionMap" parameterType="java.lang.Integer">
-        SELECT id, name, abbr AS code, '' AS url, parent_id AS catalog_id FROM t_work_catalog
+        SELECT id, name, abbr AS code, 0 AS type,  '' AS url, parent_id AS catalog_id FROM t_work_catalog
         WHERE parent_id = #{id} 
         ORDER BY id ASC
     </select>
     
     <!-- 查找栏目下的功能权限 -->
     <select id="getFunctionPermission" resultMap="permissionMap" parameterType="java.lang.Integer">
-        SELECT id, name, code, url, catalog_id AS catalog_id FROM t_permission
+        SELECT id, name, code, 1 AS type, url, catalog_id AS catalog_id FROM t_permission
         WHERE catalog_id = #{id} 
         ORDER BY id ASC
     </select>

@@ -40,7 +40,7 @@ Ext.define("MIS.view.role.RoleEditPermission", {
             Ext.Array.each(selections, function (node) {
                 rolePermissionRelation.push({
                     roleId: roleRecord.raw.id,
-                    permissionId: node.raw.id,
+                    permissionId: node.raw.pid,
                     permissionType: node.raw.type
                 });
             });
@@ -48,7 +48,7 @@ Ext.define("MIS.view.role.RoleEditPermission", {
                 url: "/role/updatepermission",
                 params: {
                     roleId: roleRecord.raw.id,
-                    permissionIds: Ext.JSON.encode(rolePermissionRelation)
+                    permissionString: Ext.JSON.encode(rolePermissionRelation)
                 },
                 success: function (response) {
                     var result = Ext.decode(response.responseText);

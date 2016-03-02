@@ -47,7 +47,7 @@
     
     <!-- 查询某角色的所有权限信息 -->
     <select id="getRolePermission" resultType="java.util.HashMap">
-        SELECT permission_id permissionId, permission_type permissionType FROM t_role_permission_relation WHERE role_id = #{roleId}
+        SELECT permission_id AS permissionId, permission_type AS permissionType FROM t_role_permission_relation WHERE role_id = #{roleId}
     </select>
 
 	<!-- 根据角色id查询所有的栏目资源id -->
