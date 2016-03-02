@@ -113,6 +113,9 @@ public class UserService {
 		// 2, 获得用户id
 		int id = user.getUserId();
 		for (int i = 0, len = roles.length; i < len; i++) {
+			if(Strings.isNullOrEmpty(roles[i])){
+				continue;
+			}
 			int roleId = Integer.valueOf(roles[i]);
 			Map<String, Integer> relation = new HashMap<String, Integer>();
 			relation.put("userId", id);

@@ -54,11 +54,13 @@ Ext.define("MIS.view.user.UserDetailsForm", {
             xtype: "textfield",
             fieldLabel: "密码",
             allowBlank: false,
+            inputType:'password',
             name: "password"
         }, {
             xtype: "textfield",
             fieldLabel: "确认密码",
             allowBlank: false,
+            inputType:'password',
             name: "repeatPassword"
         }]
     }, {

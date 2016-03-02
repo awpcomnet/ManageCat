@@ -25,10 +25,17 @@ public class MyAuthorizerFilter extends AuthorizationFilter{
 		String userName = (String) subject.getPrincipal();
 		if(Strings.isNullOrEmpty(userName))
 			return false;
+		
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		String uri = httpServletRequest.getRequestURI();
 		String[] params = uri.split("/");
-		String requestRole = params[1].trim()+":"+params[2].trim();
+		String requestRole = "";
+		for(int i=0,len=params.length; i<len; i++){
+			requestRole += params[i].trim();
+			if(i != len -1 && i != 0)
+				requestRole += ":";
+			
+		}
 		
 		//根据用户名查询用户拥有的权限
 		Set<String> set = userService.findPermissionByUsername(userName);

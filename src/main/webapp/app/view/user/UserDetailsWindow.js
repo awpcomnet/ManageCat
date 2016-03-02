@@ -72,9 +72,12 @@ Ext.define("MIS.view.user.UserDetailsWindow", {
                 }
 
             }, initUserData = function (component) {
-            	var roles = me.modifyModeDetails.raw.roles.split(',');
+            	var roles = me.modifyModeDetails.raw.roles;
             	var arr = []; 
-            	for (var c in roles) {arr.push(Number(roles[c]))}
+            	if(roles != '' && roles != null){
+            		var roleArr = roles.split(',');
+            		for (var c in roleArr) {arr.push(Number(roles[c]))}
+            	}
             	
                 component.down("textfield[name=username]").setValue(me.modifyModeDetails.raw.username);
                 component.down("textfield[name=realname]").setValue(me.modifyModeDetails.raw.realname);
