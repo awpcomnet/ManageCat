@@ -79,15 +79,23 @@ public class UserService {
 		for(int i=0, len=list.size(); i<len; i++){
 			User user = list.get(i);
 			String roles = "";
+			String roleNames = "";
 			List<Integer> rolesList = userDao.getRoleidByUserid(user.getUserId());
 			if(rolesList != null){
 				for(int j=0; j<rolesList.size(); j++){
 					roles += rolesList.get(j);
-					if(j != rolesList.size() - 1)
+					Role role = roleService.queryRoleById(rolesList.get(j));
+					if(role != null)
+						roleNames += role.getName();
+						
+					if(j != rolesList.size() - 1){
 						roles += ",";
+						roleNames += ",";
+					}
 				}
 			}
 			user.setRoles(roles);
+			user.setRoleNames(roleNames);
 			resultList.add(user);
 		}
 		

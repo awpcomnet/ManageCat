@@ -43,7 +43,7 @@ Ext.define("MIS.view.user.UserGrid", {
                 { header: '编号', dataIndex: 'userId', sortable: true, hideable: false, width: 30, align: "center"},
                 { header: '用户名', dataIndex: 'username', sortable: true},
                 { header: '真实姓名', dataIndex: 'realname', sortable: true},
-                { header: '角色', dataIndex: 'role', sortable: false},
+                { header: '角色', dataIndex: 'roleNames', sortable: false},
                 { 
                     header: '状态', dataIndex: 'state', sortable: false,
                     renderer: function (value, rowindex, record, column) {

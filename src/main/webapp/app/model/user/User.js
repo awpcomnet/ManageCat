@@ -26,6 +26,9 @@ Ext.define("MIS.model.user.User", {
 	}, {
 		name: "roles",
 		type: "string"
+	}, {
+		name: "roleNames",
+		type: "string"
 	}]
 });
 

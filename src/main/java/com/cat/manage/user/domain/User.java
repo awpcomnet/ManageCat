@@ -24,6 +24,7 @@ public class User implements Serializable {
 	private Date modifyDate;           		// 修改日期
 	private String modifier;                	// 修改者
 	private String roles;					//角色编号  , 分割
+	private String roleNames;               //角色名字
 	
 	public int getUserId() {
 		return userId;
@@ -135,6 +136,14 @@ public class User implements Serializable {
 
 	public void setRoles(String roles) {
 		this.roles = roles;
+	}
+
+	public String getRoleNames() {
+		return roleNames;
+	}
+
+	public void setRoleNames(String roleNames) {
+		this.roleNames = roleNames;
 	}
 
 	@Override

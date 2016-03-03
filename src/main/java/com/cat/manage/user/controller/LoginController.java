@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cat.manage.common.exception.BusinessException;
 import com.cat.manage.common.exception.ParameterException;
 import com.cat.manage.common.model.Srm;
 import com.cat.manage.common.util.Md5Util;
@@ -40,6 +41,8 @@ import com.google.common.io.Closer;
 public class LoginController {
     
     private static final String REMEMBER_ME_ON = "1";
+    
+    private static final String USER_STATE_NORMAL = "0";
 	
 	@Autowired
 	private UserService userService;
@@ -70,7 +73,10 @@ public class LoginController {
 	    User user = userService.findUserByUsername(username);
 	    if (user == null)
 	        throw new ParameterException("1", "用户或密码不正确");
-
+	    
+	    if(!USER_STATE_NORMAL.equals(user.getState()))
+	    	throw new BusinessException("1", "用户状态不正常");
+	    	
 	    String salt      = user.getSalt();
 	    String loginPass = Md5Util.digest(password + salt);
 	   
