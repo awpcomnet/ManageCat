@@ -16,7 +16,7 @@
 		<property name="unauthorizedUrl" value="/403" />
 		<property name="filters">    
            <map>    
-               <entry key="sperm" value-ref="myAuthorizerFilter"/>  
+               <entry key="sperm" value-ref="myAuthorizerFilter"/> 
            </map>    
        </property> 
 		<property name="filterChainDefinitions">
@@ -56,7 +56,7 @@
 	<bean id="customRealm" class="com.cat.manage.shiro.realm.CustomRealm" />
 	<bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
-	<bean id="myAuthorizerFilter" class="com.cat.manage.shiro.realm.MyAuthorizerFilter"></bean>
+	<bean id="myAuthorizerFilter" class="com.cat.manage.shiro.realm.MyAuthorizerFilter"/>
 
 	<bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
 		<constructor-arg value="rememberMe" />

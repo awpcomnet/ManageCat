@@ -50,7 +50,15 @@ Ext.define("MIS.controller.catalog.CatalogController", {
      */
     onGridRender: function (component, record, item, index, event, eOpts) {
         //console.log(component);
-        component.store.load();
+        component.store.load({
+			callback: function(records, operation, success){
+				var result = Ext.JSON.decode(operation.response.responseText);
+				if(result.resultCode != 0){
+					 Ext.MessageBox.alert("错误提示", "错误原因：" + result.resultMessage);
+				}
+	        }
+			
+		});
     },
 
     /**
@@ -64,7 +72,15 @@ Ext.define("MIS.controller.catalog.CatalogController", {
         if (!isLeaf) {
             grid = component.up("catalogview").down("cataloggrid");
             grid.store.proxy.extraParams.parentId = id;
-            grid.store.reload();
+            grid.store.reload({
+    			callback: function(records, operation, success){
+    				var result = Ext.JSON.decode(operation.response.responseText);
+    				if(result.resultCode != 0){
+    					 Ext.MessageBox.alert("错误提示", "错误原因：" + result.resultMessage);
+    				}
+    	        }
+    			
+    		});
             
             grid.selectedId = record.raw.id;
             grid.selectedText = record.raw.text;

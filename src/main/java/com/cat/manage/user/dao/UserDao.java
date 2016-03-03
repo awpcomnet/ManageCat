@@ -57,4 +57,10 @@ public interface UserDao {
 	 * @param userId
 	 */
 	public void deleteUserRoleRelationByUserId(Integer userId);
+	
+	/**
+	 * 根据用户编号删除用户信息
+	 * @param id
+	 */
+	public void deleteUser(Integer id);
 }

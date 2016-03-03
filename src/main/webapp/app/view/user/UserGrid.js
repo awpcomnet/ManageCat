@@ -123,31 +123,34 @@ Ext.define("MIS.view.user.UserGrid", {
         var selections = this.getView().getSelectionModel().getSelection();
         var selectionNum = selections.length;
 
-        if (selectionNum <= 0) {
+        if (selectionNum != 1) {
+        	Ext.MessageBox.alert("错误信息", "请选择单个用户删除");
             return;
         } 
 
-        var delList = [];
-        var delNameList = [];
-        for (var i = selections.length - 1; i >= 0; i--) {
-            var sel = selections[i];
-            delList.push(sel.raw.userId);
-            delNameList.push(sel.raw.username);
-        }
+//        var delList = [];
+//        var delNameList = [];
+//        for (var i = selections.length - 1; i >= 0; i--) {
+//            var sel = selections[i];
+//            delList.push(sel.raw.userId);
+//            delNameList.push(sel.raw.username);
+//        }
 
         Ext.MessageBox.alert(
             "确认信息",
-            "确认删除[" + delNameList.join(", ") + "]等用户信息",
+//            "确认删除[" + delNameList.join(", ") + "]等用户信息",
+            "确认删除[" + selections[0].raw.username + "]等用户信息",
             function (btn) {
                 if (btn == "ok") {
                     Ext.Ajax.request({
                         url: "/user/delete",
                         params: {
-                            ids: delList.join(",")
+                            id: selections[0].raw.userId
                         },
                         success: function (response) {
+                        	debugger;
                             var result = Ext.JSON.decode(response.responseText);
-                            if (result && result.resultCode == 0) {
+                            if (result.resultCode == 0) {
                                 me.getStore().reload();
                             } else {
                                 Ext.MessageBox.alert("错误信息", !result ? "删除出错, 稍后重试" : result.resultMessage);
