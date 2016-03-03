@@ -47,13 +47,29 @@ Ext.define("MIS.controller.dict.DictController", {
             grid.dictType = record.raw.type;
 
             grid.store.proxy.extraParams.type = record.raw.type;
-            grid.store.reload();
+            grid.store.reload({
+    			callback: function(records, operation, success){
+    				var result = Ext.JSON.decode(operation.response.responseText);
+    				if(result.resultCode != 0){
+    					 Ext.MessageBox.alert("错误提示", "错误原因：" + result.resultMessage);
+    				}
+    	        }
+    			
+    		});
 
         }
     },
 
     onDictGridRender: function (component, record, item, index, event, eOpts) {
-        component.store.load();
+        component.store.load({
+			callback: function(records, operation, success){
+				var result = Ext.JSON.decode(operation.response.responseText);
+				if(result.resultCode != 0){
+					 Ext.MessageBox.alert("错误提示", "错误原因：" + result.resultMessage);
+				}
+	        }
+			
+		});
     },
 
     /**
@@ -65,6 +81,14 @@ Ext.define("MIS.controller.dict.DictController", {
 
         dictitemgrid.dictType = id;
         dictitemgrid.store.proxy.extraParams.typeId = id;
-        dictitemgrid.store.reload();
+        dictitemgrid.store.reload({
+			callback: function(records, operation, success){
+				var result = Ext.JSON.decode(operation.response.responseText);
+				if(result.resultCode != 0){
+					 Ext.MessageBox.alert("错误提示", "错误原因：" + result.resultMessage);
+				}
+	        }
+			
+		});
     }
 });

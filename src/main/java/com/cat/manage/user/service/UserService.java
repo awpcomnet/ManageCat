@@ -262,4 +262,16 @@ public class UserService {
 	    
 	    return roleId;
 	}
+	
+	/**
+	 * 删除用户信息
+	 * @param id
+	 */
+	public void deleteUser(Integer id){
+		//删除用户与角色关系
+		userDao.deleteUserRoleRelationByUserId(id);
+		
+		//删除用户信息
+		userDao.deleteUser(id);
+	}
 }

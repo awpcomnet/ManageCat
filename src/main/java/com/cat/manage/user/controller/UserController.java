@@ -132,6 +132,14 @@ public class UserController {
 		return new Srm().setResultCode("0").setResultMessage("查询成功").addAll(list);
 	}
 	
+	@RequestMapping("/delete")
+	public @ResponseBody Srm deleteUser(Integer id){
+		if(id == null)
+			throw new BusinessException("1", "用户编号不能为空");
+		userService.deleteUser(id);
+		return new Srm().setResultCode("0").setResultMessage("成功删除用户");
+	}
+	
 	private static final transient Logger LOG = LoggerFactory.getLogger(UserController.class);
 }
                                        
