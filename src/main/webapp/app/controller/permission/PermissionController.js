@@ -32,6 +32,14 @@ Ext.define("MIS.controller.permission.PermissionController", {
      * 在数据表格渲染之前执行
      */
     onBeforePermissionGridRender: function (component, options) {
-        component.getStore().load();
+        component.getStore().load({
+			callback: function(records, operation, success){
+				var result = Ext.JSON.decode(operation.response.responseText);
+				if(result.resultCode != 0){
+					 Ext.MessageBox.alert("错误提示", "错误原因：" + result.resultMessage);
+				}
+	        }
+			
+		});
     }
 });
