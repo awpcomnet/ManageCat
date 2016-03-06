@@ -25,6 +25,7 @@
 
 				/login.html       = anon
 				/authc/login      = anon
+				/authc/logout      = anon
 				/authc/captcha    = anon
 
 				/app/**           = anon
@@ -40,6 +41,8 @@
 				/                 = user
 				/index.html       = user 
 				/druid/**         = user
+				/catalog/queryUserCatalog =user
+				/authc/userInfo   = user
 				
 				/**               = sperm
 				

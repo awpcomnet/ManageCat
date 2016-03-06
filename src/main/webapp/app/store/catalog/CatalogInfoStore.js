@@ -9,7 +9,7 @@ Ext.define("MIS.store.catalog.CatalogInfoStore", {
 
     proxy: {
         type: "ajax",
-        url: "/catalog/subCatalogs",
+        url: "/catalog/queryUserCatalog",
         reader: {
             type: "json",
             root: "results"

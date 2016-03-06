@@ -8,7 +8,8 @@ Ext.define('MIS.Application', {
                "Ext.window.MessageBox",
                
                "MIS.store.dict.DictQueryStore",
-               "MIS.common.DictManager"
+               "MIS.common.DictManager",
+               "MIS.common.CurrentUser"
                
     ],
 

@@ -61,7 +61,7 @@ Ext.define("MIS.controller.mainviewport.MainNavigation", {
 
                         proxy: {
                             type: "ajax",
-                            url: "/catalog/subCatalogs",
+                            url: "/catalog/queryUserCatalog",
                             reader: {
                                 type: "json",
                                 root: "results"
