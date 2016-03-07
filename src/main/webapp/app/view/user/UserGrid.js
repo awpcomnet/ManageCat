@@ -200,7 +200,6 @@ Ext.define("MIS.view.user.UserGrid", {
         view.getEl().mask();
 
         var record = selection[0];
-        console.log(record);
         var modifyUserWindow = Ext.create("MIS.view.user.UserDetailsWindow", {
             renderTo: view.getEl(),
             actionMode: "MODIFY",
@@ -212,7 +211,49 @@ Ext.define("MIS.view.user.UserGrid", {
             modifyModeDetails: record
         });
         modifyUserWindow.show();
-    },  
+    }, 
+    
+    onResetPasswordClick: function(component){
+    	var selection = this.getView().getSelectionModel().getSelection(),
+        selectionNum = selection.length;
+
+	    if (selectionNum != 1) {
+	        Ext.MessageBox.alert("错误提示", "请选择一个用户进行密码重置");
+	        return;
+	    }
+	    
+	    var userview = Ext.ComponentQuery.query("userview")[0];
+	    userview.getEl().mask();
+    	
+    	var editWindow = Ext.create("Ext.window.Window", {
+        	title: "["+selection[0].raw.username+"]用户密码重置",
+        	id: "resetpasswordwindow",
+        	extraData: selection[0].raw,
+        	renderTo: userview.getEl(),
+        	height: 220,
+        	width: 345,
+        	layout: "fit",
+        	closeAction: "destroy",
+        	items: [{
+        		xtype: "resetpassword"
+        	}],
+        	listeners: {
+        		close: function(){
+        			userview.getEl().unmask();
+        		},
+        		beforerender: function () {
+        			
+        		},
+        		afterrender: function(component, eOpts){
+        			var form = component.down("form");
+                    var params = Ext.clone(this.extraData);
+    				form.getForm().setValues(params);
+    			}
+        	}
+        });
+    	editWindow.show();
+	    
+    },
 
     onExpandSearchClick: function (component) {
         var searchPanel = component.up("userview").down("usersearch"),

@@ -274,4 +274,21 @@ public class UserService {
 		//删除用户信息
 		userDao.deleteUser(id);
 	}
+	
+	/**
+	 * 重置用户密码
+	 * @param userId
+	 */
+	public void resetPassWord(User user){
+		//查询用户
+		User u = userDao.queryUserById(user.getUserId());
+		if(u == null)
+			throw new BusinessException("1", "用户不存在");
+		
+		String salt = u.getSalt().trim();
+		String password = Md5Util.digest(user.getPassword().trim() + salt);
+		user.setPassword(password);
+		
+		userDao.updateUser(user);
+	}
 }

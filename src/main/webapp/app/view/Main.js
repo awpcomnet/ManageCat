@@ -21,8 +21,7 @@ Ext.define('MIS.view.Main', {
            items: [{
                xtype: "mainheader",
                region: "north",
-               cls: "v-header overflow-vis",
-               height: 60
+               cls: "v-header overflow-vis"
            }, {
 
                title: "功能导航",
