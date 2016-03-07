@@ -13,7 +13,7 @@ Ext.define("MIS.store.Nav", {
 
 	proxy: {
 		type: "ajax",
-		url: "/catalog/subCatalogs",
+		url: "/catalog/queryUserCatalog",
 		
 		reader: {
 			type: "json",

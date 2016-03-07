@@ -12,8 +12,8 @@ Ext.define("MIS.controller.mainviewport.MainNavigation", {
 
     views: [
         "MIS.view.mainviewport.MainNavigation", 
-        "MIS.view.mainviewport.MainNavigationItem"
-        //"MIS.view.mainviewport.MainHeader"
+        "MIS.view.mainviewport.MainNavigationItem",
+        "MIS.view.mainviewport.MainHeader"
     ],
 
     stores: [
@@ -61,7 +61,7 @@ Ext.define("MIS.controller.mainviewport.MainNavigation", {
 
                         proxy: {
                             type: "ajax",
-                            url: "/catalog/subCatalogs",
+                            url: "/catalog/queryUserCatalog",
                             reader: {
                                 type: "json",
                                 root: "results"

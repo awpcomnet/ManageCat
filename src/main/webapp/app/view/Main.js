@@ -18,13 +18,11 @@ Ext.define('MIS.view.Main', {
                type: "border"
            },
            
-           items: [
-//                   {
-//               xtype: "mainheader",
-//               region: "north",
-//               cls: "v-header overflow-vis"
-//           }, 
-           {
+           items: [{
+               xtype: "mainheader",
+               region: "north",
+               cls: "v-header overflow-vis"
+           }, {
                title: "功能导航",
                xtype: "mainnav",
                region: "west",
