@@ -43,6 +43,9 @@ public class DictItemController {
 			throw new ParameterException("1", "参数 字典项 [code] 不能为空");
 		
 		Dict dict = dictService.getDictByCodeWithItems(code);
+		if(dict == null)
+			return new Srm().setResultCode("1").setResultMessage("查询失败");
+		
 		return new Srm().setResultCode("0").setResultMessage("查询成功")
 				.addAll(dict.getItems());
 	}

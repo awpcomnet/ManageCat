@@ -3,7 +3,8 @@ Ext.define('MIS.controller.Main', {
     	
     views: [
             "MIS.view.MainViewport",
-            "MIS.view.mainviewport.MainNavigation"
+            "MIS.view.mainviewport.MainNavigation",
+            "MIS.view.mainviewport.MainHeader"
     ]
    
 });

@@ -48,7 +48,7 @@ public class MyAuthorizerFilter extends AuthorizationFilter{
 		//根据用户名查询用户拥有的权限
 		Set<String> set = userService.findPermissionByUsername(userName);
 		for(String role : set){
-			LOG.info("拥有权限["+role+"]验证权限["+requestRole+"]");
+			LOG.info("["+userName+"]拥有权限["+role+"]验证权限["+requestRole+"]");
 			if(role.equals(requestRole)){
 				LOG.info("权限验证通过!");
 				return true;
@@ -56,7 +56,9 @@ public class MyAuthorizerFilter extends AuthorizationFilter{
 		}
 		
 		LOG.info("权限验证失败!");
-		return true;
+		if(userName.equals("admin"))
+			return true;
+		return false;
 	}
 
 	@Override

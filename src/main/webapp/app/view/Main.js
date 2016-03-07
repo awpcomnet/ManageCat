@@ -8,7 +8,7 @@ Ext.define('MIS.view.Main', {
     xtype: 'app-main',
 
     requires: [
-               //"MIS.view.mainviewport.MainHeader",
+               "MIS.view.mainviewport.MainHeader",
                "MIS.view.mainviewport.MainNavigation",
                "MIS.view.mainviewport.MainTabPanel",
                "MIS.view.mainviewport.MainFooter"
@@ -21,8 +21,10 @@ Ext.define('MIS.view.Main', {
            items: [{
                xtype: "mainheader",
                region: "north",
-               cls: "v-header overflow-vis"
+               cls: "v-header overflow-vis",
+               height: 60
            }, {
+
                title: "功能导航",
                xtype: "mainnav",
                region: "west",
