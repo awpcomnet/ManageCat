@@ -41,6 +41,7 @@
 				/                 = user
 				/index.html       = user 
 				/druid/**         = user
+
 				/catalog/queryUserCatalog =user
 				/authc/userInfo   = user
 				

@@ -65,7 +65,6 @@ public class MyAuthorizerFilter extends AuthorizationFilter{
 	public boolean onPreHandle(ServletRequest request,
 			ServletResponse response, Object mappedValue) throws Exception {
 		if(!isAccessAllowed(request, response, null)){
-			System.out.println("enter contrll ***********");
 			PrintWriter out = new PrintWriter(response.getOutputStream());
 			try {
 				Srm srm = new Srm().setResultCode("3").setResultMessage("无权访问");
