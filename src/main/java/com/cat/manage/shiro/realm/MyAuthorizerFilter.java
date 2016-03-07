@@ -45,20 +45,29 @@ public class MyAuthorizerFilter extends AuthorizationFilter{
 			
 		}
 		
-		//根据用户名查询用户拥有的权限
-		Set<String> set = userService.findPermissionByUsername(userName);
-		for(String role : set){
-			LOG.info("["+userName+"]拥有权限["+role+"]验证权限["+requestRole+"]");
-			if(role.equals(requestRole)){
-				LOG.info("权限验证通过!");
-				return true;
-			}
+		LOG.info("权限权限验证："+subject.isPermitted(requestRole)+"|"+requestRole);
+		
+		if(userName.equals("admin")){
+			LOG.info("admin用户超级权限==>true");
+			return true;
 		}
 		
-		LOG.info("权限验证失败!");
-		if(userName.equals("admin"))
-			return true;
-		return false;
+		return subject.isPermitted(requestRole);
+		
+//		//根据用户名查询用户拥有的权限
+//		Set<String> set = userService.findPermissionByUsername(userName);
+//		for(String role : set){
+//			LOG.info("["+userName+"]拥有权限["+role+"]验证权限["+requestRole+"]");
+//			if(role.equals(requestRole)){
+//				LOG.info("权限验证通过!");
+//				return true;
+//			}
+//		}
+//		
+//		LOG.info("权限验证失败!");
+//		if(userName.equals("admin"))
+//			return true;
+//		return false;
 	}
 
 	@Override
