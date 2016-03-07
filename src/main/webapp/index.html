@@ -2,8 +2,20 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta http-equiv="pragma" content="no-cache"> 
+    <meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+    <meta http-equiv="expires" content="Wed, 01 Feb 1970 08:00:00 GMT">
+    
     <title>MIS</title>
     <link rel="stylesheet" href="/resources/component/fontawesome/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="/resources/component/tip/tip-yellow/tip-yellow.css">
+    
+    <script type="text/javascript" src="/resources/component/jquery/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/resources/component/tip/jquery.poshytip.min.js"></script>
+	<script type="text/javascript" src="/resources/component/eventemiter/EventEmitter.min.js"></script>
     
     <!-- <x-compile> -->
         <!-- <x-bootstrap> -->
@@ -13,6 +25,83 @@
         <!-- </x-bootstrap> -->
         <script src="app.js"></script>
     <!-- </x-compile> -->
+    
+    <link rel="stylesheet" href="/resources/css/app.css">
 </head>
-<body></body>
+<body>
+	<script type="text/javascript">
+	if (!window.console){
+        window.console={
+            log:function(log){},
+            info:function(log){},
+            error:function(log){},
+            warning:function(log){}
+        }
+    }
+	$(document).ready(function () {
+        /** UserBox 鼠标划入 */
+        $("body").on("mouseenter", ".userBox", function () {
+            $(".userBox").addClass("hover");
+
+            var details = $(".userBox .details");
+            details.css({display: "block"});
+            details.addClass("hover");
+        });
+        /** UserBox 鼠标划出 */
+        $("body").on("mouseleave", ".userBox", function () {
+            $(".userBox").removeClass("hover");
+
+            var details = $(".userBox .details");
+            details.css({display: "none"});
+            details.removeClass("hover");
+        });
+
+        /** 退出按钮事件 */
+        $("body").on("click", ".logout", function () {
+            $.ajax({
+                url: "/authc/logout",
+                success: function () {
+                    location.href="/login.html";
+                },
+                error: function () {
+                    Ext.Message.alert("提示", "退出失败, 稍后重试!");
+                }
+            });
+        });
+    });
+	var globalTip = {};
+    Ext.onReady(function(){
+        globalTip = Ext.create('Ext.tip.ToolTip',{
+            dismissDelay:5000,
+            minWidth: 20,
+            borderWidth: 1,
+            bodyPadding: 4,
+            padding: 0,
+            closable: false,
+            draggable: false,
+            floating: true,
+            shadow: "sides"
+        });
+        var key = new Ext.KeyMap(document,{
+            key: 8,
+            fn: function(obj,e){
+                var type = e.target.type;
+                var readonly = e.target.readOnly;
+                if(type != 'text' && type != 'textarea' && type != 'password'){
+                    //e.preventDefault();
+                    e.stopEvent();
+                }
+                else if(readonly){
+                    //e.preventDefault();
+                    e.stopEvent();
+                }
+            },
+            scope: this
+        });
+    });
+	
+	
+	
+	</script>
+</body>
 </html>

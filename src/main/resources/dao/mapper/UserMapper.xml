@@ -33,6 +33,13 @@
             select user_id, user_name, real_name, email, state, login_times from t_user order by user_id asc, create_date desc
         ]]>
 	</select>
+	
+	<!-- 根据用户Id查询用户信息 -->
+	<select id="queryUserById" parameterType="java.lang.Integer" resultMap="userMap">
+        <![CDATA[
+            select user_id, user_name, real_name, salt, email, state, login_times from t_user where user_id = #{userId}
+        ]]>
+	</select>
 
 	<!-- 增加一个用户 -->
 	<insert id="addUser" parameterType="com.cat.manage.user.domain.User">
@@ -50,7 +57,20 @@
 
 	<!-- 更新一个用户 -->
 	<update id="updateUser" parameterType="com.cat.manage.user.domain.User">
-		UPDATE t_user SET user_name = #{username}, real_name = #{realname}, state = #{state}, modifier = "system", modify_date = now()
+		UPDATE t_user SET modify_date = now() , modifier = "system" 
+		
+		<if test="username != null and username != ''">
+			, user_name = #{username}
+		</if>
+		<if test="realname != null and realname != ''">
+			, real_name = #{realname}
+		</if>
+		<if test="password != null and password != ''">
+			, pass_word=#{password}
+		</if>
+		<if test="state != null and state != ''">
+			, state = #{state}
+		</if>
 		<if test="email != null and email != ''">
 			, email=#{email}
 		</if>

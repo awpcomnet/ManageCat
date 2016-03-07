@@ -15,7 +15,8 @@ Ext.define("MIS.controller.user.UserController", {
 		"MIS.view.user.UserGrid",
 		"MIS.view.user.UserSearch",
 		"MIS.view.user.UserDetailsWindow",
-		"MIS.view.user.UserDetailsForm"
+		"MIS.view.user.UserDetailsForm",
+		"MIS.view.user.ResetPassWord"
 	],
 
 	init: function () {

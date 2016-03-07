@@ -1,0 +1,248 @@
+/**
+ * 公共
+ */
+iframe {
+	border: 0px;
+}
+
+/** 启动界面 */
+.splash {
+	background-color: white;
+	opacity: 1;
+}
+
+.loginToolbar {
+	background-color: #3892d3;
+	border: #3892d3;
+	font-size: 16px;
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+    color: #3892d3;
+    font-size: 16px;
+}
+
+/** 
+ * 管理系统Logo 
+ * 浅一点的颜色: #add2ed;
+ * 深一点的颜色: #157fcc;
+ */
+#logo {
+	height: 68px;
+	margin-left: 10px;
+	font-size: 30px;
+	color: #FFF;
+}
+
+.sys_logo {
+	float: left;
+}
+
+.logoTitle {
+	/*margin-left: 10px;*/
+	line-height: 68px;
+}
+
+.v-header {
+	background-color: #3892D3;
+}
+
+.x-tab-default-top {
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+}
+
+.v-header-signout {
+	width: 80px;
+}
+
+/**
+ * userBox样式
+ */
+.userBox {
+	height: 68px;
+	width: 220px;
+	padding: 0px 10px;
+	position: relative;
+}
+
+.userBox.hover {
+	border-right: 1px solid #dddddd;
+	border-left: 1px solid #dddddd;
+	border-top: 1px solid #dddddd;
+}
+
+.show span {
+	height: 34px;
+	line-height: 34px;
+	text-align: right;
+	width: 120px;
+	display: inline-block;
+	font-size: 17px;
+	font-family: "Microsoft YaHei", sans-serif;
+	color: #FFF;
+}
+
+.userBox .username {
+}
+
+.userBox .currentDate {
+}
+
+.userImage {
+	float: right;
+	display: inline-block;
+}
+
+.userImage img {
+	width: 66px;
+	height: 66px;
+	margin-top: 2px;
+}
+
+.userBox .details {
+	position: absolute;
+	display: inline-block;
+	width: 220px;
+	height: 200px;
+	z-index: 1000;
+	background-color: #c2c2e7;/*#3892D3;*/
+	left: -1px;
+	top: 67px;
+}
+
+.userBox .details.hover {
+	border-left: 1px solid #dddddd;
+	border-right: 1px solid #dddddd;
+	border-bottom: 1px solid #dddddd;
+}
+
+.overflow-vis, .overflow-vis div {
+	overflow: visible;
+}
+
+.userBox .details .userInfo {
+	height: 100px;
+}
+
+.userBox .details .fakeButton {
+	text-align: center;
+	padding: 10px;
+	border: 1px solid #dddddd;
+	margin: 5px 10px;
+	cursor: pointer;
+	color: #dddddd;
+}
+
+/**
+ * 导航图标颜色
+ */
+.icon-list {
+	color: #FFF;
+}
+
+/**
+ * 底部footer
+ */
+.v-footer {
+	background-color: #3892D3;
+}
+
+.v-footer .info {
+	color: #FFF;
+	margin-left: 10px;
+}
+
+/**
+ * 凭证标题
+ */
+.voucher-title {
+    text-align: center;
+    font-size: 22px;
+    line-height: 22px;
+    margin: 5px 0px;
+}
+
+.voucher-title-underline {
+    text-align: center;
+    display: block;
+}
+
+.title-tab {
+    display: inline-block;
+    width: 20px;
+}
+
+.x-col-yuan {
+    border-right: 1px solid red;
+}
+
+/**
+ * 自定义图标
+ */ 
+.textfield-month-icon input {
+	background-image:url(/resources/images/month.png) !important;   
+    background-repeat:no-repeat;   
+    background-position:right;   
+}
+
+.textfield-day-icon input {
+	background-image:url(/resources/images/day.png) !important;
+    background-repeat:no-repeat;   
+    background-position:right;
+    padding-right: 16px;
+}
+/*combobox 多选的样式*/
+.x-combo-checker {
+    background-position: -1px -1px;
+    margin-left: 1px;
+    background-color: transparent;
+    background-image: url(../images/unchecked.png);
+    background-repeat: no-repeat;
+    height: 14px;
+    width: 14px;
+    display: inline-block;
+}
+.x-boundlist-selected .x-combo-checker {
+    background-image: url(../images/checked.png);
+}
+/*凭证管理检查的radio界面*/
+.v-radio-left {left:26px !important;}
+/*凭证管理更多查询条件*/
+.voucher-top {top:5px !important;}
+.makeVoucherClsTop{top:3px !important;}
+.bodercls {
+    border-bottom-color:#c5c5c5;
+    border-bottom-style:solid;
+    border-bottom-width:1px;
+}
+
+.permissionBtn {
+    text-align: center;
+    position: relative;
+}
+
+.permissionBtn a {
+    color: #157fcc;
+    background-color: #add2ed;
+    text-decoration: none;
+    border: 1px solid #157fcc;
+    padding: 3px;
+}
+/*修改grid的样式*/
+.x-column-header-inner {
+    text-overflow: clip;
+    line-height: normal;
+    text-align: center;
+}
+.x-column-header-inner .x-column-header-text {
+    white-space: normal;
+}
+.x-grid-cell-inner {
+    text-overflow: clip;
+}
+/*grid对于href去掉下划线*/
+.x-grid-cell-inner a:link {color:#1874CD;text-decoration: none}
+.x-grid-cell-inner a:visited {color:#1874CD;text-decoration: none}
+.x-grid-cell-inner a:hover {color: red;text-decoration: none}

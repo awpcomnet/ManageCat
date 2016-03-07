@@ -140,6 +140,29 @@ public class UserController {
 		return new Srm().setResultCode("0").setResultMessage("成功删除用户");
 	}
 	
+	@RequestMapping("/reset")
+	public @ResponseBody Srm resetPassWord(HttpServletRequest request, @CurrentUser User current) { 
+		/** 1, 获得参数并校验 */
+	    HttpParams params = HttpParams.buildFrom(request);
+	    Map<String, String> requestMap = params.getMap();
+	    
+	    String userId = assertNotNullOrEmpty(requestMap, "userId");
+	    String password = assertNotNullOrEmpty(requestMap, "password");
+	    String repeatPa = assertNotNullOrEmpty(requestMap, "repeatPassword");
+	    
+	    /** 2, 检查输入的密码是否相等 */
+	    if (!repeatPa.equals(password)) {
+	        throw new BusinessException("2", "两次输入的密码不相等");
+	    }
+	    
+	    User user = new User();
+	    user.setUserId(Integer.valueOf(userId));
+	    user.setPassword(password);
+	    
+	    userService.resetPassWord(user);
+	    return new Srm().setResultCode("0").setResultMessage("重置密码成功");
+	}
+	
 	private static final transient Logger LOG = LoggerFactory.getLogger(UserController.class);
 }
                                        

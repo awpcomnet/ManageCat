@@ -63,4 +63,11 @@ public interface UserDao {
 	 * @param id
 	 */
 	public void deleteUser(Integer id);
+	
+	/**
+	 * 根据用户Id查询用户信息
+	 * @param userId
+	 * @return
+	 */
+	public User queryUserById(Integer userId);
 }
