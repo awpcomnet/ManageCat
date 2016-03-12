@@ -71,6 +71,9 @@ Ext.define("MIS.model.check.Check", {
 	}, {
 		name: "sumPrice",
 		type: "string"
+	}, {
+		name: "batchNo",
+		type: "string"
 	}]
 });
 

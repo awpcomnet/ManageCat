@@ -22,6 +22,13 @@ Ext.define("MIS.view.check.CheckModify", {
 	
 	
 	items: [{
+		fieldLabel: "批次号",
+        name: "batchNo",
+        xtype: "textfield",
+        colspan: 2,
+        width: 530,
+        anchor: "55%"
+    }, {
 		fieldLabel: "快递单号",
         name: "trackingNumber",
         xtype: "textfield",

@@ -14,6 +14,7 @@ import com.cat.manage.common.param.HttpParams;
 import com.cat.manage.shipped.domain.ShippedHead;
 import com.cat.manage.shipped.service.ShippedHeadService;
 import com.github.pagehelper.PageInfo;
+import com.google.common.base.Strings;
 
 /**
  * 
@@ -72,7 +73,7 @@ public class ShippedHeadController {
 	 */
 	@RequestMapping("/queryAll")
 	public Srm queryShippedHeadForList(ShippedHead shippedHead){
-		if(shippedHead.getTrackingNumber() == null)
+		if(Strings.isNullOrEmpty(shippedHead.getTrackingNumber()))
 			throw new BusinessException("1", "快递单号不能为空");
 		
 		List<ShippedHead> list = shippedHeadService.queryShippedHeadAll(shippedHead);
