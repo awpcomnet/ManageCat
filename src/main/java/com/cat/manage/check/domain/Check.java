@@ -31,6 +31,8 @@ public class Check implements Serializable{
 	private String brandName;//品牌名称
 	private String seriesName;//系列名称
 	private String singleName;//单品名称
+	private String transferCompanyName;//转运公司
+	private String orderAddrName;//下单网站
 	
 	public Integer getId() {
 		return id;
@@ -208,6 +210,22 @@ public class Check implements Serializable{
 		this.batchNo = batchNo;
 	}
 	
+	public String getTransferCompanyName() {
+		return transferCompanyName;
+	}
+
+	public void setTransferCompanyName(String transferCompanyName) {
+		this.transferCompanyName = transferCompanyName;
+	}
+
+	public String getOrderAddrName() {
+		return orderAddrName;
+	}
+
+	public void setOrderAddrName(String orderAddrName) {
+		this.orderAddrName = orderAddrName;
+	}
+
 	@Override
 	public String toString() {
 		return "Check [id=" + id + ", trackingNumber=" + trackingNumber

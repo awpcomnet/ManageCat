@@ -5,11 +5,13 @@ Ext.define("MIS.controller.storage.StorageController", {
 	extend: "Ext.app.Controller",
 	
 	models : [ 
-	    "MIS.model.storage.Storage" 
+	    "MIS.model.storage.Storage",
+	    "MIS.model.storage.StorageDetail"
 	],
 
 	stores : [ 
-	    "MIS.store.storage.StorageStore"
+	    "MIS.store.storage.StorageStore",
+	    "MIS.store.storage.StorageDetailStore"
 	],
 	
 	views: [
@@ -17,7 +19,9 @@ Ext.define("MIS.controller.storage.StorageController", {
 	    "MIS.view.storage.StorageGrid",
 	    "MIS.view.storage.StorageSearch",
 	    "MIS.view.shipped.StorageAdd",
-	    "MIS.view.storage.StorageModify"
+	    "MIS.view.storage.StorageModify",
+	    "MIS.view.storage.StorageDetailGrid"
+	    
 	],
 	
 	init: function(){

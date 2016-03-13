@@ -27,6 +27,8 @@
 		<result property="singleName" column="single_name"/>
 		<result property="sumPrice" column="sumprice"/>
 		<result property="batchNo" column="batch_no"/>
+		<result property="transferCompanyName" column="transfer_company_name"/>
+		<result property="orderAddrName" column="order_addr_name"/>
 	</resultMap>
 	
 	<!-- 添加下单清单 -->
@@ -102,6 +104,8 @@
     ,(select series_name from t_series where series_id = t.series_id) as series_name
     ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
 	,batch_no
+	, (select t1.name from t_dict_item t1, t_dict_type t2 where t1.typeId = t2.id and t2.code = 'transferCompany' and t.transfer_company = t1.value) as transfer_company_name
+	, (select t1.name from t_dict_item t1, t_dict_type t2 where t1.typeId = t2.id and t2.code = 'orderAddr' and t.order_addr = t1.value) as order_addr_name
 	from t_check t
 	where 1=1 
 	<if test="param1.trackingNumber != null and param1.trackingNumber != ''">

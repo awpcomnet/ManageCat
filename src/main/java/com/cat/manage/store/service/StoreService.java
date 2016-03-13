@@ -289,4 +289,12 @@ public class StoreService {
 	public List<Store> queryStoreForList(Store store, String startTime, String endTime){
 		return storeDao.queryStoreForTimeQuantum(store, startTime, endTime);
 	}
+	
+	/**
+	 * 查询有效的库存记录
+	 * @return
+	 */
+	public List<Store> queryStoreForValidity(){
+		return storeDao.queryStoreForValidity();
+	}
 }
