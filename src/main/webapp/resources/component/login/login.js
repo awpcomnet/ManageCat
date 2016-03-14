@@ -89,7 +89,7 @@
                 success: function (text) {
                     var result = text
                     if (result && result.resultCode == 0) {
-                        global.location.href = "/";
+                        global.location.href = "/index.html";
                     } else {
                         var msg = result && result.resultMessage ? result.resultMessage : "登录请求错误";
                         alertify.error(msg);
