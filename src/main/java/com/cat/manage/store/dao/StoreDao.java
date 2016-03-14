@@ -88,4 +88,10 @@ public interface StoreDao {
 	 * @return
 	 */
 	public List<Store> queryStoreForTimeQuantum(Store store, String startTime, String endTime);
+	
+	/**
+	 * 查询仍有库存的所有记录
+	 * @return
+	 */
+	public List<Store> queryStoreForValidity();
 }

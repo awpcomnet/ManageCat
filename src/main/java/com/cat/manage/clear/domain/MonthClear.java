@@ -23,6 +23,10 @@ public class MonthClear implements Serializable{
 	
 	private String remark;//备注
 	
+	private String payby;//付款人
+	private Double paybyUnitPrice;//付款人付款金额
+	private String payRatio;//付款比例
+	
 	public String getStartTime() {
 		return startTime;
 	}
@@ -103,13 +107,40 @@ public class MonthClear implements Serializable{
 		this.profitRate = profitRate;
 	}
 
+	public String getPayby() {
+		return payby;
+	}
+
+	public void setPayby(String payby) {
+		this.payby = payby;
+	}
+
+	public Double getPaybyUnitPrice() {
+		return paybyUnitPrice;
+	}
+
+	public void setPaybyUnitPrice(Double paybyUnitPrice) {
+		this.paybyUnitPrice = paybyUnitPrice;
+	}
+
+	public String getPayRatio() {
+		return payRatio;
+	}
+
+	public void setPayRatio(String payRatio) {
+		this.payRatio = payRatio;
+	}
+
 	@Override
 	public String toString() {
 		return "MonthClear [startTime=" + startTime + ", endTime=" + endTime
-				+ ", sumUnitPrice=" + sumUnitPrice + ", sumUnitPostage="
-				+ sumUnitPostage + ", sumUnitCost=" + sumUnitCost
-				+ ", sumSellPrice=" + sumSellPrice + ", sumRefund=" + sumRefund
-				+ ", sumProfit=" + sumProfit + "]";
+				+ ", sumSellPrice=" + sumSellPrice + ", sumUnitCost="
+				+ sumUnitCost + ", sumRefund=" + sumRefund + ", sumUnitPrice="
+				+ sumUnitPrice + ", sumUnitPostage=" + sumUnitPostage
+				+ ", sumProfit=" + sumProfit + ", profitRate=" + profitRate
+				+ ", remark=" + remark + ", payby=" + payby
+				+ ", paybyUnitPrice=" + paybyUnitPrice + ", payRatio="
+				+ payRatio + "]";
 	}
 
 	private static final long serialVersionUID = -2397262231993669826L;

@@ -29,6 +29,7 @@ Ext.define("MIS.view.check.CheckGrid", {
 			loadMask: true,
 			
 			columns: [
+			    { header: '批次号', dataIndex: 'batchNo', sortable: true, width: 15, align: "center"},
 			    { header: '快递单号', dataIndex: 'trackingNumber', sortable: true, width: 15, align: "center"},
 			    { header: '下单时间', dataIndex: 'orderTime', sortable: true, width: 10, align: "center"},
 			    { header: '转运公司', dataIndex: 'transferCompany', sortable: true, width: 10, align: "center", renderer: function (value, rowindex, record, column) {
@@ -145,7 +146,7 @@ Ext.define("MIS.view.check.CheckGrid", {
         	title: "添加下单清单",
         	id: "checkaddwindow",
         	renderTo: checkview.getEl(),
-        	height: 380,
+        	height: 425,
         	width: 570,
         	layout: "fit",
         	closeAction: "destroy",
@@ -195,7 +196,7 @@ Ext.define("MIS.view.check.CheckGrid", {
         	id: "checkmodifywindow",
         	extraData: selections[0].raw,
         	renderTo: checkview.getEl(),
-        	height: 380,
+        	height: 425,
         	width: 580,
         	layout: "fit",
         	closeAction: "destroy",

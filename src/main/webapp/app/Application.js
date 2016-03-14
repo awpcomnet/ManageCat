@@ -34,7 +34,8 @@ Ext.define('MIS.Application', {
                   "MIS.controller.mailuser.MailUserController", //邮件用户
                   "MIS.controller.user.UserController", //用户管理
                   "MIS.controller.permission.PermissionController", //权限管理
-                  "MIS.controller.role.RoleController" //角色管理
+                  "MIS.controller.role.RoleController", //角色管理
+                  "MIS.controller.batch.BatchController" //批次号管理
     ],
 
     stores: [

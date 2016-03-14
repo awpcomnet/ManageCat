@@ -12,6 +12,7 @@ import com.cat.manage.base.domain.Singleproduct;
 import com.cat.manage.base.service.BrandService;
 import com.cat.manage.base.service.SeriesService;
 import com.cat.manage.base.service.SingleproductService;
+import com.cat.manage.batch.service.BatchService;
 import com.cat.manage.check.domain.Check;
 import com.cat.manage.check.service.CheckService;
 import com.cat.manage.common.exception.BusinessException;
@@ -32,6 +33,9 @@ public class CheckController {
 	private SeriesService seriesService;
 	
 	@Autowired
+	private BatchService batchService;
+	
+	@Autowired
 	private SingleproductService singleproductService;
 	
 	@RequestMapping("/add")
@@ -39,6 +43,7 @@ public class CheckController {
 		Integer brandId = check.getBrandId();
 		Integer seriesId = check.getSeriesId();
 		Integer singleId = check.getSingleId();
+		String batchNo = check.getBatchNo();
 		/**参数合法性校验*/
 		//存在性验证
 		Brand brand = brandService.queryBrandById(brandId);
@@ -55,6 +60,8 @@ public class CheckController {
 			throw new BusinessException("1", "品牌["+brand.getBrandName()+"]与系列["+series.getSeriesName()+"]从属关系非法");
 		if(!singleproduct.getOfOrigin().equals(seriesId+""))
 			throw new BusinessException("1", "系列["+series.getSeriesName()+"]与单品["+singleproduct.getSingleName()+"]从属关系非法");
+		if(!batchService.checkBatchNo(batchNo))
+			throw new BusinessException("1", "批次号非法,批次号["+batchNo+"]");
 		
 		//添加下单清单是设置状态
 		check.setOrderStatus("0");//已下单

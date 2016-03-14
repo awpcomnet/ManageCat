@@ -36,50 +36,13 @@ Ext.define("MIS.view.check.CheckSearch", {
 		        editable:true
 			}, {
 				margin: "5 10",
-				xtype: "button",
-				text: '搜索',
-        		name: "search",
-        		anchor: '20%',
-        		scope: this,
-                handler: function(component){
-                	// 找到store
-                	var checkStore = component.up("checkview").down("checkgrid").getStore();
-                	
-                	// 设置Store参数
-                	var trackingNumber = component.up("checkSearchpanel").down("textfield[name=trackingNumber]").getValue(),
-                		transferCompany = component.up("checkSearchpanel").down("combobox[name=transferCompany]").getValue(),
-                		orderTime = component.up("checkSearchpanel").down("datefield[name=orderTime]").getValue(),
-                		orderAddr = component.up("checkSearchpanel").down("combobox[name=orderAddr]").getValue(),
-                		payby = component.up("checkSearchpanel").down("combobox[name=payby]").getValue(),
-                		orderStatus = component.up("checkSearchpanel").down("combobox[name=orderStatus]").getValue(),
-                		brandId = component.up("checkSearchpanel").down("combobox[name=brandId]").getValue(),
-                		seriesId = component.up("checkSearchpanel").down("combobox[name=seriesId]").getValue(),
-                		singleId = component.up("checkSearchpanel").down("combobox[name=singleId]").getValue();
-                		
-                	
-                	
-                	var params = checkStore.proxy.extraParams;
-                	params.trackingNumber = trackingNumber;
-                	params.transferCompany = transferCompany;
-                	params.orderTime = Ext.util.Format.date(orderTime,'Ymd');
-                	params.orderAddr = orderAddr;
-                	params.payby = payby;
-                	params.orderStatus = orderStatus;
-                	params.brandId = brandId;
-                	params.seriesId = seriesId;
-                	params.singleId = singleId;
-                	
-                	// reload store
-                	checkStore.reload();
-                }
-			}, {
-				margin: "5 10",
-				xtype: "button",
-				text: "重置",
-				scope: this,
-				handler: function(component){
-					component.up("checkSearchpanel").form.reset();
-				}
+				width: 200,
+				fieldLabel: "批次号",
+				labelWidth: 70,
+				name: "batchNo",
+				anchor: "55%",
+				xtype: "textfield",
+		        editable:true
 			}]
 		}, {
 			xtype: "container",
@@ -156,7 +119,7 @@ Ext.define("MIS.view.check.CheckSearch", {
 			layout: "anchor",
 			items:[{
 				margin: "0 10",
-				width: 180,
+				width: 175,
 				xtype: 'datefield',
 				fieldLabel: "下单时间",
 				name: "orderTime",
@@ -167,7 +130,7 @@ Ext.define("MIS.view.check.CheckSearch", {
 				anchor: "55%"
 			}, {
 				margin: "5 10",
-				width: 180,
+				width: 175,
 				labelWidth: 60,
 				anchor: "55%",
 				fieldLabel: "系列名称",
@@ -216,7 +179,7 @@ Ext.define("MIS.view.check.CheckSearch", {
 			layout: "anchor",
 			items:[{
 				margin: "0 10",
-				width: 230,
+				width: 175,
 				labelWidth: 60,
 				anchor: "55%",
 		        fieldLabel: "品牌名称",
@@ -260,7 +223,7 @@ Ext.define("MIS.view.check.CheckSearch", {
 		        editable:true
 			}, {
 				margin: "5 10",
-				width: 230,
+				width: 175,
 				labelWidth: 60,
 				anchor: "55%",
 				fieldLabel: "单品名称",
@@ -294,6 +257,58 @@ Ext.define("MIS.view.check.CheckSearch", {
 		        editable:true
 			}]
 			
+		}, {
+			xtype: "container",
+			layout: "anchor",
+			items:[{
+				margin: "0 10",
+				xtype: "button",
+				text: '搜索',
+				name: "search",
+				anchor: '20%',
+				scope: this,
+			    handler: function(component){
+			    	// 找到store
+			    	var checkStore = component.up("checkview").down("checkgrid").getStore();
+			    	
+			    	// 设置Store参数
+			    	var trackingNumber = component.up("checkSearchpanel").down("textfield[name=trackingNumber]").getValue(),
+			    		transferCompany = component.up("checkSearchpanel").down("combobox[name=transferCompany]").getValue(),
+			    		orderTime = component.up("checkSearchpanel").down("datefield[name=orderTime]").getValue(),
+			    		orderAddr = component.up("checkSearchpanel").down("combobox[name=orderAddr]").getValue(),
+			    		payby = component.up("checkSearchpanel").down("combobox[name=payby]").getValue(),
+			    		orderStatus = component.up("checkSearchpanel").down("combobox[name=orderStatus]").getValue(),
+			    		brandId = component.up("checkSearchpanel").down("combobox[name=brandId]").getValue(),
+			    		seriesId = component.up("checkSearchpanel").down("combobox[name=seriesId]").getValue(),
+			    		singleId = component.up("checkSearchpanel").down("combobox[name=singleId]").getValue(),
+			    		batchNo = component.up("checkSearchpanel").down("textfield[name=batchNo]").getValue();
+			    		
+			    	
+			    	
+			    	var params = checkStore.proxy.extraParams;
+			    	params.trackingNumber = trackingNumber;
+			    	params.transferCompany = transferCompany;
+			    	params.orderTime = Ext.util.Format.date(orderTime,'Ymd');
+			    	params.orderAddr = orderAddr;
+			    	params.payby = payby;
+			    	params.orderStatus = orderStatus;
+			    	params.brandId = brandId;
+			    	params.seriesId = seriesId;
+			    	params.singleId = singleId;
+			    	params.batchNo = batchNo;
+			    	
+			    	// reload store
+			    	checkStore.reload();
+			    }
+			}, {
+				margin: "5 10",
+				xtype: "button",
+				text: "重置",
+				scope: this,
+				handler: function(component){
+					component.up("checkSearchpanel").form.reset();
+				}
+			}]
 		}]
 	}]
 });

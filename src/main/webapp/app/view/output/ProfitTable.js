@@ -29,7 +29,7 @@ Ext.define("MIS.view.output.ProfitTable", {
 				margin: "0 10",
 				width: 230,
 				xtype: 'datefield',
-				fieldLabel: "*下单时间(起始)",
+				fieldLabel: "*起始时间",
 				name: "startTime",
 				anchor: "55%",
 		        format: 'Ymd',
@@ -53,7 +53,7 @@ Ext.define("MIS.view.output.ProfitTable", {
                 		return;
                 	}
                 	
-                	window.location.href = '/clear/profit?startTime='+Ext.util.Format.date(startTime,'Ymd')+'&endTime='+Ext.util.Format.date(endTime,'Ymd');  
+                	window.location.href = '/clear/profit?startTime='+Ext.util.Format.date(startTime,'Ymd')+'&endTime='+Ext.util.Format.date(endTime,'Ymd')+'&dc_='+Math.random(100);  
                 	
                 }
 			}, {
@@ -69,7 +69,7 @@ Ext.define("MIS.view.output.ProfitTable", {
 			margin: "0 10",
 			width: 230,
 			xtype: 'datefield',
-			fieldLabel: "*下单时间(结束)",
+			fieldLabel: "*结束时间",
 			name: "endTime",
 			anchor: "55%",
 	        format: 'Ymd',
@@ -95,7 +95,7 @@ Ext.define("MIS.view.output.ProfitTable", {
 				margin: "0 10",
 				width: 230,
 				xtype: 'datefield',
-				fieldLabel: "*下单时间(起始)",
+				fieldLabel: "*起始时间",
 				name: "selledStartTime",
 				anchor: "55%",
 		        format: 'Ymd',
@@ -119,7 +119,7 @@ Ext.define("MIS.view.output.ProfitTable", {
                 		return;
                 	}
                 	
-                	window.location.href = '/clear/selled?startTime='+Ext.util.Format.date(startTime,'Ymd')+'&endTime='+Ext.util.Format.date(endTime,'Ymd');  
+                	window.location.href = '/clear/selled?startTime='+Ext.util.Format.date(startTime,'Ymd')+'&endTime='+Ext.util.Format.date(endTime,'Ymd')+'&dc_='+Math.random(100);  
                 	
                 }
 			}, {
@@ -135,8 +135,109 @@ Ext.define("MIS.view.output.ProfitTable", {
 			margin: "0 10",
 			width: 230,
 			xtype: 'datefield',
-			fieldLabel: "*下单时间(结束)",
+			fieldLabel: "*结束时间",
 			name: "selledEndTime",
+			anchor: "55%",
+	        format: 'Ymd',
+	        editable:false,
+			labelWidth: 100,
+			anchor: "55%"
+		}]
+	}, {
+		xtype:'fieldset',
+        title: '仓库记录导出',
+        padding: "5 5 0 5",
+        margin: "5 10",
+        defaults: {
+            anchor: "100%"
+        },
+		
+		layout: "hbox",//横向表格
+		
+		items:[{
+			xtype: "container",
+			layout: "anchor",
+			items:[{
+				margin: "5 10",
+				xtype: "button",
+				text: '导出',
+        		name: "search",
+        		anchor: '20%',
+        		scope: this,
+                handler: function(component){
+                	window.location.href = '/clear/store?dc_='+Math.random(100);  
+                	
+                }
+			}, {
+				margin: "5 10",
+				xtype: "button",
+				text: "重置",
+				scope: this,
+				handler: function(component){
+					component.up("profittable").form.reset();
+				}
+			}]
+		}]
+	}, {
+		xtype:'fieldset',
+        title: '下单清单导出',
+        padding: "5 5 0 5",
+        margin: "5 10",
+        defaults: {
+            anchor: "100%"
+        },
+		
+		layout: "hbox",//横向表格
+		
+		items:[{
+			xtype: "container",
+			layout: "anchor",
+			items:[{
+				margin: "0 10",
+				width: 230,
+				xtype: 'datefield',
+				fieldLabel: "*起始时间",
+				name: "checkStartTime",
+				anchor: "55%",
+		        format: 'Ymd',
+		        editable:false,
+				labelWidth: 100,
+				anchor: "55%"
+			}, {
+				margin: "5 10",
+				xtype: "button",
+				text: '导出',
+        		name: "search",
+        		anchor: '20%',
+        		scope: this,
+                handler: function(component){
+                	var startTime = component.up("profittable").down("datefield[name=checkStartTime]").getValue(),
+                		endTime = component.up("profittable").down("datefield[name=checkEndTime]").getValue();
+                	//Ext.util.Format.date(storeTime,'Ymd');
+                	
+                	if(startTime == '' || endTime == '' || startTime == null || endTime == null){
+                		Ext.MessageBox.alert("请求失败", "[起始时间]和[结束时间]不能为空");
+                		return;
+                	}
+                	
+                	window.location.href = '/clear/check?startTime='+Ext.util.Format.date(startTime,'Ymd')+'&endTime='+Ext.util.Format.date(endTime,'Ymd')+'&dc_='+Math.random(100);  
+                	
+                }
+			}, {
+				margin: "5 10",
+				xtype: "button",
+				text: "重置",
+				scope: this,
+				handler: function(component){
+					component.up("profittable").form.reset();
+				}
+			}]
+		}, {
+			margin: "0 10",
+			width: 230,
+			xtype: 'datefield',
+			fieldLabel: "*结束时间",
+			name: "checkEndTime",
 			anchor: "55%",
 	        format: 'Ymd',
 	        editable:false,

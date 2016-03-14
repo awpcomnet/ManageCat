@@ -67,7 +67,7 @@ public class LoginController {
 	    
 	    HttpSession session = request.getSession();
 	    String leaveCaptcha = (String)session.getAttribute(Constants.KAPTCHA_SESSION_KEY);
-	    if (!captcha.equals(leaveCaptcha))
+	    if (!captcha.equalsIgnoreCase(leaveCaptcha))
 	        throw new ParameterException("1", "验证码错误");
 	    
 	    User user = userService.findUserByUsername(username);

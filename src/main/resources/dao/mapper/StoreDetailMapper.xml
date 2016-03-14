@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.manage.store.detail.dao.StoreDetailDao">
+
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
+	<resultMap type="com.cat.manage.store.detail.domain.StoreDetail" id="StoreDetailResultMap">
+		<result property="payBy" column="payby"/>
+		<result property="sumUnitRmb" column="sum_unit_rmb"/>
+		<result property="sumUnitPostage" column="sum_unit_postage"/>
+		<result property="residueNum" column="residue_num"/>
+		<result property="sumStoreCost" column="sum_store_cost"/>
+	</resultMap>
+	
+	<resultMap type="com.cat.manage.store.domain.Store" id="StoreResultMap">
+		<id property="id" column="id"/>
+		<result property="shippedId" column="shipped_id"/>
+		<result property="checkId" column="check_id"/>
+		<result property="trackingNumber" column="tracking_number"/>
+		<result property="transferCompany" column="transfer_company"/>
+		<result property="brandId" column="brand_id"/>
+		<result property="seriesId" column="series_id"/>
+		<result property="singleId" column="single_id"/>
+		<result property="num" column="num"/>
+		<result property="unitPrice" column="unit_price"/>
+		<result property="payby" column="payby"/>
+		<result property="unitRmb" column="unit_rmb"/>
+		<result property="unitPostage" column="unit_postage"/>
+		<result property="unitCost" column="unit_cost"/>
+		<result property="remark" column="remark"/>
+		<result property="sellNum" column="sell_num"/>
+		<result property="storeTime" column="store_time"/>
+		<result property="storeStatus" column="store_status"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="createDateFormat" column="createDateFormat"/>
+		<result property="updateDateFormat" column="updateDateFormat"/>
+		<result property="brandName" column="brand_name"/>
+		<result property="seriesName" column="series_name"/>
+		<result property="singleName" column="single_name"/>
+		<result property="residueNum" column="residue_num"/>
+	</resultMap>
+	
+	<!-- 查询所有库存 -->
+	<select id="queryStoreAll" parameterType="com.cat.manage.store.domain.Store" resultMap="StoreResultMap">
+	select id, shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, sell_num, store_time, store_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
+    ,(select series_name from t_series where series_id = t.series_id) as series_name
+    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
+    , (num - IFNULL(sell_num,0)) as residue_num 
+	from t_store t 
+	where num > IFNULL(sell_num,0)
+	</select>
+	
+	<!-- 查询所有库存详情 -->
+	<select id="queryStoreByPayBy" parameterType="com.cat.manage.store.domain.Store" resultMap="StoreDetailResultMap">
+	select payby
+	, sum((num - IFNULL(sell_num,0))*unit_rmb) as sum_unit_rmb
+	, sum((num - IFNULL(sell_num,0))*unit_postage) as sum_unit_postage
+	, sum(num - IFNULL(sell_num,0)) as residue_num
+	, sum((num - IFNULL(sell_num,0))*unit_rmb+(num - IFNULL(sell_num,0))*unit_postage) as sum_store_cost
+	 from t_store group by payby
+	</select>
+	
+</mapper>

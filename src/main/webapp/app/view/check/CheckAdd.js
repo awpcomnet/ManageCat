@@ -22,6 +22,24 @@ Ext.define("MIS.view.check.CheckAdd", {
 	
 	
 	items: [{
+		fieldLabel: "批次号",
+        name: "batchNo",
+        xtype: "combobox",
+        colspan: 1,
+        store: Ext.create("MIS.store.batch.BatchStore"),
+        mode: "local",
+        displayField: 'batchNo',
+        valueField: "batchNo",
+        allowBlank: true,
+        editable:false
+    }, {
+		fieldLabel: "*批次号注释",
+		value: "批次号仅显示前25条",
+        colspan: 1,
+        //width: 530,
+        disabled: true,
+        anchor: "55%"
+    }, {
 		fieldLabel: "快递单号",
         name: "trackingNumber",
         xtype: "textfield",
@@ -211,6 +229,29 @@ Ext.define("MIS.view.check.CheckAdd", {
     }],
 	
 	buttons: [{
+		text: "生成批次号",
+		handler: function(component){
+			Ext.Ajax.request({
+				url: "/batch/create",
+				success: function(conn, request, option, eOpts){
+					var result = Ext.JSON.decode(conn.responseText, true);
+					if(result.resultCode != 0){
+						Ext.MessageBox.alert("创建批次号失败", "原因:" + result.resultMessage);
+					} else {
+						var resultBatchNo = result.results[0];
+						var batchNo = Ext.ComponentQuery.query("checkadd combobox[name=batchNo]")[0];
+						
+						batchNo.setValue(resultBatchNo.trim());
+						batchNo.setReadOnly(true);
+					}
+				},
+				failure: function (conn, request, option, eOpts) {
+                    Ext.MessageBox.alert("服务器繁忙, 稍后重试!");
+                }
+				
+			});
+		}
+	}, {
 		text: "取消",
 		handler: function(component){
 			component.up("#checkaddwindow").close();
@@ -230,7 +271,8 @@ Ext.define("MIS.view.check.CheckAdd", {
 				singleId = checkAdd.down("combobox[name=singleId]").getValue(),
 				num = checkAdd.down("numberfield[name=num]").getValue(),
 				unitPrice = checkAdd.down("textfield[name=unitPrice]").getValue(),
-				remark = checkAdd.down("textarea[name=remark]").getValue();
+				remark = checkAdd.down("textarea[name=remark]").getValue(),
+				batchNo = checkAdd.down("textfield[name=batchNo]").getValue().trim();
 			
 			console.log("brandId="+brandId+"|orderTime="+Ext.util.Format.date(orderTime,'Ymd')+"|payby="+payby);
 			
@@ -245,7 +287,8 @@ Ext.define("MIS.view.check.CheckAdd", {
 					singleId: singleId,
 					num: num,
 					unitPrice: unitPrice,
-					remark: remark
+					remark: remark,
+					batchNo: batchNo
 	        };
 			
 			Ext.Ajax.request({

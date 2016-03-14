@@ -23,6 +23,7 @@ public class Check implements Serializable{
 	private String orderStatus;//订单状态
 	private Date createDate;//创建时间
 	private Date updateDate;//更新时间
+	private String batchNo;//批次号
 	
 	private String createDateFormat;//格式化后的创建时间
 	private String updateDateFormat;//格式化后的更新时间
@@ -30,6 +31,8 @@ public class Check implements Serializable{
 	private String brandName;//品牌名称
 	private String seriesName;//系列名称
 	private String singleName;//单品名称
+	private String transferCompanyName;//转运公司
+	private String orderAddrName;//下单网站
 	
 	public Integer getId() {
 		return id;
@@ -199,6 +202,30 @@ public class Check implements Serializable{
 		this.singleName = singleName;
 	}
 
+	public String getBatchNo() {
+		return batchNo;
+	}
+
+	public void setBatchNo(String batchNo) {
+		this.batchNo = batchNo;
+	}
+	
+	public String getTransferCompanyName() {
+		return transferCompanyName;
+	}
+
+	public void setTransferCompanyName(String transferCompanyName) {
+		this.transferCompanyName = transferCompanyName;
+	}
+
+	public String getOrderAddrName() {
+		return orderAddrName;
+	}
+
+	public void setOrderAddrName(String orderAddrName) {
+		this.orderAddrName = orderAddrName;
+	}
+
 	@Override
 	public String toString() {
 		return "Check [id=" + id + ", trackingNumber=" + trackingNumber
@@ -208,8 +235,11 @@ public class Check implements Serializable{
 				+ ", num=" + num + ", unitPrice=" + unitPrice + ", remark="
 				+ remark + ", payby=" + payby + ", orderStatus=" + orderStatus
 				+ ", createDate=" + createDate + ", updateDate=" + updateDate
-				+ ", createDateFormat=" + createDateFormat
-				+ ", updateDateFormat=" + updateDateFormat + "]";
+				+ ", batchNo=" + batchNo + ", createDateFormat="
+				+ createDateFormat + ", updateDateFormat=" + updateDateFormat
+				+ ", sumPrice=" + sumPrice + ", brandName=" + brandName
+				+ ", seriesName=" + seriesName + ", singleName=" + singleName
+				+ "]";
 	}
 
 	private static final long serialVersionUID = -935729869280274039L;

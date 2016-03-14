@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.manage.batch.dao.BatchDao">
+
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
+	<resultMap type="com.cat.manage.batch.domain.Batch" id="batchResultMap">
+		<id property="id" column="id"/>
+		<result property="batchNo" column="batch_no"/>
+		<result property="createDate" column="create_date"/>
+		<result property="orderNum" column="order_num"/>
+		<result property="sumPrice" column="sum_price"/>
+		<result property="createDateFormat" column="createDateFormat"/>
+	</resultMap>
+	
+	<!-- 插入批次号 -->
+	<insert id="addBatch" parameterType="com.cat.manage.batch.domain.Batch">
+	insert into t_batch(batch_no, create_date) values(#{batchNo}, now())
+	</insert>
+	
+	<!-- 查询批次号 -->
+	<select id="queryBatch" parameterType="com.cat.manage.batch.domain.Batch" resultMap="batchResultMap">
+	select t.id, t.batch_no, t.create_date
+	, (select count(1) from t_check where batch_no = t.batch_no) as order_num
+	, IFNULL((select sum(num*unit_price) from t_check where batch_no = t.batch_no), 0.0) as sum_price
+	, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat
+	 from t_batch t where 1=1
+	 <if test="id != null">
+	 and id = #{id}
+	 </if>
+	 <if test="batchNo != null and batchNo != ''">
+	 and batch_no = #{batchNo}
+	 </if>
+	 <if test="createDateFormat != null and createDateFormat != ''">
+	 and DATE_FORMAT(create_date, '%Y%m%d') = #{createDateFormat}
+	 </if>
+	 order by create_date desc, batch_no desc
+	</select>
+</mapper>

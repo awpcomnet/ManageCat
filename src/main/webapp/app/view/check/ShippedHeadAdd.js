@@ -22,7 +22,7 @@ Ext.define("MIS.view.check.ShippedHeadAdd", {
 	
 	
 	items: [{
-		fieldLabel: "快递单号",
+		fieldLabel: "邮寄单号",
         name: "trackingNumber",
         xtype: "textfield",
         colspan: 1,
@@ -73,7 +73,7 @@ Ext.define("MIS.view.check.ShippedHeadAdd", {
 				success: function(conn, request, option, eOpts){
 					var result = Ext.JSON.decode(conn.responseText, true);
 					if(result.resultCode != 0){
-						Ext.MessageBox.alert("校验快递单号失败, 原因:" + result.resultMessage);
+						Ext.MessageBox.alert("校验邮寄快递单号失败", "原因:" + result.resultMessage);
 					} else {
 						var results = result.results;
 						if(results.length != 0){

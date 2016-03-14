@@ -96,6 +96,12 @@ Ext.define("MIS.view.storage.StorageGrid", {
 					scope: this,
 					handler: this.onStorageallClick
 				}, '->', {
+					iconCls: 'icon-folder-open-alt',
+					text: '汇总',
+					itemId: 'detail',
+					scope: this,
+					handler: this.onDetailClick
+				},  {
 					iconCls: 'icon-refresh',
 					text: '刷新',
 					scope: this,
@@ -312,6 +318,40 @@ Ext.define("MIS.view.storage.StorageGrid", {
         			component.down("numberfield[name=sellNum]").setMaxValue(selections[0].raw.residueNum)
         			component.down("textarea[name=remark]").setValue(selections[0].raw.remark);
         			component.down("textfield[name=storeId]").setValue(selections[0].raw.id);
+    			}
+        	}
+        });
+    	editWindow.show();
+    },
+    
+    onDetailClick: function(component){
+    	debugger;
+        var storageview = Ext.ComponentQuery.query("storageview")[0];
+        storageview.getEl().mask();
+    	
+    	var editWindow = Ext.create("Ext.window.Window", {
+        	title: "仓库汇总信息",
+        	//id: "shippedswindow",
+        	extraData: "",
+        	renderTo: storageview.getEl(),
+        	height: 500,
+        	width: 800,
+        	layout: "fit",
+        	closeAction: "destroy",
+        	items: [{
+        		xtype: "storagedetailgrid"
+        	}],
+        	listeners: {
+        		close: function(){
+        			storageview.getEl().unmask();
+        		},
+        		beforerender: function () {
+        			var storagedetailgrid = Ext.ComponentQuery.query("storagedetailgrid")[0];
+        			var storagedetailgridStore = storagedetailgrid.getStore();
+        			storagedetailgridStore.load();
+        		},
+        		afterrender: function(component, eOpts){
+        			
     			}
         	}
         });

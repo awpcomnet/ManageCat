@@ -208,7 +208,7 @@ Ext.define("MIS.view.role.RoleGrid", {
         view.getEl().mask();
         var treewindow = Ext.create("MIS.view.role.RoleEditPermission", {
             width: 800,
-            height: 600,
+            height: 500,
             title: "角色["+ record.raw.name +"]的权限",
             renderTo: view.getEl(),
             listeners: {

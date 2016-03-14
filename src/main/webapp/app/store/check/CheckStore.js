@@ -24,7 +24,8 @@ Ext.define("MIS.store.check.CheckStore", {
         	brandId: "",
         	seriesId: "",
         	singleId: "",
-        	payby: ""
+        	payby: "",
+        	batchNo: ""
         }
 	}
 	
