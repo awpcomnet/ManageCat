@@ -828,9 +828,186 @@ Ext.ClassManager.addNameAlternateMappings({
     "Ext.Window"
   ],
   "MIS.Application": [],
+  "MIS.common.CurrentUser": [],
+  "MIS.common.DictManager": [],
   "MIS.controller.Main": [],
+  "MIS.controller.batch.BatchController": [],
+  "MIS.controller.brand.BrandController": [],
+  "MIS.controller.catalog.CatalogController": [],
+  "MIS.controller.check.CheckController": [],
+  "MIS.controller.dict.DictController": [],
+  "MIS.controller.mailuser.MailUserController": [],
+  "MIS.controller.mainviewport.MainNavigation": [],
+  "MIS.controller.order.OrderController": [],
+  "MIS.controller.order.SubOrderController": [],
+  "MIS.controller.output.OutputController": [],
+  "MIS.controller.permission.PermissionController": [],
+  "MIS.controller.role.RoleController": [],
+  "MIS.controller.selled.SelledController": [],
+  "MIS.controller.series.SeriesController": [],
+  "MIS.controller.shipped.ShippedHeadController": [],
+  "MIS.controller.singleproduct.SingleController": [],
+  "MIS.controller.storage.StorageController": [],
+  "MIS.controller.user.UserController": [],
+  "MIS.model.batch.Batch": [],
+  "MIS.model.brand.Brand": [],
+  "MIS.model.catalog.Catalog": [],
+  "MIS.model.check.Check": [],
+  "MIS.model.dict.Dict": [],
+  "MIS.model.dict.DictItem": [],
+  "MIS.model.mailuser.MailUser": [],
+  "MIS.model.nav.Item": [],
+  "MIS.model.nav.Root": [],
+  "MIS.model.order.Order": [],
+  "MIS.model.order.SubOrder": [],
+  "MIS.model.permission.Permission": [],
+  "MIS.model.role.Role": [],
+  "MIS.model.selled.Selled": [],
+  "MIS.model.series.Series": [],
+  "MIS.model.shipped.Shipped": [],
+  "MIS.model.shipped.ShippedHead": [],
+  "MIS.model.singleproduct.Singleproduct": [],
+  "MIS.model.storage.Storage": [],
+  "MIS.model.storage.StorageDetail": [],
+  "MIS.model.user.User": [],
+  "MIS.store.Nav": [],
+  "MIS.store.batch.BatchStore": [],
+  "MIS.store.brand.BrandStore": [],
+  "MIS.store.catalog.CatalogInfoStore": [],
+  "MIS.store.catalog.CatalogStore": [],
+  "MIS.store.check.CheckStore": [],
+  "MIS.store.dict.DictItemStore": [],
+  "MIS.store.dict.DictQueryStore": [],
+  "MIS.store.dict.DictStore": [],
+  "MIS.store.dict.DictTreeStore": [],
+  "MIS.store.mailuser.MailUserStore": [],
+  "MIS.store.order.OrderStore": [],
+  "MIS.store.order.SubOrderStore": [],
+  "MIS.store.permission.PermissionStore": [],
+  "MIS.store.permission.PermissionTreeStore": [],
+  "MIS.store.role.RoleAllStore": [],
+  "MIS.store.role.RoleStore": [],
+  "MIS.store.selled.SelledStore": [],
+  "MIS.store.series.SeriesStore": [],
+  "MIS.store.shipped.ShippedHeadStore": [],
+  "MIS.store.shipped.ShippedStore": [],
+  "MIS.store.singleproduct.SingleproductStore": [],
+  "MIS.store.storage.StorageDetailStore": [],
+  "MIS.store.storage.StorageStore": [],
+  "MIS.store.user.UserStore": [],
   "MIS.view.Main": [],
-  "MIS.view.Viewport": []
+  "MIS.view.MainViewport": [],
+  "MIS.view.Viewport": [],
+  "MIS.view.batch.BatchGrid": [],
+  "MIS.view.batch.BatchView": [],
+  "MIS.view.brand.BrandAdd": [],
+  "MIS.view.brand.BrandGrid": [],
+  "MIS.view.brand.BrandModify": [],
+  "MIS.view.brand.BrandSearch": [],
+  "MIS.view.brand.BrandView": [],
+  "MIS.view.brand.SeriesAdd": [],
+  "MIS.view.catalog.CatalogAdd": [],
+  "MIS.view.catalog.CatalogData": [],
+  "MIS.view.catalog.CatalogEdit": [],
+  "MIS.view.catalog.CatalogGrid": [],
+  "MIS.view.catalog.CatalogModify": [],
+  "MIS.view.catalog.CatalogSearch": [],
+  "MIS.view.catalog.CatalogTree": [],
+  "MIS.view.catalog.CatalogView": [],
+  "MIS.view.check.CheckAdd": [],
+  "MIS.view.check.CheckGrid": [],
+  "MIS.view.check.CheckModify": [],
+  "MIS.view.check.CheckSearch": [],
+  "MIS.view.check.CheckView": [],
+  "MIS.view.check.ShippedHeadAdd": [],
+  "MIS.view.component.MultiSelectBox": [],
+  "MIS.view.dict.DictAdd": [],
+  "MIS.view.dict.DictFilterSearch": [],
+  "MIS.view.dict.DictGrid": [],
+  "MIS.view.dict.DictItemAdd": [],
+  "MIS.view.dict.DictItemGrid": [],
+  "MIS.view.dict.DictItemModify": [],
+  "MIS.view.dict.DictItemSearch": [],
+  "MIS.view.dict.DictModify": [],
+  "MIS.view.dict.DictTree": [],
+  "MIS.view.dict.DictView": [],
+  "MIS.view.mailuser.MailUserAdd": [],
+  "MIS.view.mailuser.MailUserGrid": [],
+  "MIS.view.mailuser.MailUserView": [],
+  "MIS.view.mainviewport.MainFooter": [],
+  "MIS.view.mainviewport.MainHeader": [],
+  "MIS.view.mainviewport.MainNavigation": [],
+  "MIS.view.mainviewport.MainNavigationItem": [],
+  "MIS.view.mainviewport.MainTabPanel": [],
+  "MIS.view.order.OrderAdd": [],
+  "MIS.view.order.OrderGrid": [],
+  "MIS.view.order.OrderModify": [],
+  "MIS.view.order.OrderSearch": [],
+  "MIS.view.order.OrderView": [],
+  "MIS.view.order.SellAndBack": [],
+  "MIS.view.order.SubOrderAdd": [],
+  "MIS.view.order.SubOrderAddForOrder": [],
+  "MIS.view.order.SubOrderDetail": [],
+  "MIS.view.order.SubOrderGrid": [],
+  "MIS.view.order.SubOrderMerge": [],
+  "MIS.view.order.SubOrderModify": [],
+  "MIS.view.order.SubOrderSearch": [],
+  "MIS.view.order.SubOrderSplit": [],
+  "MIS.view.order.subOrderView": [],
+  "MIS.view.output.ProfitTable": [],
+  "MIS.view.output.ProfitView": [],
+  "MIS.view.permission.PermissionAdd": [],
+  "MIS.view.permission.PermissionCatalogTree": [],
+  "MIS.view.permission.PermissionDetail": [],
+  "MIS.view.permission.PermissionGrid": [],
+  "MIS.view.permission.PermissionModify": [],
+  "MIS.view.permission.PermissionSearch": [],
+  "MIS.view.permission.PermissionView": [],
+  "MIS.view.role.RoleAdd": [],
+  "MIS.view.role.RoleDetail": [],
+  "MIS.view.role.RoleEditPermission": [],
+  "MIS.view.role.RoleEditPermissionPanel": [],
+  "MIS.view.role.RoleGrid": [],
+  "MIS.view.role.RoleModify": [],
+  "MIS.view.role.RoleView": [],
+  "MIS.view.selled.SelledGrid": [],
+  "MIS.view.selled.SelledModify": [],
+  "MIS.view.selled.SelledRefund": [],
+  "MIS.view.selled.SelledSearch": [],
+  "MIS.view.selled.SelledView": [],
+  "MIS.view.series.SeriesAdd": [],
+  "MIS.view.series.SeriesGrid": [],
+  "MIS.view.series.SeriesModify": [],
+  "MIS.view.series.SeriesSearch": [],
+  "MIS.view.series.SeriesView": [],
+  "MIS.view.series.SingleAdd": [],
+  "MIS.view.shipped.ShippedGrid": [],
+  "MIS.view.shipped.ShippedModify": [],
+  "MIS.view.shipped.ShippedSearch": [],
+  "MIS.view.shipped.ShippedView": [],
+  "MIS.view.shipped.ShippedsGrid": [],
+  "MIS.view.shipped.ShippedsModify": [],
+  "MIS.view.shipped.StorageAdd": [],
+  "MIS.view.shipped.StorageAddContinue": [],
+  "MIS.view.singleproduct.SingleAdd": [],
+  "MIS.view.singleproduct.SingleGrid": [],
+  "MIS.view.singleproduct.SingleModify": [],
+  "MIS.view.singleproduct.SingleSearch": [],
+  "MIS.view.singleproduct.SingleView": [],
+  "MIS.view.storage.DestroyAdd": [],
+  "MIS.view.storage.SelledAdd": [],
+  "MIS.view.storage.StorageDetailGrid": [],
+  "MIS.view.storage.StorageGrid": [],
+  "MIS.view.storage.StorageModify": [],
+  "MIS.view.storage.StorageSearch": [],
+  "MIS.view.storage.StorageView": [],
+  "MIS.view.user.ResetPassWord": [],
+  "MIS.view.user.UserAdd": [],
+  "MIS.view.user.UserDetailsForm": [],
+  "MIS.view.user.UserDetailsWindow": [],
+  "MIS.view.user.UserGrid": [],
+  "MIS.view.user.UserSearch": [],
+  "MIS.view.user.UserView": []
 });
 Ext.ClassManager.addNameAliasMappings({
   "Ext.AbstractComponent": [],
@@ -1818,11 +1995,410 @@ Ext.ClassManager.addNameAliasMappings({
     "widget.window"
   ],
   "MIS.Application": [],
+  "MIS.common.CurrentUser": [],
+  "MIS.common.DictManager": [],
   "MIS.controller.Main": [],
+  "MIS.controller.batch.BatchController": [],
+  "MIS.controller.brand.BrandController": [],
+  "MIS.controller.catalog.CatalogController": [],
+  "MIS.controller.check.CheckController": [],
+  "MIS.controller.dict.DictController": [],
+  "MIS.controller.mailuser.MailUserController": [],
+  "MIS.controller.mainviewport.MainNavigation": [],
+  "MIS.controller.order.OrderController": [],
+  "MIS.controller.order.SubOrderController": [],
+  "MIS.controller.output.OutputController": [],
+  "MIS.controller.permission.PermissionController": [],
+  "MIS.controller.role.RoleController": [],
+  "MIS.controller.selled.SelledController": [],
+  "MIS.controller.series.SeriesController": [],
+  "MIS.controller.shipped.ShippedHeadController": [],
+  "MIS.controller.singleproduct.SingleController": [],
+  "MIS.controller.storage.StorageController": [],
+  "MIS.controller.user.UserController": [],
+  "MIS.model.batch.Batch": [],
+  "MIS.model.brand.Brand": [],
+  "MIS.model.catalog.Catalog": [],
+  "MIS.model.check.Check": [],
+  "MIS.model.dict.Dict": [],
+  "MIS.model.dict.DictItem": [],
+  "MIS.model.mailuser.MailUser": [],
+  "MIS.model.nav.Item": [],
+  "MIS.model.nav.Root": [],
+  "MIS.model.order.Order": [],
+  "MIS.model.order.SubOrder": [],
+  "MIS.model.permission.Permission": [],
+  "MIS.model.role.Role": [],
+  "MIS.model.selled.Selled": [],
+  "MIS.model.series.Series": [],
+  "MIS.model.shipped.Shipped": [],
+  "MIS.model.shipped.ShippedHead": [],
+  "MIS.model.singleproduct.Singleproduct": [],
+  "MIS.model.storage.Storage": [],
+  "MIS.model.storage.StorageDetail": [],
+  "MIS.model.user.User": [],
+  "MIS.store.Nav": [],
+  "MIS.store.batch.BatchStore": [],
+  "MIS.store.brand.BrandStore": [],
+  "MIS.store.catalog.CatalogInfoStore": [],
+  "MIS.store.catalog.CatalogStore": [],
+  "MIS.store.check.CheckStore": [],
+  "MIS.store.dict.DictItemStore": [],
+  "MIS.store.dict.DictQueryStore": [],
+  "MIS.store.dict.DictStore": [],
+  "MIS.store.dict.DictTreeStore": [],
+  "MIS.store.mailuser.MailUserStore": [],
+  "MIS.store.order.OrderStore": [],
+  "MIS.store.order.SubOrderStore": [],
+  "MIS.store.permission.PermissionStore": [],
+  "MIS.store.permission.PermissionTreeStore": [],
+  "MIS.store.role.RoleAllStore": [],
+  "MIS.store.role.RoleStore": [],
+  "MIS.store.selled.SelledStore": [],
+  "MIS.store.series.SeriesStore": [],
+  "MIS.store.shipped.ShippedHeadStore": [],
+  "MIS.store.shipped.ShippedStore": [],
+  "MIS.store.singleproduct.SingleproductStore": [],
+  "MIS.store.storage.StorageDetailStore": [],
+  "MIS.store.storage.StorageStore": [],
+  "MIS.store.user.UserStore": [],
   "MIS.view.Main": [
     "widget.app-main"
   ],
-  "MIS.view.Viewport": []
+  "MIS.view.MainViewport": [
+    "widget.mainviewport"
+  ],
+  "MIS.view.Viewport": [],
+  "MIS.view.batch.BatchGrid": [
+    "widget.batchgrid"
+  ],
+  "MIS.view.batch.BatchView": [
+    "widget.batchview"
+  ],
+  "MIS.view.brand.BrandAdd": [
+    "widget.brandadd"
+  ],
+  "MIS.view.brand.BrandGrid": [
+    "widget.brandgrid"
+  ],
+  "MIS.view.brand.BrandModify": [
+    "widget.brandmodify"
+  ],
+  "MIS.view.brand.BrandSearch": [
+    "widget.brandSearchpanel"
+  ],
+  "MIS.view.brand.BrandView": [
+    "widget.brandview"
+  ],
+  "MIS.view.brand.SeriesAdd": [
+    "widget.seriesadd"
+  ],
+  "MIS.view.catalog.CatalogAdd": [
+    "widget.catalogadd"
+  ],
+  "MIS.view.catalog.CatalogData": [
+    "widget.catalogdata"
+  ],
+  "MIS.view.catalog.CatalogEdit": [
+    "widget.catalogedit"
+  ],
+  "MIS.view.catalog.CatalogGrid": [
+    "widget.cataloggrid"
+  ],
+  "MIS.view.catalog.CatalogModify": [
+    "widget.catalogmodify"
+  ],
+  "MIS.view.catalog.CatalogSearch": [
+    "widget.catalogSearchpanel"
+  ],
+  "MIS.view.catalog.CatalogTree": [
+    "widget.catalogtree"
+  ],
+  "MIS.view.catalog.CatalogView": [
+    "widget.catalogview"
+  ],
+  "MIS.view.check.CheckAdd": [
+    "widget.checkadd"
+  ],
+  "MIS.view.check.CheckGrid": [
+    "widget.checkgrid"
+  ],
+  "MIS.view.check.CheckModify": [
+    "widget.checkmodify"
+  ],
+  "MIS.view.check.CheckSearch": [
+    "widget.checkSearchpanel"
+  ],
+  "MIS.view.check.CheckView": [
+    "widget.checkview"
+  ],
+  "MIS.view.check.ShippedHeadAdd": [
+    "widget.shippedheadadd"
+  ],
+  "MIS.view.component.MultiSelectBox": [
+    "widget.multiselectbox"
+  ],
+  "MIS.view.dict.DictAdd": [
+    "widget.dictadd"
+  ],
+  "MIS.view.dict.DictFilterSearch": [
+    "widget.dictFilterPanel"
+  ],
+  "MIS.view.dict.DictGrid": [
+    "widget.dictgrid"
+  ],
+  "MIS.view.dict.DictItemAdd": [
+    "widget.dictitemadd"
+  ],
+  "MIS.view.dict.DictItemGrid": [
+    "widget.dictitemgrid"
+  ],
+  "MIS.view.dict.DictItemModify": [
+    "widget.dictitemmodify"
+  ],
+  "MIS.view.dict.DictItemSearch": [
+    "widget.dictSearchpanel"
+  ],
+  "MIS.view.dict.DictModify": [
+    "widget.dictmodify"
+  ],
+  "MIS.view.dict.DictTree": [
+    "widget.dicttree"
+  ],
+  "MIS.view.dict.DictView": [
+    "widget.dictview"
+  ],
+  "MIS.view.mailuser.MailUserAdd": [
+    "widget.mailuseradd"
+  ],
+  "MIS.view.mailuser.MailUserGrid": [
+    "widget.mailusergrid"
+  ],
+  "MIS.view.mailuser.MailUserView": [
+    "widget.mailuserview"
+  ],
+  "MIS.view.mainviewport.MainFooter": [
+    "widget.mainfooter"
+  ],
+  "MIS.view.mainviewport.MainHeader": [
+    "widget.mainheader"
+  ],
+  "MIS.view.mainviewport.MainNavigation": [
+    "widget.mainnav"
+  ],
+  "MIS.view.mainviewport.MainNavigationItem": [
+    "widget.mainnavitem"
+  ],
+  "MIS.view.mainviewport.MainTabPanel": [
+    "widget.maintab"
+  ],
+  "MIS.view.order.OrderAdd": [
+    "widget.orderadd"
+  ],
+  "MIS.view.order.OrderGrid": [
+    "widget.ordergrid"
+  ],
+  "MIS.view.order.OrderModify": [
+    "widget.ordermodify"
+  ],
+  "MIS.view.order.OrderSearch": [
+    "widget.orderSearchpanel"
+  ],
+  "MIS.view.order.OrderView": [
+    "widget.orderview"
+  ],
+  "MIS.view.order.SellAndBack": [
+    "widget.sellandback"
+  ],
+  "MIS.view.order.SubOrderAdd": [
+    "widget.suborderadd"
+  ],
+  "MIS.view.order.SubOrderAddForOrder": [
+    "widget.suborderaddfororder"
+  ],
+  "MIS.view.order.SubOrderDetail": [
+    "widget.suborderdetail"
+  ],
+  "MIS.view.order.SubOrderGrid": [
+    "widget.subordergrid"
+  ],
+  "MIS.view.order.SubOrderMerge": [
+    "widget.subordermerge"
+  ],
+  "MIS.view.order.SubOrderModify": [
+    "widget.subordermodify"
+  ],
+  "MIS.view.order.SubOrderSearch": [
+    "widget.subOrderSearchpanel"
+  ],
+  "MIS.view.order.SubOrderSplit": [
+    "widget.subordersplit"
+  ],
+  "MIS.view.order.subOrderView": [
+    "widget.suborderview"
+  ],
+  "MIS.view.output.ProfitTable": [
+    "widget.profittable"
+  ],
+  "MIS.view.output.ProfitView": [
+    "widget.profitview"
+  ],
+  "MIS.view.permission.PermissionAdd": [
+    "widget.permissionadd"
+  ],
+  "MIS.view.permission.PermissionCatalogTree": [
+    "widget.permissioncatalogtree"
+  ],
+  "MIS.view.permission.PermissionDetail": [
+    "widget.permissiondetail"
+  ],
+  "MIS.view.permission.PermissionGrid": [
+    "widget.permissiongrid"
+  ],
+  "MIS.view.permission.PermissionModify": [
+    "widget.permissionmodify"
+  ],
+  "MIS.view.permission.PermissionSearch": [
+    "widget.permissionsearch"
+  ],
+  "MIS.view.permission.PermissionView": [
+    "widget.permissionview"
+  ],
+  "MIS.view.role.RoleAdd": [
+    "widget.roleadd"
+  ],
+  "MIS.view.role.RoleDetail": [
+    "widget.roledetail"
+  ],
+  "MIS.view.role.RoleEditPermission": [
+    "widget.roleeditpermission"
+  ],
+  "MIS.view.role.RoleEditPermissionPanel": [
+    "widget.roleeditpermissionpanel"
+  ],
+  "MIS.view.role.RoleGrid": [
+    "widget.rolegrid"
+  ],
+  "MIS.view.role.RoleModify": [
+    "widget.rolemodify"
+  ],
+  "MIS.view.role.RoleView": [
+    "widget.roleview"
+  ],
+  "MIS.view.selled.SelledGrid": [
+    "widget.selledgrid"
+  ],
+  "MIS.view.selled.SelledModify": [
+    "widget.selledmodify"
+  ],
+  "MIS.view.selled.SelledRefund": [
+    "widget.selledrefund"
+  ],
+  "MIS.view.selled.SelledSearch": [
+    "widget.selledSearchpanel"
+  ],
+  "MIS.view.selled.SelledView": [
+    "widget.selledview"
+  ],
+  "MIS.view.series.SeriesAdd": [
+    "widget.seriesadd"
+  ],
+  "MIS.view.series.SeriesGrid": [
+    "widget.seriesgrid"
+  ],
+  "MIS.view.series.SeriesModify": [
+    "widget.seriesmodify"
+  ],
+  "MIS.view.series.SeriesSearch": [
+    "widget.seriesSearchpanel"
+  ],
+  "MIS.view.series.SeriesView": [
+    "widget.seriesview"
+  ],
+  "MIS.view.series.SingleAdd": [
+    "widget.singleadd"
+  ],
+  "MIS.view.shipped.ShippedGrid": [
+    "widget.shippedgrid"
+  ],
+  "MIS.view.shipped.ShippedModify": [
+    "widget.shippedmodify"
+  ],
+  "MIS.view.shipped.ShippedSearch": [
+    "widget.shippedSearchpanel"
+  ],
+  "MIS.view.shipped.ShippedView": [
+    "widget.shippedview"
+  ],
+  "MIS.view.shipped.ShippedsGrid": [
+    "widget.shippedsgrid"
+  ],
+  "MIS.view.shipped.ShippedsModify": [
+    "widget.shippedsmodify"
+  ],
+  "MIS.view.shipped.StorageAdd": [
+    "widget.storageadd"
+  ],
+  "MIS.view.shipped.StorageAddContinue": [
+    "widget.storageaddcontinue"
+  ],
+  "MIS.view.singleproduct.SingleAdd": [
+    "widget.singleadd"
+  ],
+  "MIS.view.singleproduct.SingleGrid": [
+    "widget.singlegrid"
+  ],
+  "MIS.view.singleproduct.SingleModify": [
+    "widget.singlemodify"
+  ],
+  "MIS.view.singleproduct.SingleSearch": [
+    "widget.singleSearchpanel"
+  ],
+  "MIS.view.singleproduct.SingleView": [
+    "widget.singleview"
+  ],
+  "MIS.view.storage.DestroyAdd": [
+    "widget.destroyadd"
+  ],
+  "MIS.view.storage.SelledAdd": [
+    "widget.selledadd"
+  ],
+  "MIS.view.storage.StorageDetailGrid": [
+    "widget.storagedetailgrid"
+  ],
+  "MIS.view.storage.StorageGrid": [
+    "widget.storagegrid"
+  ],
+  "MIS.view.storage.StorageModify": [
+    "widget.storagemodify"
+  ],
+  "MIS.view.storage.StorageSearch": [
+    "widget.storageSearchpanel"
+  ],
+  "MIS.view.storage.StorageView": [
+    "widget.storageview"
+  ],
+  "MIS.view.user.ResetPassWord": [
+    "widget.resetpassword"
+  ],
+  "MIS.view.user.UserAdd": [
+    "widget.useraddwindow"
+  ],
+  "MIS.view.user.UserDetailsForm": [
+    "widget.userdetailsform"
+  ],
+  "MIS.view.user.UserDetailsWindow": [
+    "widget.userdetailswindow"
+  ],
+  "MIS.view.user.UserGrid": [
+    "widget.usergrid"
+  ],
+  "MIS.view.user.UserSearch": [
+    "widget.usersearch"
+  ],
+  "MIS.view.user.UserView": [
+    "widget.userview"
+  ]
 });
 Ext.setVersion("ext-theme-base", "4.2.1");
 Ext.setVersion("ext-theme-classic", "4.2.1");

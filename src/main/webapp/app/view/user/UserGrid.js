@@ -148,7 +148,6 @@ Ext.define("MIS.view.user.UserGrid", {
                             id: selections[0].raw.userId
                         },
                         success: function (response) {
-                        	debugger;
                             var result = Ext.JSON.decode(response.responseText);
                             if (result.resultCode == 0) {
                                 me.getStore().reload();

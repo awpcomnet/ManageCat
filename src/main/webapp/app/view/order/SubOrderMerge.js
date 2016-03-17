@@ -167,7 +167,6 @@ Ext.define("MIS.view.order.SubOrderMerge", {
 			var subOrderMerge = component.up("subordermerge");
 			//var extraData = component.up("subordermerge").extraData;
 			
-			debugger;
 			var subOrderIds = subOrderMerge.down("textfield[name=subOrderIds]").getValue().trim(),
 				curState = subOrderMerge.down("combobox[name=curState]").getValue(),
 				orderPrice = subOrderMerge.down("textfield[name=orderPrice]").getValue().trim(),

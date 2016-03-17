@@ -1,2 +1,2 @@
 // @tag full-page
-// @require E:\workspace\ManageWeb\src\main\webapp\app.js
+// @require F:\workspaces\ManageCat\src\main\webapp\app.js

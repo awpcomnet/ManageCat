@@ -325,7 +325,6 @@ Ext.define("MIS.view.storage.StorageGrid", {
     },
     
     onDetailClick: function(component){
-    	debugger;
         var storageview = Ext.ComponentQuery.query("storageview")[0];
         storageview.getEl().mask();
     	
