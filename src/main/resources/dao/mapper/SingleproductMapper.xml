@@ -56,6 +56,12 @@
 		delete from t_singleproduct where single_id = #{singleId}
 	</delete>
 	
+	<!-- 根据系列编号删除单品信息 -->
+	<delete id="deleteSingleproductBySeriesIds">
+		delete from t_singleproduct where of_origin in
+		<foreach collection="array" item="seriesId" open="(" separator="," close=")">#{seriesId}</foreach>
+	</delete>
+	
 	<!-- 查询单品信息 -->
 	<select id="querySingleproducts" parameterType="com.cat.manage.base.domain.Singleproduct" resultMap="singleproductResultMap">
 		select single_id, single_name, single_ename, capacity, unit, of_origin, (select series_name from t_series where series_id = t_singleproduct.of_origin) as of_origin_name, is_use, create_date, create_by, update_date, update_by, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat 

@@ -45,4 +45,10 @@ public interface SingleproductDao {
 	 * @return
 	 */
 	public Singleproduct querySingleproductBySingleId(Integer singleId);
+	
+	/**
+	 * 根据系列编号删除单品信息
+	 * @param seriesIds
+	 */
+	public void deleteSingleproductBySeriesIds(Integer[] seriesIds);
 }

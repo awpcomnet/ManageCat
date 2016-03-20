@@ -48,6 +48,11 @@
 		delete from t_series where series_id = #{seriesId}
 	</delete>
 	
+	<!-- 根据品牌编号删除系列 -->
+	<delete id="deleteSeriesByBrandId" parameterType="java.lang.Integer">
+		delete from t_series where of_origin = #{brandId}
+	</delete>
+	
 	<!-- 查询系列信息 -->
 	<select id="querySeries" parameterType="com.cat.manage.base.domain.Series" resultMap="seriesResultMap">
 		select series_id, series_name, series_ename, of_origin, (select brand_name from t_brand where brand_id = t_series.of_origin) as of_origin_name, is_use, create_date, create_by, update_date, update_by, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat 

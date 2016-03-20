@@ -63,6 +63,12 @@ Ext.define("MIS.view.brand.BrandGrid", {
 					itemId: 'modify',
 					scope: this,
 					handler: this.onModifyClick
+				}, {
+					iconCls: 'icon-remove',
+					text: '删除',
+					itemId: 'delete',
+					scope: this,
+					handler: this.onDeleteClick
 				}, '-', {
 					iconCls: 'icon-file-alt',
 					text: '添加系列',
@@ -215,6 +221,42 @@ Ext.define("MIS.view.brand.BrandGrid", {
         	}
         });
     	editWindow.show();
+    },
+    
+    onDeleteClick: function(component){
+    	var selections = this.getView().getSelectionModel().getSelection();
+        var selectionNum = selections.length;
+        
+        if (selectionNum != 1) {
+        	Ext.MessageBox.alert("请求失败", "请选择单条记录进行删除");
+            return;
+        } 
+        
+        //删除提示语言
+        var tipText = "确定删除品牌["+selections[0].raw.brandName+"]。注意:将同时删除该品牌下的系列及单品信息。";
+        
+        Ext.MessageBox.confirm("删除提示", tipText, function (confirmId) {
+        	if(confirmId == "yes"){
+        		Ext.Ajax.request({
+                	url: "/brand/delete",
+                	params: {
+                		brandId: selections[0].raw.brandId
+                	},
+                	success: function(conn, request, option, eOpts){
+                		var result = Ext.JSON.decode(conn.responseText, true);
+                		if(result.resultCode != 0){
+                			Ext.MessageBox.alert("请求失败", "删除品牌失败" + result.resultMessage);
+                		} else {
+                			Ext.ComponentQuery.query("brandgrid")[0].store.reload();
+                		}
+                	},
+                	failure: function(conn, request, option, eOpts){
+                		Ext.MessageBox.alert("请求失败", "服务器繁忙，稍后重试!");
+                	}
+                	
+                });
+        	}
+        });
     },
 	
 	onExpandSearchClick: function(component){

@@ -33,6 +33,12 @@ public interface SeriesDao {
 	public void deleteSeries(Integer seriesId);
 	
 	/**
+	 * 根据品牌编号删除系列
+	 * @param brandId
+	 */
+	public void deleteSeriesByBrandId(Integer brandId);
+	
+	/**
 	 * 查询系列
 	 * @param series
 	 * @return

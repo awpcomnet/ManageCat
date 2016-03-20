@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.cat.manage.base.dao.BrandDao;
 import com.cat.manage.base.domain.Brand;
+import com.cat.manage.base.domain.Series;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 
 /**
  * 品牌服务
@@ -19,6 +21,12 @@ import com.github.pagehelper.PageInfo;
 public class BrandService {
 	@Autowired
 	private BrandDao brandDao;
+	
+	@Autowired
+	private SeriesService seriesService;
+	
+	@Autowired
+	private SingleproductService singleService;
 	
 	/**
 	 * 添加品牌
@@ -41,7 +49,27 @@ public class BrandService {
 	 * @param brandId
 	 */
 	public void deleteBrand(Integer brandId){
+		//删除品牌
 		brandDao.deleteBrand(brandId);
+		
+		//查询系列
+		List<Series> seriesList = seriesService.querySeriesByBrandId(brandId);
+		if(seriesList == null || seriesList.size() <= 0){
+			return;
+		}
+		
+		//删除系列
+		seriesService.deleteSeriesByBrandId(brandId);
+		
+		//记录系列编号
+		List<Integer> seriesIds = Lists.newArrayList();
+		for(Series series : seriesList){
+			seriesIds.add(series.getSeriesId());
+		}
+		
+		//删除单品
+		singleService.deleteSingleproductBySeriesId((Integer[])seriesIds.toArray(new Integer[]{}));
+		
 	}
 	
 	/**

@@ -56,6 +56,14 @@ public class SingleproductService {
 	}
 	
 	/**
+	 * 根据系列编号删除单品
+	 * @param seriesIds
+	 */
+	public void deleteSingleproductBySeriesId(Integer[] seriesIds){
+		singleproductDao.deleteSingleproductBySeriesIds(seriesIds);
+	}
+	
+	/**
 	 * 查询单品信息
 	 * @param singleproduct
 	 * @param pageNum
