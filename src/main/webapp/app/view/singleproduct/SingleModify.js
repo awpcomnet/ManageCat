@@ -17,6 +17,27 @@ Ext.define("MIS.view.singleproduct.SingleModify", {
     },
 
     items: [{
+		fieldLabel: "所属品牌(非必选)",
+        name: "brandId",
+        xtype: "combo",
+        store: Ext.create("MIS.store.brand.BrandStore"),
+        listeners: {
+            select: function (combobox, record) {
+                record = parseInt(combobox.getValue());
+            	var seriesId = combobox.up("form").down("combo[name=ofOrigin]");
+            	seriesId.setValue("");
+            	var seriesIdStore = seriesId.getStore();
+            	seriesIdStore.proxy.extraParams.ofOrigin = record;
+            	seriesIdStore.proxy.extraParams.isUse = 1;
+            	seriesIdStore.reload();
+            }
+        },
+        mode: "local",
+        displayField: 'brandName',
+        valueField: "brandId",
+        allowBlank: true,
+        editable:false
+	}, {
 		fieldLabel: "所属系列",
         name: "ofOrigin",
         xtype: "combo",

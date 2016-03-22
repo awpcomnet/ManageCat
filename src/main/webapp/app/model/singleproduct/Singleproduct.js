@@ -47,6 +47,12 @@ Ext.define("MIS.model.singleproduct.Singleproduct", {
 	}, {
 		name: "ofOriginName",
 		type: "string"
+	}, {
+		name: "brandId",
+		type: "int"
+	}, {
+		name: "brandName",
+		type: "string"
 	}]
 });
 

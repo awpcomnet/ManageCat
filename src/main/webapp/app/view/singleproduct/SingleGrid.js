@@ -31,7 +31,8 @@ Ext.define("MIS.view.singleproduct.SingleGrid", {
 			columns: [
 			    { header: '单品名称', dataIndex: 'singleName', sortable: true, width: 20, align: "center"},
 			    { header: '单品英文名', dataIndex: 'singleEname', sortable: true, width: 20, align: "center"},
-			    { header: '所属系列', dataIndex: 'ofOriginName', sortable: true, width: 20, align: "center"},
+			    { header: '所属系列', dataIndex: 'ofOriginName', sortable: true, width: 15, align: "center"},
+			    { header: '所属品牌', dataIndex: 'brandName', sortable: true, width: 15, align: "center"},
 			    { header: '规格', dataIndex: 'capacity', sortable: true, width: 15, align: "center"},
 			    { header: '单位', dataIndex: 'unit', sortable: true, width: 10, align: "center", renderer: function (value, rowindex, record, column) {
 			    	return MIS.common.DictManager.getDictItemName("unitDict", value);
@@ -155,7 +156,7 @@ Ext.define("MIS.view.singleproduct.SingleGrid", {
         	id: "singlemodifywindow",
         	extraData: selections[0].raw,
         	renderTo: singleview.getEl(),
-        	height: 250,
+        	height: 280,
         	width: 580,
         	layout: "fit",
         	closeAction: "destroy",
@@ -167,6 +168,11 @@ Ext.define("MIS.view.singleproduct.SingleGrid", {
         			singleview.getEl().unmask();
         		},
         		beforerender: function () {
+        			var brandId = Ext.ComponentQuery.query("singlemodify combo[name=brandId]")[0];
+                    var brandIdStore = brandId.getStore();
+                    brandIdStore.proxy.extraParams.isUse = 1;
+                    brandIdStore.load();
+        			
         			var ofOrigin = Ext.ComponentQuery.query("singlemodify combo[name=ofOrigin]")[0];
                     var ofOriginStore = ofOrigin.getStore();
                     ofOriginStore.proxy.extraParams.isUse = 1;
@@ -181,6 +187,7 @@ Ext.define("MIS.view.singleproduct.SingleGrid", {
                     var params = Ext.clone(this.extraData);
     				form.getForm().setValues(params);
     				component.down("combo[name=ofOrigin]").setValue(Number.parseInt(this.extraData.ofOrigin));
+    				component.down("combo[name=brandId]").setValue(Number.parseInt(this.extraData.brandId));
     			}
         	}
         });
