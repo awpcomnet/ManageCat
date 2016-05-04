@@ -71,10 +71,16 @@ public class CheckController {
 	
 	@RequestMapping("/modify")
 	public Srm modifyCheck(Check check){
+		String batchNo = check.getBatchNo();
+		
 		//检查订单状态是否为 已下单
 		if(!"0".equals(check.getOrderStatus())){
 			return new Srm().setResultCode("1").setResultMessage("清单状态不为【已下单】");
 		}
+		if(!batchService.checkBatchNo(batchNo)){
+			throw new BusinessException("1", "批次号非法,批次号["+batchNo+"]");
+		}
+		
 		checkService.updateCheck(check);
 		return new Srm().setResultCode("0").setResultMessage("修改下单清单成功");
 	}

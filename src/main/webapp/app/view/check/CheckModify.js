@@ -24,10 +24,16 @@ Ext.define("MIS.view.check.CheckModify", {
 	items: [{
 		fieldLabel: "批次号",
         name: "batchNo",
-        xtype: "textfield",
+        xtype: "combobox",
         colspan: 2,
         width: 530,
-        anchor: "55%"
+        anchor: "55%",
+        store: Ext.create("MIS.store.batch.BatchStore"),
+        mode: "local",
+        displayField: 'batchNo',
+        valueField: "batchNo",
+        allowBlank: true,
+        editable:false
     }, {
 		fieldLabel: "快递单号",
         name: "trackingNumber",

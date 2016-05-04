@@ -272,7 +272,12 @@ Ext.define("MIS.view.check.CheckAdd", {
 				num = checkAdd.down("numberfield[name=num]").getValue(),
 				unitPrice = checkAdd.down("textfield[name=unitPrice]").getValue(),
 				remark = checkAdd.down("textarea[name=remark]").getValue(),
-				batchNo = checkAdd.down("textfield[name=batchNo]").getValue().trim();
+				batchNo = checkAdd.down("textfield[name=batchNo]").getValue();
+			
+			if(batchNo == null && batchNo == '' && batchNo == 'null'){
+				Ext.MessageBox.alert("批次号错误！["+batchNo+"]");
+				return;
+			}
 			
 			console.log("brandId="+brandId+"|orderTime="+Ext.util.Format.date(orderTime,'Ymd')+"|payby="+payby);
 			
