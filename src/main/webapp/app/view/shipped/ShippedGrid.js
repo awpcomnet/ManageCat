@@ -205,7 +205,7 @@ Ext.define("MIS.view.shipped.ShippedGrid", {
         	//id: "shippedswindow",
         	extraData: selections[0].raw,
         	renderTo: shippedview.getEl(),
-        	height: 500,
+        	height: 450,
         	width: 1000,
         	layout: "fit",
         	closeAction: "destroy",

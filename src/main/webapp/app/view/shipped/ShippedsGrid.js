@@ -361,8 +361,8 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
         var tipText = "确定保存相应记录的重量";
         
         
-        Ext.MessageBox.confirm("保存提示", tipText, function (confirmId) {
-        	if(confirmId == "yes"){
+//        Ext.MessageBox.confirm("保存提示", tipText, function (confirmId) {
+//        	if(confirmId == "yes"){
         		Ext.Ajax.request({
                 	url: "/shipped/weight",
                 	params: {
@@ -382,8 +382,8 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
                 	}
                 	
                 });
-        	}
-        });
+//        	}
+//        });
     },
     
     onPartCClick: function(component){

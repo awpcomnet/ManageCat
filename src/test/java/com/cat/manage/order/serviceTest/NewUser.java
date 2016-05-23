@@ -9,6 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.cat.manage.common.util.Md5Util;
+import com.cat.manage.user.dao.UserDao;
 import com.cat.manage.user.domain.User;
 import com.cat.manage.user.service.UserService;
 
@@ -19,26 +20,29 @@ public class NewUser {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private UserDao userDao;
 	
+	@Test
 	public void testAddOrder(){
 		LOG.info("添加用户开始");
 		User user = new User();
 		
 		String salt = Md5Util.getRandomSalt();
-		String password = "kamenashi223"+salt;
+		String password = "wang89hang"+salt;
 		
-		user.setUsername("taozi");
-		user.setRealname("cyy");
+		user.setUsername("admin");
+		user.setRealname("admin");
 		user.setPassword(Md5Util.digest(password));
 		user.setSalt(salt);
 		user.setEmail("");
 		user.setState("0");
 		
-//		userService.addUser(user);
+		userDao.addUser(user);
 		LOG.info("添加用户结束");
 	}
 	
-	@Test
+	
 	public void testFindUser(){
 		LOG.info("=====>查询用户");
 		User user = userService.findUserByUsername("taozi");

@@ -171,7 +171,7 @@ Ext.define("MIS.view.shipped.StorageAdd", {
 		   	    	    
 		   	    	    var unitPostage = Ext.ComponentQuery.query("storageadd numberfield[name=unitPostage]")[0];
 		   	    	    unitPostage.setValue(calculatePost);
-		   	    	    Ext.MessageBox.alert("温馨提示", "计算所得邮费仅供参考");
+		   	    	    //Ext.MessageBox.alert("温馨提示", "计算所得邮费仅供参考");
 					}
 				},
 				failure: function (conn, request, option, eOpts) {
