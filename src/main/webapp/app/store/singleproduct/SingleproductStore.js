@@ -24,7 +24,8 @@ Ext.define("MIS.store.singleproduct.SingleproductStore", {
         	isUse: "",
         	ofOrigin: "",
         	startTime: "",
-        	endTime: ""
+        	endTime: "",
+        	brandId: ""
         }
 	}
 	

@@ -29,6 +29,15 @@ public class HttpParams {
 	}
 	
 	/**
+	 * 返回String 类型的值，不进行非空校验
+	 * @return
+	 */
+	public String getStrIgnoreNull(String name) {
+		String value = innerMap.get(name);
+		return value;
+	}
+	
+	/**
 	 * 返回int值
 	 */
 	public int getInt(String name) {

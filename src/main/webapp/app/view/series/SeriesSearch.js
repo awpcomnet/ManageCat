@@ -27,17 +27,37 @@ Ext.define("MIS.view.series.SeriesSearch", {
 			layout: "anchor",
 			items:[{
 				margin: "0 10",
-				width: 170,
+				width: 180,
 				fieldLabel: "所属品牌",
-				labelWidth: 80,
+				labelWidth: 60,
 				name: "ofOrigin",
 				anchor: "55%",
 				xtype: "combo",
 		        store: Ext.create("MIS.store.brand.BrandStore"),
+		        listeners: {
+		            change : function(field,newValue,oldValue){
+		                // 找到store
+		                var ofOriginStore = Ext.ComponentQuery.query('seriesSearchpanel')[0].down("combo[name=ofOrigin]").getStore();
+
+		                //对store 进行过滤
+		                ofOriginStore.filterBy(function(record){
+		                    var name = record.raw.brandName,
+		                        code = record.raw.brandId;
+		                    //如果输入框为空，直接放回所有记录
+		                    if(newValue == '' || newValue == null)
+		                        return true;
+
+		                    if(name.indexOf(newValue) >= 0){
+		                        return true;
+		                    }
+		                    return false;
+		                });
+		            }
+		        },
 		        mode: "local",
 		        displayField: 'brandName',
 		        valueField: "brandId",
-		        editable:false
+		        editable:true
 			}, {
 				margin: "5 10",
 				xtype: "button",
@@ -91,7 +111,7 @@ Ext.define("MIS.view.series.SeriesSearch", {
 	        editable:false
 		}, {
 			margin: "0 10",
-			width: 200,
+			width: 190,
 			xtype: "textfield",
 			fieldLabel: "系列名称",
 			labelWidth: 60,
@@ -99,7 +119,7 @@ Ext.define("MIS.view.series.SeriesSearch", {
 			anchor: "55%" 
 		}, {
 			margin: "0 10",
-			width: 200,
+			width: 190,
 			xtype: "textfield",
 			fieldLabel: "系列英文名称",
 			labelWidth: 80,

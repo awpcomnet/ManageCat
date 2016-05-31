@@ -233,6 +233,11 @@ Ext.define("MIS.view.singleproduct.SingleGrid", {
 	onExpandSearchClick: function(component){
 		var searchwindow = Ext.ComponentQuery.query("singleSearchpanel")[0];
     	if(searchwindow.isHidden()){
+    		var brandId = Ext.ComponentQuery.query("singleSearchpanel combo[name=brandId]")[0];
+            var brandIdStore = brandId.getStore();
+            brandIdStore.proxy.extraParams.isUse = 1;
+            brandIdStore.load();
+    		
     		var ofOrigin = Ext.ComponentQuery.query("singleSearchpanel combo[name=ofOrigin]")[0];
             var ofOriginStore = ofOrigin.getStore();
             ofOriginStore.proxy.extraParams.isUse = 1;
@@ -240,6 +245,18 @@ Ext.define("MIS.view.singleproduct.SingleGrid", {
             
     		searchwindow.show();
     	} else {
+    		var brandId = Ext.ComponentQuery.query("singleSearchpanel combo[name=brandId]")[0];
+            var brandIdStore = brandId.getStore();
+            brandIdStore.proxy.extraParams.isUse = 1;
+            brandIdStore.proxy.extraParams.ofOrigin = '';
+    		
+    		var ofOrigin = Ext.ComponentQuery.query("singleSearchpanel combo[name=ofOrigin]")[0];
+            var ofOriginStore = ofOrigin.getStore();
+            ofOriginStore.proxy.extraParams.isUse = 1;
+            ofOriginStore.proxy.extraParams.ofOrigin = '';
+            
+            this.store.proxy.extraParams = {};
+            
     		searchwindow.form.reset();
     		searchwindow.hide();
     	}

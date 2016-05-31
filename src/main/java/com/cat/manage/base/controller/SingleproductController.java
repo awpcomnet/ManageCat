@@ -42,7 +42,10 @@ public class SingleproductController {
 		Integer pageNum = params.getInt("page");
 		Integer pageSize = params.getInt("limit");
 		
-		PageInfo<Singleproduct> page = singleproductService.querySingleproduct(singleproduct, pageNum, pageSize);
+		//单品查询添加对某品牌的所有单品的查询
+		String brandId = params.getStrIgnoreNull("brandId");
+		
+		PageInfo<Singleproduct> page = singleproductService.querySingleproduct(singleproduct, pageNum, pageSize, brandId);
 		return new Srm().setResultCode("0").setResultMessage("查询单品信息成功").buildPageInfo(page);
 	}
 }

@@ -37,7 +37,7 @@ public interface SingleproductDao {
 	 * @param singleproduct
 	 * @return
 	 */
-	public List<Singleproduct> querySingleproducts(Singleproduct singleId);
+	public List<Singleproduct> querySingleproducts(Singleproduct singleproduct, String brandId);
 	
 	/**
 	 * 根据单品编号查询单品信息

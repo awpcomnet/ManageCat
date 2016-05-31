@@ -11,6 +11,7 @@ import com.cat.manage.base.domain.Singleproduct;
 import com.cat.manage.common.exception.BusinessException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.base.Strings;
 
 /**
  * 单品服务
@@ -70,9 +71,9 @@ public class SingleproductService {
 	 * @param pageSize
 	 * @return
 	 */
-	public PageInfo<Singleproduct> querySingleproduct(Singleproduct singleproduct, Integer pageNum, Integer pageSize){
+	public PageInfo<Singleproduct> querySingleproduct(Singleproduct singleproduct, Integer pageNum, Integer pageSize, String brandId){
 		PageHelper.startPage(pageNum, pageSize);
-		List<Singleproduct> list = singleproductDao.querySingleproducts(singleproduct);
+		List<Singleproduct> list = singleproductDao.querySingleproducts(singleproduct, brandId);
 		PageInfo<Singleproduct> page = new PageInfo<Singleproduct>(list);
 		return page;
 	}

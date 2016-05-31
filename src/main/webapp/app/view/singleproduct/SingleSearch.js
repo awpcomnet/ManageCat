@@ -28,16 +28,46 @@ Ext.define("MIS.view.singleproduct.SingleSearch", {
 			items:[{
 				margin: "0 10",
 				width: 170,
-				fieldLabel: "所属系列",
+				fieldLabel: "所属品牌",
 				labelWidth: 60,
-				name: "ofOrigin",
+				name: "brandId",
 				anchor: "55%",
 				xtype: "combo",
-		        store: Ext.create("MIS.store.series.SeriesStore"),
+		        store: Ext.create("MIS.store.brand.BrandStore"),
+		        listeners: {
+		            select: function (combobox, record) {
+		                record = parseInt(combobox.getValue());
+		            	var seriesId = combobox.up("form").down("combo[name='ofOrigin']");
+		            	seriesId.setValue("");
+		            	var seriesIdStore = seriesId.getStore();
+		            	seriesIdStore.proxy.extraParams.ofOrigin = record;
+		            	seriesIdStore.proxy.extraParams.isUse = 1;
+		            	seriesIdStore.reload();
+		            },
+		            
+		            change : function(field,newValue,oldValue){
+		                // 找到store
+		                var brandIdStore = Ext.ComponentQuery.query('singleSearchpanel')[0].down("combo[name=brandId]").getStore();
+
+		                //对store 进行过滤
+		                brandIdStore.filterBy(function(record){
+		                    var name = record.raw.brandName,
+		                        code = record.raw.brandId;
+		                    //如果输入框为空，直接放回所有记录
+		                    if(newValue == '' || newValue == null)
+		                        return true;
+
+		                    if(name.indexOf(newValue) >= 0){
+		                        return true;
+		                    }
+		                    return false;
+		                });
+		            }
+		        },
 		        mode: "local",
-		        displayField: 'seriesName',
-		        valueField: "seriesId",
-		        editable:false
+		        displayField: 'brandName',
+		        valueField: "brandId",
+		        editable:true
 			}, {
 				margin: "5 10",
 				xtype: "button",
@@ -55,7 +85,8 @@ Ext.define("MIS.view.singleproduct.SingleSearch", {
                 		unit = component.up("singleSearchpanel").down("combo[name=unit]").getValue(),
                 		capacity = component.up("singleSearchpanel").down("textfield[name=capacity]").getValue(),
                 		singleName = component.up("singleSearchpanel").down("textfield[name=singleName]").getValue(),
-                		singleEname = component.up("singleSearchpanel").down("textfield[name=singleEname]").getValue();
+                		singleEname = component.up("singleSearchpanel").down("textfield[name=singleEname]").getValue(),
+                		brandId = component.up("singleSearchpanel").down("combo[name=brandId]").getValue();
                 	
                 	
                 	var params = singleStore.proxy.extraParams;
@@ -65,6 +96,7 @@ Ext.define("MIS.view.singleproduct.SingleSearch", {
                 	params.singleEname = singleEname;
                 	params.unit = unit;
                 	params.capacity = capacity;
+                	params.brandId = brandId;
                 	
                 	// reload store
                 	singleStore.reload();
@@ -84,18 +116,36 @@ Ext.define("MIS.view.singleproduct.SingleSearch", {
 			items:[{
 				margin: "0 10",
 				width: 180,
-				fieldLabel: "是否生效",
+				fieldLabel: "所属系列",
 				labelWidth: 60,
-				name: "isUse",
+				name: "ofOrigin",
 				anchor: "55%",
 				xtype: "combo",
-		        store: Ext.create("MIS.store.dict.DictQueryStore", {
-	            	dictcode: "onOff"
-	            }),
+		        store: Ext.create("MIS.store.series.SeriesStore"),
+		        listeners: {
+		            change : function(field,newValue,oldValue){
+		                // 找到store
+		                var ofOriginStore = Ext.ComponentQuery.query('singleSearchpanel')[0].down("combo[name=ofOrigin]").getStore();
+
+		                //对store 进行过滤
+		                ofOriginStore.filterBy(function(record){
+		                    var name = record.raw.seriesName,
+		                        code = record.raw.seriesId;
+		                    //如果输入框为空，直接放回所有记录
+		                    if(newValue == '' || newValue == null)
+		                        return true;
+
+		                    if(name.indexOf(newValue) >= 0){
+		                        return true;
+		                    }
+		                    return false;
+		                });
+		            }
+		        },
 		        mode: "local",
-		        displayField: 'name',
-		        valueField: "value",
-		        editable:false
+		        displayField: 'seriesName',
+		        valueField: "seriesId",
+		        editable:true
 			}, {
 				margin: "5 10",
 				width: 180,
@@ -111,11 +161,18 @@ Ext.define("MIS.view.singleproduct.SingleSearch", {
 			items:[{
 				margin: "0 10",
 				width: 200,
-				xtype: "textfield",
-				fieldLabel: "单品名称",
+				fieldLabel: "是否生效",
 				labelWidth: 60,
-				name: "singleName",
-				anchor: "55%" 
+				name: "isUse",
+				anchor: "55%",
+				xtype: "combo",
+		        store: Ext.create("MIS.store.dict.DictQueryStore", {
+	            	dictcode: "onOff"
+	            }),
+		        mode: "local",
+		        displayField: 'name',
+		        valueField: "value",
+		        editable:false
 			}, {
 				margin: "5 10",
 				width: 200,
@@ -133,13 +190,25 @@ Ext.define("MIS.view.singleproduct.SingleSearch", {
 		        editable:false
 			}]
 		}, {
-			margin: "0 10",
-			width: 200,
-			xtype: "textfield",
-			fieldLabel: "单品英文名称",
-			labelWidth: 80,
-			name: "singleEname",
-			anchor: "55%" 
+			xtype: "container",
+			layout: "anchor",
+			items:[{
+				margin: "0 10",
+				width: 200,
+				xtype: "textfield",
+				fieldLabel: "单品名称",
+				labelWidth: 80,
+				name: "singleName",
+				anchor: "55%" 
+			}, {
+				margin: "5 10",
+				width: 200,
+				xtype: "textfield",
+				fieldLabel: "单品英文名称",
+				labelWidth: 80,
+				name: "singleEname",
+				anchor: "55%" 
+			}]
 		}]
 	}]
 });

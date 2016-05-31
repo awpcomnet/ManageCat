@@ -281,6 +281,8 @@ Ext.define("MIS.view.series.SeriesGrid", {
             
     		searchwindow.show();
     	} else {
+    		this.store.proxy.extraParams = {};
+    		
     		searchwindow.form.reset();
     		searchwindow.hide();
     	}
