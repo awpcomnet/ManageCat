@@ -176,6 +176,7 @@ Ext.define("MIS.view.singleproduct.SingleGrid", {
         			var ofOrigin = Ext.ComponentQuery.query("singlemodify combo[name=ofOrigin]")[0];
                     var ofOriginStore = ofOrigin.getStore();
                     ofOriginStore.proxy.extraParams.isUse = 1;
+                    ofOriginStore.proxy.extraParams.ofOrigin = Number.parseInt(this.extraData.brandId);
                     ofOriginStore.load();
                     
                     var isUse = Ext.ComponentQuery.query("singlemodify combo[name=isUse]")[0];
@@ -241,6 +242,7 @@ Ext.define("MIS.view.singleproduct.SingleGrid", {
     		var ofOrigin = Ext.ComponentQuery.query("singleSearchpanel combo[name=ofOrigin]")[0];
             var ofOriginStore = ofOrigin.getStore();
             ofOriginStore.proxy.extraParams.isUse = 1;
+            ofOriginStore.proxy.extraParams.ofOrigin = "";
             ofOriginStore.load();
             
     		searchwindow.show();

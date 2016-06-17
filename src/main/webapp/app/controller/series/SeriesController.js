@@ -9,7 +9,8 @@ Ext.define("MIS.controller.series.SeriesController", {
 	],
 
 	stores : [ 
-	    "MIS.store.series.SeriesStore"
+	    "MIS.store.series.SeriesStore",
+	    "MIS.store.series.SeriesAllStore"
 	],
 	
 	views: [

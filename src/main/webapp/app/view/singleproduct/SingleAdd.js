@@ -20,7 +20,7 @@ Ext.define("MIS.view.singleproduct.SingleAdd", {
 		fieldLabel: "所属品牌(非必选)",
         name: "brandId",
         xtype: "combobox",
-        store: Ext.create("MIS.store.brand.BrandStore"),
+        store: Ext.create("MIS.store.brand.BrandAllStore"),
         listeners: {
             select: function (combobox, record) {
                 record = parseInt(combobox.getValue());
@@ -30,23 +30,62 @@ Ext.define("MIS.view.singleproduct.SingleAdd", {
             	seriesIdStore.proxy.extraParams.ofOrigin = record;
             	seriesIdStore.proxy.extraParams.isUse = 1;
             	seriesIdStore.reload();
+            },
+            
+            change : function(field,newValue,oldValue){
+                // 找到store
+                var brandIdStore = Ext.ComponentQuery.query('singleadd')[0].down("combobox[name=brandId]").getStore();
+
+                //对store 进行过滤
+                brandIdStore.filterBy(function(record){
+                    var name = record.raw.brandName,
+                        code = record.raw.brandId;
+                    //如果输入框为空，直接放回所有记录
+                    if(newValue == '' || newValue == null)
+                        return true;
+
+                    if(name.indexOf(newValue) >= 0){
+                        return true;
+                    }
+                    return false;
+                });
             }
         },
         mode: "local",
         displayField: 'brandName',
         valueField: "brandId",
         allowBlank: true,
-        editable:false
+        editable:true
 	}, {
 		fieldLabel: "所属系列",
         name: "ofOrigin",
         xtype: "combobox",
-        store: Ext.create("MIS.store.series.SeriesStore"),
+        store: Ext.create("MIS.store.series.SeriesAllStore"),
+        listeners: {
+            change : function(field,newValue,oldValue){
+                // 找到store
+                var ofOriginStore = Ext.ComponentQuery.query('singleadd')[0].down("combobox[name=ofOrigin]").getStore();
+
+                //对store 进行过滤
+                ofOriginStore.filterBy(function(record){
+                    var name = record.raw.seriesName,
+                        code = record.raw.seriesId;
+                    //如果输入框为空，直接放回所有记录
+                    if(newValue == '' || newValue == null)
+                        return true;
+
+                    if(name.indexOf(newValue) >= 0){
+                        return true;
+                    }
+                    return false;
+                });
+            }
+        },
         mode: "local",
         displayField: 'seriesName',
         valueField: "seriesId",
         allowBlank: true,
-        editable:false
+        editable:true
 	}, {
 		fieldLabel: "单品名称",
 	    name: "singleName",

@@ -35,6 +35,8 @@ public class Selled implements Serializable{
 	private String seriesName;//系列名称
 	private String singleName;//单品名称
 	private String sumPrice;//售出总金额
+	private String brandEname;//品牌英文名称
+	private String singleEname;//单品英文名称
 	
 	public Integer getId() {
 		return id;
@@ -234,6 +236,22 @@ public class Selled implements Serializable{
 
 	public void setSellNum(Integer sellNum) {
 		this.sellNum = sellNum;
+	}
+
+	public String getBrandEname() {
+		return brandEname;
+	}
+
+	public void setBrandEname(String brandEname) {
+		this.brandEname = brandEname;
+	}
+
+	public String getSingleEname() {
+		return singleEname;
+	}
+
+	public void setSingleEname(String singleEname) {
+		this.singleEname = singleEname;
 	}
 
 	@Override

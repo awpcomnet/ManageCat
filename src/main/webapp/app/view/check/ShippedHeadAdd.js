@@ -116,7 +116,7 @@ Ext.define("MIS.view.check.ShippedHeadAdd", {
 				success: function(conn, request, option, eOpts){
 					var result = Ext.JSON.decode(conn.responseText, true);
 					if(result.resultCode != 0){
-						Ext.MessageBox.alert("添加邮寄清单失败, 原因:" + result.resultMessage);
+						Ext.MessageBox.alert("添加邮寄清单失败", "原因:" + result.resultMessage);
 					} else {
 		                Ext.ComponentQuery.query("checkgrid")[0].store.reload();
 		                Ext.ComponentQuery.query("checkgrid")[0].getView().getSelectionModel().deselectAll();

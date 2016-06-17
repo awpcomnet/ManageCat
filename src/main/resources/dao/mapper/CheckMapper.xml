@@ -25,6 +25,8 @@
 		<result property="brandName" column="brand_name"/>
 		<result property="seriesName" column="series_name"/>
 		<result property="singleName" column="single_name"/>
+		<result property="brandEname" column="brand_ename"/>
+		<result property="singleEname" column="single_ename"/>
 		<result property="sumPrice" column="sumprice"/>
 		<result property="batchNo" column="batch_no"/>
 		<result property="transferCompanyName" column="transfer_company_name"/>
@@ -99,14 +101,20 @@
 	
 	<!-- 查询下单清单 -->
 	<select id="queryCheck" resultMap="checkResultMap">
-	select id, tracking_number, order_time, transfer_company, order_addr, brand_id, series_id, single_id, num, unit_price, remark, payby, order_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat, FORMAT(num*unit_price ,2) as sumprice  
-	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
-    ,(select series_name from t_series where series_id = t.series_id) as series_name
-    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
-	,batch_no
+	select t.id, t.tracking_number, t.order_time, t.transfer_company, t.order_addr, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.remark, t.payby, t.order_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat, FORMAT(t.num*t.unit_price ,2) as sumprice  
+	,tb.brand_name as brand_name
+    ,tse.series_name as series_name
+    ,tsp.single_name as single_name
+	,tb.brand_ename as brand_ename
+	,tsp.single_ename as single_ename
+
+	,t.batch_no
 	, (select t1.name from t_dict_item t1, t_dict_type t2 where t1.typeId = t2.id and t2.code = 'transferCompany' and t.transfer_company = t1.value) as transfer_company_name
 	, (select t1.name from t_dict_item t1, t_dict_type t2 where t1.typeId = t2.id and t2.code = 'orderAddr' and t.order_addr = t1.value) as order_addr_name
-	from t_check t
+	from t_check t 
+	left join t_brand tb on tb.brand_id = t.brand_id
+	left join t_series tse on tse.series_id = t.series_id
+	left join t_singleproduct tsp on tsp.single_id = t.single_id
 	where 1=1 
 	<if test="param1.trackingNumber != null and param1.trackingNumber != ''">
 		and tracking_number = #{param1.trackingNumber}
@@ -149,24 +157,36 @@
 	
 	<!-- 根据下单清单唯一编号查询记录 -->
 	<select id="queryCheckByIds" resultMap="checkResultMap">
-	select id, tracking_number, order_time, transfer_company, order_addr, brand_id, series_id, single_id, num, unit_price, remark, payby, order_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat, FORMAT(num*unit_price ,2) as sumprice  
-	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
-    ,(select series_name from t_series where series_id = t.series_id) as series_name
-    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
-	,batch_no
+	select t.id, t.tracking_number, t.order_time, t.transfer_company, t.order_addr, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.remark, t.payby, t.order_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat, FORMAT(t.num*t.unit_price ,2) as sumprice  
+	,tb.brand_name as brand_name
+    ,tse.series_name as series_name
+    ,tsp.single_name as single_name
+	,tb.brand_ename as brand_ename
+	,tsp.single_ename as single_ename
+	
+	,t.batch_no
 	from t_check t
+	left join t_brand tb on tb.brand_id = t.brand_id
+	left join t_series tse on tse.series_id = t.series_id
+	left join t_singleproduct tsp on tsp.single_id = t.single_id
 	where id in
 	<foreach collection="array" item="id" open="(" separator="," close=")">#{id}</foreach>
 	</select>
 	
 	<!-- 根据下单清单唯一编号查询记录 -->
 	<select id="queryCheckById" parameterType="java.lang.Integer" resultMap="checkResultMap">
-	select id, tracking_number, order_time, transfer_company, order_addr, brand_id, series_id, single_id, num, unit_price, remark, payby, order_status, create_date, update_date, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat, FORMAT(num*unit_price ,2) as sumprice  
-	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
-    ,(select series_name from t_series where series_id = t.series_id) as series_name
-    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
-	,batch_no
+	select t.id, t.tracking_number, t.order_time, t.transfer_company, t.order_addr, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.remark, t.payby, t.order_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat, FORMAT(t.num*t.unit_price ,2) as sumprice  
+	,tb.brand_name as brand_name
+    ,tse.series_name as series_name
+    ,tsp.single_name as single_name
+	,tb.brand_ename as brand_ename
+	,tsp.single_ename as single_ename
+	
+	,t.batch_no
 	from t_check t
+	left join t_brand tb on tb.brand_id = t.brand_id
+	left join t_series tse on tse.series_id = t.series_id
+	left join t_singleproduct tsp on tsp.single_id = t.single_id
 	where id = #{id}
 	</select>
 	

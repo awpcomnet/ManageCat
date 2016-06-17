@@ -72,10 +72,16 @@ Ext.define("MIS.model.selled.Selled", {
 		name: "brandName",
 		type: "string"
 	}, {
+		name: "brandEname",
+		type: "string"
+	}, {
 		name: "seriesName",
 		type: "string"
 	}, {
 		name: "singleName",
+		type: "string"
+	}, {
+		name: "singleEname",
 		type: "string"
 	}, {
 		name: "sumPrice",

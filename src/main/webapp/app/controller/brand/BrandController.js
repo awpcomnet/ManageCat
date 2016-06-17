@@ -9,7 +9,8 @@ Ext.define("MIS.controller.brand.BrandController", {
 	],
 
 	stores : [ 
-	    "MIS.store.brand.BrandStore"
+	    "MIS.store.brand.BrandStore",
+	    "MIS.store.brand.BrandAllStore"
 	],
 	
 	views: [

@@ -29,8 +29,8 @@ Ext.define("MIS.view.storage.StorageGrid", {
 			loadMask: true,
 			
 			columns: [
-			    { header: '品牌名称', dataIndex: 'brandName', sortable: true, width: 15, align: "center"},
-			    { header: '系列名称', dataIndex: 'seriesName', sortable: true, width: 10, align: "center"},
+			    { header: '品牌名称', dataIndex: 'brandEname', sortable: true, width: 15, align: "center"},
+			    { header: '系列名称', dataIndex: 'seriesName', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '单品名称', dataIndex: 'singleName', sortable: true, width: 10, align: "center"},
 			    { header: '实际单价(￥)', dataIndex: 'unitRmb', sortable: true, width: 10, align: "center"},
 			    { header: '实际单个邮费(￥)', dataIndex: 'unitPostage', sortable: true, width: 10, align: "center"},

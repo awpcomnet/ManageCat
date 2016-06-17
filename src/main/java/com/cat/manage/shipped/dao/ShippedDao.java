@@ -85,4 +85,11 @@ public interface ShippedDao {
 	 * @return
 	 */
 	public Shipped queryShippedById(Integer id);
+	
+	/**
+	 * 根据邮寄单号查询与该物品相同品牌，系列的历史最近一条拥有重量的历史数据
+	 * @param id
+	 * @return
+	 */
+	public Shipped queryShippedWeightForPlan(Integer id);
 }

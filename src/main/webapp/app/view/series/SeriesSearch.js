@@ -33,7 +33,7 @@ Ext.define("MIS.view.series.SeriesSearch", {
 				name: "ofOrigin",
 				anchor: "55%",
 				xtype: "combo",
-		        store: Ext.create("MIS.store.brand.BrandStore"),
+		        store: Ext.create("MIS.store.brand.BrandAllStore"),
 		        listeners: {
 		            change : function(field,newValue,oldValue){
 		                // 找到store

@@ -75,10 +75,16 @@ Ext.define("MIS.model.storage.Storage", {
 		name: "brandName",
 		type: "string"
 	}, {
+		name: "brandEname",
+		type: "string"
+	}, {
 		name: "seriesName",
 		type: "string"
 	}, {
 		name: "singleName",
+		type: "string"
+	}, {
+		name: "singleEname",
 		type: "string"
 	}, {
 		name: "residueNum",

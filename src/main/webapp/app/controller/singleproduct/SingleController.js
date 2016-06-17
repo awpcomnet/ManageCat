@@ -9,7 +9,8 @@ Ext.define("MIS.controller.singleproduct.SingleController", {
 	],
 
 	stores : [ 
-	    "MIS.store.singleproduct.SingleproductStore"
+	    "MIS.store.singleproduct.SingleproductStore",
+	    "MIS.store.singleproduct.SingleproductAllStore"
 	],
 	
 	views: [

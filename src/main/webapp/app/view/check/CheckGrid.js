@@ -38,8 +38,8 @@ Ext.define("MIS.view.check.CheckGrid", {
 			    { header: '下单网站', dataIndex: 'orderAddr', sortable: true, width: 10, align: "center", renderer: function (value, rowindex, record, column) {
 			    	return MIS.common.DictManager.getDictItemName("orderAddr", value);
                 }},
-			    { header: '品牌名称', dataIndex: 'brandName', sortable: true, width: 15, align: "center"},
-			    { header: '系列名称', dataIndex: 'seriesName', sortable: true, width: 15, align: "center"},
+			    { header: '品牌名称', dataIndex: 'brandEname', sortable: true, width: 15, align: "center"},
+			    { header: '系列名称', dataIndex: 'seriesName', sortable: true, width: 15, align: "center", hidden : true},
 			    { header: '单品名称', dataIndex: 'singleName', sortable: true, width: 15, align: "center"},
 			    { header: '数量', dataIndex: 'num', sortable: true, width: 5, align: "center"},
 			    { header: '单价($)', dataIndex: 'unitPrice', sortable: true, width: 10, align: "center"},
@@ -236,6 +236,8 @@ Ext.define("MIS.view.check.CheckGrid", {
         			var form = component.down("form");
                     var params = Ext.clone(this.extraData);
     				form.getForm().setValues(params);
+    				component.down("combo[name=seriesId]").setValue(Number.parseInt(this.extraData.seriesId));
+    				component.down("combo[name=singleId]").setValue(Number.parseInt(this.extraData.singleId));
     			}
         	}
         });

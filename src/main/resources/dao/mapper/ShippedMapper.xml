@@ -28,7 +28,9 @@
 		<result property="updateDateFormat" column="updateDateFormat"/>	
 		<result property="brandName" column="brand_name"/>	
 		<result property="seriesName" column="series_name"/>	
-		<result property="singleName" column="single_name"/>	
+		<result property="singleName" column="single_name"/>
+		<result property="brandEname" column="brand_ename"/>
+		<result property="singleEname" column="single_ename"/>
 		<result property="sumPrice" column="sumprice"/>
 		<result property="weight" column="weight"/>
 	</resultMap>
@@ -111,12 +113,13 @@
 	
 	<!-- 查询邮寄清单子单信息 -->
 	<select id="queryShipped" resultMap="ShippedResultMap">
-	select id, head_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, store_num, unit_price, payby, plan_rmb, plan_postage, plan_cost, remark, shipped_status, create_date, update_date, IFNULL(weight, 0) as weight, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
-	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
-    ,(select series_name from t_series where series_id = t.series_id) as series_name
-    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
-	, FORMAT(num*unit_price ,2) as sumprice
+	select t.id, t.head_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.store_num, t.unit_price, t.payby, t.plan_rmb, t.plan_postage, t.plan_cost, t.remark, t.shipped_status, t.create_date, t.update_date, IFNULL(t.weight, 0) as weight, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,tb.brand_name as brand_name,tse.series_name as series_name ,tsp.single_name as single_name ,tb.brand_ename as brand_ename
+    ,tsp.single_ename as single_ename, FORMAT(num*unit_price ,2) as sumprice
 	from t_shipped t
+	left join t_brand tb on tb.brand_id = t.brand_id
+	left join t_series tse on tse.series_id = t.series_id
+	left join t_singleproduct tsp on tsp.single_id = t.single_id
 	where 1=1
 	<if test="trackingNumber != null and trackingNumber != ''">
 		and tracking_number = #{trackingNumber}
@@ -140,35 +143,46 @@
 	
 	<!-- 根据邮寄清单主单唯一编号查询子订单 -->
 	<select id="queryShippedByHeadId" resultMap="ShippedResultMap">
-	select id, head_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, store_num, unit_price, payby, plan_rmb, plan_postage, plan_cost, remark, shipped_status, create_date, update_date, IFNULL(weight, 0) as weight, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
-	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
-    ,(select series_name from t_series where series_id = t.series_id) as series_name
-    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
-	, FORMAT(num*unit_price ,2) as sumprice
+	select t.id, t.head_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.store_num, t.unit_price, t.payby, t.plan_rmb, t.plan_postage, t.plan_cost, t.remark, t.shipped_status, t.create_date, t.update_date, IFNULL(t.weight, 0) as weight, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,tb.brand_name as brand_name,tse.series_name as series_name ,tsp.single_name as single_name ,tb.brand_ename as brand_ename
+    ,tsp.single_ename as single_ename, FORMAT(num*unit_price ,2) as sumprice
 	from t_shipped t
+	left join t_brand tb on tb.brand_id = t.brand_id
+	left join t_series tse on tse.series_id = t.series_id
+	left join t_singleproduct tsp on tsp.single_id = t.single_id
 	where head_id = #{headId}
 	</select>
 	
 	<!-- 根据邮寄清单子单唯一编号查询子单信息 -->
 	<select id="queryShippedByIds" resultMap="ShippedResultMap">
-	select id, head_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, store_num, unit_price, payby, plan_rmb, plan_postage, plan_cost, remark, shipped_status, create_date, update_date, IFNULL(weight, 0) as weight, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
-	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
-    ,(select series_name from t_series where series_id = t.series_id) as series_name
-    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
-	, FORMAT(num*unit_price ,2) as sumprice
+	select t.id, t.head_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.store_num, t.unit_price, t.payby, t.plan_rmb, t.plan_postage, t.plan_cost, t.remark, t.shipped_status, t.create_date, t.update_date, IFNULL(t.weight, 0) as weight, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,tb.brand_name as brand_name,tse.series_name as series_name ,tsp.single_name as single_name ,tb.brand_ename as brand_ename
+    ,tsp.single_ename as single_ename, FORMAT(num*unit_price ,2) as sumprice
 	from t_shipped t
+	left join t_brand tb on tb.brand_id = t.brand_id
+	left join t_series tse on tse.series_id = t.series_id
+	left join t_singleproduct tsp on tsp.single_id = t.single_id
 	where id in
 	<foreach collection="array" item="id" open="(" separator="," close=")">#{id}</foreach>
 	</select>
 	
 	<!-- 根据邮寄清单子单唯一编号查询单条信息 -->
 	<select id="queryShippedById" parameterType="java.lang.Integer" resultMap="ShippedResultMap">
-	select id, head_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, store_num, unit_price, payby, plan_rmb, plan_postage, plan_cost, remark, shipped_status, create_date, update_date, IFNULL(weight, 0) as weight, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat
-	,(select brand_name from t_brand where brand_id = t.brand_id)	 as brand_name
-    ,(select series_name from t_series where series_id = t.series_id) as series_name
-    ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
-	, FORMAT(num*unit_price ,2) as sumprice
+	select t.id, t.head_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.store_num, t.unit_price, t.payby, t.plan_rmb, t.plan_postage, t.plan_cost, t.remark, t.shipped_status, t.create_date, t.update_date, IFNULL(t.weight, 0) as weight, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,tb.brand_name as brand_name,tse.series_name as series_name ,tsp.single_name as single_name ,tb.brand_ename as brand_ename
+    ,tsp.single_ename as single_ename, FORMAT(num*unit_price ,2) as sumprice
 	from t_shipped t
+	left join t_brand tb on tb.brand_id = t.brand_id
+	left join t_series tse on tse.series_id = t.series_id
+	left join t_singleproduct tsp on tsp.single_id = t.single_id
 	where id = #{id}
 	</select>
+	
+	<!-- 根据邮寄单号查询与该物品相同品牌，系列的历史最近一条拥有重量的历史数据 -->
+	<select id="queryShippedWeightForPlan" parameterType="java.lang.Integer" resultMap="ShippedResultMap">
+	select IFNULL(t1.weight, 0) as weight, t2.id from t_shipped t1, t_shipped t2 where t1.brand_id = t2.brand_id and t1.series_id = t2.series_id and 
+	t1.single_id = t2.single_id  and (t1.weight is not null or t1.weight != 0) and t2.id = #{id}
+	order by t1.update_date DESC limit 1
+	</select>
+	
 </mapper>

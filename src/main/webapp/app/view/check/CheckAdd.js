@@ -80,7 +80,7 @@ Ext.define("MIS.view.check.CheckAdd", {
 		fieldLabel: "品牌名称",
         name: "brandId",
         xtype: "combobox",
-        store: Ext.create("MIS.store.brand.BrandStore"),
+        store: Ext.create("MIS.store.brand.BrandAllStore"),
         listeners: {
             select: function (combobox, record) {
                 record = parseInt(combobox.getValue());
@@ -160,7 +160,7 @@ Ext.define("MIS.view.check.CheckAdd", {
 		fieldLabel: "单品名称",
         name: "singleId",
         xtype: "combobox",
-        store: Ext.create("MIS.store.singleproduct.SingleproductStore"),
+        store: Ext.create("MIS.store.singleproduct.SingleproductAllStore"),
         listeners: {
             change : function(field,newValue,oldValue){
                 // 找到store

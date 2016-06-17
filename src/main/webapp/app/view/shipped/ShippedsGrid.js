@@ -39,8 +39,8 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
 			    { header: '转运公司', dataIndex: 'transferCompany', sortable: true, width: 10, align: "center", renderer: function (value, rowindex, record, column) {
 			    	return MIS.common.DictManager.getDictItemName("transferCompany", value);
                 }},
-                { header: '品牌', dataIndex: 'brandName', sortable: true, width: 10, align: "center"},
-                { header: '系列', dataIndex: 'seriesName', sortable: true, width: 10, align: "center"},
+                { header: '品牌', dataIndex: 'brandEname', sortable: true, width: 10, align: "center"},
+                { header: '系列', dataIndex: 'seriesName', sortable: true, width: 10, align: "center", hidden : true},
                 { header: '单品', dataIndex: 'singleName', sortable: true, width: 10, align: "center"},
                 { header: '数量', dataIndex: 'num', sortable: true, width: 10, align: "center"},
                 { header: '入库数量', dataIndex: 'storeNum', sortable: true, width: 10, align: "center"},
@@ -99,8 +99,7 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
 					itemId: 'shippedstorecontinue',
 					scope: this,
 					handler: this.onStoreContinueClick
-				}
-				, '-', {
+				}, '-', {
 					iconCls: 'icon-file-alt',
 					text: '邮寄清单',
 					itemId: 'partC',
@@ -124,8 +123,13 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
 					itemId: 'partE',
 					scope: this,
 					handler: this.onPartEClick
+				}, '-', {
+					iconCls: 'icon-lightbulb',
+					text: '重量预计',
+					scope: this,
+					handler: this.onWeightPlanClick
 				}, '->', {
-					iconCls: 'icon-refresh',
+				    iconCls: 'icon-refresh',
 					text: '刷新',
 					scope: this,
 					handler: this.onRefreshClick
@@ -355,7 +359,6 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
         var i = 0;
         for(;i<selectionNum; i++){
         	idAndWeights[i] = selections[i].raw.id + "|" + selections[i].data.weight.trim();
-        	console.log(idAndWeights[i]);
         }
         //提示语言
         var tipText = "确定保存相应记录的重量";
@@ -384,6 +387,56 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
                 });
 //        	}
 //        });
+    },
+    
+    onWeightPlanClick: function(component){
+    	var selections = this.getView().getSelectionModel().getSelection();
+        var selectionNum = selections.length;
+        
+        if (selectionNum < 1) {
+        	Ext.MessageBox.alert("请求失败", "请选择至少一条记录进行重量预计");
+            return;
+        } 
+        
+        //判断状态
+    	if(selections[0].raw.shippedStatus != 1){
+    		var statusText = MIS.common.DictManager.getDictItemName("orderStatus", selections[0].raw.shippedStatus);
+        	Ext.MessageBox.alert("请求失败", "订单状态不为[已邮寄],当前状态["+statusText+"]");
+            return;
+    	}
+        
+        var ids = [];
+        var i = 0;
+        for(;i<selectionNum; i++){
+        	ids[i] = selections[i].raw.id;
+        	console.log(ids[i]);
+        }
+        
+		Ext.Ajax.request({
+        	url: "/shipped/weightPlan",
+        	params: {
+        		ids: ids
+        	},
+        	success: function(conn, request, option, eOpts){
+        		var result = Ext.JSON.decode(conn.responseText, true);
+        		if(result.resultCode != 0){
+        			Ext.MessageBox.alert("请求失败", "重量预计失败:" + result.resultMessage);
+        		} else {
+        			var datalen = result.results.length;
+        			for(var j=0; j< datalen; j++){
+        				var tempId = result.results[j].id;
+        				var tempWeight = result.results[j].weight;
+        				Ext.ComponentQuery.query("shippedsgrid")[0].store.getById(tempId).set('weight', tempWeight);
+        			}
+        			console.log(result.results);
+        		}
+        	},
+        	failure: function(conn, request, option, eOpts){
+        		Ext.MessageBox.alert("请求失败", "服务器繁忙，稍后重试!");
+        	}
+        	
+        });
+    	
     },
     
     onPartCClick: function(component){

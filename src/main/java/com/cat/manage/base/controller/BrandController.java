@@ -1,5 +1,7 @@
 package com.cat.manage.base.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,12 @@ public class BrandController {
 		
 		PageInfo<Brand> page = brandService.queryBrand(brand, pageNum, pageSize);
 		return new Srm().setResultCode("0").setResultMessage("查询品牌成功").buildPageInfo(page);
+	}
+	
+	@RequestMapping("/queryAll")
+	public Srm queryBrandAll(Brand brand){
+		List<Brand> list = brandService.queryBrandAll(brand);
+		return new Srm().setResultCode("0").setResultMessage("查询所有品牌成功").addAll(list);
 	}
 	
 }

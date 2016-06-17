@@ -85,6 +85,15 @@ public class BrandService {
 	}
 	
 	/**
+	 * 查询所有品牌
+	 * @param brand
+	 * @return
+	 */
+	public List<Brand> queryBrandAll(Brand brand){
+		return brandDao.queryBrands(brand);
+	}
+	
+	/**
 	 * 根据品牌编号查询品牌
 	 * @param brandId
 	 * @return

@@ -20,12 +20,32 @@ Ext.define("MIS.view.series.SeriesAdd", {
 		fieldLabel: "所属品牌",
         name: "ofOrigin",
         xtype: "combo",
-        store: Ext.create("MIS.store.brand.BrandStore"),
+        store: Ext.create("MIS.store.brand.BrandAllStore"),
+        listeners: {
+            change : function(field,newValue,oldValue){
+                // 找到store
+                var ofOriginStore = Ext.ComponentQuery.query('seriesadd')[0].down("combo[name=ofOrigin]").getStore();
+
+                //对store 进行过滤
+                ofOriginStore.filterBy(function(record){
+                    var name = record.raw.brandName,
+                        code = record.raw.brandId;
+                    //如果输入框为空，直接放回所有记录
+                    if(newValue == '' || newValue == null)
+                        return true;
+
+                    if(name.indexOf(newValue) >= 0){
+                        return true;
+                    }
+                    return false;
+                });
+            }
+        },
         mode: "local",
         displayField: 'brandName',
         valueField: "brandId",
         allowBlank: true,
-        editable:false
+        editable:true
 	}, {
 		fieldLabel: "系列名称",
 	    name: "seriesName",

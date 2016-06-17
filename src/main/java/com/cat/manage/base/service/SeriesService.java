@@ -85,6 +85,15 @@ public class SeriesService {
 	}
 	
 	/**
+	 * 查询所有系列信息
+	 * @param series
+	 * @return
+	 */
+	public List<Series> querySeriesAll(Series series){
+		return seriesDao.querySeries(series);
+	}
+	
+	/**
 	 * 根据系列编号查询系列信息
 	 * @param seriesId
 	 * @return

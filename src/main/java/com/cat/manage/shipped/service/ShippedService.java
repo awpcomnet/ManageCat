@@ -1,6 +1,7 @@
 package com.cat.manage.shipped.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import com.cat.manage.shipped.domain.ShippedHead;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * 
@@ -59,6 +61,29 @@ public class ShippedService {
 		for(Shipped sh : shippedList){
 			updateShipped(sh);
 		}
+	}
+	
+	/**
+	 * 根据邮寄单号查询历史相同物品重量，无为0
+	 * @param ids
+	 * @return
+	 */
+	public List<Shipped> queryWeightPlan(String[] ids){
+		List<Shipped> list = Lists.newArrayList();
+		for(String id : ids){
+			Shipped shipped = shippedDao.queryShippedWeightForPlan(Integer.valueOf(id));
+			if(shipped == null){
+				shipped = new Shipped();
+				shipped.setId(Integer.valueOf(id));
+				shipped.setWeight("0");
+				continue;
+			}
+			if(shipped.getWeight() == null){
+				shipped.setWeight("0");
+			}
+			list.add(shipped);
+		}
+		return list;
 	}
 	
 	/**

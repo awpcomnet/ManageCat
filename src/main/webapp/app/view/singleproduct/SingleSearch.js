@@ -33,7 +33,7 @@ Ext.define("MIS.view.singleproduct.SingleSearch", {
 				name: "brandId",
 				anchor: "55%",
 				xtype: "combo",
-		        store: Ext.create("MIS.store.brand.BrandStore"),
+		        store: Ext.create("MIS.store.brand.BrandAllStore"),
 		        listeners: {
 		            select: function (combobox, record) {
 		                record = parseInt(combobox.getValue());
@@ -121,7 +121,7 @@ Ext.define("MIS.view.singleproduct.SingleSearch", {
 				name: "ofOrigin",
 				anchor: "55%",
 				xtype: "combo",
-		        store: Ext.create("MIS.store.series.SeriesStore"),
+		        store: Ext.create("MIS.store.series.SeriesAllStore"),
 		        listeners: {
 		            change : function(field,newValue,oldValue){
 		                // 找到store

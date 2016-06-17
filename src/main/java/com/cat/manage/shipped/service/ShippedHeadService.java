@@ -13,6 +13,7 @@ import com.cat.manage.shipped.domain.Shipped;
 import com.cat.manage.shipped.domain.ShippedHead;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 /**
@@ -167,6 +168,11 @@ public class ShippedHeadService {
 				if(!"0".equals(c.getOrderStatus()))
 					throw new BusinessException("1", "提交的下单清单中存在状态不为[已下单]的记录");
 				
+				//检测快递单号是否为空
+				if(Strings.isNullOrEmpty(c.getTrackingNumber())){
+					throw new BusinessException("1", "提交的下单清单中存在快递单号为空的记录");
+				}
+				
 				shippedService.addShipped(sh, shipped, c);
 			}
 			
@@ -186,6 +192,11 @@ public class ShippedHeadService {
 				if(!"0".equals(c.getOrderStatus()))
 					throw new BusinessException("1", "提交的下单清单中存在状态不为[已下单]的记录");
 				
+				//检测快递单号是否为空
+				if(Strings.isNullOrEmpty(c.getTrackingNumber())){
+					throw new BusinessException("1", "提交的下单清单中存在快递单号为空的记录");
+				}
+			
 				shippedService.addShipped(querySH, shipped, c);
 			}
 			

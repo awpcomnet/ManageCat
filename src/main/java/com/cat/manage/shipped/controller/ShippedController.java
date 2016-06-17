@@ -1,6 +1,7 @@
 package com.cat.manage.shipped.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -65,5 +66,11 @@ public class ShippedController {
 		
 		shippedService.updateShippedForWeight(list);
 		return new Srm().setResultCode("0").setResultMessage("修改邮寄清单重量成功");
+	}
+	
+	@RequestMapping("/weightPlan")
+	public Srm ShippedWeightPlan(String[] ids){
+		List<Shipped> list = shippedService.queryWeightPlan(ids);
+		return new Srm().setResultCode("0").setResultMessage("重量预计完毕").addAll(list);
 	}
 }

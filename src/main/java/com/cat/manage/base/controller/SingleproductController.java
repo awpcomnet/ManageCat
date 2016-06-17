@@ -1,5 +1,7 @@
 package com.cat.manage.base.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +49,15 @@ public class SingleproductController {
 		
 		PageInfo<Singleproduct> page = singleproductService.querySingleproduct(singleproduct, pageNum, pageSize, brandId);
 		return new Srm().setResultCode("0").setResultMessage("查询单品信息成功").buildPageInfo(page);
+	}
+	
+	@RequestMapping("/queryAll")
+	public Srm querySingleproductAll(Singleproduct singleproduct, HttpServletRequest request){
+		HttpParams params = HttpParams.buildFrom(request);
+		
+		//单品查询添加对某品牌的所有单品的查询
+		String brandId = params.getStrIgnoreNull("brandId");
+		List<Singleproduct> list = singleproductService.querySingleproductAll(singleproduct, brandId);
+		return new Srm().setResultCode("0").setResultMessage("查询所有单品信息成功").addAll(list);
 	}
 }

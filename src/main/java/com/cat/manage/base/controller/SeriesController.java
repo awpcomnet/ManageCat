@@ -1,5 +1,7 @@
 package com.cat.manage.base.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +46,11 @@ public class SeriesController {
 		
 		PageInfo<Series> page = seriesService.querySeries(series, pageNum, pageSize);
 		return new Srm().setResultCode("0").setResultMessage("查询系列信息成功").buildPageInfo(page);
+	}
+	
+	@RequestMapping("/queryAll")
+	public Srm querySeriesAll(Series series){
+		List<Series> list = seriesService.querySeriesAll(series);
+		return new Srm().setResultCode("0").setResultMessage("查询所有系列信息成功").addAll(list);
 	}
 }

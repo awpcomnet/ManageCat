@@ -79,6 +79,16 @@ public class SingleproductService {
 	}
 	
 	/**
+	 * 查询所有单品信息
+	 * @param singleproduct
+	 * @param brandId
+	 * @return
+	 */
+	public List<Singleproduct> querySingleproductAll(Singleproduct singleproduct, String brandId){
+		return singleproductDao.querySingleproducts(singleproduct, brandId);
+	}
+	
+	/**
 	 * 通过单品编号查询单品信息
 	 * @param singleId
 	 * @return
