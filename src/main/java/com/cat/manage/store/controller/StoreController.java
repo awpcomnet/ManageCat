@@ -27,7 +27,7 @@ public class StoreController {
 	private StoreService storeService;
 	
 	@RequestMapping("/query")
-	public Srm queryStoreForPage(Store store, String includeStatus, HttpServletRequest request){
+	public Srm queryStoreForPage(Store store, String startTime, String endTime, String includeStatus, HttpServletRequest request){
 		HttpParams params = HttpParams.buildFrom(request);
 		Integer pageNum = params.getInt("page");
 		Integer pageSize = params.getInt("limit");
@@ -36,7 +36,7 @@ public class StoreController {
 		if(!Strings.isNullOrEmpty(includeStatus))
 			status = includeStatus.split("\\|");
 		
-		PageInfo<Store> page = storeService.queryStoreForPage(store, status, pageNum, pageSize);
+		PageInfo<Store> page = storeService.queryStoreForPage(store, startTime,  endTime, status, pageNum, pageSize);
 		return new Srm().setResultCode("0").setResultMessage("查询入库清单成功").buildPageInfo(page);
 	}
 	

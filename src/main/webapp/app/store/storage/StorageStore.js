@@ -19,7 +19,8 @@ Ext.define("MIS.store.storage.StorageStore", {
         	seriesId: "",
         	brandId: "",
         	singleId: "",
-        	storeTime: "",
+        	startTime: "",
+        	endTime: "",
         	storeStatus: "",
         	includeStatus: "2|4|6"
         }

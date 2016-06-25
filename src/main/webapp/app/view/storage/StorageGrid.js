@@ -143,7 +143,7 @@ Ext.define("MIS.view.storage.StorageGrid", {
         	id: "storagemodifywindow",
         	extraData: selections[0].raw,
         	renderTo: storageview.getEl(),
-        	height: 280,
+        	height: 330,
         	width: 580,
         	layout: "fit",
         	closeAction: "destroy",
@@ -252,7 +252,7 @@ Ext.define("MIS.view.storage.StorageGrid", {
         		afterrender: function(component, eOpts){
         			component.down("textfield[name=unitCost]").setValue(selections[0].raw.unitCost);
         			component.down("textfield[name=residueNum]").setValue(selections[0].raw.residueNum);
-        			component.down("numberfield[name=sellNum]").setValue(selections[0].raw.residueNum);
+        			component.down("numberfield[name=sellNum]").setValue(1);//售出默认1
         			component.down("numberfield[name=sellNum]").setMaxValue(selections[0].raw.residueNum);
         			component.down("textarea[name=remark]").setValue(selections[0].raw.remark);
         			component.down("textfield[name=storeId]").setValue(selections[0].raw.id);

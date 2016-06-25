@@ -131,7 +131,7 @@
 	<if test="param3 != null and param3 != ''">
 	and sell_time &lt;= #{param3}
 	</if>
-	order by create_date desc
+	order by sell_time desc , tb.brand_ename 
 	</select>
 	
 	<!-- 根据售出清单唯一编号（多个）查询记录 -->

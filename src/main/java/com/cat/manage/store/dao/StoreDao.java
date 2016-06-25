@@ -43,7 +43,7 @@ public interface StoreDao {
 	 * @param store
 	 * @return
 	 */
-	public List<Store> queryStore(Store store, String[] includeStatus);
+	public List<Store> queryStore(Store store, String startTime, String endTime, String[] includeStatus);
 	
 	/**
 	 * 根据仓库唯一编号查询仓库信息

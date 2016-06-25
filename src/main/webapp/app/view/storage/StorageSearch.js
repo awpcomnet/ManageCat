@@ -27,7 +27,7 @@ Ext.define("MIS.view.storage.StorageSearch", {
 			layout: "anchor",
 			items:[{
 				margin: "0 10",
-				width: 230,
+				width: 190,
 				labelWidth: 60,
 				anchor: "55%",
 		        fieldLabel: "品牌名称",
@@ -70,49 +70,63 @@ Ext.define("MIS.view.storage.StorageSearch", {
 		        allowBlank: true,
 		        editable:true
 			}, {
-				margin: "5 10",
-				xtype: "button",
-				text: '搜索',
-        		name: "search",
-        		anchor: '20%',
-        		scope: this,
-                handler: function(component){
-                	// 找到store
-                	var storageStore = component.up("storageview").down("storagegrid").getStore();
-                	
-                	// 设置Store参数
-                	var seriesId = component.up("storageSearchpanel").down("combobox[name=seriesId]").getValue(),
-                		brandId = component.up("storageSearchpanel").down("combobox[name=brandId]").getValue(),
-                		singleId = component.up("storageSearchpanel").down("combobox[name=singleId]").getValue(),
-                		storeTime = component.up("storageSearchpanel").down("datefield[name=storeTime]").getValue(),
-                		includeStatus = component.up("storageSearchpanel").down("radio[name=includeStatus]").getGroupValue();
-                	
-                	var params = storageStore.proxy.extraParams;
-                	params.seriesId = seriesId;
-                	params.brandId = brandId;
-                	params.singleId = singleId;
-                	params.storeTime = Ext.util.Format.date(storeTime,'Ymd');
-                	params.includeStatus = includeStatus;
-                	
-                	
-                	// reload store
-                	storageStore.reload();
-                }
-			}, {
-				margin: "5 10",
-				xtype: "button",
-				text: "重置",
-				scope: this,
-				handler: function(component){
-					component.up("storageSearchpanel").form.reset();
-				}
+				xtype: "container",
+				layout: "hbox",
+				items:[{
+					margin: "5 10",
+					xtype: "button",
+					text: '搜索',
+	        		name: "search",
+	        		anchor: '20%',
+	        		scope: this,
+	                handler: function(component){
+	                	// 找到store
+	                	var storageStore = component.up("storageview").down("storagegrid").getStore();
+	                	
+	                	// 设置Store参数
+	                	var seriesId = component.up("storageSearchpanel").down("combobox[name=seriesId]").getValue(),
+	                		brandId = component.up("storageSearchpanel").down("combobox[name=brandId]").getValue(),
+	                		singleId = component.up("storageSearchpanel").down("combobox[name=singleId]").getValue(),
+	                		startTime = component.up("storageSearchpanel").down("datefield[name=startTime]").getValue(),
+	                		endTime = component.up("storageSearchpanel").down("datefield[name=endTime]").getValue(),
+	                		includeStatus = component.up("storageSearchpanel").down("radio[name=includeStatus]").getGroupValue();
+	                	
+	                	var params = storageStore.proxy.extraParams;
+	                	params.seriesId = seriesId;
+	                	params.brandId = brandId;
+	                	params.singleId = singleId;
+	                	params.startTime = Ext.util.Format.date(startTime,'Ymd');
+	                	params.endTime = Ext.util.Format.date(endTime,'Ymd');
+	                	params.includeStatus = includeStatus;
+	                	
+	                	
+	                	// reload store
+	                	storageStore.reload();
+	                }
+				}, {
+					margin: "5 10",
+					xtype: "button",
+					text: "重置",
+					scope: this,
+					handler: function(component){
+						component.up("storageSearchpanel").form.reset();
+					}
+				}, {
+					margin: "5 10",
+		            xtype: "radio",
+		            name: "includeStatus",
+		            labelWidth: 45,
+		            inputValue: '2',
+		            boxLabel: "已入库"
+				}]
+				
 			}]
 		}, {
 			xtype: "container",
 			layout: "anchor",
 			items:[{
 				margin: "0 10",
-				width: 220,
+				width: 190,
 				labelWidth: 60,
 				anchor: "65%",
 				fieldLabel: "系列名称",
@@ -158,13 +172,6 @@ Ext.define("MIS.view.storage.StorageSearch", {
 				xtype: "container",
 				layout: "hbox",
 				items:[{
-					margin: "5 10",
-		            xtype: "radio",
-		            name: "includeStatus",
-		            labelWidth: 45,
-		            inputValue: '2',
-		            boxLabel: "已入库"
-				}, {
 		        	margin: "5 10",
 		            xtype: "radio",
 		            name: "includeStatus",
@@ -184,7 +191,7 @@ Ext.define("MIS.view.storage.StorageSearch", {
 			
 		}, {
 			margin: "0 10",
-			width: 230,
+			width: 190,
 			labelWidth: 60,
 			anchor: "55%",
 			fieldLabel: "单品名称",
@@ -217,16 +224,31 @@ Ext.define("MIS.view.storage.StorageSearch", {
 	        allowBlank: true,
 	        editable:true
         }, {
-        	margin: "0 10",
-			width: 200,
-			xtype: 'datefield',
-			fieldLabel: "入库时间",
-			name: "storeTime",
-			anchor: "55%",
-	        format: 'Ymd',
-	        editable:false,
-			labelWidth: 80,
-			anchor: "55%"
+        	xtype: "container",
+			layout: "anchor",
+			items:[{
+				margin: "0 10",
+				width: 180,
+				xtype: 'datefield',
+				fieldLabel: "起始时间",
+				name: "startTime",
+				anchor: "55%",
+		        format: 'Ymd',
+		        editable:false,
+				labelWidth: 80,
+				anchor: "55%"
+			}, {
+				margin: "5 10",
+				width: 180,
+				xtype: 'datefield',
+				fieldLabel: "结束时间",
+				name: "endTime",
+				anchor: "55%",
+		        format: 'Ymd',
+		        editable:false,
+				labelWidth: 80,
+				anchor: "55%"
+			}]
 		}]
 	}]
 });

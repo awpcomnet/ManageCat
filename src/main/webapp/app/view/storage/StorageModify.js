@@ -102,6 +102,13 @@ Ext.define("MIS.view.storage.StorageModify", {
         colspan: 2,
         editable:true
 	}, {
+		xtype: 'datefield',
+		fieldLabel: "入库时间",
+		name: "storeTime",
+        format: 'Ymd',
+        colspan: 2,
+        editable:false
+	}, {
 		fieldLabel: "备注",
         name: "remark",
         xtype: "textarea",

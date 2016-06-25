@@ -118,9 +118,9 @@ public class StoreService {
 	 * @param pageSize
 	 * @return
 	 */
-	public PageInfo<Store> queryStoreForPage(Store store, String[] includeStatus, Integer pageNum, Integer pageSize){
+	public PageInfo<Store> queryStoreForPage(Store store, String startTime, String endTime, String[] includeStatus, Integer pageNum, Integer pageSize){
 		PageHelper.startPage(pageNum, pageSize);
-		List<Store> list = storeDao.queryStore(store, includeStatus);
+		List<Store> list = storeDao.queryStore(store, startTime, endTime, includeStatus);
 		PageInfo<Store> page = new PageInfo<Store>(list);
 		return page;
 	}

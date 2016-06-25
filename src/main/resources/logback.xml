@@ -20,11 +20,11 @@
 	</appender>
 	-->
 
-	<!-- 按日期滚动日志文件
+	<!-- 按日期滚动日志文件-->
 	<appender name="rollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>F:/workspaces/ManageWeb/logs/MIS.log</file>
+		<!--  <file>F:\workspaces\ManageCat\logs\MIS.log</file> -->
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>F:/workspaces/ManageWeb/logs/logs/MIS-%d{yyyy-MM-dd}.log</fileNamePattern>
+			<fileNamePattern>F:\workspaces\ManageCat\logs\MIS-%d{yyyy-MM-dd}.log</fileNamePattern>
 			<maxHistory>30</maxHistory>
 		</rollingPolicy>
 		<encoder>
@@ -34,7 +34,7 @@
 		<append>false</append>
 		<prudent>false</prudent>
 	</appender>
-	 -->
+	 
 
 	<root level="DEBUG">
 		<appender-ref ref="STDOUT" />

@@ -27,7 +27,7 @@ Ext.define("MIS.view.selled.SelledSearch", {
 			layout: "anchor",
 			items:[{
 				margin: "0 10",
-				width: 230,
+				width: 180,
 				labelWidth: 60,
 				anchor: "55%",
 		        fieldLabel: "品牌名称",
@@ -70,51 +70,61 @@ Ext.define("MIS.view.selled.SelledSearch", {
 		        allowBlank: true,
 		        editable:true
 			}, {
-				margin: "5 10",
-				xtype: "button",
-				text: '搜索',
-        		name: "search",
-        		anchor: '20%',
-        		scope: this,
-                handler: function(component){
-                	// 找到store
-                	var storageStore = component.up("selledview").down("selledgrid").getStore();
-                	
-                	// 设置Store参数
-                	var seriesId = component.up("selledSearchpanel").down("combobox[name=seriesId]").getValue(),
-                		brandId = component.up("selledSearchpanel").down("combobox[name=brandId]").getValue(),
-                		singleId = component.up("selledSearchpanel").down("combobox[name=singleId]").getValue(),
-                		startTime = component.up("selledSearchpanel").down("datefield[name=startTime]").getValue(),
-                		endTime = component.up("selledSearchpanel").down("datefield[name=endTime]").getValue(),
-                		selledStatus = component.up("selledSearchpanel").down("radio[name=selledStatus]").getGroupValue();
-                	
-                	var params = storageStore.proxy.extraParams;
-                	params.seriesId = seriesId;
-                	params.brandId = brandId;
-                	params.singleId = singleId;
-                	params.startTime = Ext.util.Format.date(startTime,'Ymd');
-                	params.endTime = Ext.util.Format.date(endTime,'Ymd');
-                	params.selledStatus = selledStatus;
-                	
-                	
-                	// reload store
-                	storageStore.reload();
-                }
-			}, {
-				margin: "5 10",
-				xtype: "button",
-				text: "重置",
-				scope: this,
-				handler: function(component){
-					component.up("selledSearchpanel").form.reset();
-				}
+				xtype: "container",
+				layout: "hbox",
+				items:[{
+					margin: "5 10",
+					xtype: "button",
+					text: '搜索',
+	        		name: "search",
+	        		anchor: '20%',
+	        		scope: this,
+	                handler: function(component){
+	                	// 找到store
+	                	var storageStore = component.up("selledview").down("selledgrid").getStore();
+	                	
+	                	// 设置Store参数
+	                	var seriesId = component.up("selledSearchpanel").down("combobox[name=seriesId]").getValue(),
+	                		brandId = component.up("selledSearchpanel").down("combobox[name=brandId]").getValue(),
+	                		singleId = component.up("selledSearchpanel").down("combobox[name=singleId]").getValue(),
+	                		startTime = component.up("selledSearchpanel").down("datefield[name=startTime]").getValue(),
+	                		endTime = component.up("selledSearchpanel").down("datefield[name=endTime]").getValue(),
+	                		selledStatus = component.up("selledSearchpanel").down("radio[name=selledStatus]").getGroupValue();
+	                	
+	                	var params = storageStore.proxy.extraParams;
+	                	params.seriesId = seriesId;
+	                	params.brandId = brandId;
+	                	params.singleId = singleId;
+	                	params.startTime = Ext.util.Format.date(startTime,'Ymd');
+	                	params.endTime = Ext.util.Format.date(endTime,'Ymd');
+	                	params.selledStatus = selledStatus;
+	                	
+	                	
+	                	// reload store
+	                	storageStore.reload();}
+				}, {
+					margin: "5 10",
+					xtype: "button",
+					text: "重置",
+					scope: this,
+					handler: function(component){
+						component.up("selledSearchpanel").form.reset();
+					}
+				}, {
+					margin: "5 10",
+		            xtype: "radio",
+		            name: "selledStatus",
+		            labelWidth: 45,
+		            inputValue: '3',
+		            boxLabel: "已售出"
+				}]
 			}]
 		}, {
 			xtype: "container",
 			layout: "anchor",
 			items:[{
 				margin: "0 10",
-				width: 220,
+				width: 180,
 				labelWidth: 60,
 				anchor: "65%",
 				fieldLabel: "系列名称",
@@ -160,13 +170,6 @@ Ext.define("MIS.view.selled.SelledSearch", {
 				xtype: "container",
 				layout: "hbox",
 				items:[{
-					margin: "5 10",
-		            xtype: "radio",
-		            name: "selledStatus",
-		            labelWidth: 45,
-		            inputValue: '3',
-		            boxLabel: "已售出"
-				}, {
 		        	margin: "5 10",
 		            xtype: "radio",
 		            name: "selledStatus",
@@ -186,7 +189,7 @@ Ext.define("MIS.view.selled.SelledSearch", {
 			
 		}, {
 			margin: "0 10",
-			width: 230,
+			width: 180,
 			labelWidth: 60,
 			anchor: "55%",
 			fieldLabel: "单品名称",
@@ -219,27 +222,31 @@ Ext.define("MIS.view.selled.SelledSearch", {
 	        allowBlank: true,
 	        editable:true
         }, {
-        	margin: "0 10",
-			width: 200,
-			xtype: 'datefield',
-			fieldLabel: "起始时间",
-			name: "startTime",
-			anchor: "55%",
-	        format: 'Ymd',
-	        editable:false,
-			labelWidth: 80,
-			anchor: "55%"
-		}, {
-        	margin: "0 10",
-			width: 200,
-			xtype: 'datefield',
-			fieldLabel: "结束时间",
-			name: "endTime",
-			anchor: "55%",
-	        format: 'Ymd',
-	        editable:false,
-			labelWidth: 80,
-			anchor: "55%"
+        	xtype: "container",
+			layout: "anchor",
+			items:[{
+				margin: "0 10",
+				width: 180,
+				xtype: 'datefield',
+				fieldLabel: "起始时间",
+				name: "startTime",
+				anchor: "55%",
+		        format: 'Ymd',
+		        editable:false,
+				labelWidth: 80,
+				anchor: "55%"
+			}, {
+	        	margin: "5 10",
+				width: 180,
+				xtype: 'datefield',
+				fieldLabel: "结束时间",
+				name: "endTime",
+				anchor: "55%",
+		        format: 'Ymd',
+		        editable:false,
+				labelWidth: 80,
+				anchor: "55%"
+			}]
 		}]
 	}]
 });
