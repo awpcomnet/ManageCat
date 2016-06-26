@@ -39,6 +39,9 @@ public class ShippedHeadController {
 		if(shippedHead.getTrackingNumber() == null)
 			throw new BusinessException("1", "快递单号不能为空");
 		
+		//去除主邮寄单号空格
+		shippedHead.setTrackingNumber(shippedHead.getTrackingNumber().trim());
+		
 		shippedHeadService.addShippedHeadAndShipped(shippedHead, checkIds);
 		return new Srm().setResultCode("0").setResultMessage("添加邮寄清单成功");
 	}
@@ -50,6 +53,9 @@ public class ShippedHeadController {
 	 */
 	@RequestMapping("/modify")
 	public Srm modifyShippedHead(ShippedHead shippedHead){
+		//去除主邮寄单号空格
+		shippedHead.setTrackingNumber(shippedHead.getTrackingNumber().trim());
+		
 		shippedHeadService.updateShippedHead(shippedHead);
 		return new Srm().setResultCode("0").setResultMessage("修改邮寄清单成功");
 	}

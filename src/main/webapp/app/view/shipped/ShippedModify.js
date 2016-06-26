@@ -27,7 +27,8 @@ Ext.define("MIS.view.shipped.ShippedModify", {
         xtype: "textfield",
         colspan: 1,
         anchor: "55%",
-        readOnly: true
+        editable:true
+        //readOnly: true
     }, {
 		xtype: 'datefield',
 		fieldLabel: "提交时间",
