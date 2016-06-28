@@ -71,11 +71,31 @@ Ext.define("MIS.view.check.CheckAdd", {
         store: Ext.create("MIS.store.dict.DictQueryStore", {
         	dictcode: "orderAddr"
         }),
+        listeners: {
+            change : function(field,newValue,oldValue){
+                // 找到store
+                var singleIdStore = Ext.ComponentQuery.query('checkadd')[0].down("combobox[name=orderAddr]").getStore();
+
+                //对store 进行过滤
+                singleIdStore.filterBy(function(record){
+                    var name = record.raw.name,
+                        code = record.raw.value;
+                    //如果输入框为空，直接放回所有记录
+                    if(newValue == '' || newValue == null)
+                        return true;
+
+                    if(name.indexOf(newValue) >= 0){
+                        return true;
+                    }
+                    return false;
+                });
+            }
+        },
         mode: "local",
         displayField: 'name',
         valueField: "value",
         allowBlank: true,
-        editable:false
+        editable:true
 	}, {
 		fieldLabel: "品牌名称",
         name: "brandId",
