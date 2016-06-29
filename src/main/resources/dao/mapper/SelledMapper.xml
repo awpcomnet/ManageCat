@@ -108,30 +108,30 @@
 	left join t_singleproduct tsp on tsp.single_id = t.single_id
 	where 1=1
 	<if test="param1.brandId != null and param1.brandId != ''">
-	and brand_id = #{param1.brandId}
+	and t.brand_id = #{param1.brandId}
 	</if>
 	<if test="param1.seriesId != null and param1.seriesId != ''">
-	and series_id = #{param1.seriesId}
+	and t.series_id = #{param1.seriesId}
 	</if>
 	<if test="param1.singleId != null and param1.singleId != ''">
-	and single_id = #{param1.singleId}
+	and t.single_id = #{param1.singleId}
 	</if>
 	<if test="param1.payby != null and param1.payby != ''">
-	and payby = #{param1.payby}
+	and t.payby = #{param1.payby}
 	</if>
 	<if test="param1.sellTime != null and param1.sellTime != ''">
-	and sell_time = #{param1.sellTime}
+	and t.sell_time = #{param1.sellTime}
 	</if>
 	<if test="param1.selledStatus != null and param1.selledStatus != ''">
-	and selled_status = #{param1.selledStatus}
+	and t.selled_status = #{param1.selledStatus}
 	</if>
 	<if test="param2 != null and param2 != ''">
-	and sell_time &gt;= #{param2}
+	and t.sell_time &gt;= #{param2}
 	</if>
 	<if test="param3 != null and param3 != ''">
-	and sell_time &lt;= #{param3}
+	and t.sell_time &lt;= #{param3}
 	</if>
-	order by sell_time desc , tb.brand_ename 
+	order by t.sell_time desc , tb.brand_ename 
 	</select>
 	
 	<!-- 根据售出清单唯一编号（多个）查询记录 -->
@@ -144,7 +144,7 @@
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
 	left join t_singleproduct tsp on tsp.single_id = t.single_id
-	where id in
+	where t.id in
 	<foreach collection="array" item="id" open="(" separator="," close=")">#{id}</foreach>
 	</select>
 	
@@ -158,7 +158,7 @@
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
 	left join t_singleproduct tsp on tsp.single_id = t.single_id
-	where id = #{id}
+	where t.id = #{id}
 	</select>
 	
 	<!-- 根据下单清单唯一编号查询记录 -->
@@ -171,7 +171,7 @@
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
 	left join t_singleproduct tsp on tsp.single_id = t.single_id
-	where check_id = #{checkId}
+	where t.check_id = #{checkId}
 	</select>
 	
 	<!-- 根据邮寄清单唯一编号查询记录 -->
@@ -184,7 +184,7 @@
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
 	left join t_singleproduct tsp on tsp.single_id = t.single_id
-	where shipped_id = #{shippedId}
+	where t.shipped_id = #{shippedId}
 	</select>
 	
 	<!-- 根据下单清单唯一编号(多个)查询记录 -->
@@ -197,7 +197,7 @@
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
 	left join t_singleproduct tsp on tsp.single_id = t.single_id
-	where check_id in 
+	where t.check_id in 
 	<foreach collection="array" item="checkId" open="(" separator="," close=")">#{checkId}</foreach>
 	</select>
 	

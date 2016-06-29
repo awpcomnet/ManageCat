@@ -9,7 +9,7 @@ Ext.define("MIS.store.singleproduct.SingleproductAllStore", {
 	
 	proxy: {
 		type: "ajax",
-		url: "/singleproduct/query",
+		url: "/singleproduct/queryAll",
 		reader: {
 			type: "json",
 			root: "results"
