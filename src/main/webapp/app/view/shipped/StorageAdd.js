@@ -55,7 +55,7 @@ Ext.define("MIS.view.shipped.StorageAdd", {
 		fieldLabel: "汇率(非必填)",
         name: "rate",
         xtype: "numberfield",
-        decimalPrecision: 2,
+        decimalPrecision: 8,
         listeners : {
  	       change : function(field,newValue,oldValue){
  	    	   var unitPrice = Ext.ComponentQuery.query("storageadd textfield[name=unitPrice]")[0].getValue();
