@@ -22,8 +22,15 @@ public class BrandController {
 	
 	@RequestMapping("/add")
 	public Srm addBrand(Brand brand){
-		brandService.addBrand(brand);
-		return new Srm().setResultCode("0").setResultMessage("添加品牌成功");
+		//参数处理
+		brand.setBrandEname(brand.getBrandEname().trim());
+		brand.setBrandName(brand.getBrandName().trim());
+		
+		boolean isAdd = brandService.addBrand(brand);
+		if(isAdd)
+			return new Srm().setResultCode("0").setResultMessage("添加品牌成功");
+		else
+			return new Srm().setResultCode("1").setResultMessage("该品牌已存在，校验英文名["+brand.getBrandEname()+"]");
 	}
 	
 	@RequestMapping("/update")

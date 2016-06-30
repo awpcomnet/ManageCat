@@ -32,8 +32,16 @@ public class BrandService {
 	 * 添加品牌
 	 * @param brand
 	 */
-	public void addBrand(Brand brand){
+	public boolean addBrand(Brand brand){
+		//校验是否存在(英文名)
+		Brand btemp = new Brand();
+		btemp.setBrandEname(brand.getBrandEname());
+		List<Brand> list = brandDao.queryBrandsAccurate(btemp);
+		if(list != null && list.size() >= 1)
+			return false;
+		
 		brandDao.addBrand(brand);
+		return true;
 	}
 	
 	/**

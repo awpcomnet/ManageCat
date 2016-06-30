@@ -49,7 +49,7 @@
     ,(select single_name from t_singleproduct where single_id = t.single_id) as single_name
     , (num - IFNULL(sell_num,0)) as residue_num 
 	from t_store t 
-	where num > IFNULL(sell_num,0)
+	where t.num > IFNULL(t.sell_num,0)
 	</select>
 	
 	<!-- 查询所有库存详情 -->

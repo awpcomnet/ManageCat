@@ -71,4 +71,23 @@
 		select brand_id, brand_name, brand_ename, of_origin, is_use, create_date, create_by, update_date, update_by, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat 
 		from t_brand where brand_id = #{brandId}
 	</select>
+	
+	<!-- 查询品牌（精确查询，不含模糊查询，不区分大小写）-->
+	<select id="queryBrandsAccurate" parameterType="com.cat.manage.base.domain.Brand" resultMap="brandResultMap">
+		select brand_id, brand_name, brand_ename, of_origin, is_use, create_date, create_by, update_date, update_by, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat 
+		from t_brand where 1=1
+		<if test="ofOrigin != null and ofOrigin != ''">
+			and of_origin = #{ofOrigin}
+		</if>
+		<if test="isUse != null and isUse != ''">
+			and is_use = #{isUse}
+		</if>
+		<if test="brandName != null and brandName != ''">
+			and brand_name = #{brandName}
+		</if>
+		<if test="brandEname != null and brandEname != ''">
+			and brand_ename = #{brandEname} 
+		</if>
+		order by create_date desc
+	</select>
 </mapper>

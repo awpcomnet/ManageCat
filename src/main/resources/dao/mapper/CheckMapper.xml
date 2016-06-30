@@ -117,42 +117,42 @@
 	left join t_singleproduct tsp on tsp.single_id = t.single_id
 	where 1=1 
 	<if test="param1.trackingNumber != null and param1.trackingNumber != ''">
-		and tracking_number = #{param1.trackingNumber}
+		and t.tracking_number = #{param1.trackingNumber}
 	</if>
 	<if test="param1.orderTime != null and param1.orderTime != ''">
-		and order_time = #{param1.orderTime}
+		and t.order_time = #{param1.orderTime}
 	</if>
 	<if test="param1.transferCompany != null and param1.transferCompany != ''">
-		and transfer_company = #{param1.transferCompany}
+		and t.transfer_company = #{param1.transferCompany}
 	</if>
 	<if test="param1.orderAddr != null and param1.orderAddr != ''">
-		and order_addr = #{param1.orderAddr}
+		and t.order_addr = #{param1.orderAddr}
 	</if>
 	<if test="param1.brandId != null and param1.brandId != ''">
-		and brand_id = #{param1.brandId}
+		and t.brand_id = #{param1.brandId}
 	</if>
 	<if test="param1.seriesId != null and param1.seriesId != ''">
-		and series_id = #{param1.seriesId}
+		and t.series_id = #{param1.seriesId}
 	</if>
 	<if test="param1.singleId != null and param1.singleId != ''">
-		and single_id = #{param1.singleId}
+		and t.single_id = #{param1.singleId}
 	</if>
 	<if test="param1.payby != null and param1.payby != ''">
-		and payby = #{param1.payby}
+		and t.payby = #{param1.payby}
 	</if>	
 	<if test="param1.orderStatus != null and param1.orderStatus != ''">
-		and order_status = #{param1.orderStatus}
+		and t.order_status = #{param1.orderStatus}
 	</if>
 	<if test="param1.batchNo != null and param1.batchNo != ''">
-		and batch_no = #{param1.batchNo}
+		and t.batch_no = #{param1.batchNo}
 	</if>
 	<if test="param2 != null and param2 != ''">
-		and DATE_FORMAT(create_date, '%Y%m%d') &gt;= #{param2}
+		and DATE_FORMAT(t.create_date, '%Y%m%d') &gt;= #{param2}
 	</if>
 	<if test="param3 != null and param3 != ''">
-		and DATE_FORMAT(create_date, '%Y%m%d') &lt;= #{param3}
+		and DATE_FORMAT(t.create_date, '%Y%m%d') &lt;= #{param3}
 	</if>
-	order by create_date desc
+	order by t.create_date desc
 	</select>
 	
 	<!-- 根据下单清单唯一编号查询记录 -->
@@ -169,7 +169,7 @@
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
 	left join t_singleproduct tsp on tsp.single_id = t.single_id
-	where id in
+	where t.id in
 	<foreach collection="array" item="id" open="(" separator="," close=")">#{id}</foreach>
 	</select>
 	
@@ -187,7 +187,7 @@
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
 	left join t_singleproduct tsp on tsp.single_id = t.single_id
-	where id = #{id}
+	where t.id = #{id}
 	</select>
 	
 </mapper>
