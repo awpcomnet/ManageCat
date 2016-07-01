@@ -45,6 +45,10 @@ Ext.define("MIS.view.storage.StorageGrid", {
                 }},
 			    { header: '备注', dataIndex: 'remark', sortable: true, width: 15, align: "center"}
 			],
+			
+			viewConfig:{  
+                enableTextSelection:true  
+            },
 		    
 			bbar: Ext.create('Ext.PagingToolbar', {
 				store: this.store,

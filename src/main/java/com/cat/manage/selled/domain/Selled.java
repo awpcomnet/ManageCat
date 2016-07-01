@@ -37,6 +37,10 @@ public class Selled implements Serializable{
 	private String sumPrice;//售出总金额
 	private String brandEname;//品牌英文名称
 	private String singleEname;//单品英文名称
+	//新加字段 国外快递单号 主邮寄单号 批次号
+	private String trackingNumber;//国外快递单号
+	private String headTrackingNumber;//主邮寄单号
+	private String batchNo;//批次号
 	
 	public Integer getId() {
 		return id;
@@ -252,6 +256,30 @@ public class Selled implements Serializable{
 
 	public void setSingleEname(String singleEname) {
 		this.singleEname = singleEname;
+	}
+
+	public String getTrackingNumber() {
+		return trackingNumber;
+	}
+
+	public void setTrackingNumber(String trackingNumber) {
+		this.trackingNumber = trackingNumber;
+	}
+
+	public String getHeadTrackingNumber() {
+		return headTrackingNumber;
+	}
+
+	public void setHeadTrackingNumber(String headTrackingNumber) {
+		this.headTrackingNumber = headTrackingNumber;
+	}
+
+	public String getBatchNo() {
+		return batchNo;
+	}
+
+	public void setBatchNo(String batchNo) {
+		this.batchNo = batchNo;
 	}
 
 	@Override

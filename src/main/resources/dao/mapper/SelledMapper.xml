@@ -32,6 +32,10 @@
 		<result property="sumPrice" column="sumPrice"/>
 		<result property="brandEname" column="brand_ename"/>
 		<result property="singleEname" column="single_name"/>
+		<!-- 新加字段  trackingNumber|headTrackingNumber|batchNo -20160701 -->
+		<result property="trackingNumber" column="tracking_number"/>
+		<result property="headTrackingNumber" column="head_tracking_number"/>
+		<result property="batchNo" column="batch_no"/>
 	</resultMap>
 	
 	
@@ -102,10 +106,13 @@
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
 	,FORMAT((IFNULL(t.sell_num,0)*IFNULL(t.selling_price,0)), 2) as sumPrice
+	,tc.tracking_number , tc.batch_no
+	,(select tsh.tracking_number from t_shipped_head tsh, t_shipped ts where tsh.id = ts.head_id and ts.check_id = tc.id) as head_tracking_number
 	from t_selled t
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
 	left join t_singleproduct tsp on tsp.single_id = t.single_id
+	left join t_check tc on tc.id = t.check_id
 	where 1=1
 	<if test="param1.brandId != null and param1.brandId != ''">
 	and t.brand_id = #{param1.brandId}
@@ -125,6 +132,15 @@
 	<if test="param1.selledStatus != null and param1.selledStatus != ''">
 	and t.selled_status = #{param1.selledStatus}
 	</if>
+	<if test="param1.trackingNumber != null and param1.trackingNumber != ''">
+	and tc.tracking_number = #{param1.trackingNumber}
+	</if>
+	<if test="param1.batchNo != null and param1.batchNo != ''">
+	and tc.batch_no = #{param1.batchNo}
+	</if>
+	<if test="param1.headTrackingNumber != null and param1.headTrackingNumber != ''">
+	and t.check_id in (select ts.check_id from t_shipped_head tsh , t_shipped ts where ts.head_id = tsh.id and tsh.tracking_number = #{param1.headTrackingNumber})
+	</if>
 	<if test="param2 != null and param2 != ''">
 	and t.sell_time &gt;= #{param2}
 	</if>
@@ -140,10 +156,13 @@
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
 	,(IFNULL(sell_num,0)*IFNULL(selling_price,0)) as sumPrice
+	,tc.tracking_number , tc.batch_no
+	,(select tsh.tracking_number from t_shipped_head tsh, t_shipped ts where tsh.id = ts.head_id and ts.check_id = tc.id) as head_tracking_number
 	from t_selled t
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
 	left join t_singleproduct tsp on tsp.single_id = t.single_id
+	left join t_check tc on tc.id = t.check_id
 	where t.id in
 	<foreach collection="array" item="id" open="(" separator="," close=")">#{id}</foreach>
 	</select>
@@ -154,10 +173,13 @@
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
 	,(IFNULL(sell_num,0)*IFNULL(selling_price,0)) as sumPrice
+	,tc.tracking_number , tc.batch_no
+	,(select tsh.tracking_number from t_shipped_head tsh, t_shipped ts where tsh.id = ts.head_id and ts.check_id = tc.id) as head_tracking_number
 	from t_selled t
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
 	left join t_singleproduct tsp on tsp.single_id = t.single_id
+	left join t_check tc on tc.id = t.check_id
 	where t.id = #{id}
 	</select>
 	
@@ -167,10 +189,13 @@
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
 	,(IFNULL(sell_num,0)*IFNULL(selling_price,0)) as sumPrice
+	,tc.tracking_number , tc.batch_no
+	,(select tsh.tracking_number from t_shipped_head tsh, t_shipped ts where tsh.id = ts.head_id and ts.check_id = tc.id) as head_tracking_number
 	from t_selled t
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
 	left join t_singleproduct tsp on tsp.single_id = t.single_id
+	left join t_check tc on tc.id = t.check_id
 	where t.check_id = #{checkId}
 	</select>
 	
@@ -180,10 +205,13 @@
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
 	,(IFNULL(sell_num,0)*IFNULL(selling_price,0)) as sumPrice
+	,tc.tracking_number , tc.batch_no
+	,(select tsh.tracking_number from t_shipped_head tsh, t_shipped ts where tsh.id = ts.head_id and ts.check_id = tc.id) as head_tracking_number
 	from t_selled t
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
 	left join t_singleproduct tsp on tsp.single_id = t.single_id
+	left join t_check tc on tc.id = t.check_id
 	where t.shipped_id = #{shippedId}
 	</select>
 	
@@ -193,10 +221,13 @@
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
 	,(IFNULL(sell_num,0)*IFNULL(selling_price,0)) as sumPrice
+	,tc.tracking_number , tc.batch_no
+	,(select tsh.tracking_number from t_shipped_head tsh, t_shipped ts where tsh.id = ts.head_id and ts.check_id = tc.id) as head_tracking_number
 	from t_selled t
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
 	left join t_singleproduct tsp on tsp.single_id = t.single_id
+	left join t_check tc on tc.id = t.check_id
 	where t.check_id in 
 	<foreach collection="array" item="checkId" open="(" separator="," close=")">#{checkId}</foreach>
 	</select>

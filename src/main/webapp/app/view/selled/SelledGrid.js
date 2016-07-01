@@ -31,6 +31,9 @@ Ext.define("MIS.view.selled.SelledGrid", {
 			columns: [
 			    { header: '品牌名称', dataIndex: 'brandEname', sortable: true, width: 10, align: "center"},
 			    { header: '系列名称', dataIndex: 'seriesName', sortable: true, width: 10, align: "center", hidden : true},
+			    { header: '邮寄主单号', dataIndex: 'headTrackingNumber', sortable: true, width: 10, align: "center", hidden : true},
+			    { header: '批次号', dataIndex: 'batchNo', sortable: true, width: 10, align: "center", hidden : true},
+			    { header: '国外邮寄单号', dataIndex: 'trackingNumber', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '单品名称', dataIndex: 'singleName', sortable: true, width: 10, align: "center"},
 			    { header: '数量', dataIndex: 'sellNum', sortable: true, width: 5, align: "center"},
 			    { header: '补损金额(￥)', dataIndex: 'refund', sortable: true, width: 10, align: "center", editor:{ 
@@ -49,6 +52,10 @@ Ext.define("MIS.view.selled.SelledGrid", {
 			    { header: '备注', dataIndex: 'remark', sortable: true, width: 15, align: "center"}
 			],
 		    
+			viewConfig:{  
+                enableTextSelection:true  
+            },
+			
 			bbar: Ext.create('Ext.PagingToolbar', {
 				store: this.store,
 				displayInfo: true,

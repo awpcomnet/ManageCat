@@ -86,6 +86,15 @@ Ext.define("MIS.model.selled.Selled", {
 	}, {
 		name: "sumPrice",
 		type: "string"
+	}, {
+		name: "trackingNumber",
+		type: "string"
+	}, {
+		name: "headTrackingNumber",
+		type: "string"
+	}, {
+		name: "batchNo",
+		type: "string"
 	}]
 });
 
