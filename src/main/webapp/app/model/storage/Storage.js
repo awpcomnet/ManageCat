@@ -89,6 +89,12 @@ Ext.define("MIS.model.storage.Storage", {
 	}, {
 		name: "residueNum",
 		type: "string"
+	}, {
+		name: "headTrackingNumber",
+		type: "string"
+	}, {
+		name: "batchNo",
+		type: "string"
 	}]
 });
 

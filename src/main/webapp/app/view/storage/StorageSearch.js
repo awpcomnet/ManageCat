@@ -89,7 +89,13 @@ Ext.define("MIS.view.storage.StorageSearch", {
 	                		singleId = component.up("storageSearchpanel").down("combobox[name=singleId]").getValue(),
 	                		startTime = component.up("storageSearchpanel").down("datefield[name=startTime]").getValue(),
 	                		endTime = component.up("storageSearchpanel").down("datefield[name=endTime]").getValue(),
-	                		includeStatus = component.up("storageSearchpanel").down("radio[name=includeStatus]").getGroupValue();
+	                		includeStatus = component.up("storageSearchpanel").down("radio[name=includeStatus]").getGroupValue(),
+	                		
+	                		trackingNumber = component.up("storageSearchpanel").down("textfield[name=trackingNumber]").getValue().trim(),
+	                		headTrackingNumber = component.up("storageSearchpanel").down("textfield[name=headTrackingNumber]").getValue().trim(),
+	                		batchNo = component.up("storageSearchpanel").down("textfield[name=batchNo]").getValue().trim();
+	                	
+	                	
 	                	
 	                	var params = storageStore.proxy.extraParams;
 	                	params.seriesId = seriesId;
@@ -98,6 +104,9 @@ Ext.define("MIS.view.storage.StorageSearch", {
 	                	params.startTime = Ext.util.Format.date(startTime,'Ymd');
 	                	params.endTime = Ext.util.Format.date(endTime,'Ymd');
 	                	params.includeStatus = includeStatus;
+	                	params.trackingNumber = trackingNumber;
+	                	params.headTrackingNumber = headTrackingNumber;
+	                	params.batchNo = batchNo;
 	                	
 	                	
 	                	// reload store
@@ -190,39 +199,73 @@ Ext.define("MIS.view.storage.StorageSearch", {
 	        }]
 			
 		}, {
-			margin: "0 10",
-			width: 190,
-			labelWidth: 60,
-			anchor: "55%",
-			fieldLabel: "单品名称",
-	        name: "singleId",
-	        xtype: "combobox",
-	        store: Ext.create("MIS.store.singleproduct.SingleproductAllStore"),
-	        listeners: {
-	            change : function(field,newValue,oldValue){
-	                // 找到store
-	                var singleIdStore = Ext.ComponentQuery.query('storageSearchpanel')[0].down("combobox[name=singleId]").getStore();
+			xtype: "container",
+			layout: "anchor",
+			items:[{
+				margin: "0 10",
+				width: 170,
+				labelWidth: 60,
+				anchor: "55%",
+				fieldLabel: "单品名称",
+		        name: "singleId",
+		        xtype: "combobox",
+		        store: Ext.create("MIS.store.singleproduct.SingleproductAllStore"),
+		        listeners: {
+		            change : function(field,newValue,oldValue){
+		                // 找到store
+		                var singleIdStore = Ext.ComponentQuery.query('storageSearchpanel')[0].down("combobox[name=singleId]").getStore();
 
-	                //对store 进行过滤
-	                singleIdStore.filterBy(function(record){
-	                    var name = record.raw.singleName,
-	                        code = record.raw.singleId;
-	                    //如果输入框为空，直接放回所有记录
-	                    if(newValue == '' || newValue == null)
-	                        return true;
+		                //对store 进行过滤
+		                singleIdStore.filterBy(function(record){
+		                    var name = record.raw.singleName,
+		                        code = record.raw.singleId;
+		                    //如果输入框为空，直接放回所有记录
+		                    if(newValue == '' || newValue == null)
+		                        return true;
 
-	                    if(name.indexOf(newValue) >= 0){
-	                        return true;
-	                    }
-	                    return false;
-	                });
-	            }
-	        },
-	        mode: "local",
-	        displayField: 'singleName',
-	        valueField: "singleId",
-	        allowBlank: true,
-	        editable:true
+		                    if(name.indexOf(newValue) >= 0){
+		                        return true;
+		                    }
+		                    return false;
+		                });
+		            }
+		        },
+		        mode: "local",
+		        displayField: 'singleName',
+		        valueField: "singleId",
+		        allowBlank: true,
+		        editable:true
+			}, {
+				margin: "5 10",
+				width: 170,
+				xtype: "textfield",
+				fieldLabel: "快递单号",
+				labelWidth: 60,
+				name: "trackingNumber",
+				anchor: "55%" 
+			}]
+			
+        }, {
+        	xtype: "container",
+			layout: "anchor",
+			items:[{
+				margin: "0 10",
+				width: 170,
+				xtype: "textfield",
+				fieldLabel: "主邮单号",
+				labelWidth: 60,
+				name: "headTrackingNumber",
+				anchor: "55%" 
+			}, {
+				margin: "5 10",
+				width: 170,
+				xtype: "textfield",
+				fieldLabel: "批次号",
+				labelWidth: 60,
+				name: "batchNo",
+				anchor: "55%" 
+			}]
+        	
         }, {
         	xtype: "container",
 			layout: "anchor",

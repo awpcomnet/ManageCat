@@ -280,6 +280,8 @@ Ext.define("MIS.view.selled.SelledGrid", {
     	if(searchwindow.isHidden()){
     		searchwindow.show();
     	} else {
+    		this.store.proxy.extraParams = {};
+    		
     		searchwindow.form.reset();
     		searchwindow.hide();
     	}

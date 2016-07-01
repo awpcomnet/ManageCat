@@ -21,6 +21,7 @@
 		<result property="ofOriginName" column="of_origin_name"/>
 		<result property="brandId" column="brand_id"/>
 		<result property="brandName" column="brand_name"/>
+		<result property="brandEname" column="brand_ename"/>
 	</resultMap>
 	
 	<!-- 添加单品信息 -->
@@ -70,6 +71,7 @@
 		select single_id, single_name, single_ename, capacity, unit, of_origin, (select series_name from t_series where series_id = t_singleproduct.of_origin) as of_origin_name, is_use, create_date, create_by, update_date, update_by, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat 
 		, (select b.brand_id from t_brand b, t_series s where s.of_origin=b.brand_id and s.series_id=t_singleproduct.of_origin) as brand_id
 		, (select b.brand_name from t_brand b, t_series s where s.of_origin=b.brand_id and s.series_id=t_singleproduct.of_origin) as brand_name
+		, (select b.brand_ename from t_brand b, t_series s where s.of_origin=b.brand_id and s.series_id=t_singleproduct.of_origin) as brand_ename
 		from t_singleproduct where 1=1
 		<if test="param1.capacity != null and param1.capacity != ''">
 			and capacity = #{param1.capacity}

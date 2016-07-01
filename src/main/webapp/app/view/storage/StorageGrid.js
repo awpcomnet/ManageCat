@@ -32,6 +32,9 @@ Ext.define("MIS.view.storage.StorageGrid", {
 			    { header: '品牌名称', dataIndex: 'brandEname', sortable: true, width: 15, align: "center"},
 			    { header: '系列名称', dataIndex: 'seriesName', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '单品名称', dataIndex: 'singleName', sortable: true, width: 10, align: "center"},
+			    { header: '邮寄主单号', dataIndex: 'headTrackingNumber', sortable: true, width: 10, align: "center", hidden : true},
+			    { header: '批次号', dataIndex: 'batchNo', sortable: true, width: 10, align: "center", hidden : true},
+			    { header: '国外邮寄单号', dataIndex: 'trackingNumber', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '实际单价(￥)', dataIndex: 'unitRmb', sortable: true, width: 10, align: "center"},
 			    { header: '实际单个邮费(￥)', dataIndex: 'unitPostage', sortable: true, width: 10, align: "center"},
 			    { header: '实际成本(￥)', dataIndex: 'unitCost', sortable: true, width: 10, align: "center"},
@@ -362,6 +365,10 @@ Ext.define("MIS.view.storage.StorageGrid", {
     	if(searchwindow.isHidden()){
     		searchwindow.show();
     	} else {
+    		this.store.proxy.extraParams = {};
+    		this.store.proxy.extraParams.includeStatus = "2|4|6";
+    		
+    		
     		searchwindow.form.reset();
     		searchwindow.hide();
     	}

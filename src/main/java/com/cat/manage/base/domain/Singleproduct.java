@@ -25,6 +25,7 @@ public class Singleproduct implements Serializable{
 	private String ofOriginName;//所属系列名称
 	private Integer brandId;//品牌编号
 	private String brandName;//品牌名称
+	private String brandEname;//品牌英文名称
 	
 	public Integer getSingleId() {
 		return singleId;
@@ -152,6 +153,14 @@ public class Singleproduct implements Serializable{
 
 	public void setBrandName(String brandName) {
 		this.brandName = brandName;
+	}
+
+	public String getBrandEname() {
+		return brandEname;
+	}
+
+	public void setBrandEname(String brandEname) {
+		this.brandEname = brandEname;
 	}
 
 	@Override

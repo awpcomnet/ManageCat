@@ -38,6 +38,8 @@ public class Store implements Serializable{
 	private Integer residueNum;//剩余数量
 	private String brandEname;//品牌名称
 	private String singleEname;//单品名称
+	private String headTrackingNumber;//主邮寄单号
+	private String batchNo;//批次号
 	
 	public Integer getId() {
 		return id;
@@ -261,6 +263,22 @@ public class Store implements Serializable{
 
 	public void setSingleEname(String singleEname) {
 		this.singleEname = singleEname;
+	}
+
+	public String getHeadTrackingNumber() {
+		return headTrackingNumber;
+	}
+
+	public void setHeadTrackingNumber(String headTrackingNumber) {
+		this.headTrackingNumber = headTrackingNumber;
+	}
+
+	public String getBatchNo() {
+		return batchNo;
+	}
+
+	public void setBatchNo(String batchNo) {
+		this.batchNo = batchNo;
 	}
 
 	@Override

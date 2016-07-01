@@ -38,6 +38,10 @@ Ext.define("MIS.view.shipped.ShippedGrid", {
 			    { header: '内含邮寄清单数量', dataIndex: 'shippedNum', sortable: true, width: 10, align: "center"},
 			    { header: '内含入库清单数量', dataIndex: 'storeNum', sortable: true, width: 10, align: "center"}
 			],
+			
+			viewConfig:{  
+                enableTextSelection:true  
+            },
 		    
 			bbar: Ext.create('Ext.PagingToolbar', {
 				store: this.store,
@@ -250,6 +254,8 @@ Ext.define("MIS.view.shipped.ShippedGrid", {
     	if(searchwindow.isHidden()){
     		searchwindow.show();
     	} else {
+    		this.store.proxy.extraParams = {};
+    		
     		searchwindow.form.reset();
     		searchwindow.hide();
     	}

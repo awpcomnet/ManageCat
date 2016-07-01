@@ -32,7 +32,7 @@ Ext.define("MIS.view.singleproduct.SingleGrid", {
 			    { header: '单品名称', dataIndex: 'singleName', sortable: true, width: 20, align: "center"},
 			    { header: '单品英文名', dataIndex: 'singleEname', sortable: true, width: 20, align: "center"},
 			    { header: '所属系列', dataIndex: 'ofOriginName', sortable: true, width: 15, align: "center"},
-			    { header: '所属品牌', dataIndex: 'brandName', sortable: true, width: 15, align: "center"},
+			    { header: '所属品牌', dataIndex: 'brandEname', sortable: true, width: 15, align: "center"},
 			    { header: '规格', dataIndex: 'capacity', sortable: true, width: 15, align: "center"},
 			    { header: '单位', dataIndex: 'unit', sortable: true, width: 10, align: "center", renderer: function (value, rowindex, record, column) {
 			    	return MIS.common.DictManager.getDictItemName("unitDict", value);

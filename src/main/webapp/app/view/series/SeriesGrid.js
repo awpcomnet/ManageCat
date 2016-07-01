@@ -31,7 +31,7 @@ Ext.define("MIS.view.series.SeriesGrid", {
 			columns: [
 			    { header: '系列名称', dataIndex: 'seriesName', sortable: true, width: 20, align: "center"},
 			    { header: '系列英文名', dataIndex: 'seriesEname', sortable: true, width: 20, align: "center"},
-			    { header: '所属品牌', dataIndex: 'ofOriginName', sortable: true, width: 20, align: "center"},
+			    { header: '所属品牌', dataIndex: 'ofOriginEname', sortable: true, width: 20, align: "center"},
 			    { header: '是否可用', dataIndex: 'isUse', sortable: true, width: 20, align: "center", renderer: function (value, rowindex, record, column) {
 			    	return MIS.common.DictManager.getDictItemName("onOff", value);
                 }},

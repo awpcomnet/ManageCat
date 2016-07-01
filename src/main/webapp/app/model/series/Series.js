@@ -41,6 +41,9 @@ Ext.define("MIS.model.series.Series", {
 	}, {
 		name: "ofOriginName",
 		type: "string"
+	}, {
+		name: "ofOriginEname",
+		type: "string"
 	}]
 });
 

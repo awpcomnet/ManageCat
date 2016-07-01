@@ -59,6 +59,10 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
                 	xtype: 'numberfield'
                 }}
 			],
+			
+			viewConfig:{  
+                enableTextSelection:true  
+            },
 		    
 			bbar: Ext.create('Ext.PagingToolbar', {
 				store: this.store,

@@ -51,6 +51,10 @@ Ext.define("MIS.view.check.CheckGrid", {
                 }}
 			    
 			],
+			
+			viewConfig:{  
+                enableTextSelection:true  
+            }, 
 		    
 			bbar: Ext.create('Ext.PagingToolbar', {
 				store: this.store,
@@ -367,6 +371,9 @@ Ext.define("MIS.view.check.CheckGrid", {
     	if(searchwindow.isHidden()){
     		searchwindow.show();
     	} else {
+    		this.store.proxy.extraParams = {};
+    		this.store.proxy.extraParams.orderStatus= "0";
+    		
     		searchwindow.form.reset();
     		searchwindow.hide();
     	}
