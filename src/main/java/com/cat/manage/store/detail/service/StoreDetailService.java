@@ -49,6 +49,7 @@ public class StoreDetailService {
 			storeDetail.setId(id);
 			storeDetail.setSumUnitPostage(String.format("%.02f", unitPostage));
 			storeDetail.setSumUnitRmb(String.format("%.02f", unitRmb));
+			storeDetail.setSumStoreCost(String.format("%.02f", storeCost));
 			resultList.add(storeDetail);
 			id++;
 		}
