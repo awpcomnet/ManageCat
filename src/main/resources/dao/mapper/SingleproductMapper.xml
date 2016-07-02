@@ -97,6 +97,28 @@
 		order by create_date desc
 	</select>
 	
+	<!-- 查询单品信息(仅用于校验单品是否存在，根据所属系列、单品名称和英文名称和规格查询，不区分大小写) -->
+	<select id="querySingleproductsAccurateForName" parameterType="com.cat.manage.base.domain.Singleproduct" resultMap="singleproductResultMap">
+		select single_id, single_name, single_ename, capacity, unit, of_origin, (select series_name from t_series where series_id = t_singleproduct.of_origin) as of_origin_name, is_use, create_date, create_by, update_date, update_by, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat 
+		, (select b.brand_id from t_brand b, t_series s where s.of_origin=b.brand_id and s.series_id=t_singleproduct.of_origin) as brand_id
+		, (select b.brand_name from t_brand b, t_series s where s.of_origin=b.brand_id and s.series_id=t_singleproduct.of_origin) as brand_name
+		, (select b.brand_ename from t_brand b, t_series s where s.of_origin=b.brand_id and s.series_id=t_singleproduct.of_origin) as brand_ename
+		from t_singleproduct where 1=1
+		<if test="capacity != null and capacity != ''">
+			and capacity = #{capacity}
+		</if>
+		<if test="ofOrigin != null and ofOrigin != ''">
+			and of_origin = #{ofOrigin}
+		</if>
+		<if test="isUse != null and isUse != ''">
+			and is_use = #{isUse}
+		</if>
+		<if test="(singleName != null and singleName != '') or (singleEname != null and singleEname != '')">
+			and (single_name = #{singleName} or single_ename = #{singleEname} )
+		</if>
+		order by create_date desc
+	</select>
+	
 	<!-- 根据单品编号查询单品信息 -->
 	<select id="querySingleproductBySingleId" parameterType="java.lang.Integer" resultMap="singleproductResultMap">
 		select single_id, single_name, single_ename, capacity, unit, of_origin, (select series_name from t_series where series_id = t_singleproduct.of_origin) as of_origin_name, is_use, create_date, create_by, update_date, update_by, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat 

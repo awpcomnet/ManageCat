@@ -40,6 +40,13 @@ public interface SingleproductDao {
 	public List<Singleproduct> querySingleproducts(Singleproduct singleproduct, String brandId);
 	
 	/**
+	 * 查询单品信息(仅用于校验单品是否存在，根据所属系列、单品名称和英文名称和规格查询，不区分大小写)
+	 * @param singleproduct
+	 * @return
+	 */
+	public List<Singleproduct> querySingleproductsAccurateForName(Singleproduct singleproduct);
+	
+	/**
 	 * 根据单品编号查询单品信息
 	 * @param singleId
 	 * @return

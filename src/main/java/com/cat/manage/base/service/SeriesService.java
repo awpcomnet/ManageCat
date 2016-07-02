@@ -32,22 +32,40 @@ public class SeriesService {
 	 * 添加系列信息
 	 * @param series
 	 */
-	public void addSeries(Series series){
+	public boolean addSeries(Series series){
 		Brand brand = brandService.queryBrandById(Integer.valueOf(series.getOfOrigin()));
 		if(brand == null)
 			throw new BusinessException("1", "品牌信息不存在");
 		if(!"1".equals(brand.getIsUse()))
 			throw new BusinessException("1", "品牌已失效");
 		
+		//检测品牌是否存在(中文名|英文名 任意一个重复则已存在)
+		List<Series> list = seriesDao.querySeriesAccurateForName(series);
+		if(list != null && list.size() >= 1)
+			return false;
+		
 		seriesDao.addSeries(series);
+		return true;
 	}
 	
 	/**
 	 * 修改系列信息
 	 * @param series
 	 */
-	public void updateSeries(Series series){
+	public boolean updateSeries(Series series){
+		Brand brand = brandService.queryBrandById(Integer.valueOf(series.getOfOrigin()));
+		if(brand == null)
+			throw new BusinessException("1", "品牌信息不存在");
+		if(!"1".equals(brand.getIsUse()))
+			throw new BusinessException("1", "品牌已失效");
+		
+		//检测品牌是否存在(中文名|英文名 任意一个重复则已存在)
+		List<Series> list = seriesDao.querySeriesAccurateForName(series);
+		if(list != null && list.size() >= 1)
+			return false;
+		
 		seriesDao.updateSeries(series);
+		return true;
 	}
 	
 	/**

@@ -227,7 +227,7 @@ Ext.define("MIS.view.series.SeriesGrid", {
                     isUseStore.load();
                },
         		afterrender: function(component, eOpts){
-        			component.down("combo[name=ofOrigin]").setValue(this.extraData.seriesId);
+        			component.down("combo[name=ofOrigin]").setValue(Number.parseInt(this.extraData.seriesId));
         			component.down("combo[name=isUse]").setValue("1");
     			}
         	}

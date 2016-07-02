@@ -30,22 +30,40 @@ public class SingleproductService {
 	 * 添加单品信息
 	 * @param singleproduct
 	 */
-	public void addSingleproduct(Singleproduct singleproduct){
+	public boolean addSingleproduct(Singleproduct singleproduct){
 		Series Series = seriesService.querySeriesById(Integer.valueOf(singleproduct.getOfOrigin()));
 		if(Series == null)
 			throw new BusinessException("1", "系列信息不存在");
 		if(!"1".equals(Series.getIsUse()))
 			throw new BusinessException("1", "系列已失效");
 		
+		//校验唯一性
+		List<Singleproduct> list = singleproductDao.querySingleproductsAccurateForName(singleproduct);
+		if(list != null && list.size() >= 1)
+			return false;
+		
 		singleproductDao.addSingleproduct(singleproduct);
+		return true;
 	}
 	
 	/**
 	 * 修改单品信息
 	 * @param singleproduct
 	 */
-	public void updateSingleproduct(Singleproduct singleproduct){
+	public boolean updateSingleproduct(Singleproduct singleproduct){
+		Series Series = seriesService.querySeriesById(Integer.valueOf(singleproduct.getOfOrigin()));
+		if(Series == null)
+			throw new BusinessException("1", "系列信息不存在");
+		if(!"1".equals(Series.getIsUse()))
+			throw new BusinessException("1", "系列已失效");
+		
+		//校验唯一性
+		List<Singleproduct> list = singleproductDao.querySingleproductsAccurateForName(singleproduct);
+		if(list != null && list.size() >= 1)
+			return false;
+		
 		singleproductDao.updateSingleproduct(singleproduct);
+		return true;
 	}
 	
 	/**

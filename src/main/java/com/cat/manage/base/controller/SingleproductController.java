@@ -22,14 +22,30 @@ public class SingleproductController {
 	
 	@RequestMapping("/add")
 	public Srm addSingleproduct(Singleproduct singleproduct){
-		singleproductService.addSingleproduct(singleproduct);
-		return new Srm().setResultCode("0").setResultMessage("添加单品信息成功");
+		//参数处理(去除空格)
+		singleproduct.setSingleName(singleproduct.getSingleName().trim());
+		singleproduct.setSingleEname(singleproduct.getSingleEname().trim());
+		singleproduct.setCapacity(singleproduct.getCapacity().trim());
+		
+		boolean isAdd = singleproductService.addSingleproduct(singleproduct);
+		if(isAdd)
+			return new Srm().setResultCode("0").setResultMessage("添加单品信息成功");
+		else
+			return new Srm().setResultCode("1").setResultMessage("该单品已存在，校验单品名称["+singleproduct.getSingleName()+"]，英文名称["+singleproduct.getSingleEname()+"]，规格["+singleproduct.getCapacity()+"]");
 	}
 	
 	@RequestMapping("/update")
 	public Srm updateSingleproduct(Singleproduct singleproduct){
-		singleproductService.updateSingleproduct(singleproduct);
-		return new Srm().setResultCode("0").setResultMessage("修改单品信息成功");
+		//参数处理(去除空格)
+		singleproduct.setSingleName(singleproduct.getSingleName().trim());
+		singleproduct.setSingleEname(singleproduct.getSingleEname().trim());
+		singleproduct.setCapacity(singleproduct.getCapacity().trim());
+		
+		boolean isModify = singleproductService.updateSingleproduct(singleproduct);
+		if(isModify)
+			return new Srm().setResultCode("0").setResultMessage("修改单品信息成功");
+		else
+			return new Srm().setResultCode("1").setResultMessage("该单品已存在，校验单品名称["+singleproduct.getSingleName()+"]，英文名称["+singleproduct.getSingleEname()+"]，规格["+singleproduct.getCapacity()+"]");
 	}
 	
 	@RequestMapping("/delete")

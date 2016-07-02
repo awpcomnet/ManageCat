@@ -35,8 +35,15 @@ public class BrandController {
 	
 	@RequestMapping("/update")
 	public Srm updateBrand(Brand brand){
-		brandService.updateBrand(brand);
-		return new Srm().setResultCode("0").setResultMessage("修改品牌成功");
+		//参数处理
+		brand.setBrandEname(brand.getBrandEname().trim());
+		brand.setBrandName(brand.getBrandName().trim());
+		
+		boolean isModify = brandService.updateBrand(brand);
+		if(isModify)
+			return new Srm().setResultCode("0").setResultMessage("修改品牌成功");
+		else 
+			return new Srm().setResultCode("1").setResultMessage("该品牌已存在，校验英文名["+brand.getBrandEname()+"]");
 	}
 	
 	@RequestMapping("/delete")

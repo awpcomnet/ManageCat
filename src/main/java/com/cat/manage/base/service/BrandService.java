@@ -48,8 +48,16 @@ public class BrandService {
 	 * 修改品牌
 	 * @param brand
 	 */
-	public void updateBrand(Brand brand){
+	public boolean updateBrand(Brand brand){
+		//校验是否存在(英文名)
+		Brand btemp = new Brand();
+		btemp.setBrandEname(brand.getBrandEname());
+		List<Brand> list = brandDao.queryBrandsAccurate(btemp);
+		if(list != null && list.size() >= 1)
+			return false;
+		
 		brandDao.updateBrand(brand);
+		return true;
 	}
 	
 	/**

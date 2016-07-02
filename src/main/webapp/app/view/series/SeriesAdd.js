@@ -84,7 +84,7 @@ Ext.define("MIS.view.series.SeriesAdd", {
                 success: function (conn, request, option, eOpts) {
                     var result = Ext.JSON.decode(conn.responseText, true);
                     if (result.resultCode != 0) {
-                        Ext.MessageBox.alert("请求失败", "添加系列失败 " + result.resultMessage);
+                        Ext.MessageBox.alert("请求失败", "原因： " + result.resultMessage);
                     } else {
                         Ext.ComponentQuery.query("seriesgrid")[0].store.reload();
                         component.up("#seriesaddwindow").close();

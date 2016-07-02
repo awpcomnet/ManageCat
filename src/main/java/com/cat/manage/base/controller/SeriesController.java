@@ -22,14 +22,28 @@ public class SeriesController {
 	
 	@RequestMapping("/add")
 	public Srm addSeries(Series series){
-		seriesService.addSeries(series);
-		return new Srm().setResultCode("0").setResultMessage("添加系列信息成功");
+		//参数处理(去除空格)
+		series.setSeriesEname(series.getSeriesEname().trim());
+		series.setSeriesName(series.getSeriesName().trim());
+		
+		boolean isAdd = seriesService.addSeries(series);
+		if(isAdd)
+			return new Srm().setResultCode("0").setResultMessage("添加系列信息成功");
+		else 
+			return new Srm().setResultCode("1").setResultMessage("该系列已经存在，校验中文名["+series.getSeriesName()+"]和英文名["+series.getSeriesEname()+"]");
 	}
 	
 	@RequestMapping("/update")
 	public Srm updateSeries(Series series){
-		seriesService.updateSeries(series);
-		return new Srm().setResultCode("0").setResultMessage("修改系列信息成功");
+		//参数处理
+		series.setSeriesEname(series.getSeriesEname().trim());
+		series.setSeriesName(series.getSeriesName().trim());
+		
+		boolean isModify = seriesService.updateSeries(series);
+		if(isModify)
+			return new Srm().setResultCode("0").setResultMessage("修改系列信息成功");
+		else
+			return new Srm().setResultCode("1").setResultMessage("该系列已经存在，校验中文名["+series.getSeriesName()+"]和英文名["+series.getSeriesEname()+"]");
 	}
 	
 	@RequestMapping("/delete")

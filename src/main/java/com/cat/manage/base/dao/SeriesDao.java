@@ -46,6 +46,13 @@ public interface SeriesDao {
 	public List<Series> querySeries(Series series);
 	
 	/**
+	 * 查询系列（仅用于通过系列名称或英文名称精确查询，但不区分大小写）
+	 * @param series
+	 * @return
+	 */
+	public List<Series> querySeriesAccurateForName(Series series);
+	
+	/**
 	 * 根据系列编号查询系列信息
 	 * @param seriesId
 	 * @return

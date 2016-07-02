@@ -90,7 +90,7 @@ Ext.define("MIS.view.brand.BrandModify", {
 				success: function(conn, request, option, eOpts){
 					var result = Ext.JSON.decode(conn.responseText, true);
 					if(result.resultCode != 0){
-						Ext.MessageBox.alert("请求失败", "修改品牌失败 " + result.resultMessage);
+						Ext.MessageBox.alert("请求失败", "原因： " + result.resultMessage);
 					} else {
 		                Ext.ComponentQuery.query("brandgrid")[0].store.reload();
 		                Ext.ComponentQuery.query("brandgrid")[0].getView().getSelectionModel().deselectAll();

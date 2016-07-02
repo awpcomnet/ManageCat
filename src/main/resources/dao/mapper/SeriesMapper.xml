@@ -75,6 +75,24 @@
 		order by create_date desc
 	</select>
 	
+	<!-- 查询系列（仅用于通过系列名称或英文名称精确查询，但不区分大小写） -->
+	<select id="querySeriesAccurateForName" parameterType="com.cat.manage.base.domain.Series" resultMap="seriesResultMap">
+		select series_id, series_name, series_ename, of_origin, (select brand_name from t_brand where brand_id = t_series.of_origin) as of_origin_name
+		, (select brand_ename from t_brand where brand_id = t_series.of_origin) as of_origin_ename
+		, is_use, create_date, create_by, update_date, update_by, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat 
+		from t_series where 1=1
+		<if test="ofOrigin != null and ofOrigin != ''">
+			and of_origin = #{ofOrigin}
+		</if>
+		<if test="isUse != null and isUse != ''">
+			and is_use = #{isUse}
+		</if>
+		<if test="(seriesName != null and seriesName != '') or (seriesEname != null and seriesEname != '')">
+			and (series_ename = #{seriesEname} or series_name = #{seriesName})
+		</if>
+		order by create_date desc
+	</select>
+	
 	<!-- 根据系列编号查询系列信息 -->
 	<select id="querySeriesById" parameterType="java.lang.Integer" resultMap="seriesResultMap">
 		select series_id, series_name, series_ename, of_origin, (select brand_name from t_brand where brand_id = t_series.of_origin) as of_origin_name

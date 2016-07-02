@@ -210,12 +210,17 @@ Ext.define("MIS.view.brand.BrandGrid", {
         			brandview.getEl().unmask();
         		},
         		beforerender: function () {
+        			var ofOrigin = Ext.ComponentQuery.query("seriesadd combo[name=ofOrigin]")[0];
+                    var ofOriginStore = ofOrigin.getStore();
+                    ofOriginStore.proxy.extraParams.isUse = 1;
+                    ofOriginStore.load();
+        			
                	 	var isUse = Ext.ComponentQuery.query("seriesadd combo[name=isUse]")[0];
                     var isUseStore = isUse.getStore();
                     isUseStore.load();
                },
         		afterrender: function(component, eOpts){
-        			component.down("textfield[name=ofOrigin]").setValue(this.extraData.brandId);
+        			component.down("textfield[name=ofOrigin]").setValue(Number.parseInt(this.extraData.brandId));
         			component.down("combo[name=isUse]").setValue("1");
     			}
         	}
