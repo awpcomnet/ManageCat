@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.manage.base.dao.SingleproductHistoryDao">
+
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
+	<resultMap type="com.cat.manage.base.domain.SingleproductHistory" id="singleproductHistoryResultMap">
+		<id property="singleHisId" column="single_his_id"/>
+		<result property="singleId" column="single_id"/>
+		<result property="singleName" column="single_name"/>
+		<result property="singleEname" column="single_ename"/>
+		<result property="capacity" column="capacity"/>
+		<result property="unit" column="unit"/>
+		<result property="ofOrigin" column="of_origin"/>
+		<result property="isUse" column="is_use"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="createBy" column="create_by"/>
+		<result property="updateBy" column="update_by"/>
+	</resultMap>
+	
+	<!-- 添加到单品历史表 -->
+	<insert id="addSingleproductHistory" parameterType="com.cat.manage.base.domain.Singleproduct">
+		insert into t_singleproduct_his(single_id, single_name, single_ename, of_origin, capacity, unit, is_use, create_date, create_by , update_date, update_by)
+		values(#{singleId}, #{singleName}, #{singleEname}, #{ofOrigin}, #{capacity}, #{unit}, #{isUse}, now(), 'system', now(), 'system')
+	</insert>
+	
+	<!-- 修改单品历史表 -->
+	<update id="updateSingleproductHistory" parameterType="com.cat.manage.base.domain.SingleproductHistory">
+		update t_singleproduct_his set update_date=now() , update_by = 'system'
+		<if test="singleName != null and singleName != ''">
+			, single_name = #{singleName}
+		</if>
+		<if test="singleEname != null and singleEname != ''">
+			, single_ename = #{singleEname}
+		</if>
+		<if test="capacity != null and capacity != ''">
+			, capacity = #{capacity}
+		</if>
+		<if test="unit != null and unit != ''">
+			, unit = #{unit}
+		</if>
+		<if test="ofOrigin != null and ofOrigin != ''">
+			, of_origin = #{ofOrigin}
+		</if>
+		<if test="isUse != null and isUse != ''">
+			, is_use = #{isUse}
+		</if>
+		where single_his_id = #{singleHisId}
+	</update>
+	
+	<!-- 删除单品历史表记录 -->
+	<delete id="deleteSingleproductHistoryBySingleHisId" parameterType="com.cat.manage.base.domain.SingleproductHistory">
+		delete from t_singleproduct_his where single_his_id = #{singleHisId}
+	</delete>
+	
+	<!--  删除单品历史记录 （系列唯一编号） -->
+	<delete id="deleteSingleproductHistoryBySeriesId" parameterType="java.lang.Integer">
+		delete from t_singleproduct_his where of_origin = #{seriesId}
+	</delete>
+	
+	<!-- 根据单品历史表唯一编号查询 -->
+	<select id="querySingleproductBySingleHisId"  parameterType="java.lang.Integer" resultMap="singleproductHistoryResultMap">
+		select single_his_id, single_id, single_name, single_ename, of_origin, capacity, unit, is_use, create_date
+		, create_by, update_date, update_by from t_singleproduct_his
+		where single_his_id = #{singleHisId}
+	</select>
+	
+	<!-- 根据单品唯一编号查询记录 -->
+	<select id="querySingleproductBySingleId"  parameterType="java.lang.Integer" resultMap="singleproductHistoryResultMap">
+		select single_his_id, single_id, single_name, single_ename, of_origin, capacity, unit, is_use, create_date
+		, create_by, update_date, update_by from t_singleproduct_his
+		where single_id = #{singleId}
+	</select>
+	
+</mapper>

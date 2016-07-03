@@ -95,7 +95,7 @@ public class SeriesService {
 		singleService.deleteSingleproductBySeriesId(new Integer[]{seriesId});
 		
 		//删除系列历史信息
-		this.deleteSeriesHistoryInfo(seriesId);
+		seriesHisService.deleteSeriesHistoryInfo(seriesId);
 	}
 	
 	/**
@@ -120,7 +120,7 @@ public class SeriesService {
 		
 		//删除系列历史信息
 		for(Integer seriesId: seriesIds){
-			this.deleteSeriesHistoryInfo(seriesId);
+			seriesHisService.deleteSeriesHistoryInfo(seriesId);
 		}
 		
 		//删除单品
@@ -212,12 +212,12 @@ public class SeriesService {
 		seriesDao.updateSeries(stemp);
 
 		//删除历史信息
-		this.deleteSeriesHistoryInfo(stemp.getSeriesId());
+		seriesHisService.deleteSeriesHistoryInfo(stemp.getSeriesId());
 		
 	}
 	
 	/**
-	 * 根据系列ID保存系列历史信息
+	 * 添加或更新系列历史信息
 	 * @param seriesId
 	 */
 	private void addOrUpdateSeriesHistoryInfo(Series seriesNew){
@@ -252,13 +252,13 @@ public class SeriesService {
 	 * 删除历史信息
 	 * @param seriesId
 	 */
-	private void deleteSeriesHistoryInfo(Integer seriesId){
-		//查询历史信息
-		SeriesHistory seriesHistory = seriesHisService.querySeriesHisBySeriesId(seriesId);
-		
-		if(seriesHistory.getSeriesHisId() != null)
-			seriesHisService.deleteSeriesHis(seriesHistory);
-	}
+//	private void deleteSeriesHistoryInfo(Integer seriesId){
+//		//查询历史信息
+//		SeriesHistory seriesHistory = seriesHisService.querySeriesHisBySeriesId(seriesId);
+//		
+//		if(seriesHistory.getSeriesHisId() != null)
+//			seriesHisService.deleteSeriesHis(seriesHistory);
+//	}
 	
 	/**
 	 * 将系列历史信息转变为系列模型信息

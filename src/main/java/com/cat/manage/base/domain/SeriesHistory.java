@@ -119,5 +119,5 @@ public class SeriesHistory implements Serializable{
 				+ ", needSynchronization=" + needSynchronization + "]";
 	}
 
-	private static final long serialVersionUID = 7346383716508049128L;
+	private static final long serialVersionUID = 8974265587685042153L;
 }

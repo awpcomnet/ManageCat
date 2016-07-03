@@ -70,4 +70,16 @@ public class SeriesHisService {
 	public void deleteSeriesHis(SeriesHistory seriesHistory){
 		seriesHisDao.deleteSeriesHistory(seriesHistory);
 	}
+	
+	/**
+	 * 删除历史信息
+	 * @param seriesId
+	 */
+	public void deleteSeriesHistoryInfo(Integer seriesId){
+		//查询历史信息
+		SeriesHistory seriesHistory = seriesHisDao.querySeriesHistoryBySeriesId(seriesId);
+		
+		if(seriesHistory.getSeriesHisId() != null)
+			this.deleteSeriesHis(seriesHistory);
+	}
 }

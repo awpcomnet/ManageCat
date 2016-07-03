@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cat.manage.base.domain.Series;
 import com.cat.manage.base.domain.Singleproduct;
 import com.cat.manage.base.service.SingleproductService;
 import com.cat.manage.common.model.Srm;
@@ -75,5 +76,11 @@ public class SingleproductController {
 		String brandId = params.getStrIgnoreNull("brandId");
 		List<Singleproduct> list = singleproductService.querySingleproductAll(singleproduct, brandId);
 		return new Srm().setResultCode("0").setResultMessage("查询所有单品信息成功").addAll(list);
+	}
+	
+	@RequestMapping("/recover")
+	public Srm recoverSingleproduct(Singleproduct singleproduct){
+		singleproductService.recoverSingleproduct(singleproduct);
+		return new Srm().setResultCode("0").setResultMessage("恢复单品历史信息成功");
 	}
 }

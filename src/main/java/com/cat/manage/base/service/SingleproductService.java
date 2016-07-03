@@ -2,12 +2,15 @@ package com.cat.manage.base.service;
 
 import java.util.List;
 
+import javax.swing.SingleSelectionModel;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cat.manage.base.dao.SingleproductDao;
 import com.cat.manage.base.domain.Series;
 import com.cat.manage.base.domain.Singleproduct;
+import com.cat.manage.base.domain.SingleproductHistory;
 import com.cat.manage.common.exception.BusinessException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -25,6 +28,9 @@ public class SingleproductService {
 	
 	@Autowired
 	private SeriesService seriesService;
+	
+	@Autowired
+	private SingleproductHistoryService singleHisService;
 	
 	/**
 	 * 添加单品信息
@@ -62,6 +68,9 @@ public class SingleproductService {
 		if(list != null && list.size() >= 1)
 			return false;
 		
+		//添加历史记录
+		this.addOrUpdateSingleproductHistoryInfo(singleproduct);
+		
 		singleproductDao.updateSingleproduct(singleproduct);
 		return true;
 	}
@@ -71,6 +80,9 @@ public class SingleproductService {
 	 * @param singleproductId
 	 */
 	public void deleteSingleproduct(Integer singleId){
+		//删除历史记录
+		singleHisService.deleteSingleproductHistory(singleId);
+		
 		singleproductDao.deleteSingleproduct(singleId);
 	}
 	
@@ -79,6 +91,11 @@ public class SingleproductService {
 	 * @param seriesIds
 	 */
 	public void deleteSingleproductBySeriesId(Integer[] seriesIds){
+		//根据系列唯一编号删除单品历史记录
+		for(Integer seriesId : seriesIds){
+			singleHisService.deleteSingleproductHistoryBySeriesId(seriesId);
+		}
+		
 		singleproductDao.deleteSingleproductBySeriesIds(seriesIds);
 	}
 	
@@ -113,5 +130,92 @@ public class SingleproductService {
 	 */
 	public Singleproduct querySingleproductBySingleId(Integer singleId){
 		return singleproductDao.querySingleproductBySingleId(singleId);
+	}
+	
+	/**
+	 * 恢复单品历史记录
+	 * @param single
+	 */
+	public void recoverSingleproduct(Singleproduct singleproduct){
+		//读取历史记录
+		SingleproductHistory singleHis = singleHisService.querySingleHistoryBySingleId(singleproduct.getSingleId());
+		if(singleHis == null)
+			return;
+		
+		Singleproduct singleOld = this.changeToSingle(singleHis); 
+		
+		//检验系列信息
+		Series Series = seriesService.querySeriesById(Integer.valueOf(singleOld.getOfOrigin()));
+		if(Series == null)
+			throw new BusinessException("1", "系列信息不存在");
+		if(!"1".equals(Series.getIsUse()))
+			throw new BusinessException("1", "系列已失效");
+		
+		//校验唯一性
+		List<Singleproduct> list = singleproductDao.querySingleproductsAccurateForName(singleOld);
+		if(list != null && list.size() >= 1)
+			throw new BusinessException("1", "要恢复的单品信息和当前信息重复,历史信息["+singleOld.getSingleName()+"]["+singleOld.getSingleEname()+"]["+singleOld.getCapacity()+"]");
+	
+		//修改单品信息
+		singleproductDao.updateSingleproduct(singleOld);
+		
+		//删除单品历史记录
+		singleHisService.deleteSingleproductHistory(singleHis);
+	}
+	
+	/**
+	 * 添加或更新 单品历史信息
+	 * @param singleNew
+	 */
+	private void addOrUpdateSingleproductHistoryInfo(Singleproduct singleNew){
+		Integer singleId = singleNew.getSingleId();
+		Singleproduct singleOld = singleproductDao.querySingleproductBySingleId(singleId);
+		if(singleOld == null)
+			throw new BusinessException("1", "该单品不存在");
+		
+		//查看单品历史信息是否存在
+		SingleproductHistory singleHis = singleHisService.querySingleHistoryBySingleId(singleId);
+		if(singleHis == null){//无历史记录
+			singleHisService.addSingleproductHistory(singleOld);
+		} else {
+			SingleproductHistory singleHisNew = this.changeToSingleHis(singleOld);
+			singleHisNew.setSingleHisId(singleHis.getSingleHisId());
+			singleHisService.updateSingleproductHistory(singleHisNew);
+		}
+		
+	}
+	
+	/**
+	 * 单品模型转换为单品历史模型
+	 * @param single
+	 * @return
+	 */
+	private SingleproductHistory changeToSingleHis(Singleproduct single){
+		SingleproductHistory singleHis = new SingleproductHistory();
+		singleHis.setSingleId(single.getSingleId());
+		singleHis.setSingleName(single.getSingleName());
+		singleHis.setSingleEname(single.getSingleEname());
+		singleHis.setIsUse(single.getIsUse());
+		singleHis.setOfOrigin(single.getOfOrigin());
+		singleHis.setCapacity(single.getCapacity());
+		singleHis.setUnit(single.getUnit());
+		return singleHis;
+	}
+	
+	/**
+	 * 单品历史模型转换为单品模型
+	 * @param singleHis
+	 * @return
+	 */
+	private Singleproduct changeToSingle(SingleproductHistory singleHis){
+		Singleproduct single = new Singleproduct();
+		single.setSingleId(singleHis.getSingleId());
+		single.setSingleName(singleHis.getSingleName());
+		single.setSingleEname(singleHis.getSingleEname());
+		single.setIsUse(singleHis.getIsUse());
+		single.setCapacity(singleHis.getCapacity());
+		single.setOfOrigin(singleHis.getOfOrigin());
+		single.setUnit(singleHis.getUnit());
+		return single;
 	}
 }
