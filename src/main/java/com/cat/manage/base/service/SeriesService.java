@@ -8,9 +8,13 @@ import org.springframework.stereotype.Service;
 import com.cat.manage.base.dao.SeriesDao;
 import com.cat.manage.base.domain.Brand;
 import com.cat.manage.base.domain.Series;
+import com.cat.manage.base.domain.SeriesHistory;
+import com.cat.manage.check.domain.Check;
+import com.cat.manage.check.service.CheckService;
 import com.cat.manage.common.exception.BusinessException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 
 /**
  * 系列服务
@@ -28,6 +32,12 @@ public class SeriesService {
 	@Autowired
 	private SingleproductService singleService;
 	
+	@Autowired
+	private CheckService checkService;
+	
+	@Autowired
+	private SeriesHisService seriesHisService;
+	
 	/**
 	 * 添加系列信息
 	 * @param series
@@ -43,6 +53,8 @@ public class SeriesService {
 		List<Series> list = seriesDao.querySeriesAccurateForName(series);
 		if(list != null && list.size() >= 1)
 			return false;
+		
+		
 		
 		seriesDao.addSeries(series);
 		return true;
@@ -64,6 +76,9 @@ public class SeriesService {
 		if(list != null && list.size() >= 1)
 			return false;
 		
+		//保存历史信息
+		this.addOrUpdateSeriesHistoryInfo(series);
+		
 		seriesDao.updateSeries(series);
 		return true;
 	}
@@ -78,6 +93,9 @@ public class SeriesService {
 		
 		//删除单品信息
 		singleService.deleteSingleproductBySeriesId(new Integer[]{seriesId});
+		
+		//删除系列历史信息
+		this.deleteSeriesHistoryInfo(seriesId);
 	}
 	
 	/**
@@ -85,7 +103,28 @@ public class SeriesService {
 	 * @param brandId
 	 */
 	public void deleteSeriesByBrandId(Integer brandId){
+		//查询系列
+		List<Series> seriesList = this.querySeriesByBrandId(brandId);
+		if(seriesList == null || seriesList.size() <= 0){
+			return;
+		}
+		
+		//记录系列编号
+		List<Integer> seriesIds = Lists.newArrayList();
+		for(Series series : seriesList){
+			seriesIds.add(series.getSeriesId());
+		}
+		
+		//删除系列信息
 		seriesDao.deleteSeriesByBrandId(brandId);
+		
+		//删除系列历史信息
+		for(Integer seriesId: seriesIds){
+			this.deleteSeriesHistoryInfo(seriesId);
+		}
+		
+		//删除单品
+		singleService.deleteSingleproductBySeriesId((Integer[])seriesIds.toArray(new Integer[]{}));
 	}
 	
 	/**
@@ -130,5 +169,109 @@ public class SeriesService {
 		series.setOfOrigin(brandId+"");
 		
 		return seriesDao.querySeries(series);
+	}
+	
+	/**
+	 * 查询下单清单中所有属于  该系列
+	 * @param series
+	 * @return
+	 */
+	public List<Check> queryAffectCheck(Series series){
+		List<Check> list = Lists.newArrayList();
+		Check check = new Check();
+		//check.setBrandId(Integer.parseInt(series.getOfOrigin()));
+		check.setSeriesId(series.getSeriesId());
+		
+		list = checkService.queryCheckForList(check, null, null);
+		return list;
+	}
+	
+	/**
+	 * 恢复系列历史信息
+	 * @param series
+	 */
+	public void recoverSeries(Series series){
+		//查询历史信息表
+		SeriesHistory seriesHistory = seriesHisService.querySeriesHisBySeriesId(series.getSeriesId());
+		if(seriesHistory == null)
+			return;
+		
+		Brand brand = brandService.queryBrandById(Integer.valueOf(seriesHistory.getOfOrigin()));
+		if(brand == null)
+			throw new BusinessException("1", "品牌信息不存在");
+		if(!"1".equals(brand.getIsUse()))
+			throw new BusinessException("1", "品牌已失效");
+		
+		//检测品牌是否存在(中文名|英文名 任意一个重复则已存在)
+		Series stemp = this.hisChangeToSeries(seriesHistory);
+		List<Series> list = seriesDao.querySeriesAccurateForName(stemp);
+		if(list != null && list.size() >= 1)
+			throw new BusinessException("1", "要恢复的系列信息和当前信息重复,历史信息["+seriesHistory.getSeriesName()+"]["+seriesHistory.getSeriesEname()+"]");
+		
+		//修改系列信息
+		seriesDao.updateSeries(stemp);
+
+		//删除历史信息
+		this.deleteSeriesHistoryInfo(stemp.getSeriesId());
+		
+	}
+	
+	/**
+	 * 根据系列ID保存系列历史信息
+	 * @param seriesId
+	 */
+	private void addOrUpdateSeriesHistoryInfo(Series seriesNew){
+		Integer seriesId = seriesNew.getSeriesId();
+		Series seriesOld = seriesDao.querySeriesById(seriesId);
+		if(seriesOld == null)
+			throw new BusinessException("1", "该系列不存在");
+		
+		//查询历史记录是否存在
+		SeriesHistory seriesHistory = seriesHisService.querySeriesHisBySeriesId(seriesId);
+		
+		if(seriesHistory == null){
+			if(seriesOld.getOfOrigin().equals(seriesNew.getOfOrigin())){//相同品牌
+				seriesHisService.addSeriesHis(seriesOld, "0");
+			} else {
+				seriesHisService.addSeriesHis(seriesOld);
+			}
+		} else {
+			if(!seriesOld.getOfOrigin().equals(seriesNew.getOfOrigin())){//不同品牌
+				seriesHistory.setNeedSynchronization("1");
+			}
+			
+			seriesHistory.setSeriesName(seriesOld.getSeriesName());
+			seriesHistory.setSeriesEname(seriesOld.getSeriesEname());
+			seriesHistory.setIsUse(seriesOld.getIsUse());
+			seriesHistory.setOfOrigin(seriesOld.getOfOrigin());
+			seriesHisService.updateSeriesHis(seriesHistory);
+		}
+	}
+	
+	/**
+	 * 删除历史信息
+	 * @param seriesId
+	 */
+	private void deleteSeriesHistoryInfo(Integer seriesId){
+		//查询历史信息
+		SeriesHistory seriesHistory = seriesHisService.querySeriesHisBySeriesId(seriesId);
+		
+		if(seriesHistory.getSeriesHisId() != null)
+			seriesHisService.deleteSeriesHis(seriesHistory);
+	}
+	
+	/**
+	 * 将系列历史信息转变为系列模型信息
+	 * @param seriesHistory
+	 * @return
+	 */
+	private Series hisChangeToSeries(SeriesHistory seriesHistory){
+		Series series = new Series();
+		series.setSeriesId(seriesHistory.getSeriesId());
+		series.setSeriesName(seriesHistory.getSeriesName());
+		series.setSeriesEname(seriesHistory.getSeriesEname());
+		series.setIsUse(seriesHistory.getIsUse());
+		series.setOfOrigin(seriesHistory.getOfOrigin());
+		return series;
 	}
 }

@@ -69,22 +69,22 @@ public class BrandService {
 		brandDao.deleteBrand(brandId);
 		
 		//查询系列
-		List<Series> seriesList = seriesService.querySeriesByBrandId(brandId);
-		if(seriesList == null || seriesList.size() <= 0){
-			return;
-		}
+//		List<Series> seriesList = seriesService.querySeriesByBrandId(brandId);
+//		if(seriesList == null || seriesList.size() <= 0){
+//			return;
+//		}
 		
-		//删除系列
+		//删除系列 系列中将会操作单品信息的删除
 		seriesService.deleteSeriesByBrandId(brandId);
 		
 		//记录系列编号
-		List<Integer> seriesIds = Lists.newArrayList();
-		for(Series series : seriesList){
-			seriesIds.add(series.getSeriesId());
-		}
+//		List<Integer> seriesIds = Lists.newArrayList();
+//		for(Series series : seriesList){
+//			seriesIds.add(series.getSeriesId());
+//		}
 		
 		//删除单品
-		singleService.deleteSingleproductBySeriesId((Integer[])seriesIds.toArray(new Integer[]{}));
+//		singleService.deleteSingleproductBySeriesId((Integer[])seriesIds.toArray(new Integer[]{}));
 		
 	}
 	

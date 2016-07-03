@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.manage.base.dao.SeriesHistoryDao">
+
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
+	<resultMap type="com.cat.manage.base.domain.SeriesHistory" id="seriesHistoryResultMap">
+		<id property="seriesHisId" column="series_his_id"/>
+		<result property="seriesId" column="series_id"/>
+		<result property="seriesName" column="series_name"/>
+		<result property="seriesEname" column="series_ename"/>
+		<result property="ofOrigin" column="of_origin"/>
+		<result property="isUse" column="is_use"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="createBy" column="create_by"/>
+		<result property="updateBy" column="update_by"/>
+		<result property="needSynchronization" column="need_synchronization"/>
+	</resultMap>
+	
+	<!-- 添加到系列历史表 -->
+	<insert id="addSeriesHistory">
+		insert into t_series_his(series_id, series_name, series_ename, of_origin, is_use, create_date, create_by, update_date, update_by, need_synchronization)
+		values(#{param1.seriesId}, #{param1.seriesName}, #{param1.seriesEname}, #{param1.ofOrigin}, #{param1.isUse}, now(), 'system', now(), 'system', #{param2})
+	</insert>
+	
+	<!-- 更新系列历史表 -->
+	<update id="updateSeriesHistory" parameterType="com.cat.manage.base.domain.SeriesHistory">
+		update t_series_his set update_date=now() , update_by = 'system'
+		<if test="seriesName != null and seriesName != ''">
+			, series_name = #{seriesName}
+		</if>
+		<if test="seriesEname != null and seriesEname != ''">
+			, series_ename = #{seriesEname}
+		</if>
+		<if test="ofOrigin != null and ofOrigin != ''">
+			, of_origin = #{ofOrigin}
+		</if>
+		<if test="isUse != null and isUse != ''">
+			, is_use = #{isUse}
+		</if>
+		<if test="needSynchronization != null and needSynchronization != ''">
+			, need_synchronization = #{needSynchronization}
+		</if>
+		where series_his_id = #{seriesHisId}
+	</update>
+	
+	<!-- 删除系列历史表记录 -->
+	<delete id="deleteSeriesHistory">
+		delete from t_series_his where series_his_id = #{seriesHisId}
+	</delete>
+	
+	<!-- 查询系列历史表记录 -->
+	<select id="querySeriesHistoryBySeriesHisId" resultMap="seriesHistoryResultMap">
+		select series_his_id, series_id, series_name, series_ename, of_origin, is_use, create_date, create_by, update_date
+		, update_by, need_synchronization from t_series_his
+		where series_his_id = #{seriesHisId}
+	</select>
+	
+	<!-- 根据系列唯一编号查询历史记录  -->
+	<select id="querySeriesHistoryBySeriesId" resultMap="seriesHistoryResultMap">
+		select series_his_id, series_id, series_name, series_ename, of_origin, is_use, create_date, create_by, update_date
+		, update_by, need_synchronization from t_series_his
+		where series_id = #{seriesId}
+	</select>
+</mapper>

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.cat.manage.base.domain.Series;
+import com.cat.manage.base.domain.SeriesHistory;
 
 /**
  * 系列Dao
@@ -46,7 +47,7 @@ public interface SeriesDao {
 	public List<Series> querySeries(Series series);
 	
 	/**
-	 * 查询系列（仅用于通过系列名称或英文名称精确查询，但不区分大小写）
+	 * 查询系列（仅用于通过系列名称或英文名称精确查询，但不区分大小写）排除自身
 	 * @param series
 	 * @return
 	 */
@@ -58,4 +59,5 @@ public interface SeriesDao {
 	 * @return
 	 */
 	public Series querySeriesById(Integer seriesId);
+	
 }

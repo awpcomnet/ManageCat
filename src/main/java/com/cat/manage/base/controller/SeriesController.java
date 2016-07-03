@@ -67,4 +67,10 @@ public class SeriesController {
 		List<Series> list = seriesService.querySeriesAll(series);
 		return new Srm().setResultCode("0").setResultMessage("查询所有系列信息成功").addAll(list);
 	}
+	
+	@RequestMapping("/recover")
+	public Srm recoverSeries(Series series){
+		seriesService.recoverSeries(series);
+		return new Srm().setResultCode("0").setResultMessage("恢复系列历史信息成功");
+	}
 }

@@ -75,7 +75,7 @@
 		order by create_date desc
 	</select>
 	
-	<!-- 查询系列（仅用于通过系列名称或英文名称精确查询，但不区分大小写） -->
+	<!-- 查询系列（仅用于通过系列名称或英文名称精确查询，但不区分大小写）排除自身 -->
 	<select id="querySeriesAccurateForName" parameterType="com.cat.manage.base.domain.Series" resultMap="seriesResultMap">
 		select series_id, series_name, series_ename, of_origin, (select brand_name from t_brand where brand_id = t_series.of_origin) as of_origin_name
 		, (select brand_ename from t_brand where brand_id = t_series.of_origin) as of_origin_ename
@@ -89,6 +89,9 @@
 		</if>
 		<if test="(seriesName != null and seriesName != '') or (seriesEname != null and seriesEname != '')">
 			and (series_ename = #{seriesEname} or series_name = #{seriesName})
+		</if>
+		<if test="seriesId != null">
+			and series_id != #{seriesId}
 		</if>
 		order by create_date desc
 	</select>

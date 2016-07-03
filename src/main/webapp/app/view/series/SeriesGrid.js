@@ -73,6 +73,12 @@ Ext.define("MIS.view.series.SeriesGrid", {
 					itemId: 'singleAdd',
 					scope: this,
 					handler: this.onSingleAddClick
+				}, {
+					iconCls: 'icon-reply',
+					text: '恢复系列修改',
+					itemId: 'seriesRecover',
+					scope: this,
+					handler: this.onRecoverClick
 				}, '->', {
 					iconCls: 'icon-refresh',
 					text: '刷新',
@@ -233,6 +239,42 @@ Ext.define("MIS.view.series.SeriesGrid", {
         	}
         });
     	editWindow.show();
+    },
+    
+    onRecoverClick: function(component){
+    	var selections = this.getView().getSelectionModel().getSelection();
+        var selectionNum = selections.length;
+        
+        if (selectionNum != 1) {
+        	Ext.MessageBox.alert("请求失败", "请选择单条记录进行恢复");
+            return;
+        } 
+        
+        //删除提示语言
+        var tipText = "确定恢复系列信息["+selections[0].raw.seriesName+"]。注意:仅能恢复一次最近修改记录。";
+        
+        Ext.MessageBox.confirm("恢复提示", tipText, function (confirmId) {
+        	if(confirmId == "yes"){
+        		Ext.Ajax.request({
+                	url: "/Series/recover",
+                	params: {
+                		seriesId: selections[0].raw.seriesId
+                	},
+                	success: function(conn, request, option, eOpts){
+                		var result = Ext.JSON.decode(conn.responseText, true);
+                		if(result.resultCode != 0){
+                			Ext.MessageBox.alert("请求失败", "原因：" + result.resultMessage);
+                		} else {
+                			Ext.ComponentQuery.query("seriesgrid")[0].store.reload();
+                		}
+                	},
+                	failure: function(conn, request, option, eOpts){
+                		Ext.MessageBox.alert("请求失败", "服务器繁忙，稍后重试!");
+                	}
+                	
+                });
+        	}
+        });
     },
     
     onDeleteClick: function(component){

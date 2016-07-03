@@ -116,6 +116,9 @@
 		<if test="(singleName != null and singleName != '') or (singleEname != null and singleEname != '')">
 			and (single_name = #{singleName} or single_ename = #{singleEname} )
 		</if>
+		<if test="singleId != null">
+			and single_id != #{singleId}
+ 		</if>
 		order by create_date desc
 	</select>
 	
