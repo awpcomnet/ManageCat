@@ -89,6 +89,39 @@
 	where id = #{id}
 	</update>
 	
+	<!-- 根据下单清单唯一编号修改邮寄清单内容  -->
+	<update id="updateShippedByCheckId" parameterType="com.cat.manage.shipped.domain.Shipped">
+	update t_shipped set update_date=now() 
+	<if test="trackingNumber != null and trackingNumber != ''">
+		, tracking_number = #{trackingNumber}
+	</if>
+	<if test="transferCompany != null and transferCompany != ''">
+		, transfer_company = #{transferCompany}
+	</if>
+	<if test="num != null">
+		, num = #{num}
+	</if>
+	<if test="brandId != null">
+		, brand_id = #{brandId}
+	</if>
+	<if test="seriesId != null">
+		, series_id = #{seriesId}
+	</if>
+	<if test="singleId != null">
+		, single_id = #{singleId}
+	</if>
+	<if test="unitPrice != null and unitPrice != ''">
+		, unit_price = #{unitPrice}
+	</if>
+	<if test="payby != null and payby != ''">
+		, payby = #{payby}
+	</if>
+	<if test="shippedStatus != null and shippedStatus != ''">
+		, shipped_status = #{shippedStatus}
+	</if>
+	where check_id = #{checkId}
+	</update>
+	
 	<!-- 根据邮寄清单子单编号修改清单状态） -->
 	<update id="updateShippedForStatus">
 	update t_shipped set update_date=now() 
@@ -233,5 +266,17 @@
 		and t.single_id = #{singleId}
 	</if>
 	order by t.create_date desc
+	</select>
+	
+	<!-- 根据下单清单唯一编号查询邮寄清单 -->
+	<select id="queryShippedByCheckId" parameterType="java.lang.Integer" resultMap="ShippedResultMap">
+	select t.id, t.head_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.store_num, t.unit_price, t.payby, t.plan_rmb, t.plan_postage, t.plan_cost, t.remark, t.shipped_status, t.create_date, t.update_date, IFNULL(t.weight, 0) as weight, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,tb.brand_name as brand_name,tse.series_name as series_name ,tsp.single_name as single_name ,tb.brand_ename as brand_ename
+    ,tsp.single_ename as single_ename, FORMAT(num*unit_price ,2) as sumprice
+	from t_shipped t
+	left join t_brand tb on tb.brand_id = t.brand_id
+	left join t_series tse on tse.series_id = t.series_id
+	left join t_singleproduct tsp on tsp.single_id = t.single_id
+	where t.check_id = #{checkId}
 	</select>
 </mapper>

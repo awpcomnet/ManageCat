@@ -290,4 +290,12 @@ public class SelledService {
 		selled.setSingleId(singleId);
 		selledDao.updateSelled(selled);
 	}
+	
+	/**
+	 * 根据下单清单唯一编号修改售出清单(5项)
+	 * @param selled
+	 */
+	public void updateSelledByCheckId(Selled selled){
+		selledDao.updateSelledByCheckId(selled);
+	}
 }

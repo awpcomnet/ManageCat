@@ -79,6 +79,12 @@ Ext.define("MIS.view.check.CheckGrid", {
 					scope: this,
 					handler: this.onModifyClick
 				}, {
+					iconCls: 'icon-magic',
+					text: '强制修改',
+					itemId: 'modifyForce',
+					scope: this,
+					handler: this.onModifyForceClick
+				}, {
 					iconCls: 'icon-remove',
 					text: '删除',
 					itemId: 'delete',
@@ -233,6 +239,70 @@ Ext.define("MIS.view.check.CheckGrid", {
                     singleIdStore.load();
                     
                     var payby = Ext.ComponentQuery.query("checkmodify combobox[name=payby]")[0];
+                    var paybyStore = payby.getStore();
+                    paybyStore.load();
+               },
+        		afterrender: function(component, eOpts){
+        			var form = component.down("form");
+                    var params = Ext.clone(this.extraData);
+    				form.getForm().setValues(params);
+    				component.down("combobox[name=seriesId]").setValue(Number.parseInt(this.extraData.seriesId));
+    				component.down("combobox[name=singleId]").setValue(Number.parseInt(this.extraData.singleId));
+    			}
+        	}
+        });
+    	editWindow.show();
+    },
+    
+    onModifyForceClick: function(component){
+    	var selections = this.getView().getSelectionModel().getSelection();
+    	var selectionNum = selections.length;
+    	if(selectionNum != 1){
+    		Ext.MessageBox.alert("请求失败", "请选择单条记录进行修改");
+    		return;
+    	}
+    	
+    	var checkview = Ext.ComponentQuery.query("checkview")[0];
+    	checkview.getEl().mask();
+    	
+    	var editWindow = Ext.create("Ext.window.Window", {
+        	title: "强制修改下单清单",
+        	id: "checkforcemodifywindow",
+        	extraData: selections[0].raw,
+        	renderTo: checkview.getEl(),
+        	height: 425,
+        	width: 580,
+        	layout: "fit",
+        	closeAction: "destroy",
+        	items: [{
+        		xtype: "checkforcemodify"
+        	}],
+        	listeners: {
+        		close: function(){
+        			checkview.getEl().unmask();
+        		},
+        		beforerender: function () {
+               	 	var transferCompany = Ext.ComponentQuery.query("checkforcemodify combobox[name=transferCompany]")[0];
+                    var transferCompanyStore = transferCompany.getStore();
+                    transferCompanyStore.load();
+                    
+                    var orderAddr = Ext.ComponentQuery.query("checkforcemodify combobox[name=orderAddr]")[0];
+                    var orderAddrStore = orderAddr.getStore();
+                    orderAddrStore.load();
+                    
+                    var brandId = Ext.ComponentQuery.query("checkforcemodify combobox[name=brandId]")[0];
+                    var brandIdStore = brandId.getStore();
+                    brandIdStore.load();
+                    
+                    var seriesId = Ext.ComponentQuery.query("checkforcemodify combobox[name=seriesId]")[0];
+                    var seriesIdStore = seriesId.getStore();
+                    seriesIdStore.load();
+                    
+                    var singleId = Ext.ComponentQuery.query("checkforcemodify combobox[name=singleId]")[0];
+                    var singleIdStore = singleId.getStore();
+                    singleIdStore.load();
+                    
+                    var payby = Ext.ComponentQuery.query("checkforcemodify combobox[name=payby]")[0];
                     var paybyStore = payby.getStore();
                     paybyStore.load();
                },

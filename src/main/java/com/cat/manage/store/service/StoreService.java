@@ -263,6 +263,14 @@ public class StoreService {
 	}
 	
 	/**
+	 * 根据下单清单修改仓库信息（8项）
+	 * @param store
+	 */
+	public void updateStoreByCheckId(Store store){
+		storeDao.updateStoreByCheckId(store);
+	}
+	
+	/**
 	 * 根据下单清单唯一编号删除入库记录
 	 * @param checkId
 	 */

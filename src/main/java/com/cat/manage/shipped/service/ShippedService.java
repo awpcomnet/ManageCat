@@ -51,6 +51,14 @@ public class ShippedService {
 	}
 	
 	/**
+	 * 根据下单清单唯一编号修改邮寄清单
+	 * @param shipped
+	 */
+	public void updateShippedByCheckId(Shipped shipped){
+		shippedDao.updateShippedByCheckId(shipped);
+	}
+	
+	/**
 	 * 单独用于修改邮寄清单重量
 	 * @param shippedList
 	 */
@@ -260,6 +268,15 @@ public class ShippedService {
 		shipped.setSeriesId(seriesId);
 		shipped.setSingleId(singleId);
 		shippedDao.updateShipped(shipped);
+	}
+	
+	/**
+	 * 根据下单清单唯一编号查询邮寄清单
+	 * @param checkId
+	 * @return
+	 */
+	public Shipped queryShippedByCheckId(Integer checkId){
+		return shippedDao.queryShippedByCheckId(checkId);
 	}
 	
 }

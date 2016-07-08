@@ -34,6 +34,12 @@ public interface SelledDao {
 	public void updateSelledForStatus(Selled selled);
 	
 	/**
+	 * 根据下单清单唯一编号修改售出清单(5项)
+	 * @param selled
+	 */
+	public void updateSelledByCheckId(Selled selled);
+	
+	/**
 	 * 根据售出清单唯一编号删除记录
 	 * @param id
 	 */

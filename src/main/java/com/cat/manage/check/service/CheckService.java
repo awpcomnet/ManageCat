@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 import com.cat.manage.check.dao.CheckDao;
 import com.cat.manage.check.domain.Check;
 import com.cat.manage.common.exception.BusinessException;
+import com.cat.manage.selled.domain.Selled;
 import com.cat.manage.selled.service.SelledService;
+import com.cat.manage.shipped.domain.Shipped;
 import com.cat.manage.shipped.service.ShippedService;
+import com.cat.manage.store.domain.Store;
 import com.cat.manage.store.service.StoreService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -149,5 +152,219 @@ public class CheckService {
 		check.setSeriesId(seriesId);
 		check.setSingleId(singleId);
 		checkDao.updateCheck(check);
+	}
+	
+	/**
+	 * 强制修改下单清单的信息，不校验当前状态
+	 * @param check
+	 */
+	public String updateCheckForce(Check check){
+		if(check.getNum().intValue() <= 0)
+			throw new BusinessException("1", "下单数量非法["+check.getNum()+"]");
+		
+		//获取数据库中数据
+		Check dbCheck = checkDao.queryCheckById(check.getId());
+		if(dbCheck == null)
+			throw new BusinessException("1", "强制修改的下单清单内容不存在");
+		
+		StringBuffer tip = new StringBuffer("影响的清单有[下单清单]");
+		//判断是否需要修改其他表
+		boolean isChangeShipped = this.isChangeShipped(dbCheck, check);
+		boolean isChangeStore = this.isChangeStore(dbCheck, check);
+		boolean isChangeSelled = this.isChangeSelled(dbCheck, check);
+		
+		//修改 下单清单
+		check.setOrderStatus("");//订单状态不允许修改
+		checkDao.updateCheck(check);
+		
+		//修改 邮寄清单
+		if(isChangeShipped){
+			//查询邮寄清单
+			Shipped newShipped = this.changeToShipped(check);
+			Shipped oldShipped = shippedService.queryShippedByCheckId(check.getId());
+			if(oldShipped != null){
+				int storeNum = oldShipped.getStoreNum();//入库数量
+				if(check.getNum().intValue() < storeNum){
+					throw new BusinessException("1", "下单清单购买的数量["+check.getNum()+"]小于已入库的数量["+storeNum+"]");
+				} else if(check.getNum().intValue() > storeNum && storeNum > 0){
+					newShipped.setShippedStatus("7");//部分入库
+				} else if(check.getNum().intValue() > storeNum && storeNum == 0){
+					newShipped.setShippedStatus("1");//已邮寄
+				} else if(check.getNum().intValue() == storeNum){
+					newShipped.setShippedStatus("2");//已入库
+				} 
+					
+				shippedService.updateShippedByCheckId(newShipped);
+				tip.append("[邮寄清单]");
+			}
+				
+			
+		}
+
+		//修改 库存清单
+		if(isChangeStore){
+			Store newStore = this.changeToStore(check);
+			List<Store> oldStoreList = storeService.queryStoreByCheckIds(new Integer[]{check.getId()});
+			if(oldStoreList != null && oldStoreList.size() == 1){
+				Store oldStore = oldStoreList.get(0);
+				int sellNum = oldStore.getSellNum();
+				if(check.getNum().intValue() < sellNum){
+					throw new BusinessException("1", "下单清单购买的数量["+check.getNum()+"]小于已售出的数量["+sellNum+"]");
+				} else if(check.getNum().intValue() > sellNum && sellNum == 0){
+					newStore.setStoreStatus("2");//已入库
+				} else if(check.getNum().intValue() > sellNum && sellNum > 0){
+					newStore.setStoreStatus("4");//销售中
+				} else if(check.getNum().intValue() == sellNum){
+					newStore.setStoreStatus("3");//已售罄
+				}
+				
+				storeService.updateStoreByCheckId(newStore);
+				tip.append("[入库清单]");
+			} else if(oldStoreList != null && oldStoreList.size() >= 1){
+				throw new BusinessException("1", "入库清单异常，下单清单唯一编号["+check.getId()+"]存在["+oldStoreList.size()+"]条入库记录");
+			}
+		}
+		
+		//修改 售出清单
+		if(isChangeSelled){
+			Selled newSelled = this.changeToSelled(check);
+			List<Selled> oldSelledList = selledService.queryStoreByCheckIds(new Integer[]{check.getId()});
+			if(oldSelledList != null && oldSelledList.size() >= 1){
+				selledService.updateSelledByCheckId(newSelled);
+				tip.append("[售出清单]");
+			}
+		}
+		
+		return tip.toString();
+	}
+	
+	/**
+	 * 将下单清单转换为邮寄清单
+	 * @param check
+	 * @return
+	 */
+	private Shipped changeToShipped(Check check){
+		Shipped shipped = new Shipped();
+		shipped.setCheckId(check.getId());
+		shipped.setTrackingNumber(check.getTrackingNumber());
+		shipped.setTransferCompany(check.getTransferCompany());
+		shipped.setBrandId(check.getBrandId());
+		shipped.setSeriesId(check.getSeriesId());
+		shipped.setSingleId(check.getSingleId());
+		shipped.setPayby(check.getPayby());
+		shipped.setUnitPrice(check.getUnitPrice());
+		shipped.setNum(check.getNum());
+		return shipped;
+	}
+	
+	/**
+	 * 将下单清单转换为入库清单
+	 * @param check
+	 * @return
+	 */
+	private Store changeToStore(Check check){
+		Store store = new Store();
+		store.setCheckId(check.getId());
+		store.setTrackingNumber(check.getTrackingNumber());
+		store.setTransferCompany(check.getTransferCompany());
+		store.setBrandId(check.getBrandId());
+		store.setSeriesId(check.getSeriesId());
+		store.setSingleId(check.getSingleId());
+		store.setPayby(check.getPayby());
+		store.setUnitPrice(check.getUnitPrice()+"");
+		store.setNum(check.getNum());
+		return store;
+	}
+	
+	/**
+	 * 将下单清单转换为售出清单
+	 * @param check
+	 * @return
+	 */
+	private Selled changeToSelled(Check check){
+		Selled selled = new Selled();
+		selled.setCheckId(check.getId());
+		selled.setBrandId(check.getBrandId());
+		selled.setSeriesId(check.getSeriesId());
+		selled.setSingleId(check.getSingleId());
+		selled.setPayby(check.getPayby());
+		selled.setUnitPrice(check.getUnitPrice()+"");
+		return selled;
+	}
+	
+	/**
+	 * 是否需要修改邮寄清单
+	 * @param dbCheck
+	 * @param newCheck
+	 * @return
+	 */
+	private boolean isChangeShipped(Check dbCheck, Check newCheck){
+		if(!dbCheck.getTrackingNumber().equals(newCheck.getTrackingNumber()))
+			return true;
+		if(!dbCheck.getTransferCompany().equals(newCheck.getTransferCompany()))
+			return true;
+		if(dbCheck.getBrandId().intValue() != newCheck.getBrandId().intValue())
+			return true;
+		if(dbCheck.getSeriesId().intValue() != newCheck.getSeriesId().intValue())
+			return true;
+		if(dbCheck.getSingleId().intValue() != newCheck.getSingleId().intValue())
+			return true;
+		if(dbCheck.getNum().intValue() != newCheck.getNum().intValue())
+			return true;
+		if(dbCheck.getUnitPrice().doubleValue() != newCheck.getUnitPrice().doubleValue()){
+			return true;
+		}
+		if(!dbCheck.getPayby().equals(newCheck.getPayby()))
+			return true;
+		
+		return false;
+	}
+	
+	/**
+	 * 是否需要修改入库清单
+	 * @param dbCheck
+	 * @param newCheck
+	 * @return
+	 */
+	public boolean isChangeStore(Check dbCheck, Check newCheck){
+		if(!dbCheck.getTrackingNumber().equals(newCheck.getTrackingNumber()))
+			return true;
+		if(!dbCheck.getTransferCompany().equals(newCheck.getTransferCompany()))
+			return true;
+		if(dbCheck.getBrandId().intValue() != newCheck.getBrandId().intValue())
+			return true;
+		if(dbCheck.getSeriesId().intValue() != newCheck.getSeriesId().intValue())
+			return true;
+		if(dbCheck.getSingleId().intValue() != newCheck.getSingleId().intValue())
+			return true;
+		if(dbCheck.getNum().intValue() != newCheck.getNum().intValue())
+			return true;
+		if(dbCheck.getUnitPrice().doubleValue() != newCheck.getUnitPrice().doubleValue())
+			return true;
+		if(!dbCheck.getPayby().equals(newCheck.getPayby()))
+			return true;
+		
+		return false;
+	}
+	
+	/**
+	 * 是否需要修改售出清单
+	 * @param dbCheck
+	 * @param newCheck
+	 * @return
+	 */
+	public boolean isChangeSelled(Check dbCheck, Check newCheck){
+		if(dbCheck.getBrandId().intValue() != newCheck.getBrandId().intValue())
+			return true;
+		if(dbCheck.getSeriesId().intValue() != newCheck.getSeriesId().intValue())
+			return true;
+		if(dbCheck.getSingleId().intValue() != newCheck.getSingleId().intValue())
+			return true;
+		if(dbCheck.getUnitPrice().doubleValue() != newCheck.getUnitPrice().doubleValue())
+			return true;
+		if(!dbCheck.getPayby().equals(newCheck.getPayby()))
+			return true;
+		
+		return false;
 	}
 }

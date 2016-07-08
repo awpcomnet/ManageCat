@@ -17,7 +17,8 @@ Ext.define("MIS.controller.check.CheckController", {
 	    "MIS.view.check.CheckGrid",
 	    "MIS.view.check.CheckSearch",
 	    "MIS.view.check.CheckAdd",
-	    "MIS.view.check.CheckModify"
+	    "MIS.view.check.CheckModify",
+	    "MIS.view.check.CheckForceModify"
 	    
 	],
 	

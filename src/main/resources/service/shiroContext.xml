@@ -13,7 +13,7 @@
 		<property name="securityManager" ref="securityManager" />
 		<property name="loginUrl" value="/login.html" />
 		<property name="successUrl" value="/index.html" />
-		<property name="unauthorizedUrl" value="/403" />
+		<property name="unauthorizedUrl" value="/error.html" />
 		<property name="filters">    
            <map>    
                <entry key="sperm" value-ref="myAuthorizerFilter"/> 

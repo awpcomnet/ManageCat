@@ -99,6 +99,27 @@
 	where id = #{id}
 	</update>
 	
+	<!-- 根据下单清单唯一编号修改售出清单(5项) -->
+	<update id="updateSelledByCheckId" parameterType="com.cat.manage.selled.domain.Selled">
+	update t_selled set update_date = now()
+	<if test="brandId != null and brandId != ''">
+	, brand_id = #{brandId}
+	</if>
+	<if test="seriesId != null and seriesId != ''">
+	, series_id = #{seriesId}
+	</if>
+	<if test="singleId != null and singleId != ''">
+	, single_id = #{singleId}
+	</if>
+	<if test="payby != null and payby != ''">
+	, payby = #{payby}
+	</if>
+	<if test="unitPrice != null and unitPrice != ''">
+	, unit_price = #{unitPrice}
+	</if>
+	where check_id = #{checkId}
+	</update>
+	
 	<!-- 根据售出清单唯一编号删除记录 -->
 	<delete id="deleteSelledById" parameterType="java.lang.Integer">
 	delete from t_selled where id = #{id} 

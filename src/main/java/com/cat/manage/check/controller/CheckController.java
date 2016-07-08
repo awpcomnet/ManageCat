@@ -85,6 +85,15 @@ public class CheckController {
 		return new Srm().setResultCode("0").setResultMessage("修改下单清单成功");
 	}
 	
+	@RequestMapping("/modifyForce")
+	public Srm modifyCheckForce(Check check){
+		if(check == null)
+			throw new BusinessException("1", "下单信息不能为空");
+		
+		String tip = checkService.updateCheckForce(check);
+		return new Srm().setResultCode("0").setResultMessage(tip);
+	}
+	
 	@RequestMapping("/delete")
 	public Srm deleteCheck(Integer id){
 		checkService.deleteCheck(id);
@@ -100,4 +109,5 @@ public class CheckController {
 		PageInfo<Check> page = checkService.queryCheck(check, startTime, endTime, pageNum, pageSize);
 		return new Srm().setResultCode("0").setResultMessage("查询订单成功").buildPageInfo(page);
 	}
+	
 }

@@ -28,6 +28,12 @@ public interface ShippedDao {
 	public void updateShipped(Shipped shipped);
 	
 	/**
+	 * 根据下单清单唯一编号修改邮寄清单内容
+	 * @param shipped
+	 */
+	public void updateShippedByCheckId(Shipped shipped);
+	
+	/**
 	 * 根据邮寄清单子单编号修改清单状态
 	 * @param ids
 	 * @param shippedStatus
@@ -99,5 +105,12 @@ public interface ShippedDao {
 	 * @return
 	 */
 	public List<Shipped> queryShippedForSync(Shipped shipped);
+	
+	/**
+	 * 根据下单清单唯一编号查询邮寄清单
+	 * @param checkId
+	 * @return
+	 */
+	public Shipped queryShippedByCheckId(Integer checkId);
 	
 }

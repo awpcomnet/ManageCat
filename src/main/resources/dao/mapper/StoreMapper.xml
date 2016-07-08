@@ -83,6 +83,39 @@
 	where id = #{id}
 	</update>
 	
+	<!-- 根据下单清单修改仓库信息（8项） -->
+	<update id="updateStoreByCheckId" parameterType="com.cat.manage.store.domain.Store">
+	update t_store set update_date=now() 
+	<if test="num != null and num != ''">
+	, num = #{num}
+	</if>
+	<if test="brandId != null and brandId != ''">
+	, brand_id = #{brandId}
+	</if>
+	<if test="seriesId != null and seriesId != ''">
+	, series_id = #{seriesId}
+	</if>
+	<if test="singleId != null and singleId != ''">
+	, single_id = #{singleId}
+	</if>
+	<if test="unitPrice != null and unitPrice != ''">
+	, unit_price = #{unitPrice}
+	</if>
+	<if test="payby != null and payby != ''">
+	, payby = #{payby}
+	</if>
+	<if test="trackingNumber != null and trackingNumber != ''">
+	, tracking_number = #{trackingNumber}
+	</if>
+	<if test="transferCompany != null and transferCompany != ''">
+	, transfer_company = #{transferCompany}
+	</if>
+	<if test="storeStatus != null and storeStatus != ''">
+	, store_status = #{storeStatus}
+	</if>
+	where check_id = #{checkId}
+	</update>
+	
 	<!-- 根据仓库唯一编号删除仓库信息 -->
 	<delete id="deleteStoreById" parameterType="java.lang.Integer">
 	delete from t_store where id = #{id} 
