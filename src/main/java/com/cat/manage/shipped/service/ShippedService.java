@@ -228,4 +228,38 @@ public class ShippedService {
 		return shippedDao.queryShippedById(id);
 	}
 	
+	/**
+	 * 查询邮寄清单，仅系列/单品 同步时使用
+	 * @param seriesId
+	 * @param singleId
+	 * @return
+	 */
+	public List<Shipped> queryShippedForSync(Integer seriesId, Integer singleId){
+		if(seriesId == null && singleId == null)
+			return null;
+		if(seriesId != null && singleId != null)
+			return null;
+		
+		Shipped shipped = new Shipped();
+		shipped.setSeriesId(seriesId);
+		shipped.setSingleId(singleId);
+		return shippedDao.queryShippedForSync(shipped);
+	}
+	
+	/**
+	 * 修改邮寄清单的 品牌，系列，单品， 仅系列/单品 同步时使用
+	 * @param id
+	 * @param brandId
+	 * @param seriesId
+	 * @param singleId
+	 */
+	public void updateShippedForSync(Integer id, Integer brandId, Integer seriesId, Integer singleId){
+		Shipped shipped = new Shipped();
+		shipped.setId(id);
+		shipped.setBrandId(brandId);
+		shipped.setSeriesId(seriesId);
+		shipped.setSingleId(singleId);
+		shippedDao.updateShipped(shipped);
+	}
+	
 }

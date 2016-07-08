@@ -115,7 +115,7 @@ Ext.define("MIS.view.check.CheckModify", {
 		fieldLabel: "系列名称",
         name: "seriesId",
         xtype: "combobox",
-        store: Ext.create("MIS.store.series.SeriesStore"),
+        store: Ext.create("MIS.store.series.SeriesAllStore"),
         listeners: {
             select: function (combobox, record) {
                 record = parseInt(combobox.getValue());

@@ -1,6 +1,7 @@
 package com.cat.manage.base.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import com.cat.manage.check.service.CheckService;
 import com.cat.manage.common.exception.BusinessException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 /**
@@ -37,6 +39,9 @@ public class SeriesService {
 	
 	@Autowired
 	private SeriesHisService seriesHisService;
+	
+	@Autowired
+	private SyncDirectoryService syncDirService;
 	
 	/**
 	 * 添加系列信息
@@ -215,6 +220,39 @@ public class SeriesService {
 		seriesHisService.deleteSeriesHistoryInfo(stemp.getSeriesId());
 		
 	}
+	
+	/**
+	 * 同步系列
+	 * @param series
+	 */
+	public Map<String, Integer> syncSeries(Series series){
+		Series dbSeries = seriesDao.querySeriesById(series.getSeriesId());
+		if(dbSeries == null)
+			throw new BusinessException("1", "要同步的系列不存在");
+		if(!"1".equals(dbSeries.getIsUse()))
+			throw new BusinessException("1", "该系列已经失效");
+		
+		//开始同步
+		Map<String, Integer> map = syncDirService.addSync(dbSeries);
+		return map;
+	}
+	
+	/**
+	 * 恢复系列同步
+	 * @param syncFlag
+	 * @return
+	 */
+	public Map<String, Integer> recoverSyncSeries(Series series){
+		Series dbSeries = seriesDao.querySeriesById(series.getSeriesId());
+		if(dbSeries == null)
+			throw new BusinessException("1", "要同步的系列不存在");
+		if(!"1".equals(dbSeries.getIsUse()))
+			throw new BusinessException("1", "该系列已经失效");
+		
+		//开始恢复
+		Map<String, Integer> map = syncDirService.recoverSync(dbSeries);
+		return map;
+	} 
 	
 	/**
 	 * 添加或更新系列历史信息

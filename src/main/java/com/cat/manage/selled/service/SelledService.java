@@ -260,4 +260,34 @@ public class SelledService {
 	public List<Selled> querySelledForTimeQuantum(Selled selled, String startTime, String endTime){
 		return selledDao.querySelled(selled, startTime, endTime);
 	}
+	
+	/**
+	 * 查询售出清单，仅系列/单品 同步时使用
+	 * @param seriesId
+	 * @param singleId
+	 * @return
+	 */
+	public List<Selled> querySelledForSync(Integer seriesId, Integer singleId){
+		if(seriesId == null && singleId == null)
+			return null;
+		if(seriesId != null && singleId != null)
+			return null;
+		return selledDao.querySelledForSync(seriesId, singleId);
+	}
+	
+	/**
+	 * 修改售出清单的 品牌，系列，单品， 仅系列/单品 同步时使用
+	 * @param id
+	 * @param brandId
+	 * @param seriesId
+	 * @param singleId
+	 */
+	public void updateSelledForSync(Integer id, Integer brandId, Integer seriesId, Integer singleId){
+		Selled selled = new Selled();
+		selled.setId(id);
+		selled.setBrandId(brandId);
+		selled.setSeriesId(seriesId);
+		selled.setSingleId(singleId);
+		selledDao.updateSelled(selled);
+	}
 }

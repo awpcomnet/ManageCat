@@ -240,8 +240,8 @@ Ext.define("MIS.view.check.CheckGrid", {
         			var form = component.down("form");
                     var params = Ext.clone(this.extraData);
     				form.getForm().setValues(params);
-    				component.down("combo[name=seriesId]").setValue(Number.parseInt(this.extraData.seriesId));
-    				component.down("combo[name=singleId]").setValue(Number.parseInt(this.extraData.singleId));
+    				component.down("combobox[name=seriesId]").setValue(Number.parseInt(this.extraData.seriesId));
+    				component.down("combobox[name=singleId]").setValue(Number.parseInt(this.extraData.singleId));
     			}
         	}
         });

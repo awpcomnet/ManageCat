@@ -33,7 +33,7 @@ public class SeriesTest {
 	private SeriesHistoryDao shd;
 	
 	
-	@Test
+	
 	public void testSeriesHis(){
 		LOG.info("系列历史测试开始");
 		Series series = new Series();
@@ -80,6 +80,7 @@ public class SeriesTest {
 		LOG.info("系列测试结束");
 	}
 	
+	@Test
 	public void testSeriesService(){
 		List<Check> checkAffect = Lists.newArrayList();
 		List<Check> shipAffect = Lists.newArrayList();

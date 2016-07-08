@@ -78,6 +78,18 @@ Ext.define("MIS.view.singleproduct.SingleGrid", {
 					itemId: 'singleRecover',
 					scope: this,
 					handler: this.onRecoverClick
+				}, '-', {
+					iconCls: 'icon-upload',
+					text: '同步单品',
+					itemId: 'singleSync',
+					scope: this,
+					handler: this.onSyncClick
+				}, {
+					iconCls: 'icon-download',
+					text: '恢复同步',
+					itemId: 'singleRecoverSync',
+					scope: this,
+					handler: this.onRecoverSyncClick
 				}, '->', {
 					iconCls: 'icon-refresh',
 					text: '刷新',
@@ -261,6 +273,80 @@ Ext.define("MIS.view.singleproduct.SingleGrid", {
                 		if(result.resultCode != 0){
                 			Ext.MessageBox.alert("请求失败", "原因：" + result.resultMessage);
                 		} else {
+                			Ext.ComponentQuery.query("singlegrid")[0].store.reload();
+                		}
+                	},
+                	failure: function(conn, request, option, eOpts){
+                		Ext.MessageBox.alert("请求失败", "服务器繁忙，稍后重试!");
+                	}
+                	
+                });
+        	}
+        });
+    },
+    
+    onSyncClick: function(component){
+    	var selections = this.getView().getSelectionModel().getSelection();
+        var selectionNum = selections.length;
+        
+        if (selectionNum != 1) {
+        	Ext.MessageBox.alert("请求失败", "请选择单条记录进行同步");
+            return;
+        } 
+        
+        //提示语言
+        var tipText = "确定同步单品["+selections[0].raw.singleName+"]。注意:单品信息将同步到[下单][邮寄][入库][售出]清单中，您将可以使用恢复同步功能进行数据恢复，该功能仅影响各个清单中的[品牌][系列][单品]。";
+        
+        Ext.MessageBox.confirm("同步提示", tipText, function (confirmId) {
+        	if(confirmId == "yes"){
+        		Ext.Ajax.request({
+                	url: "/singleproduct/sync",
+                	params: {
+                		singleId: selections[0].raw.singleId
+                	},
+                	success: function(conn, request, option, eOpts){
+                		var result = Ext.JSON.decode(conn.responseText, true);
+                		if(result.resultCode != 0){
+                			Ext.MessageBox.alert("请求失败", "原因：" + result.resultMessage);
+                		} else {
+                			Ext.MessageBox.alert("同步成功", result.resultMessage);
+                			Ext.ComponentQuery.query("singlegrid")[0].store.reload();
+                		}
+                	},
+                	failure: function(conn, request, option, eOpts){
+                		Ext.MessageBox.alert("请求失败", "服务器繁忙，稍后重试!");
+                	}
+                	
+                });
+        	}
+        });
+    },
+    
+    onRecoverSyncClick: function(component){
+    	var selections = this.getView().getSelectionModel().getSelection();
+        var selectionNum = selections.length;
+        
+        if (selectionNum != 1) {
+        	Ext.MessageBox.alert("请求失败", "请选择单条记录进行恢复同步");
+            return;
+        } 
+        
+        //提示语言
+        var tipText = "确定恢复同步单品["+selections[0].raw.singleName+"]。注意:该功能仅影响各个清单中的[品牌][系列][单品]，数据会恢复至最近一次同步。";
+        
+        Ext.MessageBox.confirm("恢复同步提示", tipText, function (confirmId) {
+        	if(confirmId == "yes"){
+        		Ext.Ajax.request({
+                	url: "/singleproduct/recoverSync",
+                	params: {
+                		singleId: selections[0].raw.singleId
+                	},
+                	success: function(conn, request, option, eOpts){
+                		var result = Ext.JSON.decode(conn.responseText, true);
+                		if(result.resultCode != 0){
+                			Ext.MessageBox.alert("请求失败", "原因：" + result.resultMessage);
+                		} else {
+                			Ext.MessageBox.alert("恢复同步成功", result.resultMessage);
                 			Ext.ComponentQuery.query("singlegrid")[0].store.reload();
                 		}
                 	},

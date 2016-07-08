@@ -1,6 +1,7 @@
 package com.cat.manage.base.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.SingleSelectionModel;
 
@@ -31,6 +32,9 @@ public class SingleproductService {
 	
 	@Autowired
 	private SingleproductHistoryService singleHisService;
+	
+	@Autowired
+	private SyncDirectoryService syncDirService;
 	
 	/**
 	 * 添加单品信息
@@ -161,6 +165,61 @@ public class SingleproductService {
 		
 		//删除单品历史记录
 		singleHisService.deleteSingleproductHistory(singleHis);
+	}
+	
+	/**
+	 * 同步单品信息到所有清单表（下单/邮寄/入库/售出）
+	 * @param singleproduct
+	 * @return
+	 */
+	public Map<String, Integer> synchronizationSingleToOrder(Singleproduct singleproduct){
+		//检验单品信息合法性。 是否生效，系列是否存在，系列是否生效
+		Singleproduct dbSingle = singleproductDao.querySingleproductBySingleId(singleproduct.getSingleId());
+		
+		if(dbSingle == null){
+			throw new BusinessException("1", "单品信息不存在");
+		}
+		if(!"1".equals(dbSingle.getIsUse())){//未生效
+			throw new BusinessException("1", "该单品尚未生效");
+		}
+		
+		Series dbSeries = seriesService.querySeriesById(Integer.valueOf(dbSingle.getOfOrigin()));
+		if(dbSeries == null)
+			throw new BusinessException("1", "单品所属系列信息不存在");
+		if(!"1".equals(dbSeries.getIsUse()))
+			throw new BusinessException("1", "单品所属系列信息未生效");
+		
+		//开始同步
+		Map<String, Integer> map = syncDirService.addSync(dbSingle);
+		
+		return map;
+	}
+	
+	/**
+	 * 恢复同步记录
+	 * @param syncFlag
+	 * @return
+	 */
+	public Map<String, Integer> recoverSyncSingle(Singleproduct single){
+		//检验单品信息合法性。 是否生效，系列是否存在，系列是否生效
+		Singleproduct dbSingle = singleproductDao.querySingleproductBySingleId(single.getSingleId());
+		
+		if(dbSingle == null){
+			throw new BusinessException("1", "单品信息不存在");
+		}
+		if(!"1".equals(dbSingle.getIsUse())){//未生效
+			throw new BusinessException("1", "该单品尚未生效");
+		}
+		
+		Series dbSeries = seriesService.querySeriesById(Integer.valueOf(dbSingle.getOfOrigin()));
+		if(dbSeries == null)
+			throw new BusinessException("1", "单品所属系列信息不存在");
+		if(!"1".equals(dbSeries.getIsUse()))
+			throw new BusinessException("1", "单品所属系列信息未生效");
+		
+		//恢复记录开始
+		Map<String, Integer> map = syncDirService.recoverSync(dbSingle);
+		return map;
 	}
 	
 	/**

@@ -1,6 +1,7 @@
 package com.cat.manage.base.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -72,5 +73,21 @@ public class SeriesController {
 	public Srm recoverSeries(Series series){
 		seriesService.recoverSeries(series);
 		return new Srm().setResultCode("0").setResultMessage("恢复系列历史信息成功");
+	}
+	
+	@RequestMapping("/sync")
+	public Srm syncSeries(Series series){
+		Map<String, Integer> map = seriesService.syncSeries(series);
+		String tip = "同步系列完成,本次同步影响[下单清单 "+map.get("check")+" 条]，[邮寄清单 "+map.get("shipped")+"  条]，"
+				+ "[入库清单 "+map.get("store")+"  条]，[售出清单 "+map.get("selled")+"  条]";
+		return new Srm().setResultCode("0").setResultMessage(tip);
+	}
+	
+	@RequestMapping("/recoverSync")
+	public Srm recoverSyncSeries(Series series){
+		Map<String, Integer> map = seriesService.recoverSyncSeries(series);
+		String tip = "恢复系列完成,本次恢复影响[下单清单 "+map.get("check")+" 条]，[邮寄清单 "+map.get("shipped")+"  条]，"
+				+ "[入库清单 "+map.get("store")+"  条]，[售出清单 "+map.get("selled")+"  条]";
+		return new Srm().setResultCode("0").setResultMessage(tip);
 	}
 }

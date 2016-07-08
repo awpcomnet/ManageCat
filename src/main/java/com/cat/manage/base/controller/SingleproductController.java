@@ -1,6 +1,7 @@
 package com.cat.manage.base.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -82,5 +83,21 @@ public class SingleproductController {
 	public Srm recoverSingleproduct(Singleproduct singleproduct){
 		singleproductService.recoverSingleproduct(singleproduct);
 		return new Srm().setResultCode("0").setResultMessage("恢复单品历史信息成功");
+	}
+	
+	@RequestMapping("/sync")
+	public Srm syncSingleproduct(Singleproduct single){
+		Map<String, Integer> map = singleproductService.synchronizationSingleToOrder(single);
+		String tip = "同步单品完成,本次同步影响[下单清单 "+map.get("check")+" 条]，[邮寄清单 "+map.get("shipped")+"  条]，"
+				+ "[入库清单 "+map.get("store")+"  条]，[售出清单 "+map.get("selled")+"  条]";
+		return new Srm().setResultCode("0").setResultMessage(tip);
+	}
+	
+	@RequestMapping("/recoverSync")
+	public Srm recoverSyncSingleproduct(Singleproduct single){
+		Map<String, Integer> map = singleproductService.recoverSyncSingle(single);
+		String tip = "恢复单品完成,本次恢复影响[下单清单 "+map.get("check")+" 条]，[邮寄清单 "+map.get("shipped")+"  条]，"
+				+ "[入库清单 "+map.get("store")+"  条]，[售出清单 "+map.get("selled")+"  条]";
+		return new Srm().setResultCode("0").setResultMessage(tip);
 	}
 }

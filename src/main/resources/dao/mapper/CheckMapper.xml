@@ -190,4 +190,18 @@
 	where t.id = #{id}
 	</select>
 	
+	<!-- 通过系列Id和单品Id查询下单清单 -->
+	<select id="queryCheckForSync"  resultMap="checkResultMap">
+	select t.id, t.tracking_number, t.order_time, t.transfer_company, t.order_addr, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.remark, t.payby, t.order_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat, FORMAT(t.num*t.unit_price ,2) as sumprice  
+	from t_check t
+	where
+	<if test="param1 != null and param1 != ''">
+		series_id = #{param1}
+	</if>
+	<if test="param2 != null and param2 != ''">
+		single_id = #{param2}
+	</if>
+	
+	</select>
+	
 </mapper>

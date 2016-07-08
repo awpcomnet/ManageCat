@@ -69,4 +69,14 @@ public interface CheckDao {
 	 * @return
 	 */
 	public Check queryCheckById(Integer id);
+	
+	/**
+	 * 通过系列Id和单品Id查询下单清单
+	 * 
+	 * seriesId和singleId 有且只有1个条件存在
+	 * @param seriesId
+	 * @param singleId
+	 * @return
+	 */
+	public List<Check> queryCheckForSync(Integer seriesId, Integer singleId);
 }

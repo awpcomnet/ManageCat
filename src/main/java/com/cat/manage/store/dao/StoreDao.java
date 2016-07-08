@@ -94,4 +94,12 @@ public interface StoreDao {
 	 * @return
 	 */
 	public List<Store> queryStoreForValidity();
+	
+	/**
+	 * 查询入库清单，根据系列编号或单品编号查询
+	 * @param seriesId
+	 * @param singleId
+	 * @return
+	 */
+	public List<Store> queryStoreForSync(Integer seriesId, Integer singleId);
 }

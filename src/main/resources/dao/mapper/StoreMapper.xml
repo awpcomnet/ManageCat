@@ -71,6 +71,15 @@
 	<if test="num != null and num != ''">
 	, num = #{num}
 	</if>
+	<if test="brandId != null and brandId != ''">
+	, brand_id = #{brandId}
+	</if>
+	<if test="seriesId != null and seriesId != ''">
+	, series_id = #{seriesId}
+	</if>
+	<if test="singleId != null and singleId != ''">
+	, single_id = #{singleId}
+	</if>
 	where id = #{id}
 	</update>
 	
@@ -287,4 +296,16 @@
 	order by t.store_time desc, tb.brand_ename
 	</select>
 	
+	<!-- 查询入库清单，根据系列编号或单品编号查询 -->
+	<select id="queryStoreForSync"  resultMap="StoreResultMap">
+		select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
+		from  t_store t
+		where 
+		<if test="param1 != null and param1 != ''">
+			series_id = #{param1}
+		</if>
+		<if test="param2 != null and param2 != ''">
+			single_id = #{param2}
+		</if>
+	</select>
 </mapper>

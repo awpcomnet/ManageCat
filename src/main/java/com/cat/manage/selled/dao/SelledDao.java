@@ -86,4 +86,12 @@ public interface SelledDao {
 	 * @return
 	 */
 	public List<Selled> querySelledByCheckIds(Integer[] checkIds);
+	
+	/**
+	 * 根据系列/单品查询售出清单
+	 * @param seriesId
+	 * @param singleId
+	 * @return
+	 */
+	public List<Selled> querySelledForSync(Integer seriesId, Integer singleId);
 }

@@ -297,4 +297,34 @@ public class StoreService {
 	public List<Store> queryStoreForValidity(){
 		return storeDao.queryStoreForValidity();
 	}
+	
+	/**
+	 * 查询入库清单，仅系列/单品 同步时使用
+	 * @param seriesId
+	 * @param singleId
+	 * @return
+	 */
+	public List<Store> queryStoreForSync(Integer seriesId, Integer singleId){
+		if(seriesId == null && singleId == null)
+			return null;
+		if(seriesId != null && singleId != null)
+			return null;
+		return storeDao.queryStoreForSync(seriesId, singleId);
+	}
+	
+	/**
+	 * 修改入库清单的 品牌，系列，单品， 仅系列/单品 同步时使用
+	 * @param id
+	 * @param brandId
+	 * @param seriesId
+	 * @param singleId
+	 */
+	public void updateStoreForSync(Integer id, Integer brandId, Integer seriesId, Integer singleId){
+		Store store = new Store();
+		store.setId(id);
+		store.setBrandId(brandId);
+		store.setSeriesId(seriesId);
+		store.setSingleId(singleId);
+		storeDao.updateStore(store);
+	}
 }

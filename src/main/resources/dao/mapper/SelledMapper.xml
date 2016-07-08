@@ -63,6 +63,15 @@
 	<if test="sellTime != null and sellTime != ''">
 	, sell_time = #{sellTime}
 	</if>
+	<if test="brandId != null and brandId != ''">
+	, brand_id = #{brandId}
+	</if>
+	<if test="seriesId != null and seriesId != ''">
+	, series_id = #{seriesId}
+	</if>
+	<if test="singleId != null and singleId != ''">
+	, single_id = #{singleId}
+	</if>
 	where id = #{id}
 	</update>
 	
@@ -230,6 +239,19 @@
 	left join t_check tc on tc.id = t.check_id
 	where t.check_id in 
 	<foreach collection="array" item="checkId" open="(" separator="," close=")">#{checkId}</foreach>
+	</select>
+	
+	<!-- 根据系列/单品查询售出清单 -->
+	<select id="querySelledForSync"  resultMap="SelledResultMap">
+		select t.id, t.store_id, t.check_id, t.brand_id, t.series_id, t.single_id, t.sell_num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.selling_price, IFNULL(t.refund, 0) as refund, t.remark, t.sell_time, t.selled_status, t.create_date, t.update_date, DATE_FORMAT(t.create_date,'%Y年%m月%d日 %T') as createDateFormat, DATE_FORMAT(t.update_date,'%Y年%m月%d日 %T') as updateDateFormat
+		from t_selled t
+		where
+		<if test="param1 != null and param1 != ''">
+			series_id = #{param1}
+		</if>
+		<if test="param2 != null and param2 != ''">
+			single_id = #{param2}
+		</if>
 	</select>
 	
 </mapper>

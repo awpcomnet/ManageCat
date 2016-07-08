@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.manage.base.dao.SyncDirectoryDao">
+
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
+	<resultMap type="com.cat.manage.base.domain.SyncDirectory" id="SyncDirectoryResultMap">
+		<id property="syncDirectoryId" column="sync_directory_id"/>
+		<result property="syncFlag" column="sync_flag"/>
+		<result property="brandId" column="brand_id"/>
+		<result property="seriesId" column="series_id"/>
+		<result property="singleId" column="single_id"/>
+		<result property="isUsable" column="is_usable"/>
+		<result property="createDate" column="create_date"/>
+		<result property="createBy" column="create_by"/>
+	</resultMap>
+	
+	<!-- 添加同步目录 -->
+	<insert id="addSyncDirectory" parameterType="com.cat.manage.base.domain.SyncDirectory">
+		insert into t_single_series_sync_directory(sync_flag, brand_id, series_id, single_id, is_usable, create_date, create_by)
+		values(#{syncFlag}, #{brandId}, #{seriesId}, #{singleId}, #{isUsable}, now(), 'system')
+	</insert>
+	
+	<!-- 根据同步目录唯一标识删除记录 -->
+	<delete id="deleteSyncDirectoryById" parameterType="java.lang.Integer">
+		delete from t_single_series_sync_directory where sync_directory_id = #{syncDirectoryId}
+	</delete>
+	
+	<!-- 根据同步目录目录标记 删除记录 -->
+	<delete id="deleteSyncDirectoryBySyncFlag"  parameterType="java.lang.String">
+		delete from t_single_series_sync_directory where sync_flag = #{syncFlag}
+	</delete>
+	
+	<!-- 查询同步目录 -->
+	<select id="querySyncDirectory" parameterType="com.cat.manage.base.domain.SyncDirectory" resultMap="SyncDirectoryResultMap">
+		select sync_directory_id, sync_flag, brand_id, series_id, single_id, is_usable, create_date, create_by 
+		from t_single_series_sync_directory
+		where 1=1
+		<if test="syncDirectoryId != null">
+			and sync_directory_id = #{syncDirectoryId}
+		</if>
+		<if test="syncFlag != null and syncFlag != ''">
+			and sync_flag = #{syncFlag}
+		</if>
+		<if test="brandId != null">
+			and brand_id = #{brandId}
+		</if>
+		<if test="seriesId != null">
+			and series_id = #{seriesId}
+		</if>
+		<if test="singleId != null">
+			and single_id = #{singleId}
+		</if>
+		order by create_date desc
+	</select>
+	
+	<!-- 查询目录中最新的一条记录 -->
+	<select id="querySyncDirectoryForNew" resultMap="SyncDirectoryResultMap">
+		select sync_directory_id, sync_flag, brand_id, series_id, single_id, is_usable, create_date, create_by 
+		from t_single_series_sync_directory
+		where 
+		<if test="param1 != null">
+			series_id = #{param1}
+		</if>
+		<if test="param2 != null">
+			single_id = #{param2}
+		</if>
+		order by create_date desc limit 1
+	</select>
+	
+</mapper>

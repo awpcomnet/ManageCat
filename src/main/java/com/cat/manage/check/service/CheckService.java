@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.cat.manage.check.dao.CheckDao;
 import com.cat.manage.check.domain.Check;
+import com.cat.manage.common.exception.BusinessException;
 import com.cat.manage.selled.service.SelledService;
 import com.cat.manage.shipped.service.ShippedService;
 import com.cat.manage.store.service.StoreService;
@@ -118,5 +119,35 @@ public class CheckService {
 	 */
 	public Check queryCheckById(Integer id){
 		return checkDao.queryCheckById(id);
+	}
+	
+	/**
+	 * 查询下单清单，仅系列/单品 同步时使用
+	 * @param seriesId
+	 * @param singleId
+	 * @return
+	 */
+	public List<Check> queryCheckForSync(Integer seriesId, Integer singleId){
+		if(seriesId == null && singleId == null)
+			return null;
+		if(seriesId != null && singleId != null)
+			return null;
+		return checkDao.queryCheckForSync(seriesId, singleId);
+	}
+	
+	/**
+	 * 修改下单清单的 品牌，系列，单品， 仅系列/单品 同步时使用
+	 * @param id
+	 * @param brandId
+	 * @param seriesId
+	 * @param singleId
+	 */
+	public void updateCheckForSync(Integer id, Integer brandId, Integer seriesId, Integer singleId){
+		Check check = new Check();
+		check.setId(id);
+		check.setBrandId(brandId);
+		check.setSeriesId(seriesId);
+		check.setSingleId(singleId);
+		checkDao.updateCheck(check);
 	}
 }

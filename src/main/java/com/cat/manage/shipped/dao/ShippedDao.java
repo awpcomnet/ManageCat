@@ -92,4 +92,12 @@ public interface ShippedDao {
 	 * @return
 	 */
 	public Shipped queryShippedWeightForPlan(Integer id);
+	
+	/**
+	 * 用于同步的邮寄清单查询，仅查询 品牌 ，系列 ， 单品，唯一编号，下单唯一编号
+	 * @param shipped
+	 * @return
+	 */
+	public List<Shipped> queryShippedForSync(Shipped shipped);
+	
 }

@@ -77,6 +77,15 @@
 	<if test="storeNum != null">
 		, store_num = #{storeNum}
 	</if>
+	<if test="brandId != null">
+		, brand_id = #{brandId}
+	</if>
+	<if test="seriesId != null">
+		, series_id = #{seriesId}
+	</if>
+	<if test="singleId != null">
+		, single_id = #{singleId}
+	</if>
 	where id = #{id}
 	</update>
 	
@@ -122,23 +131,24 @@
 	left join t_singleproduct tsp on tsp.single_id = t.single_id
 	where 1=1
 	<if test="trackingNumber != null and trackingNumber != ''">
-		and tracking_number = #{trackingNumber}
+		and t.tracking_number = #{trackingNumber}
 	</if>
 	<if test="transferCompany != null and transferCompany != ''">
-		and transfer_company = #{transferCompany}
+		and t.transfer_company = #{transferCompany}
 	</if>
 	<if test="checkId != null and checkId != ''">
-		and check_id = #{checkId}
+		and t.check_id = #{checkId}
 	</if>
 	<if test="headId != null and headId != ''">
-		and head_id = #{headId}
+		and t.head_id = #{headId}
 	</if>
 	<if test="shippedStatus != null and shippedStatus != ''">
-		and shipped_status = #{shippedStatus}
+		and t.shipped_status = #{shippedStatus}
 	</if>
 	<if test="id != null and id != ''">
-		and id = #{id}
+		and t.id = #{id}
 	</if>
+	order by t.create_date desc
 	</select>
 	
 	<!-- 根据邮寄清单主单唯一编号查询子订单 -->
@@ -185,4 +195,43 @@
 	order by t1.update_date DESC limit 1
 	</select>
 	
+	<!-- 用于同步的邮寄清单查询，仅查询 品牌 ，系列 ， 单品，唯一编号，下单唯一编号 -->
+	<select id="queryShippedForSync" resultMap="ShippedResultMap">
+	select t.id, t.head_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.store_num, t.unit_price, t.payby, t.plan_rmb, t.plan_postage, t.plan_cost, t.remark, t.shipped_status, t.create_date, t.update_date, IFNULL(t.weight, 0) as weight, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,tb.brand_name as brand_name,tse.series_name as series_name ,tsp.single_name as single_name ,tb.brand_ename as brand_ename
+    ,tsp.single_ename as single_ename, FORMAT(num*unit_price ,2) as sumprice
+	from t_shipped t
+	left join t_brand tb on tb.brand_id = t.brand_id
+	left join t_series tse on tse.series_id = t.series_id
+	left join t_singleproduct tsp on tsp.single_id = t.single_id
+	where 1=1
+	<if test="trackingNumber != null and trackingNumber != ''">
+		and t.tracking_number = #{trackingNumber}
+	</if>
+	<if test="transferCompany != null and transferCompany != ''">
+		and t.transfer_company = #{transferCompany}
+	</if>
+	<if test="checkId != null and checkId != ''">
+		and t.check_id = #{checkId}
+	</if>
+	<if test="headId != null and headId != ''">
+		and t.head_id = #{headId}
+	</if>
+	<if test="shippedStatus != null and shippedStatus != ''">
+		and t.shipped_status = #{shippedStatus}
+	</if>
+	<if test="id != null and id != ''">
+		and t.id = #{id}
+	</if>
+	<if test="brandId != null and brandId != ''">
+		and t.brand_id = #{brandId}
+	</if>
+	<if test="seriesId != null and seriesId != ''">
+		and t.series_id = #{seriesId}
+	</if>
+	<if test="singleId != null and singleId != ''">
+		and t.single_id = #{singleId}
+	</if>
+	order by t.create_date desc
+	</select>
 </mapper>
