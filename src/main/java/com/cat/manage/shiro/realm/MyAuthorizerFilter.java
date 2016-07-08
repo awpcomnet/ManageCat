@@ -76,7 +76,7 @@ public class MyAuthorizerFilter extends AuthorizationFilter{
 		if(!isAccessAllowed(request, response, null)){
 			PrintWriter out = new PrintWriter(response.getOutputStream());
 			try {
-				Srm srm = new Srm().setResultCode("3").setResultMessage("无权访问");
+				Srm srm = new Srm().setResultCode("3").setResultMessage("Unauthorized access");
 				out.write(mapper.writeValueAsString(srm));
 				out.flush();
 				
