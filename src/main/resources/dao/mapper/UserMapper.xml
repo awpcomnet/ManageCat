@@ -34,6 +34,25 @@
         ]]>
 	</select>
 	
+	<!-- 查询所有用户（可以条件查询） -->
+	<select id="queryAllUsers" parameterType="com.cat.manage.user.domain.User" resultMap="userMap">
+            select user_id, user_name, real_name, email, state, login_times from t_user
+            where 1=1
+            <if test="username != null and username != ''">
+            	and user_name like '%${username}%'
+            </if>
+            <if test="realname != null and realname != ''">
+            	and real_name like '%${realname}%' 
+            </if>
+            <if test="email != null and email != ''">
+            	and email = #{email}
+            </if>
+            <if test="state != null and state != ''">
+            	and state = #{state}
+            </if>
+            order by user_id asc, create_date desc
+	</select>
+	
 	<!-- 根据用户Id查询用户信息 -->
 	<select id="queryUserById" parameterType="java.lang.Integer" resultMap="userMap">
         <![CDATA[

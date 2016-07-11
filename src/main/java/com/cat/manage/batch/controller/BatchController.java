@@ -50,4 +50,19 @@ public class BatchController {
 		return new Srm().setResultCode("0").setResultMessage("查询批次号成功").buildPageInfo(page);
 	}
 	
+	/**
+	 * 查询批次号 固定前50条
+	 * @param batch
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/queryLast")
+	public Srm queryBatchNoForAssign(Batch batch){
+		Integer pageNum = 1;
+		Integer pageSize = 50;
+		
+		PageInfo<Batch> page = batchService.queryBatchForPage(batch, pageNum, pageSize);
+		return new Srm().setResultCode("0").setResultMessage("查询批次号成功").buildPageInfo(page);
+	}
+	
 }

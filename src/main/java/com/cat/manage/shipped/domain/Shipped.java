@@ -29,6 +29,8 @@ public class Shipped implements Serializable{
 	private Date createDate;//创建时间
 	private Date updateDate;//更新时间
 	private String weight;//重量(kg/个)
+	private Double rate;//汇率
+	private Integer currency;//币种
 	
 	private String createDateFormat;//格式化后的创建时间
 	private String updateDateFormat;//格式化后的修改时间
@@ -263,6 +265,22 @@ public class Shipped implements Serializable{
 		this.singleEname = singleEname;
 	}
 
+	public Double getRate() {
+		return rate;
+	}
+
+	public void setRate(Double rate) {
+		this.rate = rate;
+	}
+
+	public Integer getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(Integer currency) {
+		this.currency = currency;
+	}
+
 	@Override
 	public String toString() {
 		return "Shipped [id=" + id + ", headId=" + headId + ", checkId="
@@ -274,10 +292,12 @@ public class Shipped implements Serializable{
 				+ ", planPostage=" + planPostage + ", planCost=" + planCost
 				+ ", remark=" + remark + ", shippedStatus=" + shippedStatus
 				+ ", createDate=" + createDate + ", updateDate=" + updateDate
-				+ ", weight=" + weight + ", createDateFormat="
-				+ createDateFormat + ", updateDateFormat=" + updateDateFormat
-				+ ", brandName=" + brandName + ", seriesName=" + seriesName
-				+ ", singleName=" + singleName + ", sumPrice=" + sumPrice + "]";
+				+ ", weight=" + weight + ", rate=" + rate + ", currency="
+				+ currency + ", createDateFormat=" + createDateFormat
+				+ ", updateDateFormat=" + updateDateFormat + ", brandName="
+				+ brandName + ", seriesName=" + seriesName + ", singleName="
+				+ singleName + ", brandEname=" + brandEname + ", singleEname="
+				+ singleEname + ", sumPrice=" + sumPrice + "]";
 	}
 
 	private static final long serialVersionUID = -508826833677156720L;

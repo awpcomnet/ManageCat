@@ -40,6 +40,12 @@ Ext.define("MIS.view.check.CheckGrid", {
                 }},
 			    { header: '品牌名称', dataIndex: 'brandEname', sortable: true, width: 15, align: "center"},
 			    { header: '系列名称', dataIndex: 'seriesName', sortable: true, width: 15, align: "center", hidden : true},
+			    { header: '汇率', dataIndex: 'rate', sortable: true, width: 15, align: "center", hidden : true, renderer: function (value, rowindex, record, column) {
+			    	return value == '' ? '--' : value;
+                }},
+			    { header: '币种', dataIndex: 'currency', sortable: true, width: 15, align: "center", hidden : true, renderer: function (value, rowindex, record, column) {
+			    	return MIS.common.DictManager.getDictItemName("currency", value);
+                }},
 			    { header: '单品名称', dataIndex: 'singleName', sortable: true, width: 15, align: "center"},
 			    { header: '数量', dataIndex: 'num', sortable: true, width: 5, align: "center"},
 			    { header: '单价($)', dataIndex: 'unitPrice', sortable: true, width: 10, align: "center"},
@@ -156,8 +162,8 @@ Ext.define("MIS.view.check.CheckGrid", {
         	title: "添加下单清单",
         	id: "checkaddwindow",
         	renderTo: checkview.getEl(),
-        	height: 425,
-        	width: 570,
+        	height: 330,
+        	width: 835,
         	layout: "fit",
         	closeAction: "destroy",
         	items: [{
@@ -171,6 +177,10 @@ Ext.define("MIS.view.check.CheckGrid", {
         			var payby = Ext.ComponentQuery.query("checkadd combobox[name=payby]")[0];
                     var paybyStore = payby.getStore();
                     paybyStore.load();
+                    
+                    var currency = Ext.ComponentQuery.query("checkadd combobox[name=currency]")[0];
+                    var currencyStore = currency.getStore();
+                    currencyStore.load();
         		},
         		afterrender: function(component, eOpts){
         			
@@ -206,8 +216,8 @@ Ext.define("MIS.view.check.CheckGrid", {
         	id: "checkmodifywindow",
         	extraData: selections[0].raw,
         	renderTo: checkview.getEl(),
-        	height: 425,
-        	width: 580,
+        	height: 330,
+        	width: 835,
         	layout: "fit",
         	closeAction: "destroy",
         	items: [{
@@ -241,6 +251,10 @@ Ext.define("MIS.view.check.CheckGrid", {
                     var payby = Ext.ComponentQuery.query("checkmodify combobox[name=payby]")[0];
                     var paybyStore = payby.getStore();
                     paybyStore.load();
+                    
+                    var currency = Ext.ComponentQuery.query("checkmodify combobox[name=currency]")[0];
+                    var currencyStore = currency.getStore();
+                    currencyStore.load();
                },
         		afterrender: function(component, eOpts){
         			var form = component.down("form");
@@ -248,6 +262,7 @@ Ext.define("MIS.view.check.CheckGrid", {
     				form.getForm().setValues(params);
     				component.down("combobox[name=seriesId]").setValue(Number.parseInt(this.extraData.seriesId));
     				component.down("combobox[name=singleId]").setValue(Number.parseInt(this.extraData.singleId));
+    				component.down("combobox[name=currency]").setValue(this.extraData.currency+'');
     			}
         	}
         });
@@ -270,8 +285,8 @@ Ext.define("MIS.view.check.CheckGrid", {
         	id: "checkforcemodifywindow",
         	extraData: selections[0].raw,
         	renderTo: checkview.getEl(),
-        	height: 425,
-        	width: 580,
+        	height: 330,
+        	width: 835,
         	layout: "fit",
         	closeAction: "destroy",
         	items: [{
@@ -305,6 +320,10 @@ Ext.define("MIS.view.check.CheckGrid", {
                     var payby = Ext.ComponentQuery.query("checkforcemodify combobox[name=payby]")[0];
                     var paybyStore = payby.getStore();
                     paybyStore.load();
+                    
+                    var currency = Ext.ComponentQuery.query("checkforcemodify combobox[name=currency]")[0];
+                    var currencyStore = currency.getStore();
+                    currencyStore.load();
                },
         		afterrender: function(component, eOpts){
         			var form = component.down("form");
@@ -312,6 +331,7 @@ Ext.define("MIS.view.check.CheckGrid", {
     				form.getForm().setValues(params);
     				component.down("combobox[name=seriesId]").setValue(Number.parseInt(this.extraData.seriesId));
     				component.down("combobox[name=singleId]").setValue(Number.parseInt(this.extraData.singleId));
+    				component.down("combobox[name=currency]").setValue(this.extraData.currency+'');
     			}
         	}
         });

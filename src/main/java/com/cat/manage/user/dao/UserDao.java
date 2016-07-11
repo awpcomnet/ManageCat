@@ -21,6 +21,13 @@ public interface UserDao {
 	List<User> getAllUsers();
 	
 	/**
+	 * 查询所有用户（可以条件查询）
+	 * @param user
+	 * @return
+	 */
+	public List<User> queryAllUsers(User user);
+	
+	/**
 	 * 新增一个用户
 	 */
 	void addUser(User user);

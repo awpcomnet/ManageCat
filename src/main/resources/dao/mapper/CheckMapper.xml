@@ -31,12 +31,14 @@
 		<result property="batchNo" column="batch_no"/>
 		<result property="transferCompanyName" column="transfer_company_name"/>
 		<result property="orderAddrName" column="order_addr_name"/>
+		<result property="rate" column="rate"/>
+		<result property="currency" column="currency"/>
 	</resultMap>
 	
 	<!-- 添加下单清单 -->
 	<insert id="addCheck" parameterType="com.cat.manage.check.domain.Check">
-	insert into t_check (tracking_number, order_time, transfer_company, order_addr, brand_id, series_id, single_id, num, unit_price, remark, payby, order_status, create_date, update_date, batch_no)
-	values(#{trackingNumber}, #{orderTime}, #{transferCompany}, #{orderAddr}, #{brandId}, #{seriesId}, #{singleId}, #{num}, #{unitPrice}, #{remark}, #{payby}, #{orderStatus}, now(), now(), #{batchNo})
+	insert into t_check (tracking_number, order_time, transfer_company, order_addr, brand_id, series_id, single_id, num, unit_price, remark, payby, order_status, create_date, update_date, batch_no, rate, currency)
+	values(#{trackingNumber}, #{orderTime}, #{transferCompany}, #{orderAddr}, #{brandId}, #{seriesId}, #{singleId}, #{num}, #{unitPrice}, #{remark}, #{payby}, #{orderStatus}, now(), now(), #{batchNo}, #{rate}, #{currency})
 	</insert>
 	
 	<!-- 修改下单清单 -->
@@ -81,6 +83,12 @@
 	<if test="batchNo != null and batchNo != ''">
 		, batch_no = #{batchNo}
 	</if>
+	<if test="rate != null and rate != ''">
+		, rate = #{rate}
+	</if>
+	<if test="currency != null">
+		, currency = #{currency}
+	</if>
 		where id = #{id}
 	</update>
 	
@@ -107,8 +115,7 @@
     ,tsp.single_name as single_name
 	,tb.brand_ename as brand_ename
 	,tsp.single_ename as single_ename
-
-	,t.batch_no
+	,t.batch_no, t.rate, t.currency 
 	, (select t1.name from t_dict_item t1, t_dict_type t2 where t1.typeId = t2.id and t2.code = 'transferCompany' and t.transfer_company = t1.value) as transfer_company_name
 	, (select t1.name from t_dict_item t1, t_dict_type t2 where t1.typeId = t2.id and t2.code = 'orderAddr' and t.order_addr = t1.value) as order_addr_name
 	from t_check t 
@@ -164,7 +171,7 @@
 	,tb.brand_ename as brand_ename
 	,tsp.single_ename as single_ename
 	
-	,t.batch_no
+	,t.batch_no, t.rate, t.currency 
 	from t_check t
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
@@ -182,7 +189,7 @@
 	,tb.brand_ename as brand_ename
 	,tsp.single_ename as single_ename
 	
-	,t.batch_no
+	,t.batch_no, t.rate, t.currency 
 	from t_check t
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
@@ -193,6 +200,7 @@
 	<!-- 通过系列Id和单品Id查询下单清单 -->
 	<select id="queryCheckForSync"  resultMap="checkResultMap">
 	select t.id, t.tracking_number, t.order_time, t.transfer_company, t.order_addr, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.remark, t.payby, t.order_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat, FORMAT(t.num*t.unit_price ,2) as sumprice  
+	,t.batch_no, t.rate, t.currency 
 	from t_check t
 	where
 	<if test="param1 != null and param1 != ''">

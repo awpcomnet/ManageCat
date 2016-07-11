@@ -17,7 +17,7 @@ Ext.define("MIS.view.check.CheckForceModify", {
     },
     layout: {
     	type: 'table',
-    	columns:2
+    	columns:3
     },
 	
 	
@@ -25,10 +25,10 @@ Ext.define("MIS.view.check.CheckForceModify", {
 		fieldLabel: "批次号",
         name: "batchNo",
         xtype: "combobox",
-        colspan: 2,
-        width: 530,
+        colspan: 1,
+        //width: 530,
         anchor: "55%",
-        store: Ext.create("MIS.store.batch.BatchStore"),
+        store: Ext.create("MIS.store.batch.BatchAssignStore"),
         mode: "local",
         displayField: 'batchNo',
         valueField: "batchNo",
@@ -40,6 +40,27 @@ Ext.define("MIS.view.check.CheckForceModify", {
         xtype: "textfield",
         colspan: 1,
         anchor: "55%"
+    }, {
+		fieldLabel: "汇率",
+		name: "rate",
+        xtype: "numberfield",
+        decimalPrecision: 8,
+        colspan: 1,
+        //width: 130,
+        editable:true,
+        anchor: "55%"
+    }, {
+		fieldLabel: "币种",
+		name: "currency",
+        xtype: "combobox",
+        store: Ext.create("MIS.store.dict.DictQueryStore", {
+        	dictcode: "currency"
+        }),
+        mode: "local",
+        displayField: 'name',
+        valueField: "value",
+        allowBlank: true,
+        editable:false
     }, {
 		xtype: 'datefield',
 		fieldLabel: "下单时间",

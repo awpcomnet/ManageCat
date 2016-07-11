@@ -38,7 +38,7 @@ Ext.define("MIS.view.singleproduct.SingleAdd", {
 
                 //对store 进行过滤
                 brandIdStore.filterBy(function(record){
-                    var name = record.raw.brandName,
+                    var name = record.raw.brandEname,
                         code = record.raw.brandId;
                     //如果输入框为空，直接放回所有记录
                     if(newValue == '' || newValue == null)
@@ -52,7 +52,7 @@ Ext.define("MIS.view.singleproduct.SingleAdd", {
             }
         },
         mode: "local",
-        displayField: 'brandName',
+        displayField: 'brandEname',
         valueField: "brandId",
         allowBlank: true,
         editable:true

@@ -43,6 +43,8 @@ public class LoginController {
     private static final String REMEMBER_ME_ON = "1";
     
     private static final String USER_STATE_NORMAL = "0";
+    
+    private static final String USER_STATE_SUPER = "1";//特殊状态
 	
 	@Autowired
 	private UserService userService;
@@ -74,7 +76,7 @@ public class LoginController {
 	    if (user == null)
 	        throw new ParameterException("1", "用户或密码不正确");
 	    
-	    if(!USER_STATE_NORMAL.equals(user.getState()))
+	    if(!USER_STATE_NORMAL.equals(user.getState()) && !USER_STATE_SUPER.equals(user.getState()))
 	    	throw new BusinessException("1", "用户状态不正常");
 	    	
 	    String salt      = user.getSalt();

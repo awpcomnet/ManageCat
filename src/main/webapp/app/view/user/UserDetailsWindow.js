@@ -76,13 +76,13 @@ Ext.define("MIS.view.user.UserDetailsWindow", {
             	var arr = []; 
             	if(roles != '' && roles != null){
             		var roleArr = roles.split(',');
-            		for (var c in roleArr) {arr.push(Number(roles[c]))}
+            		for (var c in roleArr) {arr.push(Number(roleArr[c]))}
             	}
             	
                 component.down("textfield[name=username]").setValue(me.modifyModeDetails.raw.username);
                 component.down("textfield[name=realname]").setValue(me.modifyModeDetails.raw.realname);
                 component.down("combobox[name=state]").setValue(me.modifyModeDetails.raw.state);
-                component.down("textfield[name=roles]").setValue(arr);
+                component.down("combobox[name=roles]").setValue(arr);
             };
 
             //增加事件监听处理器

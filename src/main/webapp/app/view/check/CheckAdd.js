@@ -17,7 +17,7 @@ Ext.define("MIS.view.check.CheckAdd", {
     },
     layout: {
     	type: 'table',
-    	columns:2
+    	columns:3
     },
 	
 	
@@ -26,19 +26,34 @@ Ext.define("MIS.view.check.CheckAdd", {
         name: "batchNo",
         xtype: "combobox",
         colspan: 1,
-        store: Ext.create("MIS.store.batch.BatchStore"),
+        store: Ext.create("MIS.store.batch.BatchAssignStore"),
         mode: "local",
         displayField: 'batchNo',
         valueField: "batchNo",
         allowBlank: true,
         editable:false
     }, {
-		fieldLabel: "*批次号注释",
-		value: "批次号仅显示前25条",
+		fieldLabel: "汇率",
+		name: "rate",
+        xtype: "numberfield",
+        decimalPrecision: 8,
         colspan: 1,
-        //width: 530,
-        disabled: true,
+        //width: 130,
+        editable:true,
         anchor: "55%"
+    }, {
+		fieldLabel: "币种",
+		name: "currency",
+        xtype: "combobox",
+        store: Ext.create("MIS.store.dict.DictQueryStore", {
+        	dictcode: "currency"
+        }),
+        mode: "local",
+        displayField: 'name',
+        valueField: "value",
+        allowBlank: true,
+        value: '0',
+        editable:false
     }, {
 		fieldLabel: "快递单号",
         name: "trackingNumber",
@@ -234,7 +249,7 @@ Ext.define("MIS.view.check.CheckAdd", {
 		fieldLabel: "付款人",
         name: "payby",
         xtype: "combobox",
-        store: Ext.create("MIS.store.user.UserStore"),
+        store: Ext.create("MIS.store.user.UserStateStore"),
         mode: "local",
         displayField: 'username',
         valueField: "realname",
@@ -244,7 +259,7 @@ Ext.define("MIS.view.check.CheckAdd", {
 		fieldLabel: "备注",
         name: "remark",
         xtype: "textarea",
-        colspan: 2,
+        colspan: 3,
         width: 530
     }],
 	
@@ -292,7 +307,10 @@ Ext.define("MIS.view.check.CheckAdd", {
 				num = checkAdd.down("numberfield[name=num]").getValue(),
 				unitPrice = checkAdd.down("textfield[name=unitPrice]").getValue(),
 				remark = checkAdd.down("textarea[name=remark]").getValue(),
-				batchNo = checkAdd.down("textfield[name=batchNo]").getValue();
+				batchNo = checkAdd.down("textfield[name=batchNo]").getValue(),
+				rate = checkAdd.down("numberfield[name=rate]").getValue(),
+				currency = checkAdd.down("combobox[name=currency]").getValue();
+			
 			
 			if(batchNo == null && batchNo == '' && batchNo == 'null'){
 				Ext.MessageBox.alert("批次号错误！["+batchNo+"]");
@@ -313,7 +331,9 @@ Ext.define("MIS.view.check.CheckAdd", {
 					num: num,
 					unitPrice: unitPrice,
 					remark: remark,
-					batchNo: batchNo
+					batchNo: batchNo,
+					rate: rate,
+					currency: currency
 	        };
 			
 			Ext.Ajax.request({

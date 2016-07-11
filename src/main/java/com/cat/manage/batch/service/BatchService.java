@@ -51,7 +51,7 @@ public class BatchService {
 		} else {
 			Batch existBatch = list.get(0);
 			String existBatchNo = existBatch.getBatchNo();
-			int existSerialNumber = Integer.parseInt(existBatchNo.substring(existBatchNo.length()-1, existBatchNo.length()));
+			int existSerialNumber = Integer.parseInt(existBatchNo.substring(existBatchNo.length()-2, existBatchNo.length()));
 			existSerialNumber++;
 			batchNo = timeStr + String.format("%02d", existSerialNumber);
 		}

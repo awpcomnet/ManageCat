@@ -70,7 +70,7 @@ Ext.define("MIS.view.check.CheckSearch", {
 				fieldLabel: "付款人",
 		        name: "payby",
 		        xtype: "combobox",
-		        store: Ext.create("MIS.store.user.UserStore"),
+		        store: Ext.create("MIS.store.user.UserStateStore"),
 		        mode: "local",
 		        displayField: 'realname',
 		        valueField: "realname",

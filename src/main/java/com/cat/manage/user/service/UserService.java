@@ -103,6 +103,13 @@ public class UserService {
 	}
 	
 	/**
+	 * 查找所有用户(仅查询用户信息，不查询用户权限)
+	 */
+	public List<User> getAllUsers(User user) {
+		return userDao.queryAllUsers(user);
+	}
+	
+	/**
 	 * 新增加用户
 	 */
 	public void addUser(User user, String[] roles) {

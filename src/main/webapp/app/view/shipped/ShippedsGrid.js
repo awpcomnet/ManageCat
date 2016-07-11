@@ -41,6 +41,12 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
                 }},
                 { header: '品牌', dataIndex: 'brandEname', sortable: true, width: 10, align: "center"},
                 { header: '系列', dataIndex: 'seriesName', sortable: true, width: 10, align: "center", hidden : true},
+                { header: '汇率', dataIndex: 'rate', sortable: true, width: 15, align: "center", hidden : true, renderer: function (value, rowindex, record, column) {
+			    	return value == '' ? '--' : value;
+                }},
+			    { header: '币种', dataIndex: 'currency', sortable: true, width: 15, align: "center", hidden : true, renderer: function (value, rowindex, record, column) {
+			    	return MIS.common.DictManager.getDictItemName("currency", value);
+                }},
                 { header: '单品', dataIndex: 'singleName', sortable: true, width: 10, align: "center"},
                 { header: '数量', dataIndex: 'num', sortable: true, width: 10, align: "center"},
                 { header: '入库数量', dataIndex: 'storeNum', sortable: true, width: 10, align: "center"},
@@ -288,6 +294,7 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
         			component.down("numberfield[name=unitCost]").setValue(selections[0].raw.planCost);
         			component.down("textarea[name=remark]").setValue(selections[0].raw.remark);
         			component.down("textfield[name=shippedId]").setValue(selections[0].raw.id);
+        			component.down("numberfield[name=rate]").setValue(selections[0].raw.rate);
     			}
         	}
         });

@@ -9,7 +9,8 @@ Ext.define("MIS.controller.batch.BatchController", {
 	],
 
 	stores : [ 
-	    "MIS.store.batch.BatchStore"
+	    "MIS.store.batch.BatchStore",
+	    "MIS.store.batch.BatchAssignStore"
 	],
 	
 	views: [

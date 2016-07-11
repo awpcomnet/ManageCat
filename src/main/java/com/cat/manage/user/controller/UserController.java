@@ -119,17 +119,18 @@ public class UserController {
 	
 	
 	@RequestMapping("/queryAll")
-	public @ResponseBody Srm getAllUsersForStore() {
-		List<User> users = userService.getAllUsers();
-		List<Map<String, Object>> list = Lists.newArrayList();
-		for(User u : users){
-			Map<String, Object> map = Maps.newHashMap();
-			map.put("userId", u.getUserId());
-			map.put("name", u.getUsername());
-			
-			list.add(map);
-		}
-		return new Srm().setResultCode("0").setResultMessage("查询成功").addAll(list);
+	public @ResponseBody Srm getAllUsersForStore(User user) {
+		List<User> users = userService.getAllUsers(user);
+//		List<Map<String, Object>> list = Lists.newArrayList();
+//		for(User u : users){
+//			Map<String, Object> map = Maps.newHashMap();
+//			map.put("userId", u.getUserId());
+//			map.put("username", u.getUsername());
+//			
+//			
+//			list.add(map);
+//		}
+		return new Srm().setResultCode("0").setResultMessage("查询成功").addAll(users);
 	}
 	
 	@RequestMapping("/delete")

@@ -24,6 +24,8 @@ public class Check implements Serializable{
 	private Date createDate;//创建时间
 	private Date updateDate;//更新时间
 	private String batchNo;//批次号
+	private Double rate;//汇率
+	private Integer currency;//币种
 	
 	private String createDateFormat;//格式化后的创建时间
 	private String updateDateFormat;//格式化后的更新时间
@@ -245,6 +247,22 @@ public class Check implements Serializable{
 		this.singleEname = singleEname;
 	}
 
+	public Double getRate() {
+		return rate;
+	}
+
+	public void setRate(Double rate) {
+		this.rate = rate;
+	}
+
+	public Integer getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(Integer currency) {
+		this.currency = currency;
+	}
+
 	@Override
 	public String toString() {
 		return "Check [id=" + id + ", trackingNumber=" + trackingNumber
@@ -254,11 +272,14 @@ public class Check implements Serializable{
 				+ ", num=" + num + ", unitPrice=" + unitPrice + ", remark="
 				+ remark + ", payby=" + payby + ", orderStatus=" + orderStatus
 				+ ", createDate=" + createDate + ", updateDate=" + updateDate
-				+ ", batchNo=" + batchNo + ", createDateFormat="
-				+ createDateFormat + ", updateDateFormat=" + updateDateFormat
-				+ ", sumPrice=" + sumPrice + ", brandName=" + brandName
-				+ ", seriesName=" + seriesName + ", singleName=" + singleName
-				+ "]";
+				+ ", batchNo=" + batchNo + ", rate=" + rate + ", currency="
+				+ currency + ", createDateFormat=" + createDateFormat
+				+ ", updateDateFormat=" + updateDateFormat + ", sumPrice="
+				+ sumPrice + ", brandName=" + brandName + ", seriesName="
+				+ seriesName + ", singleName=" + singleName + ", brandEname="
+				+ brandEname + ", singleEname=" + singleEname
+				+ ", transferCompanyName=" + transferCompanyName
+				+ ", orderAddrName=" + orderAddrName + "]";
 	}
 
 	private static final long serialVersionUID = -935729869280274039L;

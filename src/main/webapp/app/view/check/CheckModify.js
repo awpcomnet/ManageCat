@@ -17,7 +17,7 @@ Ext.define("MIS.view.check.CheckModify", {
     },
     layout: {
     	type: 'table',
-    	columns:2
+    	columns:3
     },
 	
 	
@@ -25,10 +25,10 @@ Ext.define("MIS.view.check.CheckModify", {
 		fieldLabel: "批次号",
         name: "batchNo",
         xtype: "combobox",
-        colspan: 2,
-        width: 530,
+        colspan: 1,
+        //width: 530,
         anchor: "55%",
-        store: Ext.create("MIS.store.batch.BatchStore"),
+        store: Ext.create("MIS.store.batch.BatchAssignStore"),
         mode: "local",
         displayField: 'batchNo',
         valueField: "batchNo",
@@ -40,6 +40,27 @@ Ext.define("MIS.view.check.CheckModify", {
         xtype: "textfield",
         colspan: 1,
         anchor: "55%"
+    }, {
+		fieldLabel: "汇率",
+		name: "rate",
+        xtype: "numberfield",
+        decimalPrecision: 8,
+        colspan: 1,
+        //width: 130,
+        editable:true,
+        anchor: "55%"
+    }, {
+		fieldLabel: "币种",
+		name: "currency",
+        xtype: "combobox",
+        store: Ext.create("MIS.store.dict.DictQueryStore", {
+        	dictcode: "currency"
+        }),
+        mode: "local",
+        displayField: 'name',
+        valueField: "value",
+        allowBlank: true,
+        editable:false
     }, {
 		xtype: 'datefield',
 		fieldLabel: "下单时间",
@@ -209,7 +230,7 @@ Ext.define("MIS.view.check.CheckModify", {
 		fieldLabel: "付款人",
         name: "payby",
         xtype: "combobox",
-        store: Ext.create("MIS.store.user.UserStore"),
+        store: Ext.create("MIS.store.user.UserStateStore"),
         mode: "local",
         displayField: 'realname',
         valueField: "realname",
@@ -246,7 +267,7 @@ Ext.define("MIS.view.check.CheckModify", {
 				success: function(conn, request, option, eOpts){
 					var result = Ext.JSON.decode(conn.responseText, true);
 					if(result.resultCode != 0){
-						Ext.MessageBox.alert("修改下单清单记录失败, 原因:" + result.resultMessage);
+						Ext.MessageBox.alert("修改下单清单记录失败", "原因:" + result.resultMessage);
 					} else {
 		                Ext.ComponentQuery.query("checkgrid")[0].store.reload();
 		                Ext.ComponentQuery.query("checkgrid")[0].getView().getSelectionModel().deselectAll();

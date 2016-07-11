@@ -80,6 +80,12 @@ Ext.define("MIS.model.check.Check", {
 	}, {
 		name: "batchNo",
 		type: "string"
+	}, {
+		name: "rate",
+		type: "string"
+	}, {
+		name: "currency",
+		type: "int"
 	}]
 });
 

@@ -89,6 +89,12 @@ Ext.define("MIS.model.shipped.Shipped", {
 	}, {
 		name: "weight",
 		type: "string"
+	}, {
+		name: "rate",
+		type: "string"
+	}, {
+		name: "currency",
+		type: "int"
 	}]
 });
 

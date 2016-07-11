@@ -918,6 +918,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "MIS.view.catalog.CatalogTree": [],
   "MIS.view.catalog.CatalogView": [],
   "MIS.view.check.CheckAdd": [],
+  "MIS.view.check.CheckForceModify": [],
   "MIS.view.check.CheckGrid": [],
   "MIS.view.check.CheckModify": [],
   "MIS.view.check.CheckSearch": [],
@@ -2125,6 +2126,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "MIS.view.check.CheckAdd": [
     "widget.checkadd"
+  ],
+  "MIS.view.check.CheckForceModify": [
+    "widget.checkforcemodify"
   ],
   "MIS.view.check.CheckGrid": [
     "widget.checkgrid"
