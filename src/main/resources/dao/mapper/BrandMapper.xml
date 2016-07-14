@@ -48,22 +48,28 @@
 	</delete>
 	
 	<!-- 查询品牌信息 -->
-	<select id="queryBrands" parameterType="com.cat.manage.base.domain.Brand" resultMap="brandResultMap">
+	<select id="queryBrands" resultMap="brandResultMap">
 		select brand_id, brand_name, brand_ename, of_origin, is_use, create_date, create_by, update_date, update_by, date_format(create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(update_date, '%Y年%m月%d日 %T') as updateDateFormat 
 		from t_brand where 1=1
-		<if test="ofOrigin != null and ofOrigin != ''">
-			and of_origin = #{ofOrigin}
+		<if test="param1.ofOrigin != null and param1.ofOrigin != ''">
+			and of_origin = #{param1.ofOrigin}
 		</if>
-		<if test="isUse != null and isUse != ''">
-			and is_use = #{isUse}
+		<if test="param1.isUse != null and param1.isUse != ''">
+			and is_use = #{param1.isUse}
 		</if>
-		<if test="brandName != null and brandName != ''">
-			and brand_name like '%${brandName}%'
+		<if test="param1.brandName != null and param1.brandName != ''">
+			and brand_name like '%${param1.brandName}%'
 		</if>
-		<if test="brandEname != null and brandEname != ''">
-			and brand_ename like '%${brandEname}%' 
+		<if test="param1.brandEname != null and param1.brandEname != ''">
+			and brand_ename like '%${param1.brandEname}%' 
 		</if>
-		order by create_date desc
+		<if test="param2 != null and param2 != ''">
+			order by ${param2} asc
+		</if>
+		<if test="param2 == null or param2 == ''">
+			order by create_date desc
+		</if>
+		
 	</select>
 	
 	<!-- 根据品牌编号查询品牌信息 -->

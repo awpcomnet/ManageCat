@@ -19,7 +19,8 @@ Ext.define("MIS.store.brand.BrandAllStore", {
         	isUse: "",
         	ofOrigin: "",
         	brandName: "",
-        	brandEname: ""
+        	brandEname: "",
+        	orderBy: "1"
         }
 	}
 	

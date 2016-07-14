@@ -69,6 +69,12 @@ Ext.define("MIS.view.brand.BrandGrid", {
 					itemId: 'delete',
 					scope: this,
 					handler: this.onDeleteClick
+				}, {
+					iconCls: 'icon-exchange',
+					text: '排序方式',
+					itemId: 'brandOrderByChange',
+					scope: this,
+					handler: this.onBrandOrderByChangeClick
 				}, '-', {
 					iconCls: 'icon-file-alt',
 					text: '添加系列',
@@ -263,7 +269,18 @@ Ext.define("MIS.view.brand.BrandGrid", {
         	}
         });
     },
-	
+    
+    onBrandOrderByChangeClick: function(component){
+        var brandStore = this.getStore();
+        var orderBy = brandStore.proxy.extraParams.orderBy;
+        if(orderBy == null || orderBy == ''){
+        	brandStore.proxy.extraParams.orderBy = '1';
+        } else {
+        	brandStore.proxy.extraParams.orderBy = '';
+        }
+        brandStore.load();
+    },
+    
 	onExpandSearchClick: function(component){
 		var searchwindow = Ext.ComponentQuery.query("brandSearchpanel")[0];
     	if(searchwindow.isHidden()){

@@ -38,7 +38,7 @@ public class SeriesTest {
 		LOG.info("系列历史测试开始");
 		Series series = new Series();
 		series.setSeriesEname("Pomegranate");
-		List<Series> seriesList = seriesService.querySeriesAll(series);
+		List<Series> seriesList = seriesService.querySeriesAll(series, "");
 		System.out.println(seriesList.get(0).toString());
 		
 		System.out.println("添加系列历史");
@@ -91,7 +91,7 @@ public class SeriesTest {
 		Series series = new Series();
 		series.setSeriesEname("ANR");
 		
-		List<Series> list = seriesService.querySeriesAll(series);
+		List<Series> list = seriesService.querySeriesAll(series, null);
 		System.out.println(list.get(0).toString());
 		
 		List<Check> checks = seriesService.queryAffectCheck(list.get(0));

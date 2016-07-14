@@ -44,7 +44,7 @@ public interface SeriesDao {
 	 * @param series
 	 * @return
 	 */
-	public List<Series> querySeries(Series series);
+	public List<Series> querySeries(Series series, String orderBy);
 	
 	/**
 	 * 查询系列（仅用于通过系列名称或英文名称精确查询，但不区分大小写）排除自身

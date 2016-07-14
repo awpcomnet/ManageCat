@@ -139,9 +139,9 @@ public class SeriesService {
 	 * @param pageSize
 	 * @return
 	 */
-	public PageInfo<Series> querySeries(Series series, Integer pageNum, Integer pageSize){
+	public PageInfo<Series> querySeries(Series series, Integer pageNum, Integer pageSize, String orderBy){
 		PageHelper.startPage(pageNum, pageSize);
-		List<Series> list = seriesDao.querySeries(series);
+		List<Series> list = seriesDao.querySeries(series, orderBy);
 		PageInfo<Series> page = new PageInfo<Series>(list);
 		return page;
 	}
@@ -151,8 +151,8 @@ public class SeriesService {
 	 * @param series
 	 * @return
 	 */
-	public List<Series> querySeriesAll(Series series){
-		return seriesDao.querySeries(series);
+	public List<Series> querySeriesAll(Series series, String orderBy){
+		return seriesDao.querySeries(series, orderBy);
 	}
 	
 	/**
@@ -173,7 +173,7 @@ public class SeriesService {
 		Series series = new Series();
 		series.setOfOrigin(brandId+"");
 		
-		return seriesDao.querySeries(series);
+		return seriesDao.querySeries(series, null);
 	}
 	
 	/**

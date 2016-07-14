@@ -20,7 +20,8 @@ Ext.define("MIS.store.brand.BrandStore", {
         	isUse: "",
         	ofOrigin: "",
         	brandName: "",
-        	brandEname: ""
+        	brandEname: "",
+        	orderBy: ""
         }
 	}
 	

@@ -19,6 +19,7 @@ import com.cat.manage.common.exception.BusinessException;
 import com.cat.manage.common.model.Srm;
 import com.cat.manage.common.param.HttpParams;
 import com.github.pagehelper.PageInfo;
+import com.google.common.base.Strings;
 
 @RestController
 @RequestMapping("/check")
@@ -62,6 +63,18 @@ public class CheckController {
 			throw new BusinessException("1", "系列["+series.getSeriesName()+"]与单品["+singleproduct.getSingleName()+"]从属关系非法");
 		if(!batchService.checkBatchNo(batchNo))
 			throw new BusinessException("1", "批次号非法,批次号["+batchNo+"]");
+		
+		//校验下单价格
+		if(check.getUnitPrice() == null || check.getUnitPrice() < 0)
+			check.setUnitPrice(0.00);
+		
+		//付款人
+		if(Strings.isNullOrEmpty(check.getPayby()))
+			throw new BusinessException("1", "付款人不能为空");
+		
+		//数量校验
+		if(check.getNum() == null || check.getNum() <= 0)
+			throw new BusinessException("1", "订单数量非法");
 		
 		//添加下单清单是设置状态
 		check.setOrderStatus("0");//已下单

@@ -58,14 +58,18 @@ public class SeriesController {
 		HttpParams params = HttpParams.buildFrom(request);
 		Integer pageNum = params.getInt("page");
 		Integer pageSize = params.getInt("limit");
+		//String orderBy = params.getStrForDefault("orderBy");
 		
-		PageInfo<Series> page = seriesService.querySeries(series, pageNum, pageSize);
+		PageInfo<Series> page = seriesService.querySeries(series, pageNum, pageSize, null);
 		return new Srm().setResultCode("0").setResultMessage("查询系列信息成功").buildPageInfo(page);
 	}
 	
 	@RequestMapping("/queryAll")
-	public Srm querySeriesAll(Series series){
-		List<Series> list = seriesService.querySeriesAll(series);
+	public Srm querySeriesAll(Series series, HttpServletRequest request){
+//		HttpParams params = HttpParams.buildFrom(request);
+//		String orderBy = params.getStrForDefault("orderBy");
+		
+		List<Series> list = seriesService.querySeriesAll(series, null);
 		return new Srm().setResultCode("0").setResultMessage("查询所有系列信息成功").addAll(list);
 	}
 	

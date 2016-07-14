@@ -393,6 +393,11 @@ Ext.define("MIS.view.check.CheckGrid", {
         		Ext.MessageBox.alert("请求失败", "下单清单，快递单号["+selections[i].raw.trackingNumber+"]，单品名称["+selections[i].raw.singleName+"]，状态不为[已下单]");
         		return;
         	}
+        	
+        	if(selections[i].raw.trackingNumber == ''){
+        		Ext.MessageBox.alert("请求失败", "下单清单，单品名称["+selections[i].raw.singleName+"]，快递单号不能为空");
+        		return;
+        	}
         }
         
         var checkview = Ext.ComponentQuery.query("checkview")[0];

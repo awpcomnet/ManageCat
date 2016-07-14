@@ -68,7 +68,7 @@
 	<if test="num != null and num != ''">
 		, num = #{num}
 	</if>
-	<if test="unitPrice != null and unitPrice != ''">
+	<if test="unitPrice != null">
 		, unit_price = #{unitPrice}
 	</if>
 	<if test="remark != null and remark != ''">

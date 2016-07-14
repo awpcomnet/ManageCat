@@ -2,6 +2,8 @@ package com.cat.manage.base.service;
 
 import java.util.List;
 
+import javax.print.attribute.standard.MediaSize.Other;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,7 @@ import com.cat.manage.base.domain.Brand;
 import com.cat.manage.base.domain.Series;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 /**
@@ -93,9 +96,9 @@ public class BrandService {
 	 * @param brand
 	 * @return
 	 */
-	public PageInfo<Brand> queryBrand(Brand brand, Integer pageNum, Integer pageSize){
+	public PageInfo<Brand> queryBrand(Brand brand, Integer pageNum, Integer pageSize, String orderBy){
 		PageHelper.startPage(pageNum, pageSize);
-		List<Brand> list = brandDao.queryBrands(brand);
+		List<Brand> list = brandDao.queryBrands(brand, Strings.isNullOrEmpty(orderBy) ? null : orderBy);
 		PageInfo<Brand> page = new PageInfo<Brand>(list);
 		return page;
 	}
@@ -105,8 +108,8 @@ public class BrandService {
 	 * @param brand
 	 * @return
 	 */
-	public List<Brand> queryBrandAll(Brand brand){
-		return brandDao.queryBrands(brand);
+	public List<Brand> queryBrandAll(Brand brand, String orderBy){
+		return brandDao.queryBrands(brand, orderBy);
 	}
 	
 	/**
@@ -116,5 +119,23 @@ public class BrandService {
 	 */
 	public Brand queryBrandById(Integer brandId){
 		return brandDao.queryBrandById(brandId);
+	}
+	
+	/**
+	 * 转换排序列
+	 * @param orderBy
+	 * @return
+	 */
+	public String decodeForOrderBy(String orderBy){
+		if(Strings.isNullOrEmpty(orderBy))
+			return null;
+		
+		String result = null;
+		switch(orderBy){
+			case "1":
+				result = "brand_ename";
+				break;
+		}
+		return result;
 	}
 }

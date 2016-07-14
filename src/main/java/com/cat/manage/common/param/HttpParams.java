@@ -29,6 +29,15 @@ public class HttpParams {
 	}
 	
 	/**
+	 * 返回String 类型的值
+	 * @param name
+	 * @return
+	 */
+	public String getStrForDefault(String name){
+		return defaultValueByName(name);
+	}
+	
+	/**
 	 * 返回String 类型的值，不进行非空校验
 	 * @return
 	 */
@@ -100,6 +109,20 @@ public class HttpParams {
 		
 		if (Strings.isNullOrEmpty(value))
 			throw new ParameterException(PARAM_EXCEPTION_CODE, "参数 [" + name + "] 的值为空");
+		
+		return value;
+	}
+	
+	/**
+	 * 检测值如果为空则返回 ""
+	 * @param name
+	 * @return
+	 */
+	private String defaultValueByName(String name){
+		String value = innerMap.get(name);
+		
+		if(Strings.isNullOrEmpty(value))
+			value = "";
 		
 		return value;
 	}

@@ -33,7 +33,7 @@ public interface BrandDao {
 	 * 查询品牌
 	 * @return
 	 */
-	public List<Brand> queryBrands(Brand brand);
+	public List<Brand> queryBrands(Brand brand, String orderBy);
 	
 	/**
 	 * 根据品牌编号查询品牌信息

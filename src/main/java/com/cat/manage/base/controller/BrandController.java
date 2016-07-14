@@ -13,6 +13,7 @@ import com.cat.manage.base.service.BrandService;
 import com.cat.manage.common.model.Srm;
 import com.cat.manage.common.param.HttpParams;
 import com.github.pagehelper.PageInfo;
+import com.google.common.base.Strings;
 
 @RestController
 @RequestMapping("/brand")
@@ -57,14 +58,18 @@ public class BrandController {
 		HttpParams params = HttpParams.buildFrom(request);
 		Integer pageNum = params.getInt("page");
 		Integer pageSize = params.getInt("limit");
+		String orderBy = brandService.decodeForOrderBy(params.getStrForDefault("orderBy"));
 		
-		PageInfo<Brand> page = brandService.queryBrand(brand, pageNum, pageSize);
+		PageInfo<Brand> page = brandService.queryBrand(brand, pageNum, pageSize, orderBy);
 		return new Srm().setResultCode("0").setResultMessage("查询品牌成功").buildPageInfo(page);
 	}
 	
 	@RequestMapping("/queryAll")
-	public Srm queryBrandAll(Brand brand){
-		List<Brand> list = brandService.queryBrandAll(brand);
+	public Srm queryBrandAll(Brand brand, HttpServletRequest request){
+		HttpParams params = HttpParams.buildFrom(request);
+		String orderBy = brandService.decodeForOrderBy(params.getStrForDefault("orderBy"));
+		
+		List<Brand> list = brandService.queryBrandAll(brand, orderBy);
 		return new Srm().setResultCode("0").setResultMessage("查询所有品牌成功").addAll(list);
 	}
 	
