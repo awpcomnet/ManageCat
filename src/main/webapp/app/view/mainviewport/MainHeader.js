@@ -12,7 +12,7 @@ Ext.define("MIS.view.mainviewport.MainHeader", {
     items: [
             {
         xtype: "label",
-        html: "<div id=\"logo\"><!--<img class=\"sys_logo\" src=\"/resources/component/header/logo.png\" />--><span class=\"logoTitle\">专业代购猫 1.3.8</span></div>"
+        html: "<div id=\"logo\"><!--<img class=\"sys_logo\" src=\"/resources/component/header/logo.png\" />--><span class=\"logoTitle\">专业代购猫 1.3.9</span></div>"
     }, {
         xtype: "tbfill"
     }, 

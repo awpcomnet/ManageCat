@@ -120,7 +120,7 @@ public class ShippedService {
 		Shipped shipped = new Shipped();
 		shipped.setCheckId(checkId);
 		List<Shipped> list = shippedDao.queryShipped(shipped);
-		if(list == null)
+		if(list == null || list.size() <= 0)
 			return;
 		if(list.size() > 1)
 			throw new BusinessException("1", "业务异常，下单清单编号["+checkId+"]存在"+list.size()+"个邮寄清单");

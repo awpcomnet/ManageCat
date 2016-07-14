@@ -871,6 +871,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "MIS.model.storage.StorageDetail": [],
   "MIS.model.user.User": [],
   "MIS.store.Nav": [],
+  "MIS.store.batch.BatchAssignStore": [],
   "MIS.store.batch.BatchStore": [],
   "MIS.store.brand.BrandAllStore": [],
   "MIS.store.brand.BrandStore": [],
@@ -897,6 +898,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "MIS.store.singleproduct.SingleproductStore": [],
   "MIS.store.storage.StorageDetailStore": [],
   "MIS.store.storage.StorageStore": [],
+  "MIS.store.user.UserStateStore": [],
   "MIS.store.user.UserStore": [],
   "MIS.view.Main": [],
   "MIS.view.MainViewport": [],
@@ -2042,6 +2044,7 @@ Ext.ClassManager.addNameAliasMappings({
   "MIS.model.storage.StorageDetail": [],
   "MIS.model.user.User": [],
   "MIS.store.Nav": [],
+  "MIS.store.batch.BatchAssignStore": [],
   "MIS.store.batch.BatchStore": [],
   "MIS.store.brand.BrandAllStore": [],
   "MIS.store.brand.BrandStore": [],
@@ -2068,6 +2071,7 @@ Ext.ClassManager.addNameAliasMappings({
   "MIS.store.singleproduct.SingleproductStore": [],
   "MIS.store.storage.StorageDetailStore": [],
   "MIS.store.storage.StorageStore": [],
+  "MIS.store.user.UserStateStore": [],
   "MIS.store.user.UserStore": [],
   "MIS.view.Main": [
     "widget.app-main"
