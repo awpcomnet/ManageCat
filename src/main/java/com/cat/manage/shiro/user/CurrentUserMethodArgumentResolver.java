@@ -40,6 +40,8 @@ public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentR
         Subject subject = SecurityUtils.getSubject();
         String username = (String)subject.getPrincipals().getPrimaryPrincipal();
         User user = userService.findUserByUsername(username);
+        user.setPassword("");//去除密码
+        user.setSalt("");//去除盐
         return user;
     }
 }

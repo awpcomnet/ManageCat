@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cat.manage.base.dao.HabitDao">
+
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+
+	<resultMap type="com.cat.manage.base.domain.Habit" id="habitResultMap">
+		<id property="id" column="id"/>
+		<result property="userId" column="user_id"/>
+		<result property="type" column="type"/>
+		<result property="habitKey" column="habit_key"/>
+		<result property="habitValue" column="habit_value"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+	</resultMap>
+	
+	<!-- 添加偏好 -->
+	<insert id="addHabit" parameterType="com.cat.manage.base.domain.Habit">
+		insert into t_habit (user_id, type, habit_key, habit_value, create_date, update_date)
+		values(#{userId}, #{type}, #{habitKey}, #{habitValue}, now(), now())
+	</insert>
+	
+	<!-- 修改偏好信息 -->
+	<update id="updateHabit" parameterType="com.cat.manage.base.domain.Habit">
+		update t_habit set update_date = now()
+		<if test="userId != null">
+			, user_id = #{userId}
+		</if>
+		<if test="type != null and type != ''">
+			, type = #{type}
+		</if>
+		<if test="habitKey != null and habitKey != ''">
+			, habit_key = #{habitKey}
+		</if>
+		<if test="habitValue != null and habitValue != ''">
+			, habit_value = #{habitValue}
+		</if>
+		where id = #{id}
+	</update>
+	
+	<!-- 删除偏好信息 -->
+	<delete id="deleteHabit" parameterType="java.lang.Integer">
+		delete from t_habit where id = #{id}
+	</delete>
+	
+	<!-- 查询偏好信息 -->
+	<select id="queryHabit" parameterType="com.cat.manage.base.domain.Habit" resultMap="habitResultMap">
+		select id, user_id, type, habit_key, habit_value, create_date, update_date from t_habit
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="userId != null">
+			and user_id = #{userId}
+		</if>
+		<if test="type != null and type != ''">
+			and type = #{type}
+		</if>
+		<if test="habitKey != null and habitKey != ''">
+			and habit_key = #{habitKey}
+		</if>
+		<if test="habitValue != null and habitValue != ''">
+			and habit_value = #{habitValue}
+		</if>
+		order by update_date DESC
+	</select>
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+    
+    <bean id="habitJob" class="com.cat.manage.task.nail.HabitJob" >
+    	<property name="frequency">
+    		<!-- 每天执行，每5秒一次 -->
+    		<value>0/5 * * * * ?</value>
+    	</property>
+    	<property name="defaultSwitch">
+    		<!-- 定时任务默认开关，true为开启，false为暂停 ， 任务0为开启，任务1为暂停 事例：0:true|1:false 或者 default:true 为全部开启-->
+    		<value>default:true</value>
+    	</property>
+    	<property name="jobName">
+    		<!-- 任务名称 -->
+    		<value>HabitJob</value>
+    	</property>
+    	<property name="jobGroup">
+    		<!-- 任务组别 -->
+    		<value>HabitGroup</value>
+    	</property>
+    	<property name="description">
+    		<!-- 任务描述 -->
+    		<value>偏好定时任务</value>
+    	</property>
+    </bean>
+    
+   	<bean id="jobBox" class="com.cat.manage.task.box.JobBox">
+   		<property name="state">
+   			<!-- 定时任务是否启动 -->
+   			<value>true</value>
+   		</property>
+   		<property name="jobList">
+   			<list>
+   				<!-- 添加定时任务bean -->
+   				<ref bean="habitJob" />
+   			</list>
+   		</property>
+   	</bean>
+</beans>

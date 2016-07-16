@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cat.manage.check.domain.Check;
 import com.cat.manage.common.exception.BusinessException;
 import com.cat.manage.common.model.Srm;
 import com.cat.manage.common.param.HttpParams;

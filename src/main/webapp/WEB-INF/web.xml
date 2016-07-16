@@ -19,6 +19,9 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+	<!-- <listener>
+		<listener-class>com.cat.manage.task.machine.TimerTask</listener-class>
+	</listener> -->
 
 	<filter>
 		<filter-name>encodingFilter</filter-name>

@@ -92,4 +92,5 @@
 	<import resource="daoContext/daoContext.xml" />
 	<import resource="service/serviceContext.xml" />
 	<import resource="service/shiroContext.xml" /> 
+	<!-- <import resource="service/taskContext.xml" /> -->
 </beans>
