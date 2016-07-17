@@ -100,4 +100,11 @@ public interface SelledDao {
 	 * @return
 	 */
 	public List<Selled> querySelledForSync(Integer seriesId, Integer singleId);
+	
+	/**
+	 * 获取某单品的最新售出价格
+	 * @param singleId
+	 * @return
+	 */
+	public Selled querySelledLastPriceBySingleId(Integer singleId);
 }

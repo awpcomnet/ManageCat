@@ -1,5 +1,8 @@
 package com.cat.manage.selled.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,8 @@ import com.cat.manage.common.param.HttpParams;
 import com.cat.manage.selled.domain.Selled;
 import com.cat.manage.selled.service.SelledService;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * @Description: 售出控制器
@@ -68,5 +73,24 @@ public class SelledController {
 	public Srm addDestroy(Selled selled){
 		selledService.addStoreForDestroy(selled);
 		return new Srm().setResultCode("0").setResultMessage("添加损坏记录成功");
+	}
+	
+	@RequestMapping("/lastPrice")
+	public Srm querySingleLastSellPrice(Selled selled){
+		if(selled == null || selled.getSingleId() == null)
+			return new Srm().setResultCode("1").setResultMessage("参数为空");
+		Selled s = selledService.querySingleLastSellPrice(selled.getSingleId());
+		
+		List<Map<String, String>> list = Lists.newArrayList();
+		Map<String, String> map = Maps.newHashMap();
+		
+		if(s != null){
+			map.put("lastPrice", String.format("%.02f", s.getSellingPrice()));
+		} else {
+			map.put("lastPrice", "0.00");
+		}
+		
+		list.add(map);
+		return new Srm().setResultCode("0").setResultMessage("查询售出最新价格成功").addAll(list);
 	}
 }

@@ -275,4 +275,10 @@
 		</if>
 	</select>
 	
+	<!-- 获取某单品的最新售出价格 -->
+	<select id="querySelledLastPriceBySingleId" parameterType="java.lang.Integer" resultMap="SelledResultMap">
+		select id, store_id, check_id, brand_id, series_id, single_id, sell_num, unit_price, payby, unit_rmb, unit_postage, unit_cost, selling_price, refund, remark, sell_time, selled_status, create_date, update_date
+ 		from t_selled where single_id = #{singleId} and selled_status = '3' order by create_date DESC limit 1
+	</select>
+	
 </mapper>

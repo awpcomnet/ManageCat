@@ -298,4 +298,13 @@ public class SelledService {
 	public void updateSelledByCheckId(Selled selled){
 		selledDao.updateSelledByCheckId(selled);
 	}
+	
+	/**
+	 * 获取某单品的最新售出价格
+	 * @param singleId
+	 * @return
+	 */
+	public Selled querySingleLastSellPrice(Integer singleId){
+		return selledDao.querySelledLastPriceBySingleId(singleId);
+	}
 }

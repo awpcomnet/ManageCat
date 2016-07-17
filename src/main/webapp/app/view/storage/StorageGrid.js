@@ -251,6 +251,7 @@ Ext.define("MIS.view.storage.StorageGrid", {
         			storageview.getEl().unmask();
         		},
         		beforerender: function () {
+        			
 //        			var shippedsgrid = Ext.ComponentQuery.query("storagegrid")[0];
 //        			var shippedsgridStore = shippedsgrid.getStore();
 //        			shippedsgridStore.proxy.extraParams.headId = selections[0].raw.id;
@@ -264,6 +265,21 @@ Ext.define("MIS.view.storage.StorageGrid", {
         			component.down("textarea[name=remark]").setValue(selections[0].raw.remark);
         			component.down("textfield[name=storeId]").setValue(selections[0].raw.id);
         			component.down("numberfield[name=rate]").setValue(15);
+        			
+        			//查询最新售价
+        			Ext.Ajax.request({
+                    	url: "/selled/lastPrice",
+                    	params: {
+                    		singleId: selections[0].raw.singleId
+                    	},
+                    	success: function(conn, request, option, eOpts){
+                    		var result = Ext.JSON.decode(conn.responseText, true);
+                    		if(result.resultCode == 0){
+                    			component.down("numberfield[name=sellingPrice]").setValue(result.results[0].lastPrice);
+                    		}
+                    	}
+                    	
+                    });
     			}
         	}
         });
