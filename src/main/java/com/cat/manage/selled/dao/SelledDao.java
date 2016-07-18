@@ -107,4 +107,11 @@ public interface SelledDao {
 	 * @return
 	 */
 	public Selled querySelledLastPriceBySingleId(Integer singleId);
+	
+	/**
+	 * 根据入库Id查询所有售出记录（含已损坏，已补损记录）
+	 * @param storeId
+	 * @return
+	 */
+	public List<Selled> querySelledByStoreId(Integer storeId);
 }

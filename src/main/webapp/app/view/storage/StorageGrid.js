@@ -35,6 +35,7 @@ Ext.define("MIS.view.storage.StorageGrid", {
 			    { header: '邮寄主单号', dataIndex: 'headTrackingNumber', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '批次号', dataIndex: 'batchNo', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '国外邮寄单号', dataIndex: 'trackingNumber', sortable: true, width: 10, align: "center", hidden : true},
+			    { header: '原下单数量', dataIndex: 'num', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '实际单价(￥)', dataIndex: 'unitRmb', sortable: true, width: 10, align: "center"},
 			    { header: '实际单个邮费(￥)', dataIndex: 'unitPostage', sortable: true, width: 10, align: "center"},
 			    { header: '实际成本(￥)', dataIndex: 'unitCost', sortable: true, width: 10, align: "center"},

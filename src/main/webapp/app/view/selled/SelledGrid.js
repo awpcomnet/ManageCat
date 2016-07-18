@@ -34,6 +34,22 @@ Ext.define("MIS.view.selled.SelledGrid", {
 			    { header: '邮寄主单号', dataIndex: 'headTrackingNumber', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '批次号', dataIndex: 'batchNo', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '国外邮寄单号', dataIndex: 'trackingNumber', sortable: true, width: 10, align: "center", hidden : true},
+			    { header: '实际成本', dataIndex: 'unitCost', sortable: true, width: 10, align: "center", hidden : true},
+			    { header: '单个利润', dataIndex: 'profit', sortable: true, width: 10, align: "center", hidden : true, renderer: function (value, rowindex, record, column) {
+			    	var profit = record.raw.sellingPrice - record.raw.unitCost;
+			    	return profit > 0 ? profit.toFixed(2) : "--";
+                }},
+                { header: '总利润', dataIndex: 'allProfit', sortable: true, width: 10, align: "center", hidden : true, renderer: function (value, rowindex, record, column) {
+			    	var profit = record.raw.sellingPrice - record.raw.unitCost;
+			    	var allProfit = profit * record.raw.sellNum;
+			    	return allProfit > 0 ? allProfit.toFixed(2) : "--";
+                }},
+			    { header: '利润率', dataIndex: 'profitRate', sortable: true, width: 10, align: "center", hidden : true, renderer: function (value, rowindex, record, column) {
+			    	var profit = record.raw.sellingPrice - record.raw.unitCost;
+			    	var profitRate = (profit / record.raw.unitCost) * 100;
+			    	return profitRate > 0 ? profitRate.toFixed(2)+"%" : "--%";
+                }},
+			    
 			    { header: '单品名称', dataIndex: 'singleName', sortable: true, width: 10, align: "center"},
 			    { header: '数量', dataIndex: 'sellNum', sortable: true, width: 5, align: "center"},
 			    { header: '补损金额(￥)', dataIndex: 'refund', sortable: true, width: 10, align: "center", editor:{ 
@@ -45,6 +61,7 @@ Ext.define("MIS.view.selled.SelledGrid", {
                 	xtype: 'numberfield'
                 }},
 			    { header: '售出总金额(￥)', dataIndex: 'sumPrice', sortable: true, width: 10, align: "center"},
+			    
 			    { header: '售出时间', dataIndex: 'sellTime', sortable: true, width: 10, align: "center"},
 			    { header: '状态', dataIndex: 'selledStatus', sortable: true, width: 10, align: "center", renderer: function (value, rowindex, record, column) {
 			    	return MIS.common.DictManager.getDictItemName("orderStatus", value);

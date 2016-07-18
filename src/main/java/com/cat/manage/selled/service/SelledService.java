@@ -307,4 +307,13 @@ public class SelledService {
 	public Selled querySingleLastSellPrice(Integer singleId){
 		return selledDao.querySelledLastPriceBySingleId(singleId);
 	}
+	
+	/**
+	 * 根据入库Id查询所有售出记录（含已损坏，补损记录）
+	 * @param StoreId
+	 * @return
+	 */
+	public List<Selled> querySelledsByStoreId(Integer storeId){
+		return selledDao.querySelledByStoreId(storeId);
+	}
 }

@@ -72,6 +72,17 @@
 	<if test="singleId != null and singleId != ''">
 	, single_id = #{singleId}
 	</if>
+	
+	<!-- 仓库记录修改时会需要修改售出记录中的各种成本记录 -->
+	<if test="unitRmb != null">
+	, unit_rmb = #{unitRmb}
+	</if>
+	<if test="unitPostage != null">
+	, unit_postage = #{unitPostage}
+	</if>
+	<if test="unitCost != null">
+	, unit_cost = #{unitCost}
+	</if>
 	where id = #{id}
 	</update>
 	
@@ -279,6 +290,12 @@
 	<select id="querySelledLastPriceBySingleId" parameterType="java.lang.Integer" resultMap="SelledResultMap">
 		select id, store_id, check_id, brand_id, series_id, single_id, sell_num, unit_price, payby, unit_rmb, unit_postage, unit_cost, selling_price, refund, remark, sell_time, selled_status, create_date, update_date
  		from t_selled where single_id = #{singleId} and selled_status = '3' order by create_date DESC limit 1
+	</select>
+	
+	<!-- 根据入库Id查询所有售出记录（含已损坏，已补损记录） -->
+	<select id="querySelledByStoreId" parameterType="java.lang.Integer" resultMap="SelledResultMap">
+		select id, store_id, check_id, brand_id, series_id, single_id, sell_num, unit_price, payby, unit_rmb, unit_postage, unit_cost, selling_price, refund, remark, sell_time, selled_status, create_date, update_date
+ 		from t_selled where store_id = #{storeId}
 	</select>
 	
 </mapper>

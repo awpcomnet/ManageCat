@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.cat.manage.check.service.CheckService;
 import com.cat.manage.common.exception.BusinessException;
+import com.cat.manage.selled.domain.Selled;
+import com.cat.manage.selled.service.SelledService;
 import com.cat.manage.shipped.domain.Shipped;
 import com.cat.manage.shipped.domain.ShippedHead;
 import com.cat.manage.shipped.service.ShippedHeadService;
@@ -37,6 +39,9 @@ public class StoreService {
 	
 	@Autowired
 	private CheckService checkService;
+	
+	@Autowired
+	private SelledService selledService;
 	
 	/**
 	 * 添加仓库信息
@@ -259,7 +264,51 @@ public class StoreService {
 	 * @param store
 	 */
 	public void updateStore(Store store){
+		//判断是否需要修改售出记录
 		storeDao.updateStore(store);
+		
+		//查询售出记录
+		List<Selled> selledList = selledService.querySelledsByStoreId(store.getId());
+		if(selledList == null || selledList.size() <= 0)
+			return;
+		
+		if(!this.isNeedChangeSelled(selledList, store))
+			return;
+		
+		for(Selled selled : selledList){
+			selled.setUnitRmb(Double.valueOf(store.getUnitRmb()));//实际单价(人民币)
+			selled.setUnitPostage(Double.valueOf(store.getUnitPostage()));//实际单个邮费(人民币)
+			selled.setUnitCost(Double.valueOf(store.getUnitCost()));//实际成本(人民币)
+			
+			//修改售出记录
+			selledService.updateSelled(selled);
+		}
+		
+	}
+	
+	/**
+	 * 判断是否需要修改售出记录
+	 * @param selleds
+	 * @param store
+	 * @return
+	 */
+	private boolean isNeedChangeSelled(List<Selled> selleds, Store store){
+		for(Selled selled : selleds){
+			if(selled.getUnitRmb() != Double.valueOf(store.getUnitRmb())){
+				return true;
+			}
+			
+			if(selled.getUnitPostage() != Double.valueOf(store.getUnitPostage()))
+			{
+				return true;
+			}
+			
+			if(selled.getUnitCost() != Double.valueOf(store.getUnitCost())){
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	/**
