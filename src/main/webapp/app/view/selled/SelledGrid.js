@@ -46,6 +46,9 @@ Ext.define("MIS.view.selled.SelledGrid", {
                 }},
 			    { header: '利润率', dataIndex: 'profitRate', sortable: true, width: 10, align: "center", hidden : true, renderer: function (value, rowindex, record, column) {
 			    	var profit = record.raw.sellingPrice - record.raw.unitCost;
+			    	if(record.raw.unitCost == 0)//成本为0时不计算利润里
+			    		return "--%";
+			    	
 			    	var profitRate = (profit / record.raw.unitCost) * 100;
 			    	return profitRate > 0 ? profitRate.toFixed(2)+"%" : "--%";
                 }},
