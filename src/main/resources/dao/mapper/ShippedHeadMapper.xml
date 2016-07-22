@@ -62,6 +62,13 @@
 	<if test="param1.id != null and param1.id != ''">
 		and id = #{param1.id}
 	</if>
+	<if test="param1.submitTimeStart != null and param1.submitTimeStart != ''">
+		and SUBSTR(submit_time, 1, 6) &gt;= #{param1.submitTimeStart}
+	</if>
+	<if test="param1.submitTimeEnd != null and param1.submitTimeEnd != ''">
+		and SUBSTR(submit_time, 1, 6) &lt;= #{param1.submitTimeEnd}
+	</if>
+	
 	<!-- 筛选邮寄清单中子单未入库主单 -->
 	<if test="param2 == 1">
 		and id in (select head_id from t_shipped where shipped_status in ('1', '7'))
@@ -70,8 +77,13 @@
 	<if test="param2 == 2">
 		and id not in (select head_id from t_shipped where shipped_status in ('1', '7'))
 	</if>
+	<if test="param3 != null and param3 != ''">
+			order by ${param3} desc
+	</if>
+	<if test="param3 == null or param3 == ''">
+		order by create_date desc
+	</if>
 	
-	order by create_date desc
 	</select>
 	
 	<!-- 根据快递单号查询邮寄清单主单 -->

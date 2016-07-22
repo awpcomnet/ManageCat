@@ -66,6 +66,12 @@ Ext.define("MIS.view.shipped.ShippedGrid", {
 					scope: this,
 					handler: this.onDeleteClick
 				}, {
+					iconCls: 'icon-exchange',
+					text: '排序方式',
+					itemId: 'shippedGridByChange',
+					scope: this,
+					handler: this.onShippedGridByChange
+				}, '-', {
 					iconCls: 'icon-folder-open-alt',
 					text: '详情',
 					itemId: 'detail',
@@ -191,6 +197,18 @@ Ext.define("MIS.view.shipped.ShippedGrid", {
                 });
         	}
         });
+    },
+    
+    onShippedGridByChange: function(component){
+    	var shippedHeadStore = this.getStore();
+        var orderBy = shippedHeadStore.proxy.extraParams.orderBy;
+        
+        if(orderBy == null || orderBy == ''){
+        	shippedHeadStore.proxy.extraParams.orderBy = '1';
+        } else {
+        	shippedHeadStore.proxy.extraParams.orderBy = '';
+        }
+        shippedHeadStore.load();
     },
     
     onDetailClick: function(component){

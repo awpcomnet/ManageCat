@@ -9,7 +9,8 @@ Ext.define('MIS.Application', {
                
                "MIS.store.dict.DictQueryStore",
                "MIS.common.DictManager",
-               "MIS.common.CurrentUser"
+               "MIS.common.CurrentUser",
+               "MIS.common.MonthField"
                
     ],
 

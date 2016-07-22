@@ -18,6 +18,9 @@ public class ShippedHead implements Serializable{
 	private String createDateFormat;//格式化后的创建时间
 	private String shippedNum;//内含邮寄中清单数量
 	private String storeNum;//内含入库清单数量
+	//--------新增字段
+	private String submitTimeStart;//查询时使用，提交开始时间
+	private String submitTimeEnd;//查询时使用，提交结束时间
 	
 	public Integer getId() {
 		return id;
@@ -89,6 +92,22 @@ public class ShippedHead implements Serializable{
 
 	public void setStoreNum(String storeNum) {
 		this.storeNum = storeNum;
+	}
+
+	public String getSubmitTimeStart() {
+		return submitTimeStart;
+	}
+
+	public void setSubmitTimeStart(String submitTimeStart) {
+		this.submitTimeStart = submitTimeStart;
+	}
+
+	public String getSubmitTimeEnd() {
+		return submitTimeEnd;
+	}
+
+	public void setSubmitTimeEnd(String submitTimeEnd) {
+		this.submitTimeEnd = submitTimeEnd;
 	}
 
 	@Override

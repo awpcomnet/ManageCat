@@ -58,7 +58,7 @@ public class BrandController {
 		HttpParams params = HttpParams.buildFrom(request);
 		Integer pageNum = params.getInt("page");
 		Integer pageSize = params.getInt("limit");
-		String orderBy = brandService.decodeForOrderBy(params.getStrForDefault("orderBy"));
+		String orderBy = BrandService.decodeForOrderBy(params.getStrForDefault("orderBy"));
 		
 		PageInfo<Brand> page = brandService.queryBrand(brand, pageNum, pageSize, orderBy);
 		return new Srm().setResultCode("0").setResultMessage("查询品牌成功").buildPageInfo(page);
@@ -67,7 +67,7 @@ public class BrandController {
 	@RequestMapping("/queryAll")
 	public Srm queryBrandAll(Brand brand, HttpServletRequest request){
 		HttpParams params = HttpParams.buildFrom(request);
-		String orderBy = brandService.decodeForOrderBy(params.getStrForDefault("orderBy"));
+		String orderBy = BrandService.decodeForOrderBy(params.getStrForDefault("orderBy"));
 		
 		List<Brand> list = brandService.queryBrandAll(brand, orderBy);
 		return new Srm().setResultCode("0").setResultMessage("查询所有品牌成功").addAll(list);

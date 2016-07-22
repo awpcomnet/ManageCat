@@ -95,9 +95,9 @@ public class ShippedHeadService {
 	 * @param pageSize
 	 * @return
 	 */
-	public PageInfo<ShippedHead> queryShippedHead(ShippedHead shippedHead, String flag, Integer pageNum, Integer pageSize){
+	public PageInfo<ShippedHead> queryShippedHead(ShippedHead shippedHead, String flag, Integer pageNum, Integer pageSize, String orderBy){
 		PageHelper.startPage(pageNum, pageSize);
-		List<ShippedHead> list = shippedHeadDao.queryShippedHead(shippedHead, flag);
+		List<ShippedHead> list = shippedHeadDao.queryShippedHead(shippedHead, flag, orderBy);
 		PageInfo<ShippedHead> page = new PageInfo<ShippedHead>(list);
 		return page;
 	}
@@ -110,7 +110,7 @@ public class ShippedHeadService {
 	public ShippedHead queryShippedHeadBytrackingNumber(String trackingNumber){
 		ShippedHead shippedHead = new ShippedHead();
 		shippedHead.setTrackingNumber(trackingNumber);
-		List<ShippedHead> list = shippedHeadDao.queryShippedHead(shippedHead, "");
+		List<ShippedHead> list = shippedHeadDao.queryShippedHead(shippedHead, "", null);
 		if(list.size() > 1)
 			throw new BusinessException("1", "快递单号【"+trackingNumber+"】存在"+list.size()+"个主邮寄清单！");
 		if(list.size() == 1){
@@ -135,7 +135,7 @@ public class ShippedHeadService {
 	 * @return
 	 */
 	public List<ShippedHead> queryShippedHeadAll(ShippedHead shippedHead){
-		return shippedHeadDao.queryShippedHead(shippedHead, "");
+		return shippedHeadDao.queryShippedHead(shippedHead, "", null);
 	}
 	
 	/**
@@ -225,5 +225,23 @@ public class ShippedHeadService {
 	 */
 	public List<ShippedHead> queryShippedHeadForList(ShippedHead shippedHead, String startTime, String endTime){
 		return shippedHeadDao.queryShippedHeadForList(shippedHead, startTime, endTime);
+	}
+	
+	/**
+	 * 转换排序列
+	 * @param orderBy
+	 * @return
+	 */
+	public static String decodeForOrderBy(String orderBy){
+		if(Strings.isNullOrEmpty(orderBy))
+			return null;
+		
+		String result = null;
+		switch(orderBy){
+			case "1":
+				result = "submit_time";
+				break;
+		}
+		return result;
 	}
 }

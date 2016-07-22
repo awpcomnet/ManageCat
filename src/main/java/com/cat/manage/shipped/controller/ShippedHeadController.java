@@ -97,8 +97,9 @@ public class ShippedHeadController {
 		HttpParams params = HttpParams.buildFrom(request);
 		Integer pageNum = params.getInt("page");
 		Integer pageSize = params.getInt("limit");
+		String orderBy = ShippedHeadService.decodeForOrderBy(params.getStrForDefault("orderBy"));
 		
-		PageInfo<ShippedHead> page = shippedHeadService.queryShippedHead(shippedHead, flag, pageNum, pageSize);
+		PageInfo<ShippedHead> page = shippedHeadService.queryShippedHead(shippedHead, flag, pageNum, pageSize, orderBy);
 		return new Srm().setResultCode("0").setResultMessage("查询邮寄清单主单成功").buildPageInfo(page);
 	}
 }

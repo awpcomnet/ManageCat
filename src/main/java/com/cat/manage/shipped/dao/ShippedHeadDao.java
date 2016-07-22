@@ -33,9 +33,11 @@ public interface ShippedHeadDao {
 	
 	/**
 	 * 查询邮寄清单（主单）记录
+	 * @param shippedHead
+	 * @param flag 筛选标记， 1-筛选邮寄清单中子单未入库主单 2-筛选邮寄清单中子单全已入库主单    其他为全部查询
 	 * @return
 	 */
-	public List<ShippedHead> queryShippedHead(ShippedHead shippedHead, String flag);
+	public List<ShippedHead> queryShippedHead(ShippedHead shippedHead, String flag, String orderBy);
 	
 	/**
 	 * 根据快递单号查询邮寄清单主单

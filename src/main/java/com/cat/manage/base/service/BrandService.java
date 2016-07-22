@@ -126,7 +126,7 @@ public class BrandService {
 	 * @param orderBy
 	 * @return
 	 */
-	public String decodeForOrderBy(String orderBy){
+	public static String decodeForOrderBy(String orderBy){
 		if(Strings.isNullOrEmpty(orderBy))
 			return null;
 		
