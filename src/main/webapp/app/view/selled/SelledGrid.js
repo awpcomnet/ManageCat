@@ -168,6 +168,12 @@ Ext.define("MIS.view.selled.SelledGrid", {
     		return;
     	}
     	
+    	//已损坏(赔偿)不能修改信息
+    	if(selections[0].raw.selledStatus == 8){
+    		Ext.MessageBox.alert("请求失败", "该商品[已损坏(赔偿)]，不支持修改");
+    		return;
+    	}
+    	
     	var selledview = Ext.ComponentQuery.query("selledview")[0];
     	selledview.getEl().mask();
     	
