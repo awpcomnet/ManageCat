@@ -36,11 +36,11 @@ Ext.define("MIS.view.selled.SelledGrid", {
 			    { header: '国外邮寄单号', dataIndex: 'trackingNumber', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '实际成本', dataIndex: 'unitCost', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '单个利润', dataIndex: 'profit', sortable: true, width: 10, align: "center", hidden : true, renderer: function (value, rowindex, record, column) {
-			    	var profit = record.raw.sellingPrice - record.raw.unitCost;
+			    	var profit = record.raw.sellingPrice - record.raw.unitCost - Number.parseFloat(record.raw.refund);
 			    	return profit > 0 ? profit.toFixed(2) : "--";
                 }},
                 { header: '总利润', dataIndex: 'allProfit', sortable: true, width: 10, align: "center", hidden : true, renderer: function (value, rowindex, record, column) {
-			    	var profit = record.raw.sellingPrice - record.raw.unitCost;
+			    	var profit = record.raw.sellingPrice - record.raw.unitCost - Number.parseFloat(record.raw.refund);
 			    	var allProfit = profit * record.raw.sellNum;
 			    	return allProfit > 0 ? allProfit.toFixed(2) : "--";
                 }},
@@ -209,10 +209,11 @@ Ext.define("MIS.view.selled.SelledGrid", {
     	}
     	
     	//已损坏不能修改信息
-    	if(selections[0].raw.selledStatus == 98){
-    		Ext.MessageBox.alert("请求失败", "该商品[已损坏]，不支持补损");
-    		return;
-    	}
+    	//损害也可补损，商家或转运公司赔偿金额，需要填写 【负值】
+//    	if(selections[0].raw.selledStatus == 98){
+//    		Ext.MessageBox.alert("请求失败", "该商品[已损坏]，不支持补损");
+//    		return;
+//    	}
     	
     	var selledview = Ext.ComponentQuery.query("selledview")[0];
     	selledview.getEl().mask();

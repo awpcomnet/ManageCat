@@ -75,12 +75,14 @@ public class ClearService {
 		BigDecimal sumRefund = new BigDecimal(0.0);//补损总金额(￥)
 		BigDecimal sumUnitPrice = new BigDecimal(0.0);//下单总金额($)
 		BigDecimal sumProfit = new BigDecimal(0.0);//实际总利润(￥)
-		String remark = "实际利润与入库时邮费定义和成本定义有关，与实际所得利润可能存在差异。付款人的付款总金额仅包含下单金额,下单金额为换算后的人民币,不包含邮费。";//备注
+		String remark = "实际利润与入库时邮费定义和成本定义有关，与实际所得利润可能存在差异。付款人的付款总金额仅包含下单金额,下单金额为换算后的人民币,不包含邮费。补损金额：正值为赔偿买家金额；负值为商家或转运公司赔偿卖家金额。";//备注
 		String profitRate = "0%";
 		Map<String, Double> payInfo = Maps.newHashMap();
 		Double sumUnitRmb = 0.0;
 		
-		List<Integer> checkIds = Lists.newArrayList();
+		//保存下单清单唯一编号以及售出记录，用于计算售出产品的原价格（例如美元、日元等）。需要进行单条处理，如果直接查询所有下单唯一编号，会造成计算错误
+		List<Map<String, Integer>> checkIdsAndSellNumList = Lists.newArrayList();
+		
 		//时间段内售出清单查询
 		List<Selled> selledList = selledService.querySelledForTimeQuantum(new Selled(), startTime, endTime);
 		if(selledList != null){
@@ -92,7 +94,11 @@ public class ClearService {
 				sumSellPrice = sumSellPrice.add(new BigDecimal(sellingPrice * sellNum));
 				sumUnitCost = sumUnitCost.add(new BigDecimal(unitCost * sellNum));
 				sumRefund = sumRefund.add(new BigDecimal(refund));
-				checkIds.add(selled.getCheckId());
+				
+				Map<String, Integer> checkIdsAndSellNumMap = Maps.newHashMap();
+				checkIdsAndSellNumMap.put("checkId", selled.getCheckId());
+				checkIdsAndSellNumMap.put("sellNum", sellNum);
+				checkIdsAndSellNumList.add(checkIdsAndSellNumMap);
 				
 				//统计付款人，以及付款总金额（仅下单金额,下单金额为换算后的人民币，不包含邮费）
 				//已经保存过付款人,则累计付款金额
@@ -110,12 +116,11 @@ public class ClearService {
 		}
 		
 		//查询下单清单记录
-		List<Check> checkList = checkService.queryCheckByIds((Integer[])checkIds.toArray(new Integer[]{}));
-		if(checkList != null){
-			for(Check check : checkList){
-				Double unitPrice = check.getUnitPrice();
-				Integer num = check.getNum();
-				sumUnitPrice = sumUnitPrice.add(new BigDecimal(unitPrice * num));
+		//一条下单记录可以分N条售出，那么售出的下单金额需要通过售出清单记录分别查询。
+		for(Map<String, Integer> map : checkIdsAndSellNumList){
+			Check check = checkService.queryCheckById(map.get("checkId"));
+			if(check != null){
+				sumUnitPrice = sumUnitPrice.add(new BigDecimal(check.getUnitPrice() * map.get("sellNum")));
 			}
 		}
 		

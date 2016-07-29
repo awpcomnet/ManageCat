@@ -175,6 +175,7 @@ public class SelledService {
 	 */
 	public void updateSelledForRefund(Selled selled){
 		Double refund = selled.getRefund();
+		Double sellingPrice = selled.getSellingPrice();
 		
 		if(refund == null){
 			refund = 0.0;
@@ -185,10 +186,17 @@ public class SelledService {
 			//设置状态为[5已售出（补损）]
 			selled.setSelledStatus("5");
 		} else if(refund == 0){
-			//设置状态为[3已售出]
-			selled.setSelledStatus("3");
+			if(sellingPrice == null || sellingPrice == 0){
+				//设置为[98已损坏]
+				selled.setSelledStatus("98");
+			} else {
+				//设置状态为[3已售出]
+				selled.setSelledStatus("3");
+			}
 		} else {
-			throw new BusinessException("1", "补损金额不能为负值。当前金额为["+refund+"]");
+			//补损金额可以为 【负值】，意义：商家或转运公司赔偿金额。
+			//throw new BusinessException("1", "补损金额不能为负值。当前金额为["+refund+"]");
+			selled.setSelledStatus("8");//已损坏，商家或转运公司已赔偿
 		}
 		
 		selledDao.updateSelledForStatus(selled);

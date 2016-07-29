@@ -28,12 +28,25 @@ Ext.define("MIS.view.selled.SelledRefund", {
         colspan: 1,
         anchor: "55%",
         allowBlank: true,
-        minValue: 0.0,
+        //补损金额允许添加负值
+        //minValue: 0.0,
         decimalPrecision: 2,
-        editable:true
+        editable:true,
+        id: 'refund-tip',
+        listeners : { 
+	    	afterrender: function () {
+	    		$("#refund-tip-inputEl").poshytip({
+	                content: "补损金额：赔付客户金额为正值；商家或转运公司赔偿金额为负值",
+	                offsetX: 50,
+	            	offsetY: 50,
+	            	allowTipHover: false,
+	                showTimeout: 1000
+	            });
+	    	}
+        } 
     }, {
 		xtype: 'datefield',
-		fieldLabel: "售出时间",
+		fieldLabel: "售出/损坏时间",
 		name: "sellTime",
 		anchor: "55%",
         format: 'Ymd',
@@ -82,5 +95,5 @@ Ext.define("MIS.view.selled.SelledRefund", {
 			});
 		}
 	}]
-	
+    
 });
