@@ -124,6 +124,12 @@ Ext.define("MIS.view.selled.SelledGrid", {
 					handler: this.onDamageClick
 				}, {
 					iconCls: 'icon-file-alt',
+					text: '已损坏(赔偿)',
+					itemId: 'damageCompensation',
+					scope: this,
+					handler: this.onDamageCompensationClick
+				}, {
+					iconCls: 'icon-file-alt',
 					text: '所有',
 					itemId: 'selledAll',
 					scope: this,
@@ -301,6 +307,11 @@ Ext.define("MIS.view.selled.SelledGrid", {
     
     onDamageClick: function(component){
     	this.store.proxy.extraParams.selledStatus = '98';
+    	this.store.reload();
+    },
+    
+    onDamageCompensationClick: function(component){
+    	this.store.proxy.extraParams.selledStatus = '8';
     	this.store.reload();
     },
     
