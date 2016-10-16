@@ -106,8 +106,17 @@ Ext.define("MIS.view.storage.StorageModify", {
 		fieldLabel: "入库时间",
 		name: "storeTime",
         format: 'Ymd',
-        colspan: 2,
+        colspan: 1,
         editable:false
+	}, {
+		fieldLabel: "预计售价(￥)",
+        name: "planSellPrice",
+        xtype: "numberfield",
+        decimalPrecision: 2,
+        allowBlank: true,
+        minValue: 0,
+        colspan: 1,
+        editable:true
 	}, {
 		fieldLabel: "备注",
         name: "remark",
@@ -118,9 +127,41 @@ Ext.define("MIS.view.storage.StorageModify", {
     }, {
         name: "id",
         hidden: true
+    }, {
+        name: "singleId",
+        hidden: true
     }],
 	
 	buttons: [{
+		text: "售价预计",
+		handler: function(component){
+			var storagemodify = component.up("storagemodify");
+			
+			var singleId = storagemodify.down("textfield[name=singleId]").getValue().trim();
+			
+			var params = {
+				singleId: singleId
+			}
+			
+			Ext.Ajax.request({
+				url: "/selled/lastPrice",
+				params: params,
+				success: function(conn, request, option, eOpts){
+					var result = Ext.JSON.decode(conn.responseText, true);
+					if(result.resultCode != 0){
+						//不需要提醒
+						//Ext.MessageBox.alert("售价预计失败", "原因:" + result.resultMessage);
+					} else {
+						storagemodify.down("numberfield[name=planSellPrice]").setValue(result.results[0].lastPrice);
+					}
+				},
+				failure: function (conn, request, option, eOpts) {
+                    Ext.MessageBox.alert("服务器繁忙, 稍后重试!");
+                }
+				
+			});
+		}
+	}, {
 		text: "取消",
 		handler: function(component){
 			component.up("#storagemodifywindow").close();

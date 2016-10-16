@@ -36,12 +36,14 @@
 		<!-- 新加字段  headTrackingNumber|batchNo -20160701 -->
 		<result property="headTrackingNumber" column="head_tracking_number"/>
 		<result property="batchNo" column="batch_no"/>
+		<!-- 新加字段 planSellPrice -20161016 -->
+		<result property="planSellPrice" column="plan_sell_price"/>
 	</resultMap>
 	
 	<!-- 添加仓库信息 -->
 	<insert id="addStore">
-	insert into t_store(shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, store_time, store_status, create_date, update_date)
-	values(#{param1.id}, #{param1.checkId}, #{param1.trackingNumber}, #{param1.transferCompany}, #{param1.brandId}, #{param1.seriesId}, #{param1.singleId}, #{param2.num}, #{param1.unitPrice}, #{param1.payby}, #{param2.unitRmb}, #{param2.unitPostage}, #{param2.unitCost}, #{param2.remark}, #{param2.storeTime}, #{param2.storeStatus}, now(), now())
+	insert into t_store(shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, store_time, store_status, create_date, update_date, plan_sell_price)
+	values(#{param1.id}, #{param1.checkId}, #{param1.trackingNumber}, #{param1.transferCompany}, #{param1.brandId}, #{param1.seriesId}, #{param1.singleId}, #{param2.num}, #{param1.unitPrice}, #{param1.payby}, #{param2.unitRmb}, #{param2.unitPostage}, #{param2.unitCost}, #{param2.remark}, #{param2.storeTime}, #{param2.storeStatus}, now(), now(), #{param2.planSellPrice})
 	</insert>
 	
 	<!-- 修改仓库信息 -->
@@ -79,6 +81,9 @@
 	</if>
 	<if test="singleId != null and singleId != ''">
 	, single_id = #{singleId}
+	</if>
+	<if test="planSellPrice != null and planSellPrice != ''">
+	, plan_sell_price = #{planSellPrice}
 	</if>
 	where id = #{id}
 	</update>
@@ -135,7 +140,7 @@
     
     ,(select tsh.tracking_number from t_shipped ts, t_shipped_head tsh where ts.head_id = tsh.id and ts.id = t.shipped_id) as head_tracking_number
 	,(select tc.batch_no from t_check tc where tc.id = t.check_id) as batch_no
-    
+    , t.plan_sell_price
 	from t_store t
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
@@ -200,6 +205,7 @@
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
     , (t.num - IFNULL(t.sell_num,0)) as residue_num 
+    , plan_sell_price
 	from t_store t
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
@@ -213,6 +219,7 @@
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
     , (t.num - IFNULL(t.sell_num,0)) as residue_num 
+    , t.plan_sell_price
 	from t_store t
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
@@ -226,6 +233,7 @@
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
     , (t.num - IFNULL(t.sell_num,0)) as residue_num 
+    , t.plan_sell_price
 	from t_store t
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
@@ -239,6 +247,7 @@
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
     , (t.num - IFNULL(t.sell_num,0)) as residue_num 
+    , t.plan_sell_price
 	from t_store t
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
@@ -253,6 +262,7 @@
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
     , (t.num - IFNULL(t.sell_num,0)) as residue_num 
+    , t.plan_sell_price
 	from t_store t
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
@@ -267,6 +277,7 @@
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
     , (t.num - IFNULL(t.sell_num,0)) as residue_num 
+    , t.plan_sell_price
 	from t_store t
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
@@ -321,6 +332,7 @@
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
     , (t.num - IFNULL(t.sell_num,0)) as residue_num 
+    , t.plan_sell_price
 	from t_store t
 	left join t_brand tb on tb.brand_id = t.brand_id
 	left join t_series tse on tse.series_id = t.series_id
@@ -332,6 +344,7 @@
 	<!-- 查询入库清单，根据系列编号或单品编号查询 -->
 	<select id="queryStoreForSync"  resultMap="StoreResultMap">
 		select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
+		, t.plan_sell_price
 		from  t_store t
 		where 
 		<if test="param1 != null and param1 != ''">

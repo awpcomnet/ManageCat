@@ -317,6 +317,24 @@ public class SelledService {
 	}
 	
 	/**
+	 * 查询单品的推荐价格
+	 * 规则：1.查询该单品入库时  预计售价， 不为-1， 则返回该值
+	 *     2.查询该产品最新售价
+	 * @param singleId
+	 * @return
+	 */
+	public String queryRecommendPrice(Integer storeId, Integer singleId){
+		//1.查询入库时的 预售价格
+		Store store = storeService.queryStoreById(storeId);
+		if(store != null && !"-1".equals(store.getPlanSellPrice()))
+			return String.format("%.02f", Double.parseDouble(store.getPlanSellPrice()));
+		Selled selled = selledDao.querySelledLastPriceBySingleId(singleId);
+		if(selled == null)
+			return "0.00";
+		return String.format("%.02f", selled.getSellingPrice());
+	}
+	
+	/**
 	 * 根据入库Id查询所有售出记录（含已损坏，补损记录）
 	 * @param StoreId
 	 * @return

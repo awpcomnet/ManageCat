@@ -34,7 +34,6 @@ Ext.define("MIS.view.selled.SelledGrid", {
 			    { header: '邮寄主单号', dataIndex: 'headTrackingNumber', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '批次号', dataIndex: 'batchNo', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '国外邮寄单号', dataIndex: 'trackingNumber', sortable: true, width: 10, align: "center", hidden : true},
-			    { header: '实际成本', dataIndex: 'unitCost', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '单个利润', dataIndex: 'profit', sortable: true, width: 10, align: "center", hidden : true, renderer: function (value, rowindex, record, column) {
 			    	var profit = record.raw.sellingPrice - record.raw.unitCost - Number.parseFloat(record.raw.refund);
 			    	return profit > 0 ? profit.toFixed(2) : "--";
@@ -59,6 +58,7 @@ Ext.define("MIS.view.selled.SelledGrid", {
                 	decimalPrecision: 2,
                 	xtype: 'numberfield'
                 }},
+                { header: '实际成本', dataIndex: 'unitCost', sortable: true, width: 10, align: "center"},
 			    { header: '售价(￥)', dataIndex: 'sellingPrice', sortable: true, width: 10, align: "center", editor:{ 
                 	decimalPrecision: 2,
                 	xtype: 'numberfield'

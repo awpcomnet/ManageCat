@@ -42,6 +42,10 @@ public class StoreController {
 	
 	@RequestMapping("/add")
 	public Srm addStore(Store store){
+		//参数处理
+		if(store.getPlanSellPrice() == null || "".equals(store.getPlanSellPrice()))
+			store.setPlanSellPrice("-1");
+		
 		storeService.addStore(store);
 		return new Srm().setResultCode("0").setResultMessage("添加入库清单成功");
 	}
@@ -60,6 +64,10 @@ public class StoreController {
 	
 	@RequestMapping("/modify")
 	public Srm modifyStore(Store store){
+		//参数处理
+		if(store.getPlanSellPrice() == null || "".equals(store.getPlanSellPrice()))
+			store.setPlanSellPrice("-1");
+		
 		storeService.updateStore(store);
 		return new Srm().setResultCode("0").setResultMessage("修改仓库记录成功");
 	}

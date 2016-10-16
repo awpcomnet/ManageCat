@@ -36,6 +36,9 @@ Ext.define("MIS.view.storage.StorageGrid", {
 			    { header: '批次号', dataIndex: 'batchNo', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '国外邮寄单号', dataIndex: 'trackingNumber', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '原下单数量', dataIndex: 'num', sortable: true, width: 10, align: "center", hidden : true},
+			    { header: '预计售价(￥)', dataIndex: 'planSellPrice', sortable: true, width: 10, align: "center", hidden : true, renderer: function (value, rowindex, record, column) {
+			    	return value == '-1' ? '--' : value;
+                }},
 			    { header: '实际单价(￥)', dataIndex: 'unitRmb', sortable: true, width: 10, align: "center"},
 			    { header: '实际单个邮费(￥)', dataIndex: 'unitPostage', sortable: true, width: 10, align: "center"},
 			    { header: '实际成本(￥)', dataIndex: 'unitCost', sortable: true, width: 10, align: "center"},
@@ -169,6 +172,8 @@ Ext.define("MIS.view.storage.StorageGrid", {
         			var form = component.down("form");
                     var params = Ext.clone(this.extraData);
     				form.getForm().setValues(params);
+    				
+    				component.down("numberfield[name=planSellPrice]").setValue(params.planSellPrice == '-1' ? '':params.planSellPrice);
     			}
         	}
         });
@@ -266,15 +271,17 @@ Ext.define("MIS.view.storage.StorageGrid", {
         			component.down("textarea[name=remark]").setValue(selections[0].raw.remark);
         			component.down("textfield[name=storeId]").setValue(selections[0].raw.id);
         			component.down("numberfield[name=rate]").setValue(15);
-        			
-        			//查询最新售价
+        			debugger;
+        			//查询推荐售价
         			Ext.Ajax.request({
-                    	url: "/selled/lastPrice",
+                    	url: "/selled/RecommendPrice",
                     	params: {
+                    		storeId:  selections[0].raw.id,
                     		singleId: selections[0].raw.singleId
                     	},
                     	success: function(conn, request, option, eOpts){
                     		var result = Ext.JSON.decode(conn.responseText, true);
+                    		debugger;
                     		if(result.resultCode == 0){
                     			component.down("numberfield[name=sellingPrice]").setValue(result.results[0].lastPrice);
                     			component.down("numberfield[name=sellingPriceReal]").setValue(result.results[0].lastPrice);

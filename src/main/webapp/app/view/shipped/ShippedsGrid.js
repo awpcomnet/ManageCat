@@ -295,6 +295,22 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
         			component.down("textarea[name=remark]").setValue(selections[0].raw.remark);
         			component.down("textfield[name=shippedId]").setValue(selections[0].raw.id);
         			component.down("numberfield[name=rate]").setValue(selections[0].raw.rate);
+        			component.down("textfield[name=singleId]").setValue(selections[0].raw.singleId);
+        			
+        			//查询最近售价
+        			Ext.Ajax.request({
+                    	url: "/selled/lastPrice",
+                    	params: {
+                    		singleId: selections[0].raw.singleId
+                    	},
+                    	success: function(conn, request, option, eOpts){
+                    		var result = Ext.JSON.decode(conn.responseText, true);
+                    		if(result.resultCode == 0){
+                    			component.down("numberfield[name=planSellPrice]").setValue(result.results[0].lastPrice);
+                    		}
+                    	}
+                    	
+                    });
     			}
         	}
         });

@@ -93,4 +93,21 @@ public class SelledController {
 		list.add(map);
 		return new Srm().setResultCode("0").setResultMessage("查询售出最新价格成功").addAll(list);
 	}
+	
+	@RequestMapping("/RecommendPrice")
+	public Srm querySingleRecommendSellPrice(Selled selled){
+		if(selled == null || selled.getSingleId() == null)
+			return new Srm().setResultCode("1").setResultMessage("参数为空");
+		if(selled == null || selled.getStoreId() == null)
+			return new Srm().setResultCode("1").setResultMessage("参数为空");
+		
+		String recommendPrice = selledService.queryRecommendPrice(selled.getStoreId(), selled.getSingleId());
+		
+		List<Map<String, String>> list = Lists.newArrayList();
+		Map<String, String> map = Maps.newHashMap();
+		map.put("lastPrice", recommendPrice);
+		
+		list.add(map);
+		return new Srm().setResultCode("0").setResultMessage("查询推荐售价成功").addAll(list);
+	}
 }

@@ -125,7 +125,16 @@ Ext.define("MIS.view.shipped.StorageAdd", {
         xtype: "numberfield",
         allowBlank: true,
         decimalPrecision: 2,
-        colspan: 2,
+        colspan: 1,
+        editable:true
+	}, {
+		fieldLabel: "预计售价(￥)",
+        name: "planSellPrice",
+        xtype: "numberfield",
+        allowBlank: true,
+        decimalPrecision: 2,
+        minValue: 0,
+        colspan: 1,
         editable:true
 	}, {
 		fieldLabel: "备注",
@@ -137,9 +146,43 @@ Ext.define("MIS.view.shipped.StorageAdd", {
     }, {
         name: "shippedId",
         hidden: true
+    }, {
+        name: "singleId",
+        hidden: true
     }],
-	
-	buttons: [{
+    
+	buttons: [
+	    /*{
+		text: "售价预计",
+		handler: function(component){
+			var storageadd = component.up("storageadd");
+			
+			var singleId = storageadd.down("textfield[name=singleId]").getValue().trim();
+			
+			var params = {
+				singleId: singleId
+			}
+			
+			Ext.Ajax.request({
+				url: "/selled/lastPrice",
+				params: params,
+				success: function(conn, request, option, eOpts){
+					var result = Ext.JSON.decode(conn.responseText, true);
+					if(result.resultCode != 0){
+						//不需要提醒
+						//Ext.MessageBox.alert("售价预计失败", "原因:" + result.resultMessage);
+					} else {
+						storageadd.down("numberfield[name=planSellPrice]").setValue(result.results[0].lastPrice);
+					}
+				},
+				failure: function (conn, request, option, eOpts) {
+                    Ext.MessageBox.alert("服务器繁忙, 稍后重试!");
+                }
+				
+			});
+		}
+	},*/
+	{
 		text: "计算邮费",
 		handler: function(component){
 			var storageadd = component.up("storageadd");

@@ -95,6 +95,9 @@ Ext.define("MIS.model.storage.Storage", {
 	}, {
 		name: "batchNo",
 		type: "string"
+	}, {
+		name: "planSellPrice",
+		type: "string"
 	}]
 });
 
