@@ -830,6 +830,10 @@ Ext.ClassManager.addNameAlternateMappings({
   "MIS.Application": [],
   "MIS.common.CurrentUser": [],
   "MIS.common.DictManager": [],
+  "MIS.common.MonthField": [
+    "Ext.form.MonthField",
+    "Ext.form.Month"
+  ],
   "MIS.controller.Main": [],
   "MIS.controller.batch.BatchController": [],
   "MIS.controller.brand.BrandController": [],
@@ -2004,6 +2008,9 @@ Ext.ClassManager.addNameAliasMappings({
   "MIS.Application": [],
   "MIS.common.CurrentUser": [],
   "MIS.common.DictManager": [],
+  "MIS.common.MonthField": [
+    "widget.monthfield"
+  ],
   "MIS.controller.Main": [],
   "MIS.controller.batch.BatchController": [],
   "MIS.controller.brand.BrandController": [],
