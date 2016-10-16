@@ -240,7 +240,7 @@ Ext.define("MIS.view.storage.StorageGrid", {
         	id: "selledaddwindow",
         	extraData: selections[0].raw,
         	renderTo: storageview.getEl(),
-        	height: 315,
+        	height: 380,
         	width: 580,
         	layout: "fit",
         	closeAction: "destroy",
@@ -277,6 +277,7 @@ Ext.define("MIS.view.storage.StorageGrid", {
                     		var result = Ext.JSON.decode(conn.responseText, true);
                     		if(result.resultCode == 0){
                     			component.down("numberfield[name=sellingPrice]").setValue(result.results[0].lastPrice);
+                    			component.down("numberfield[name=sellingPriceReal]").setValue(result.results[0].lastPrice);
                     		}
                     	}
                     	

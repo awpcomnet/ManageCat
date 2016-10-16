@@ -42,6 +42,28 @@ Ext.define("MIS.view.storage.SelledAdd", {
         colspan: 1,
         anchor: "55%",
         minValue: 1,
+        listeners : {
+   	       change : function(field,newValue,oldValue){
+   	    	   //售出价格（显示框）
+  	    	   var sellingPrice = Ext.ComponentQuery.query("selledadd numberfield[name=sellingPrice]")[0];
+  	    	   
+  	    	   //售出价格(隐藏框)
+  	    	   var sellingPriceReal = Ext.ComponentQuery.query("selledadd numberfield[name=sellingPriceReal]")[0].getValue();
+  	    	   if(sellingPriceReal == '' || sellingPriceReal == null || sellingPriceReal < 0)
+  	    		 sellingPriceReal = 0;
+   	    	   
+   	    	   //售出数量
+  	    	   if(newValue == '' || newValue == null || newValue < 1)
+ 	    		   newValue = 1;
+  	    	   
+  	    	   //包邮费用
+  	    	   var byfy = Ext.ComponentQuery.query("selledadd numberfield[name=byfy]")[0].getValue();
+	    	   if(byfy == '' || byfy == null || byfy < 0)
+	    		   byfy = 0;
+  	    	   
+   	    	   sellingPrice.setValue(Number.parseFloat(sellingPriceReal)-(Number.parseFloat(byfy)/Number.parseInt(newValue)));
+   	       }
+   		},
         editable:true
     }, {
 		fieldLabel: "单个售价(￥)",
@@ -51,6 +73,34 @@ Ext.define("MIS.view.storage.SelledAdd", {
         anchor: "55%",
         minValue: 0,
         allowBlank: true,
+        listeners : {
+        		blur : function(field,newValue,oldValue){
+    	    	   //售出价格（显示框）
+        		   var sellingPriceV = field.getValue();
+    	    	   if(sellingPriceV == '' || sellingPriceV == null || sellingPriceV < 0)
+    	    		   sellingPriceV = 0;
+    	    	   
+    	    	   //设置售出价格（隐藏框）
+    	    	   var sellingPriceFrame = Ext.ComponentQuery.query("selledadd numberfield[name=sellingPriceReal]")[0];
+    	    	   sellingPriceFrame.setValue(sellingPriceV);
+    	    	   
+	   	    	   //售出价格(隐藏框)
+	   	    	   var sellingPriceReal = sellingPriceFrame.getValue();
+	   	    	   if(sellingPriceReal == '' || sellingPriceReal == null || sellingPriceReal < 0)
+	   	    		 sellingPriceReal = 0;
+    	    	   
+    	    	   //售出数量
+	   	    	   var sellNum = Ext.ComponentQuery.query("selledadd numberfield[name=sellNum]")[0].getValue();
+	  	    	   if(sellNum == '' || sellNum == null || sellNum < 1)
+	  	    		   sellNum = 1;
+   	    	   
+	   	    	   //包邮费用
+	   	    	   var byfy = Ext.ComponentQuery.query("selledadd numberfield[name=byfy]")[0].getValue();
+	 	    	   if(byfy == '' || byfy == null || byfy < 0)
+	 	    		   byfy = 0;
+	 	    	   field.setValue(Number.parseFloat(sellingPriceReal)-(Number.parseFloat(byfy)/Number.parseInt(sellNum)));
+    	       }
+    		},
         editable:true
     }, {
 		xtype: 'datefield',
@@ -61,13 +111,53 @@ Ext.define("MIS.view.storage.SelledAdd", {
         value: new Date(),
         editable:false
 	}, {
-		fieldLabel: "涨幅(%)",
-        name: "rate",
+		fieldLabel: "包邮费用",
+        name: "byfy",
         xtype: "numberfield",
         colspan: 1,
         anchor: "55%",
         minValue: 0,
+        listeners : {
+  	       change : function(field,newValue,oldValue){
+  	    	   //售出价格（显示框）
+  	    	   var sellingPrice = Ext.ComponentQuery.query("selledadd numberfield[name=sellingPrice]")[0];
+  	    	   
+  	    	   //售出价格(隐藏框)
+  	    	   var sellingPriceReal = Ext.ComponentQuery.query("selledadd numberfield[name=sellingPriceReal]")[0].getValue();
+  	    	   if(sellingPriceReal == '' || sellingPriceReal == null || sellingPriceReal < 0)
+  	    		 sellingPriceReal = 0;
+  	    	   
+  	    	   //包邮邮费
+  	    	   if(newValue == '' || newValue == null || newValue < 0)
+	    		   newValue = 0;
+  	    	   
+  	    	   //售出数量
+  	    	   var sellNum = Ext.ComponentQuery.query("selledadd numberfield[name=sellNum]")[0].getValue();
+  	    	   if(sellNum == '' || sellNum == null || sellNum < 1)
+  	    		   sellNum = 1;
+  	    	   
+  	    	   //设置售价
+  	    	   sellingPrice.setValue(Number.parseFloat(sellingPriceReal)-(Number.parseFloat(newValue)/Number.parseInt(sellNum)));
+  	       }
+  		},
         editable:true
+    }, {
+		fieldLabel: "涨幅(%)",
+        name: "rate",
+        xtype: "numberfield",
+        colspan: 2,
+        anchor: "55%",
+        minValue: 0,
+        editable:true
+    }, {
+		fieldLabel: "",
+        name: "sellingPriceReal",
+        xtype: "numberfield",
+        colspan: 1,
+        anchor: "55%",
+        minValue: 0,
+        editable:false,
+        hidden: true
     }, {
 		fieldLabel: "备注",
 	    name: "remark",
@@ -75,6 +165,14 @@ Ext.define("MIS.view.storage.SelledAdd", {
 	    colspan: 2,
         width: 540,
 	    editable:true
+    }, {
+		fieldLabel: "",
+	    name: "remarkReal",
+	    xtype: "textarea",
+	    colspan: 2,
+        width: 540,
+	    editable:false,
+	    hidden: true
     }, {
         name: "storeId",
         hidden: true
