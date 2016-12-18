@@ -33,6 +33,7 @@
 		<result property="orderAddrName" column="order_addr_name"/>
 		<result property="rate" column="rate"/>
 		<result property="currency" column="currency"/>
+		<result property="specification" column="specification"/>
 	</resultMap>
 	
 	<!-- 添加下单清单 -->
@@ -113,6 +114,7 @@
 	,tb.brand_name as brand_name
     ,tse.series_name as series_name
     ,tsp.single_name as single_name
+    ,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename
 	,tsp.single_ename as single_ename
 	,t.batch_no, t.rate, t.currency 
@@ -168,6 +170,7 @@
 	,tb.brand_name as brand_name
     ,tse.series_name as series_name
     ,tsp.single_name as single_name
+    ,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename
 	,tsp.single_ename as single_ename
 	
@@ -186,6 +189,7 @@
 	,tb.brand_name as brand_name
     ,tse.series_name as series_name
     ,tsp.single_name as single_name
+    ,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename
 	,tsp.single_ename as single_ename
 	

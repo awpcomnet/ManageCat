@@ -95,6 +95,9 @@ Ext.define("MIS.model.selled.Selled", {
 	}, {
 		name: "batchNo",
 		type: "string"
+	}, {
+		name: "specification",
+		type: "string"
 	}]
 });
 

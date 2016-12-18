@@ -38,6 +38,7 @@ public class Check implements Serializable{
 	
 	private String transferCompanyName;//转运公司
 	private String orderAddrName;//下单网站
+	private String specification;//规格
 	
 	public Integer getId() {
 		return id;
@@ -263,6 +264,14 @@ public class Check implements Serializable{
 		this.currency = currency;
 	}
 
+	public String getSpecification() {
+		return specification;
+	}
+
+	public void setSpecification(String specification) {
+		this.specification = specification;
+	}
+
 	@Override
 	public String toString() {
 		return "Check [id=" + id + ", trackingNumber=" + trackingNumber
@@ -279,7 +288,8 @@ public class Check implements Serializable{
 				+ seriesName + ", singleName=" + singleName + ", brandEname="
 				+ brandEname + ", singleEname=" + singleEname
 				+ ", transferCompanyName=" + transferCompanyName
-				+ ", orderAddrName=" + orderAddrName + "]";
+				+ ", orderAddrName=" + orderAddrName + ", specification="
+				+ specification + "]";
 	}
 
 	private static final long serialVersionUID = -935729869280274039L;

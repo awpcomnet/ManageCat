@@ -95,6 +95,9 @@ Ext.define("MIS.model.shipped.Shipped", {
 	}, {
 		name: "currency",
 		type: "int"
+	}, {
+		name: "specification",
+		type: "string"
 	}]
 });
 

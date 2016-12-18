@@ -38,6 +38,8 @@
 		<result property="batchNo" column="batch_no"/>
 		<!-- 新加字段 planSellPrice -20161016 -->
 		<result property="planSellPrice" column="plan_sell_price"/>
+		<!-- 新加字段specification 20161218 -->
+		<result property="specification" column="specification"/>
 	</resultMap>
 	
 	<!-- 添加仓库信息 -->
@@ -135,6 +137,7 @@
 	<select id="queryStore" resultMap="StoreResultMap">
 	select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
     , (t.num - IFNULL(t.sell_num,0)) as residue_num 
     
@@ -203,6 +206,7 @@
 	<select id="queryStoreById" parameterType="java.lang.Integer" resultMap="StoreResultMap">
 	select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
     , (t.num - IFNULL(t.sell_num,0)) as residue_num 
     , plan_sell_price
@@ -217,6 +221,7 @@
 	<select id="queryStoreByCheckId" parameterType="java.lang.Integer" resultMap="StoreResultMap">
 	select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
     , (t.num - IFNULL(t.sell_num,0)) as residue_num 
     , t.plan_sell_price
@@ -231,6 +236,7 @@
 	<select id="queryStoreByShippedId" parameterType="java.lang.Integer" resultMap="StoreResultMap">
 	select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
     , (t.num - IFNULL(t.sell_num,0)) as residue_num 
     , t.plan_sell_price
@@ -245,6 +251,7 @@
 	<select id="queryStoreByIds" resultMap="StoreResultMap">
 	select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
     , (t.num - IFNULL(t.sell_num,0)) as residue_num 
     , t.plan_sell_price
@@ -260,6 +267,7 @@
 	<select id="queryStoreByCheckIds" resultMap="StoreResultMap">
 	select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
     , (t.num - IFNULL(t.sell_num,0)) as residue_num 
     , t.plan_sell_price
@@ -275,6 +283,7 @@
 	<select id="queryStoreForTimeQuantum" resultMap="StoreResultMap">
 	select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
     , (t.num - IFNULL(t.sell_num,0)) as residue_num 
     , t.plan_sell_price
@@ -330,6 +339,7 @@
 	<select id="queryStoreForValidity" resultMap="StoreResultMap">
 	select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
     , (t.num - IFNULL(t.sell_num,0)) as residue_num 
     , t.plan_sell_price

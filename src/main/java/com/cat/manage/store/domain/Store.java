@@ -41,6 +41,7 @@ public class Store implements Serializable{
 	private String headTrackingNumber;//主邮寄单号
 	private String batchNo;//批次号
 	private String planSellPrice;//预计售价
+	private String specification;//规格
 	
 	public Integer getId() {
 		return id;
@@ -288,6 +289,14 @@ public class Store implements Serializable{
 
 	public void setPlanSellPrice(String planSellPrice) {
 		this.planSellPrice = planSellPrice;
+	}
+
+	public String getSpecification() {
+		return specification;
+	}
+
+	public void setSpecification(String specification) {
+		this.specification = specification;
 	}
 
 	@Override

@@ -36,6 +36,8 @@
 		<result property="trackingNumber" column="tracking_number"/>
 		<result property="headTrackingNumber" column="head_tracking_number"/>
 		<result property="batchNo" column="batch_no"/>
+		<!-- 新加字段 specification 20161218 -->
+		<result property="specification" column="specification"/>
 	</resultMap>
 	
 	
@@ -145,6 +147,7 @@
 	<select id="querySelled" resultMap="SelledResultMap">
 	select t.id, t.store_id, t.check_id, t.brand_id, t.series_id, t.single_id, t.sell_num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.selling_price, IFNULL(t.refund, 0) as refund, t.remark, t.sell_time, t.selled_status, t.create_date, t.update_date, DATE_FORMAT(t.create_date,'%Y年%m月%d日 %T') as createDateFormat, DATE_FORMAT(t.update_date,'%Y年%m月%d日 %T') as updateDateFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
 	,FORMAT((IFNULL(t.sell_num,0)*IFNULL(t.selling_price,0)), 2) as sumPrice
 	,tc.tracking_number , tc.batch_no
@@ -195,6 +198,7 @@
 	<select id="querySelledByIds" resultMap="SelledResultMap">
 	select t.id, t.store_id, t.check_id, t.brand_id, t.series_id, t.single_id, t.sell_num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.selling_price, IFNULL(t.refund, 0) as refund, t.remark, t.sell_time, t.selled_status, t.create_date, t.update_date, DATE_FORMAT(t.create_date,'%Y年%m月%d日 %T') as createDateFormat, DATE_FORMAT(t.update_date,'%Y年%m月%d日 %T') as updateDateFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
 	,(IFNULL(sell_num,0)*IFNULL(selling_price,0)) as sumPrice
 	,tc.tracking_number , tc.batch_no
@@ -212,6 +216,7 @@
 	<select id="querySelledById" parameterType="java.lang.Integer" resultMap="SelledResultMap">
 	select t.id, t.store_id, t.check_id, t.brand_id, t.series_id, t.single_id, t.sell_num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.selling_price, IFNULL(t.refund, 0) as refund, t.remark, t.sell_time, t.selled_status, t.create_date, t.update_date, DATE_FORMAT(t.create_date,'%Y年%m月%d日 %T') as createDateFormat, DATE_FORMAT(t.update_date,'%Y年%m月%d日 %T') as updateDateFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
 	,(IFNULL(sell_num,0)*IFNULL(selling_price,0)) as sumPrice
 	,tc.tracking_number , tc.batch_no
@@ -228,6 +233,7 @@
 	<select id="querySelledByCheckId" parameterType="java.lang.Integer" resultMap="SelledResultMap">
 	select t.id, t.store_id, t.check_id, t.brand_id, t.series_id, t.single_id, t.sell_num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.selling_price, IFNULL(t.refund, 0) as refund, t.remark, t.sell_time, t.selled_status, t.create_date, t.update_date, DATE_FORMAT(t.create_date,'%Y年%m月%d日 %T') as createDateFormat, DATE_FORMAT(t.update_date,'%Y年%m月%d日 %T') as updateDateFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
 	,(IFNULL(sell_num,0)*IFNULL(selling_price,0)) as sumPrice
 	,tc.tracking_number , tc.batch_no
@@ -244,6 +250,7 @@
 	<select id="querySelledByShippedId" parameterType="java.lang.Integer" resultMap="SelledResultMap">
 	select t.id, t.store_id, t.check_id, t.brand_id, t.series_id, t.single_id, t.sell_num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.selling_price, IFNULL(t.refund, 0) as refund, t.remark, t.sell_time, t.selled_status, t.create_date, t.update_date, DATE_FORMAT(t.create_date,'%Y年%m月%d日 %T') as createDateFormat, DATE_FORMAT(t.update_date,'%Y年%m月%d日 %T') as updateDateFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
 	,(IFNULL(sell_num,0)*IFNULL(selling_price,0)) as sumPrice
 	,tc.tracking_number , tc.batch_no
@@ -260,6 +267,7 @@
 	<select id="querySelledByCheckIds" resultMap="SelledResultMap">
 	select t.id, t.store_id, t.check_id, t.brand_id, t.series_id, t.single_id, t.sell_num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.selling_price, IFNULL(t.refund, 0) as refund, t.remark, t.sell_time, t.selled_status, t.create_date, t.update_date, DATE_FORMAT(t.create_date,'%Y年%m月%d日 %T') as createDateFormat, DATE_FORMAT(t.update_date,'%Y年%m月%d日 %T') as updateDateFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
 	,(IFNULL(sell_num,0)*IFNULL(selling_price,0)) as sumPrice
 	,tc.tracking_number , tc.batch_no

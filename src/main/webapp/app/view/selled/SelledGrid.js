@@ -53,6 +53,9 @@ Ext.define("MIS.view.selled.SelledGrid", {
                 }},
 			    
 			    { header: '单品名称', dataIndex: 'singleName', sortable: true, width: 10, align: "center"},
+			    { header: '规格', dataIndex: 'specification', sortable: true, width: 5, align: "center", renderer: function (value, rowindex, record, column) {
+			    	return value == ' ' ? '--' : value;
+                }},
 			    { header: '数量', dataIndex: 'sellNum', sortable: true, width: 5, align: "center"},
 			    { header: '补损金额(￥)', dataIndex: 'refund', sortable: true, width: 10, align: "center", editor:{ 
                 	decimalPrecision: 2,

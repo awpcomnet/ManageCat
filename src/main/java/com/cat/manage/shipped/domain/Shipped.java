@@ -40,6 +40,7 @@ public class Shipped implements Serializable{
 	private String brandEname;//品牌名称
 	private String singleEname;//单品名称
 	private String sumPrice;//总价
+	private String specification;//规格
 	
 	public Integer getId() {
 		return id;
@@ -279,6 +280,14 @@ public class Shipped implements Serializable{
 
 	public void setCurrency(Integer currency) {
 		this.currency = currency;
+	}
+
+	public String getSpecification() {
+		return specification;
+	}
+
+	public void setSpecification(String specification) {
+		this.specification = specification;
 	}
 
 	@Override

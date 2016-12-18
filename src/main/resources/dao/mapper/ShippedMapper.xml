@@ -36,6 +36,7 @@
 		<result property="weight" column="weight"/>
 		<result property="rate" column="rate"/>
 		<result property="currency" column="currency"/>
+		<result property="specification" column="specification"/>
 	</resultMap>
 	
 	<!-- 添加邮寄清单（子单） -->
@@ -159,7 +160,9 @@
 	<!-- 查询邮寄清单子单信息 -->
 	<select id="queryShipped" resultMap="ShippedResultMap">
 	select t.id, t.head_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.store_num, t.unit_price, t.payby, t.plan_rmb, t.plan_postage, t.plan_cost, t.remark, t.shipped_status, t.create_date, t.update_date, IFNULL(t.weight, 0) as weight, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
-	,tb.brand_name as brand_name,tse.series_name as series_name ,tsp.single_name as single_name ,tb.brand_ename as brand_ename
+	,tb.brand_name as brand_name,tse.series_name as series_name ,tsp.single_name as single_name 
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
+	,tb.brand_ename as brand_ename
     ,tsp.single_ename as single_ename, FORMAT(t.num*t.unit_price ,2) as sumprice
     ,tc.rate, tc.currency
 	from t_shipped t
@@ -192,7 +195,9 @@
 	<!-- 根据邮寄清单主单唯一编号查询子订单 -->
 	<select id="queryShippedByHeadId" resultMap="ShippedResultMap">
 	select t.id, t.head_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.store_num, t.unit_price, t.payby, t.plan_rmb, t.plan_postage, t.plan_cost, t.remark, t.shipped_status, t.create_date, t.update_date, IFNULL(t.weight, 0) as weight, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
-	,tb.brand_name as brand_name,tse.series_name as series_name ,tsp.single_name as single_name ,tb.brand_ename as brand_ename
+	,tb.brand_name as brand_name,tse.series_name as series_name ,tsp.single_name as single_name 
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
+	,tb.brand_ename as brand_ename
     ,tsp.single_ename as single_ename, FORMAT(t.num*t.unit_price ,2) as sumprice
     ,tc.rate, tc.currency
 	from t_shipped t
@@ -206,7 +211,9 @@
 	<!-- 根据邮寄清单子单唯一编号查询子单信息 -->
 	<select id="queryShippedByIds" resultMap="ShippedResultMap">
 	select t.id, t.head_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.store_num, t.unit_price, t.payby, t.plan_rmb, t.plan_postage, t.plan_cost, t.remark, t.shipped_status, t.create_date, t.update_date, IFNULL(t.weight, 0) as weight, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
-	,tb.brand_name as brand_name,tse.series_name as series_name ,tsp.single_name as single_name ,tb.brand_ename as brand_ename
+	,tb.brand_name as brand_name,tse.series_name as series_name ,tsp.single_name as single_name 
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
+	,tb.brand_ename as brand_ename
     ,tsp.single_ename as single_ename, FORMAT(t.num*t.unit_price ,2) as sumprice
     ,tc.rate, tc.currency
 	from t_shipped t
@@ -221,7 +228,9 @@
 	<!-- 根据邮寄清单子单唯一编号查询单条信息 -->
 	<select id="queryShippedById" parameterType="java.lang.Integer" resultMap="ShippedResultMap">
 	select t.id, t.head_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.store_num, t.unit_price, t.payby, t.plan_rmb, t.plan_postage, t.plan_cost, t.remark, t.shipped_status, t.create_date, t.update_date, IFNULL(t.weight, 0) as weight, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
-	,tb.brand_name as brand_name,tse.series_name as series_name ,tsp.single_name as single_name ,tb.brand_ename as brand_ename
+	,tb.brand_name as brand_name,tse.series_name as series_name ,tsp.single_name as single_name 
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
+	,tb.brand_ename as brand_ename
     ,tsp.single_ename as single_ename, FORMAT(t.num*t.unit_price ,2) as sumprice
     ,tc.rate, tc.currency
 	from t_shipped t
@@ -242,7 +251,9 @@
 	<!-- 用于同步的邮寄清单查询，仅查询 品牌 ，系列 ， 单品，唯一编号，下单唯一编号 -->
 	<select id="queryShippedForSync" resultMap="ShippedResultMap">
 	select t.id, t.head_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.store_num, t.unit_price, t.payby, t.plan_rmb, t.plan_postage, t.plan_cost, t.remark, t.shipped_status, t.create_date, t.update_date, IFNULL(t.weight, 0) as weight, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
-	,tb.brand_name as brand_name,tse.series_name as series_name ,tsp.single_name as single_name ,tb.brand_ename as brand_ename
+	,tb.brand_name as brand_name,tse.series_name as series_name ,tsp.single_name as single_name 
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
+	,tb.brand_ename as brand_ename
     ,tsp.single_ename as single_ename, FORMAT(t.num*t.unit_price ,2) as sumprice
 	from t_shipped t
 	left join t_brand tb on tb.brand_id = t.brand_id
@@ -282,7 +293,9 @@
 	<!-- 根据下单清单唯一编号查询邮寄清单 -->
 	<select id="queryShippedByCheckId" parameterType="java.lang.Integer" resultMap="ShippedResultMap">
 	select t.id, t.head_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.store_num, t.unit_price, t.payby, t.plan_rmb, t.plan_postage, t.plan_cost, t.remark, t.shipped_status, t.create_date, t.update_date, IFNULL(t.weight, 0) as weight, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
-	,tb.brand_name as brand_name,tse.series_name as series_name ,tsp.single_name as single_name ,tb.brand_ename as brand_ename
+	,tb.brand_name as brand_name,tse.series_name as series_name ,tsp.single_name as single_name 
+	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
+	,tb.brand_ename as brand_ename
     ,tsp.single_ename as single_ename, FORMAT(t.num*t.unit_price ,2) as sumprice
     ,tc.rate, tc.currency
 	from t_shipped t

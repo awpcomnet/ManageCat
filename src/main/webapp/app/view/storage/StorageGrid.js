@@ -32,6 +32,9 @@ Ext.define("MIS.view.storage.StorageGrid", {
 			    { header: '品牌名称', dataIndex: 'brandEname', sortable: true, width: 15, align: "center"},
 			    { header: '系列名称', dataIndex: 'seriesName', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '单品名称', dataIndex: 'singleName', sortable: true, width: 10, align: "center"},
+			    { header: '规格', dataIndex: 'specification', sortable: true, width: 5, align: "center", renderer: function (value, rowindex, record, column) {
+			    	return value == ' ' ? '--' : value;
+                }},
 			    { header: '邮寄主单号', dataIndex: 'headTrackingNumber', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '批次号', dataIndex: 'batchNo', sortable: true, width: 10, align: "center", hidden : true},
 			    { header: '国外邮寄单号', dataIndex: 'trackingNumber', sortable: true, width: 10, align: "center", hidden : true},

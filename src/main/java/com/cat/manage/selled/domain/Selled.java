@@ -41,6 +41,7 @@ public class Selled implements Serializable{
 	private String trackingNumber;//国外快递单号
 	private String headTrackingNumber;//主邮寄单号
 	private String batchNo;//批次号
+	private String specification;//规格
 	
 	public Integer getId() {
 		return id;
@@ -280,6 +281,14 @@ public class Selled implements Serializable{
 
 	public void setBatchNo(String batchNo) {
 		this.batchNo = batchNo;
+	}
+
+	public String getSpecification() {
+		return specification;
+	}
+
+	public void setSpecification(String specification) {
+		this.specification = specification;
 	}
 
 	@Override

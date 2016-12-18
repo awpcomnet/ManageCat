@@ -98,6 +98,9 @@ Ext.define("MIS.model.storage.Storage", {
 	}, {
 		name: "planSellPrice",
 		type: "string"
+	}, {
+		name: "specification",
+		type: "string"
 	}]
 });
 

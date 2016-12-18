@@ -86,6 +86,9 @@ Ext.define("MIS.model.check.Check", {
 	}, {
 		name: "currency",
 		type: "int"
+	}, {
+		name: "specification",
+		type: "string"
 	}]
 });
 

@@ -29,7 +29,7 @@ Ext.define("MIS.view.check.CheckGrid", {
 			loadMask: true,
 			
 			columns: [
-			    { header: '批次号', dataIndex: 'batchNo', sortable: true, width: 15, align: "center"},
+			    { header: '批次号', dataIndex: 'batchNo', sortable: true, width: 10, align: "center"},
 			    { header: '快递单号', dataIndex: 'trackingNumber', sortable: true, width: 15, align: "center"},
 			    { header: '下单时间', dataIndex: 'orderTime', sortable: true, width: 10, align: "center"},
 			    { header: '转运公司', dataIndex: 'transferCompany', sortable: true, width: 10, align: "center", renderer: function (value, rowindex, record, column) {
@@ -47,6 +47,9 @@ Ext.define("MIS.view.check.CheckGrid", {
 			    	return MIS.common.DictManager.getDictItemName("currency", value);
                 }},
 			    { header: '单品名称', dataIndex: 'singleName', sortable: true, width: 15, align: "center"},
+			    { header: '规格', dataIndex: 'specification', sortable: true, width: 6, align: "center", renderer: function (value, rowindex, record, column) {
+			    	return value == ' ' ? '--' : value;
+                }},
 			    { header: '数量', dataIndex: 'num', sortable: true, width: 5, align: "center"},
 			    { header: '单价($)', dataIndex: 'unitPrice', sortable: true, width: 10, align: "center"},
 			    { header: '总价($)', dataIndex: 'sumPrice', sortable: true, width: 10, align: "center"},

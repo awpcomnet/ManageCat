@@ -48,6 +48,9 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
 			    	return MIS.common.DictManager.getDictItemName("currency", value);
                 }},
                 { header: '单品', dataIndex: 'singleName', sortable: true, width: 10, align: "center"},
+                { header: '规格', dataIndex: 'specification', sortable: true, width: 8, align: "center", renderer: function (value, rowindex, record, column) {
+			    	return value == ' ' ? '--' : value;
+                }},
                 { header: '数量', dataIndex: 'num', sortable: true, width: 10, align: "center"},
                 { header: '入库数量', dataIndex: 'storeNum', sortable: true, width: 10, align: "center"},
                 { header: '下单单价($)', dataIndex: 'unitPrice', sortable: true, width: 10, align: "center"},
