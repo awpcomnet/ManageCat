@@ -56,7 +56,7 @@ public class BrandService {
 		Brand btemp = new Brand();
 		btemp.setBrandEname(brand.getBrandEname());
 		List<Brand> list = brandDao.queryBrandsAccurate(btemp);
-		if(list != null && list.size() >= 1)
+		if(list != null && list.size() > 1)
 			return false;
 		
 		brandDao.updateBrand(brand);
