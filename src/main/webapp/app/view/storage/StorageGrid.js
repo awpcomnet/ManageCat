@@ -42,6 +42,15 @@ Ext.define("MIS.view.storage.StorageGrid", {
 			    { header: '预计售价(￥)', dataIndex: 'planSellPrice', sortable: true, width: 10, align: "center", hidden : true, renderer: function (value, rowindex, record, column) {
 			    	return value == '-1' ? '--' : value;
                 }},
+                { header: '生产日期', dataIndex: 'dateOfManufactureFormat', sortable: true, width: 15, align: "center", hidden : true, renderer: function (value, rowindex, record, column) {
+			    	return value == '' ? '--' : value;
+                }},
+                { header: '有效时长（年）', dataIndex: 'qualityGuaranteePeriod', sortable: true, width: 15, align: "center", hidden : true, renderer: function (value, rowindex, record, column) {
+			    	return value == '' ? '--' : value;
+                }},
+                { header: '到期日期', dataIndex: 'periodOfValidityFormat', sortable: true, width: 15, align: "center", hidden : true, renderer: function (value, rowindex, record, column) {
+			    	return value == '' ? '--' : value;
+                }},
 			    { header: '实际单价(￥)', dataIndex: 'unitRmb', sortable: true, width: 10, align: "center"},
 			    { header: '实际单个邮费(￥)', dataIndex: 'unitPostage', sortable: true, width: 10, align: "center"},
 			    { header: '实际成本(￥)', dataIndex: 'unitCost', sortable: true, width: 10, align: "center"},
@@ -393,6 +402,9 @@ Ext.define("MIS.view.storage.StorageGrid", {
 	onExpandSearchClick: function(component){
 		var searchwindow = Ext.ComponentQuery.query("storageSearchpanel")[0];
     	if(searchwindow.isHidden()){
+    		var periodOfValidityFilter = Ext.ComponentQuery.query("storageSearchpanel combobox[name=periodOfValidityFilter]")[0];
+            var periodOfValidityFilterStore = periodOfValidityFilter.getStore();
+            periodOfValidityFilterStore.load();
     		searchwindow.show();
     	} else {
     		this.store.proxy.extraParams = {};

@@ -98,6 +98,21 @@ Ext.define("MIS.model.shipped.Shipped", {
 	}, {
 		name: "specification",
 		type: "string"
+	}, {
+		name: "dateOfManufacture",
+		type: "string"
+	}, {
+		name: "qualityGuaranteePeriod",
+		type: "string"
+	}, {
+		name: "periodOfValidity",
+		type: "string"
+	}, {
+		name: "dateOfManufactureFormat",
+		type: "string"
+	}, {
+		name: "periodOfValidityFormat",
+		type: "string"
 	}]
 });
 

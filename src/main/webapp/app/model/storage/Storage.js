@@ -101,6 +101,21 @@ Ext.define("MIS.model.storage.Storage", {
 	}, {
 		name: "specification",
 		type: "string"
+	}, {
+		name: "dateOfManufacture",
+		type: "string"
+	}, {
+		name: "qualityGuaranteePeriod",
+		type: "string"
+	}, {
+		name: "periodOfValidity",
+		type: "string"
+	}, {
+		name: "dateOfManufactureFormat",
+		type: "string"
+	}, {
+		name: "periodOfValidityFormat",
+		type: "string"
 	}]
 });
 

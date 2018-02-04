@@ -56,9 +56,18 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
                 { header: '下单单价($)', dataIndex: 'unitPrice', sortable: true, width: 10, align: "center"},
                 { header: '总价($)', dataIndex: 'sumPrice', sortable: true, width: 10, align: "center"},
                 { header: '付款人', dataIndex: 'payby', sortable: true, width: 10, align: "center"},
-                { header: '预计单价(￥)', dataIndex: 'planRmb', sortable: true, width: 10, align: "center"},
-                { header: '预计邮费(￥)', dataIndex: 'planPostage', sortable: true, width: 10, align: "center"},
-                { header: '预计成本(￥)', dataIndex: 'planCost', sortable: true, width: 10, align: "center"},
+                { header: '生产日期', dataIndex: 'dateOfManufactureFormat', sortable: true, width: 15, align: "center", renderer: function (value, rowindex, record, column) {
+			    	return value == '' ? '--' : value;
+                }},
+                { header: '有效时长（年）', dataIndex: 'qualityGuaranteePeriod', sortable: true, width: 15, align: "center", renderer: function (value, rowindex, record, column) {
+			    	return value == '-1' ? '--' : value;
+                }},
+                { header: '到期日期', dataIndex: 'periodOfValidityFormat', sortable: true, width: 15, align: "center", renderer: function (value, rowindex, record, column) {
+			    	return value == '' ? '--' : value;
+                }},
+                { header: '预计单价(￥)', dataIndex: 'planRmb', sortable: true, width: 10, align: "center", hidden : true},
+                { header: '预计邮费(￥)', dataIndex: 'planPostage', sortable: true, width: 10, align: "center", hidden : true},
+                { header: '预计成本(￥)', dataIndex: 'planCost', sortable: true, width: 10, align: "center", hidden : true},
                 { header: '备注', dataIndex: 'remark', sortable: true, width: 10, align: "center"},
 			    { header: '邮寄状态', dataIndex: 'shippedStatus', sortable: true, width: 10, align: "center", renderer: function (value, rowindex, record, column) {
 			    	return MIS.common.DictManager.getDictItemName("orderStatus", value);
@@ -112,6 +121,12 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
 					itemId: 'shippedstorecontinue',
 					scope: this,
 					handler: this.onStoreContinueClick
+				}, '-', {
+					iconCls: 'icon-random',
+					text: '分割订单',
+					itemId: 'divisionOrder',
+					scope: this,
+					handler: this.onDivisionOrderClick
 				}, '-', {
 					iconCls: 'icon-file-alt',
 					text: '邮寄清单',
@@ -189,11 +204,37 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
         			shippedsgridview.getEl().unmask();
         		},
         		beforerender: function () {
-        			
+        			var transferCompany = Ext.ComponentQuery.query("shippedsmodify combobox[name=qualityGuaranteePeriod]")[0];
+                    var transferCompanyStore = transferCompany.getStore();
+                    transferCompanyStore.load();
         		},
         		afterrender: function(component, eOpts){
         			var form = component.down("form");
                     var params = Ext.clone(this.extraData);
+                    var dateMode = Ext.ComponentQuery.query("shippedsmodify radiogroup[name=dateMode]")[0];
+                    var dateOfManufacture = Ext.ComponentQuery.query("shippedsmodify datefield[name=dateOfManufacture]")[0];
+					var qualityGuaranteePeriod = Ext.ComponentQuery.query("shippedsmodify combobox[name=qualityGuaranteePeriod]")[0];
+					var periodOfValidity = Ext.ComponentQuery.query("shippedsmodify datefield[name=periodOfValidity]")[0];
+					if(params.dateOfManufacture != '' && params.qualityGuaranteePeriod != ''){
+						var dateMode = Ext.ComponentQuery.query("shippedsmodify radiogroup[name=dateMode]")[0];
+						dateMode.colspan = 2;
+						params.rb = 2;
+						dateOfManufacture.show();
+						qualityGuaranteePeriod.show();
+					} else {
+						params.rb = 1;
+						periodOfValidity.show();
+					}
+					if(params.shippedStatus != '1'){
+						dateOfManufacture.disable();
+						qualityGuaranteePeriod.disable();
+						periodOfValidity.disable();
+						dateMode.disable();
+					}
+					if(params.qualityGuaranteePeriod == -1){
+						params.qualityGuaranteePeriod = '';
+					}
+					
     				form.getForm().setValues(params);
     			}
         	}
@@ -292,9 +333,6 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
         			component.down("numberfield[name=num]").setMaxValue(selections[0].raw.num - selections[0].raw.storeNum);
         			component.down("textfield[name=unitPrice]").setValue(selections[0].raw.unitPrice);
         			component.down("numberfield[name=weight]").setValue(selections[0].raw.weight);
-        			component.down("numberfield[name=unitRmb]").setValue(selections[0].raw.planRmb);
-        			component.down("numberfield[name=unitPostage]").setValue(selections[0].raw.planPostage);
-        			component.down("numberfield[name=unitCost]").setValue(selections[0].raw.planCost);
         			component.down("textarea[name=remark]").setValue(selections[0].raw.remark);
         			component.down("textfield[name=shippedId]").setValue(selections[0].raw.id);
         			component.down("numberfield[name=rate]").setValue(selections[0].raw.rate);
@@ -362,6 +400,64 @@ Ext.define("MIS.view.shipped.ShippedsGrid", {
         			component.down("textfield[name=storeNum]").setValue(selections[0].raw.storeNum);
         			component.down("numberfield[name=num]").setValue(selections[0].raw.num - selections[0].raw.storeNum);
         			component.down("numberfield[name=num]").setMaxValue(selections[0].raw.num - selections[0].raw.storeNum);
+        			component.down("textfield[name=shippedId]").setValue(selections[0].raw.id);
+    			}
+        	}
+        });
+    	editWindow.show();
+    },
+    
+    //TODO 
+    onDivisionOrderClick: function(component){
+    	var selections = this.getView().getSelectionModel().getSelection();
+    	var selectionNum = selections.length;
+    	if(selectionNum != 1){
+    		Ext.MessageBox.alert("请求失败", "请选择单条记录入库");
+    		return;
+    	}
+    	
+    	if(selections[0].raw.shippedStatus != 1 && selections[0].raw.shippedStatus != 7){
+    		var statusText = MIS.common.DictManager.getDictItemName("orderStatus", selections[0].raw.shippedStatus);
+        	Ext.MessageBox.alert("请求失败", "订单状态不为[已邮寄]或[部分入库],当前状态["+statusText+"]");
+            return;
+    	}
+    	
+    	var shippedgridview = Ext.ComponentQuery.query("shippedgrid")[0];
+    	var shippedsgridview = Ext.ComponentQuery.query("shippedsgrid")[0];
+    	shippedsgridview.getEl().mask();
+    	
+    	var editWindow = Ext.create("Ext.window.Window", {
+        	title: "["+selections[0].raw.singleName+"]订单分割信息",
+        	id: "divisionorderwindow",
+        	extraData: selections[0].raw,
+        	renderTo: shippedgridview.getEl(),
+        	height: 165,
+        	width: 580,
+        	layout: "fit",
+        	closeAction: "destroy",
+        	items: [{
+        		xtype: "divisionorder"
+        	}],
+        	listeners: {
+        		close: function(){
+        			shippedsgridview.getEl().unmask();
+        		},
+        		beforerender: function () {
+        			
+        		},
+        		afterrender: function(component, eOpts){
+        			component.down("textfield[name=checkNum]").setValue(selections[0].raw.num);
+        			component.down("textfield[name=storeNum]").setValue(selections[0].raw.storeNum);
+        			if(selections[0].raw.shippedStatus == 1){//已邮寄
+        				component.down("numberfield[name=divisionNum]").setValue(0);
+            			component.down("numberfield[name=divisionNum]").setMaxValue(selections[0].raw.num - selections[0].raw.storeNum - 1);
+            			component.down("textfield[name=maxDivisionNum]").setValue(selections[0].raw.num - selections[0].raw.storeNum - 1);
+        			}
+        			if(selections[0].raw.shippedStatus == 7){//部分入库
+        				component.down("numberfield[name=divisionNum]").setValue(1);
+            			component.down("numberfield[name=divisionNum]").setMaxValue(selections[0].raw.num - selections[0].raw.storeNum);
+            			component.down("textfield[name=maxDivisionNum]").setValue(selections[0].raw.num - selections[0].raw.storeNum);
+        			}
         			component.down("textfield[name=shippedId]").setValue(selections[0].raw.id);
     			}
         	}

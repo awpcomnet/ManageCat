@@ -51,11 +51,16 @@ public class StoreService {
 	public void addStore(Store store){
 		//验证邮寄清单子单是否存在
 		Integer shippedId = store.getShippedId();
+		Double rate = store.getRate();
 		
 		if(shippedId == null)
 			throw new BusinessException("1", "邮寄清单不存在");
 		
 		Shipped shipped = shippedService.queryShippedById(shippedId);
+		if(rate != null){
+			shipped.setRate(rate);
+		}
+		
 		if(shipped == null)
 			throw new BusinessException("1", "邮寄清单不存在");
 		

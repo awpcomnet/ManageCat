@@ -93,8 +93,8 @@ Ext.define("MIS.view.storage.StorageSearch", {
 	                		
 	                		trackingNumber = component.up("storageSearchpanel").down("textfield[name=trackingNumber]").getValue().trim(),
 	                		headTrackingNumber = component.up("storageSearchpanel").down("textfield[name=headTrackingNumber]").getValue().trim(),
-	                		batchNo = component.up("storageSearchpanel").down("textfield[name=batchNo]").getValue().trim();
-	                	
+	                		//batchNo = component.up("storageSearchpanel").down("textfield[name=batchNo]").getValue().trim();
+	                		periodOfValidityFilter = component.up("storageSearchpanel").down("combobox[name=periodOfValidityFilter]").getValue();
 	                	
 	                	
 	                	var params = storageStore.proxy.extraParams;
@@ -106,8 +106,8 @@ Ext.define("MIS.view.storage.StorageSearch", {
 	                	params.includeStatus = includeStatus;
 	                	params.trackingNumber = trackingNumber;
 	                	params.headTrackingNumber = headTrackingNumber;
-	                	params.batchNo = batchNo;
-	                	
+	                	//params.batchNo = batchNo;
+	                	params.periodOfValidityFilter = periodOfValidityFilter;
 	                	
 	                	// reload store
 	                	storageStore.reload();
@@ -259,10 +259,19 @@ Ext.define("MIS.view.storage.StorageSearch", {
 			}, {
 				margin: "5 10",
 				width: 170,
-				xtype: "textfield",
-				fieldLabel: "批次号",
+				xtype: "combobox",
+				fieldLabel: "有效期",
 				labelWidth: 60,
-				name: "batchNo",
+				name: "periodOfValidityFilter",
+				store: Ext.create("MIS.store.dict.DictQueryStore", {
+		        	dictcode: "periodOfValidityFilter"
+		        }),
+		        mode: "local",
+		        displayField: 'name',
+		        valueField: "value",
+		        allowBlank: true,
+		        value: '-1',
+		        editable:false,
 				anchor: "55%" 
 			}]
         	

@@ -40,12 +40,19 @@
 		<result property="planSellPrice" column="plan_sell_price"/>
 		<!-- 新加字段specification 20161218 -->
 		<result property="specification" column="specification"/>
+		<!-- 新增到期时间等字段 20180203 -->
+		<result property="dateOfManufacture" column="date_of_manufacture"/>
+		<result property="qualityGuaranteePeriod" column="quality_guarantee_period"/>
+		<result property="periodOfValidity" column="period_of_validity"/>
+		<result property="dateOfManufactureFormat" column="dateOfManufactureFormat"/>
+		<result property="periodOfValidityFormat" column="periodOfValidityFormat"/>
+		<result property="periodOfValidityFilter" column="periodOfValidityFilter"/>
 	</resultMap>
 	
 	<!-- 添加仓库信息 -->
 	<insert id="addStore">
-	insert into t_store(shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, store_time, store_status, create_date, update_date, plan_sell_price)
-	values(#{param1.id}, #{param1.checkId}, #{param1.trackingNumber}, #{param1.transferCompany}, #{param1.brandId}, #{param1.seriesId}, #{param1.singleId}, #{param2.num}, #{param1.unitPrice}, #{param1.payby}, #{param2.unitRmb}, #{param2.unitPostage}, #{param2.unitCost}, #{param2.remark}, #{param2.storeTime}, #{param2.storeStatus}, now(), now(), #{param2.planSellPrice})
+	insert into t_store(shipped_id, check_id, tracking_number, transfer_company, brand_id, series_id, single_id, date_of_manufacture, quality_guarantee_period, period_of_validity, num, unit_price, payby, unit_rmb, unit_postage, unit_cost, remark, store_time, store_status, create_date, update_date, plan_sell_price)
+	values(#{param1.id}, #{param1.checkId}, #{param1.trackingNumber}, #{param1.transferCompany}, #{param1.brandId}, #{param1.seriesId}, #{param1.singleId}, #{param1.dateOfManufacture}, #{param1.qualityGuaranteePeriod}, #{param1.periodOfValidity}, #{param2.num}, #{param1.unitPrice}, #{param1.payby}, #{param2.unitRmb}, #{param2.unitPostage}, #{param2.unitCost}, #{param2.remark}, #{param2.storeTime}, #{param2.storeStatus}, now(), now(), #{param2.planSellPrice})
 	</insert>
 	
 	<!-- 修改仓库信息 -->
@@ -87,6 +94,15 @@
 	<if test="planSellPrice != null and planSellPrice != ''">
 	, plan_sell_price = #{planSellPrice}
 	</if>
+	<if test="dateOfManufacture != null">
+		, date_of_manufacture = #{dateOfManufacture}
+	</if>
+	<if test="qualityGuaranteePeriod != null">
+		, quality_guarantee_period = #{qualityGuaranteePeriod}
+	</if>
+	<if test="periodOfValidity != null and periodOfValidity != ''">
+		, period_of_validity = #{periodOfValidity}
+	</if>
 	where id = #{id}
 	</update>
 	
@@ -120,6 +136,12 @@
 	<if test="storeStatus != null and storeStatus != ''">
 	, store_status = #{storeStatus}
 	</if>
+	<if test="unitRmb != null and unitRmb != ''">
+	, unit_rmb = #{unitRmb}
+	</if>
+	<if test="unitCost != null and unitCost != ''">
+	, unit_cost = #{unitCost}
+	</if>
 	where check_id = #{checkId}
 	</update>
 	
@@ -136,6 +158,7 @@
 	<!-- 查询仓库信息 -->
 	<select id="queryStore" resultMap="StoreResultMap">
 	select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,t.date_Of_Manufacture, case when isnull(t.quality_guarantee_period) then '-1' when t.quality_guarantee_period = '' then '-1' else t.quality_guarantee_period end as quality_guarantee_period, t.period_Of_Validity, date_format(t.date_Of_Manufacture, '%Y年%m月%d日') as dateOfManufactureFormat, date_format(t.period_Of_Validity, '%Y年%m月%d日') as periodOfValidityFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
@@ -198,13 +221,23 @@
 		and t.store_status in 
 		<foreach collection="param4" item="status" open="(" separator="," close=")">#{status}</foreach>
 	</if>
+	<if test="param1.periodOfValidityFilter == 1 or param1.periodOfValidityFilter == 2">
+		and t.period_of_validity != ''
+	</if>
 	
 	order by t.store_time desc, tb.brand_ename
+	<if test="param1.periodOfValidityFilter == 1">
+		, t.period_of_validity ASC
+	</if>
+	<if test="param1.periodOfValidityFilter == 2">
+		, t.period_of_validity DESC
+	</if>
 	</select>
 	
 	<!-- 根据仓库唯一编号查询仓库信息 -->
 	<select id="queryStoreById" parameterType="java.lang.Integer" resultMap="StoreResultMap">
 	select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,t.date_Of_Manufacture, case when isnull(t.quality_guarantee_period) then '-1' when t.quality_guarantee_period = '' then '-1' else t.quality_guarantee_period end as quality_guarantee_period, t.period_Of_Validity, date_format(t.date_Of_Manufacture, '%Y年%m月%d日') as dateOfManufactureFormat, date_format(t.period_Of_Validity, '%Y年%m月%d日') as periodOfValidityFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
@@ -220,6 +253,7 @@
 	<!-- 根据下单清单唯一编号查询仓库信息 -->
 	<select id="queryStoreByCheckId" parameterType="java.lang.Integer" resultMap="StoreResultMap">
 	select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,t.date_Of_Manufacture, case when isnull(t.quality_guarantee_period) then '-1' when t.quality_guarantee_period = '' then '-1' else t.quality_guarantee_period end as quality_guarantee_period, t.period_Of_Validity, date_format(t.date_Of_Manufacture, '%Y年%m月%d日') as dateOfManufactureFormat, date_format(t.period_Of_Validity, '%Y年%m月%d日') as periodOfValidityFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
@@ -235,6 +269,7 @@
 	<!-- 根据邮寄清单唯一编号查询入库清单信息 -->
 	<select id="queryStoreByShippedId" parameterType="java.lang.Integer" resultMap="StoreResultMap">
 	select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,t.date_Of_Manufacture, case when isnull(t.quality_guarantee_period) then '-1' when t.quality_guarantee_period = '' then '-1' else t.quality_guarantee_period end as quality_guarantee_period, t.period_Of_Validity, date_format(t.date_Of_Manufacture, '%Y年%m月%d日') as dateOfManufactureFormat, date_format(t.period_Of_Validity, '%Y年%m月%d日') as periodOfValidityFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
@@ -250,6 +285,7 @@
 	<!-- 根据入库清单唯一编号查询记录（多个） -->
 	<select id="queryStoreByIds" resultMap="StoreResultMap">
 	select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,t.date_Of_Manufacture, case when isnull(t.quality_guarantee_period) then '-1' when t.quality_guarantee_period = '' then '-1' else t.quality_guarantee_period end as quality_guarantee_period, t.period_Of_Validity, date_format(t.date_Of_Manufacture, '%Y年%m月%d日') as dateOfManufactureFormat, date_format(t.period_Of_Validity, '%Y年%m月%d日') as periodOfValidityFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
@@ -266,6 +302,7 @@
 	<!-- 根据下单清单唯一编号（多个）查询入库信息 -->
 	<select id="queryStoreByCheckIds" resultMap="StoreResultMap">
 	select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,t.date_Of_Manufacture, case when isnull(t.quality_guarantee_period) then '-1' when t.quality_guarantee_period = '' then '-1' else t.quality_guarantee_period end as quality_guarantee_period, t.period_Of_Validity, date_format(t.date_Of_Manufacture, '%Y年%m月%d日') as dateOfManufactureFormat, date_format(t.period_Of_Validity, '%Y年%m月%d日') as periodOfValidityFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
@@ -282,6 +319,7 @@
 	<!-- 查询入库信息时间段内信息 -->
 	<select id="queryStoreForTimeQuantum" resultMap="StoreResultMap">
 	select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,t.date_Of_Manufacture, case when isnull(t.quality_guarantee_period) then '-1' when t.quality_guarantee_period = '' then '-1' else t.quality_guarantee_period end as quality_guarantee_period, t.period_Of_Validity, date_format(t.date_Of_Manufacture, '%Y年%m月%d日') as dateOfManufactureFormat, date_format(t.period_Of_Validity, '%Y年%m月%d日') as periodOfValidityFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
@@ -338,6 +376,7 @@
 	<!-- 查询仍有库存的所有记录 -->
 	<select id="queryStoreForValidity" resultMap="StoreResultMap">
 	select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
+	,t.date_Of_Manufacture, case when isnull(t.quality_guarantee_period) then '-1' when t.quality_guarantee_period = '' then '-1' else t.quality_guarantee_period end as quality_guarantee_period, t.period_Of_Validity, date_format(t.date_Of_Manufacture, '%Y年%m月%d日') as dateOfManufactureFormat, date_format(t.period_Of_Validity, '%Y年%m月%d日') as periodOfValidityFormat
 	,tb.brand_name as brand_name ,tse.series_name as series_name ,tsp.single_name as single_name
 	,concat_ws(" ", tsp.capacity, tsp.unit) as specification
 	,tb.brand_ename as brand_ename ,tsp.single_ename as single_ename
@@ -355,6 +394,7 @@
 	<select id="queryStoreForSync"  resultMap="StoreResultMap">
 		select t.id, t.shipped_id, t.check_id, t.tracking_number, t.transfer_company, t.brand_id, t.series_id, t.single_id, t.num, t.unit_price, t.payby, t.unit_rmb, t.unit_postage, t.unit_cost, t.remark, t.sell_num, t.store_time, t.store_status, t.create_date, t.update_date, date_format(t.create_date, '%Y年%m月%d日 %T') as createDateFormat, date_format(t.update_date, '%Y年%m月%d日 %T') as updateDateFormat
 		, t.plan_sell_price
+		,t.date_Of_Manufacture, case when isnull(t.quality_guarantee_period) then '-1' when t.quality_guarantee_period = '' then '-1' else t.quality_guarantee_period end as quality_guarantee_period, t.period_Of_Validity, date_format(t.date_Of_Manufacture, '%Y年%m月%d日') as dateOfManufactureFormat, date_format(t.period_Of_Validity, '%Y年%m月%d日') as periodOfValidityFormat
 		from  t_store t
 		where 
 		<if test="param1 != null and param1 != ''">

@@ -22,6 +22,13 @@ public interface ShippedDao {
 	public void addShipped(ShippedHead shippedHead, Shipped shipped, Check check);
 	
 	/**
+	 * 添加邮寄清单（子单） 复制邮寄清单使用
+	 * @param shipped
+	 * @param checkId
+	 */
+	public void addShippedForCopyShipped(Shipped shipped, Integer checkId);
+	
+	/**
 	 * 修改邮寄清单（子单）
 	 * @param shipped
 	 */

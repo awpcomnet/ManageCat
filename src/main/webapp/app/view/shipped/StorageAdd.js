@@ -104,7 +104,7 @@ Ext.define("MIS.view.shipped.StorageAdd", {
 		fieldLabel: "实际单个邮费(￥)",
         name: "unitPostage",
         xtype: "numberfield",
-        allowBlank: true,
+        allowBlank: false,
         decimalPrecision: 2,
         listeners : {
    	       change : function(field,newValue,oldValue){

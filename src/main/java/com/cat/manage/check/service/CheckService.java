@@ -16,6 +16,7 @@ import com.cat.manage.store.domain.Store;
 import com.cat.manage.store.service.StoreService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.base.Strings;
 
 /**
  * 下单清单服务
@@ -173,9 +174,10 @@ public class CheckService {
 		boolean isChangeStore = this.isChangeStore(dbCheck, check);
 		boolean isChangeSelled = this.isChangeSelled(dbCheck, check);
 		
-		//修改 下单清单
-		check.setOrderStatus("");//订单状态不允许修改
-		checkDao.updateCheck(check);
+		String checkOrderStatus = "";
+		int storeN = 0;//已入库数量
+		int sellN = 0;//已售出数量
+		int buyN = check.getNum();//购买数量
 		
 		//修改 邮寄清单
 		if(isChangeShipped){
@@ -190,7 +192,7 @@ public class CheckService {
 					newShipped.setShippedStatus("7");//部分入库
 				} else if(check.getNum().intValue() > storeNum && storeNum == 0){
 					newShipped.setShippedStatus("1");//已邮寄
-				} else if(check.getNum().intValue() == storeNum){
+				} else if(check.getNum().intValue() == storeNum && storeNum > 0){
 					newShipped.setShippedStatus("2");//已入库
 				} 
 					
@@ -200,7 +202,7 @@ public class CheckService {
 				
 			
 		}
-
+		
 		//修改 库存清单
 		if(isChangeStore){
 			Store newStore = this.changeToStore(check);
@@ -208,16 +210,23 @@ public class CheckService {
 			if(oldStoreList != null && oldStoreList.size() == 1){
 				Store oldStore = oldStoreList.get(0);
 				int sellNum = oldStore.getSellNum();
+				int storeNum = oldStore.getNum();//已入库数量
+				sellN = sellNum;
+				storeN = storeNum;
 				if(check.getNum().intValue() < sellNum){
 					throw new BusinessException("1", "下单清单购买的数量["+check.getNum()+"]小于已售出的数量["+sellNum+"]");
-				} else if(check.getNum().intValue() > sellNum && sellNum == 0){
-					newStore.setStoreStatus("2");//已入库
-				} else if(check.getNum().intValue() > sellNum && sellNum > 0){
-					newStore.setStoreStatus("4");//销售中
-				} else if(check.getNum().intValue() == sellNum){
-					newStore.setStoreStatus("3");//已售罄
-				}
+				} else if(check.getNum().intValue() < storeNum){
+					throw new BusinessException("1", "下单清单购买的数量["+check.getNum()+"]小于已入库的数量["+storeNum+"]");
+				} 
 				
+		        double unitPostage = Double.parseDouble(oldStore.getUnitPostage());//实际邮费
+		        double unitPrice = check.getUnitPrice();//下单单价（美元单位）
+		        double rate = check.getRate();//汇率
+		        double unitRmb = unitPrice * rate;//实际单价
+		        double unitCost = unitRmb + unitPostage;//实际成本
+		        newStore.setUnitRmb(String.format("%.2f", unitRmb));
+		        newStore.setUnitCost(String.format("%.2f", unitCost));
+		        
 				storeService.updateStoreByCheckId(newStore);
 				tip.append("[入库清单]");
 			} else if(oldStoreList != null && oldStoreList.size() >= 1){
@@ -230,10 +239,37 @@ public class CheckService {
 			Selled newSelled = this.changeToSelled(check);
 			List<Selled> oldSelledList = selledService.queryStoreByCheckIds(new Integer[]{check.getId()});
 			if(oldSelledList != null && oldSelledList.size() >= 1){
+				Selled oldSelled = oldSelledList.get(0);
+				
+				double unitPostage = oldSelled.getUnitPostage();//实际邮费
+		        double unitPrice = check.getUnitPrice();//下单单价（美元单位）
+		        double rate = check.getRate();//汇率
+		        double unitRmb = unitPrice * rate;//实际单价
+		        double unitCost = unitRmb + unitPostage;//实际成本
+		        newSelled.setUnitRmb(Double.parseDouble(String.format("%.2f", unitRmb)));
+		        newSelled.setUnitCost(Double.parseDouble(String.format("%.2f", unitCost)));
+				
 				selledService.updateSelledByCheckId(newSelled);
 				tip.append("[售出清单]");
 			}
 		}
+		
+		//修改 下单清单
+		if(buyN > storeN && storeN > 0){
+			checkOrderStatus = "7";//部分入库
+		}else if(buyN == sellN && sellN > 0){
+			checkOrderStatus = "3";//已售罄
+		}else if(buyN == storeN && storeN > 0 && sellN > 0){
+			checkOrderStatus = "4";//销售中
+		}else if(buyN == storeN && storeN > 0 && sellN == 0){
+			checkOrderStatus = "2";//已入库
+		}
+		if(Strings.isNullOrEmpty(checkOrderStatus)){
+			check.setOrderStatus("");//不修改状态
+		}else{
+			check.setOrderStatus(checkOrderStatus);
+		}
+		checkDao.updateCheck(check);
 		
 		return tip.toString();
 	}
@@ -272,7 +308,6 @@ public class CheckService {
 		store.setSingleId(check.getSingleId());
 		store.setPayby(check.getPayby());
 		store.setUnitPrice(check.getUnitPrice()+"");
-		store.setNum(check.getNum());
 		return store;
 	}
 	
@@ -337,13 +372,12 @@ public class CheckService {
 			return true;
 		if(dbCheck.getSingleId().intValue() != newCheck.getSingleId().intValue())
 			return true;
-		if(dbCheck.getNum().intValue() != newCheck.getNum().intValue())
-			return true;
 		if(dbCheck.getUnitPrice().doubleValue() != newCheck.getUnitPrice().doubleValue())
 			return true;
 		if(!dbCheck.getPayby().equals(newCheck.getPayby()))
 			return true;
-		
+		if(dbCheck.getRate() != newCheck.getRate())
+			return true;
 		return false;
 	}
 	
@@ -364,7 +398,8 @@ public class CheckService {
 			return true;
 		if(!dbCheck.getPayby().equals(newCheck.getPayby()))
 			return true;
-		
+		if(dbCheck.getRate() != newCheck.getRate())
+			return true;
 		return false;
 	}
 }

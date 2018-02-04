@@ -47,71 +47,74 @@ Ext.define("MIS.view.shipped.ShippedsModify", {
 		fieldLabel: "汇率(非必填)",
 		name: "rate",
 		anchor: "55%",
-		listeners : {
-	       change : function(field,newValue,oldValue){
-	    	   var unitPrice = Ext.ComponentQuery.query("shippedsmodify textfield[name=unitPrice]")[0].getValue();
-	    	   var planRmb = Ext.ComponentQuery.query("shippedsmodify numberfield[name=planRmb]")[0];
-	    	   var planPostage = Ext.ComponentQuery.query("shippedsmodify numberfield[name=planPostage]")[0].getValue();
-	    	   var planCost = Ext.ComponentQuery.query("shippedsmodify numberfield[name=planCost]")[0];
-	    	   if(newValue == '' || newValue == null)
-	    		   newValue = 0;
-	    	   if(unitPrice == '' || unitPrice == null)
-	    		   unitPrice = 0;
-	    	   if(planPostage == '' || planPostage == null)
-	    		   planPostage = 0;
-	    	   
-	    	   planRmb.setValue(Number.parseFloat(unitPrice)*Number.parseFloat(newValue));
-	    	   planCost.setValue(Number.parseFloat(unitPrice)*Number.parseFloat(newValue)+Number.parseFloat(planPostage));
-	       }
-		},
         editable:true
 	}, {
-		fieldLabel: "预计单价(￥)",
-        name: "planRmb",
-        xtype: "numberfield",
-        allowBlank: true,
-        decimalPrecision: 2,
+		fieldLabel: "日期模式",
+		name: "dateMode",
+	    xtype:'radiogroup',  
+        colspan: 1,
+        items:[
+        	{ boxLabel: '到期时间', name: 'rb', inputValue: '1', checked:true},   
+            { boxLabel: '生产日期', name: 'rb', inputValue: '2' } 
+        ],
         listeners : {
  	       change : function(field,newValue,oldValue){
- 	    	   var planPostage = Ext.ComponentQuery.query("shippedsmodify numberfield[name=planPostage]")[0].getValue();
- 	    	   var planCost = Ext.ComponentQuery.query("shippedsmodify numberfield[name=planCost]")[0];
- 	    	   if(newValue == '' || newValue == null)
- 	    		   newValue = 0;
- 	    	   if(planPostage == '' || planPostage == null)
- 	    		   planPostage = 0;
- 	    	   
- 	    	   planCost.setValue(Number.parseFloat(newValue)+Number.parseFloat(planPostage));
+ 	    	   var nv = newValue.rb;
+ 	    	   var ov = oldValue.rb;
+ 	    	   var periodOfValidity = Ext.ComponentQuery.query("shippedsmodify datefield[name=periodOfValidity]")[0];
+ 	    	   var dateOfManufacture = Ext.ComponentQuery.query("shippedsmodify datefield[name=dateOfManufacture]")[0];
+ 	    	   var qualityGuaranteePeriod = Ext.ComponentQuery.query("shippedsmodify combobox[name=qualityGuaranteePeriod]")[0];
+ 	    	   var dateMode = Ext.ComponentQuery.query("shippedsmodify radiogroup[name=dateMode]")[0];
+ 	    	   if(nv == '1'){
+ 	    		  dateMode.colspan = 1;
+ 	    		  periodOfValidity.show();
+ 	    		  dateOfManufacture.hide();
+ 	    		  qualityGuaranteePeriod.hide();
+ 	    		  //dateOfManufacture.reset();
+ 	    		  //qualityGuaranteePeriod.reset();
+ 	    	   }else{
+ 	    		  dateMode.colspan = 2;
+ 	    		  periodOfValidity.hide();
+ 	    		  dateOfManufacture.show();
+ 	    		  qualityGuaranteePeriod.show();
+ 	    		  //periodOfValidity.reset();
+ 	    	   }
  	       }
  		},
-        editable:true
-	}, {
-		fieldLabel: "预计邮费(￥)",
-        name: "planPostage",
-        xtype: "numberfield",
         allowBlank: true,
-        decimalPrecision: 2,
-        listeners : {
-  	       change : function(field,newValue,oldValue){
-  	    	   var planRmb = Ext.ComponentQuery.query("shippedsmodify numberfield[name=planRmb]")[0].getValue();
-  	    	   var planCost = Ext.ComponentQuery.query("shippedsmodify numberfield[name=planCost]")[0];
-  	    	   if(newValue == '' || newValue == null)
-  	    		   newValue = 0;
-  	    	   if(planRmb == '' || planRmb == null)
-  	    		   planRmb = 0;
-  	    	   
-  	    	   planCost.setValue(Number.parseFloat(newValue)+Number.parseFloat(planRmb));
-  	       }
-  		},
-        editable:true
-	}, {
-		fieldLabel: "预计成本(￥)",
-        name: "planCost",
-        xtype: "numberfield",
-        decimalPrecision: 2,
+        editable:false
+    }, {
+		fieldLabel: "到期日期",
+        name: "periodOfValidity",
+        xtype: "datefield",
+        format: 'Ymd',
         allowBlank: true,
-        colspan: 2,
-        editable:true
+        colspan: 1,
+        hidden:true,
+        editable:false
 	}, {
+		fieldLabel: "生产日期",
+        name: "dateOfManufacture",
+        xtype: "datefield",
+        format: 'Ymd',
+        allowBlank: false,
+        colspan: 1,
+        hidden:true,
+        editable:false
+	}, {
+		fieldLabel: "有效期",
+        name: "qualityGuaranteePeriod",
+        xtype: "combobox",
+        store: Ext.create("MIS.store.dict.DictQueryStore", {
+        	dictcode: "qualityGuaranteePeriod"
+        }),
+        mode: "local",
+        displayField: 'name',
+        valueField: "value",
+        allowBlank: true,
+        hidden:true,
+        editable:true
+    }, {
 		fieldLabel: "备注",
         name: "remark",
         xtype: "textarea",
@@ -120,6 +123,9 @@ Ext.define("MIS.view.shipped.ShippedsModify", {
         editable:true
     }, {
         name: "id",
+        hidden: true
+    }, {
+        name: "checkId",
         hidden: true
     }],
 	
@@ -133,7 +139,21 @@ Ext.define("MIS.view.shipped.ShippedsModify", {
 		handler: function(component){
 			var form = component.up("shippedsmodify");
         	var params = form.getForm().getValues();
-			
+        	if((params.dateOfManufacture != '' && params.qualityGuaranteePeriod == '') || (params.dateOfManufacture == '' && params.qualityGuaranteePeriod != '')){
+        		Ext.MessageBox.alert("修改邮寄清单记录失败", "原因:生产日期和保质期必须同时不为空或同时为空");
+        		return;
+        	}
+        	if(params.qualityGuaranteePeriod < 0){
+        		Ext.MessageBox.alert("修改邮寄清单记录失败", "原因:有效期不能为负值");
+        		return;
+        	}
+        	if(params.rb == 2){
+        		params.periodOfValidity = '';
+        		params.qualityGuaranteePeriod = params.qualityGuaranteePeriod == '' ? '-1' : params.qualityGuaranteePeriod;
+        	} else {
+        		params.dateOfManufacture = '';
+        		params.qualityGuaranteePeriod = '-1';
+        	}
 			Ext.Ajax.request({
 				url: "/shipped/modify",
 				params: params,

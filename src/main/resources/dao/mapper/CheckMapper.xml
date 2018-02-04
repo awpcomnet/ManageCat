@@ -38,6 +38,9 @@
 	
 	<!-- 添加下单清单 -->
 	<insert id="addCheck" parameterType="com.cat.manage.check.domain.Check">
+	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+          SELECT LAST_INSERT_ID() as id
+    </selectKey>
 	insert into t_check (tracking_number, order_time, transfer_company, order_addr, brand_id, series_id, single_id, num, unit_price, remark, payby, order_status, create_date, update_date, batch_no, rate, currency)
 	values(#{trackingNumber}, #{orderTime}, #{transferCompany}, #{orderAddr}, #{brandId}, #{seriesId}, #{singleId}, #{num}, #{unitPrice}, #{remark}, #{payby}, #{orderStatus}, now(), now(), #{batchNo}, #{rate}, #{currency})
 	</insert>

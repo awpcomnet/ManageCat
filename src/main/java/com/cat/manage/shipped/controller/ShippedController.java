@@ -73,4 +73,14 @@ public class ShippedController {
 		List<Shipped> list = shippedService.queryWeightPlan(ids);
 		return new Srm().setResultCode("0").setResultMessage("重量预计完毕").addAll(list);
 	}
+	
+	@RequestMapping("/divisionOrder")
+	public Srm divisionOrder(int maxDivisionNum, int divisionNum, Integer shippedId){
+		if(shippedId == null){
+			return new Srm().setResultCode("-1").setResultMessage("邮寄清单唯一编号为空！");
+		}
+		
+		shippedService.updateDivisionOrderByShippedId(shippedId, divisionNum);
+		return new Srm().setResultCode("0").setResultMessage("订单分割完毕。原订单中商品可分割数量["+maxDivisionNum+"]，分割出的订单中商品数量["+divisionNum+"]。");
+	}
 }

@@ -43,6 +43,13 @@ public class Store implements Serializable{
 	private String planSellPrice;//预计售价
 	private String specification;//规格
 	
+	private String dateOfManufacture;//生产日期
+	private String qualityGuaranteePeriod;//有效时长（单位：年）
+	private String periodOfValidity;//到期时间
+	private String dateOfManufactureFormat;//格式化后的生产日期
+	private String periodOfValidityFormat;//格式化后的到期时间
+	private String periodOfValidityFilter;//有效期过滤器
+	private Double rate;//汇率 这个参数仅为了接收汇率设置，实际仓库清单中并没有汇率参数所有汇率参数保存在下单清单中
 	public Integer getId() {
 		return id;
 	}
@@ -299,6 +306,62 @@ public class Store implements Serializable{
 		this.specification = specification;
 	}
 
+	public String getDateOfManufacture() {
+		return dateOfManufacture;
+	}
+
+	public void setDateOfManufacture(String dateOfManufacture) {
+		this.dateOfManufacture = dateOfManufacture;
+	}
+
+	public String getQualityGuaranteePeriod() {
+		return qualityGuaranteePeriod;
+	}
+
+	public void setQualityGuaranteePeriod(String qualityGuaranteePeriod) {
+		this.qualityGuaranteePeriod = qualityGuaranteePeriod;
+	}
+
+	public String getPeriodOfValidity() {
+		return periodOfValidity;
+	}
+
+	public void setPeriodOfValidity(String periodOfValidity) {
+		this.periodOfValidity = periodOfValidity;
+	}
+
+	public String getDateOfManufactureFormat() {
+		return dateOfManufactureFormat;
+	}
+
+	public void setDateOfManufactureFormat(String dateOfManufactureFormat) {
+		this.dateOfManufactureFormat = dateOfManufactureFormat;
+	}
+
+	public String getPeriodOfValidityFormat() {
+		return periodOfValidityFormat;
+	}
+
+	public void setPeriodOfValidityFormat(String periodOfValidityFormat) {
+		this.periodOfValidityFormat = periodOfValidityFormat;
+	}
+
+	public String getPeriodOfValidityFilter() {
+		return periodOfValidityFilter;
+	}
+
+	public void setPeriodOfValidityFilter(String periodOfValidityFilter) {
+		this.periodOfValidityFilter = periodOfValidityFilter;
+	}
+
+	public Double getRate() {
+		return rate;
+	}
+
+	public void setRate(Double rate) {
+		this.rate = rate;
+	}
+
 	@Override
 	public String toString() {
 		return "Store [id=" + id + ", shippedId=" + shippedId + ", checkId="
@@ -313,7 +376,17 @@ public class Store implements Serializable{
 				+ ", updateDate=" + updateDate + ", createDateFormat="
 				+ createDateFormat + ", updateDateFormat=" + updateDateFormat
 				+ ", brandName=" + brandName + ", seriesName=" + seriesName
-				+ ", singleName=" + singleName + "]";
+				+ ", singleName=" + singleName + ", residueNum=" + residueNum
+				+ ", brandEname=" + brandEname + ", singleEname=" + singleEname
+				+ ", headTrackingNumber=" + headTrackingNumber + ", batchNo="
+				+ batchNo + ", planSellPrice=" + planSellPrice
+				+ ", specification=" + specification + ", dateOfManufacture="
+				+ dateOfManufacture + ", qualityGuaranteePeriod="
+				+ qualityGuaranteePeriod + ", periodOfValidity="
+				+ periodOfValidity + ", dateOfManufactureFormat="
+				+ dateOfManufactureFormat + ", periodOfValidityFormat="
+				+ periodOfValidityFormat + ", periodOfValidityFilter="
+				+ periodOfValidityFilter + "]";
 	}
 
 	private static final long serialVersionUID = 8780174321869563798L;

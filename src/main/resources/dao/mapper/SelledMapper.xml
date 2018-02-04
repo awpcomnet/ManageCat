@@ -130,6 +130,12 @@
 	<if test="unitPrice != null and unitPrice != ''">
 	, unit_price = #{unitPrice}
 	</if>
+	<if test="unitRmb != null and unitRmb != ''">
+	, unit_rmb = #{unitRmb}
+	</if>
+	<if test="unitCost != null and unitCost != ''">
+	, unit_cost = #{unitCost}
+	</if>
 	where check_id = #{checkId}
 	</update>
 	

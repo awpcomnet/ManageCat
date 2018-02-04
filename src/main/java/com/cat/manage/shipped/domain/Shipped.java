@@ -42,6 +42,11 @@ public class Shipped implements Serializable{
 	private String sumPrice;//总价
 	private String specification;//规格
 	
+	private String dateOfManufacture;//生产日期
+	private String qualityGuaranteePeriod;//有效时长（单位：年）
+	private String periodOfValidity;//到期时间
+	private String dateOfManufactureFormat;//格式化后的生产日期
+	private String periodOfValidityFormat;//格式化后的到期时间
 	public Integer getId() {
 		return id;
 	}
@@ -290,6 +295,46 @@ public class Shipped implements Serializable{
 		this.specification = specification;
 	}
 
+	public String getDateOfManufacture() {
+		return dateOfManufacture;
+	}
+
+	public void setDateOfManufacture(String dateOfManufacture) {
+		this.dateOfManufacture = dateOfManufacture;
+	}
+
+	public String getQualityGuaranteePeriod() {
+		return qualityGuaranteePeriod;
+	}
+
+	public void setQualityGuaranteePeriod(String qualityGuaranteePeriod) {
+		this.qualityGuaranteePeriod = qualityGuaranteePeriod;
+	}
+
+	public String getPeriodOfValidity() {
+		return periodOfValidity;
+	}
+
+	public void setPeriodOfValidity(String periodOfValidity) {
+		this.periodOfValidity = periodOfValidity;
+	}
+
+	public String getDateOfManufactureFormat() {
+		return dateOfManufactureFormat;
+	}
+
+	public void setDateOfManufactureFormat(String dateOfManufactureFormat) {
+		this.dateOfManufactureFormat = dateOfManufactureFormat;
+	}
+
+	public String getPeriodOfValidityFormat() {
+		return periodOfValidityFormat;
+	}
+
+	public void setPeriodOfValidityFormat(String periodOfValidityFormat) {
+		this.periodOfValidityFormat = periodOfValidityFormat;
+	}
+
 	@Override
 	public String toString() {
 		return "Shipped [id=" + id + ", headId=" + headId + ", checkId="
@@ -306,7 +351,12 @@ public class Shipped implements Serializable{
 				+ ", updateDateFormat=" + updateDateFormat + ", brandName="
 				+ brandName + ", seriesName=" + seriesName + ", singleName="
 				+ singleName + ", brandEname=" + brandEname + ", singleEname="
-				+ singleEname + ", sumPrice=" + sumPrice + "]";
+				+ singleEname + ", sumPrice=" + sumPrice + ", specification="
+				+ specification + ", dateOfManufacture=" + dateOfManufacture
+				+ ", qualityGuaranteePeriod=" + qualityGuaranteePeriod
+				+ ", periodOfValidity=" + periodOfValidity
+				+ ", dateOfManufactureFormat=" + dateOfManufactureFormat
+				+ ", periodOfValidityFormat=" + periodOfValidityFormat + "]";
 	}
 
 	private static final long serialVersionUID = -508826833677156720L;
